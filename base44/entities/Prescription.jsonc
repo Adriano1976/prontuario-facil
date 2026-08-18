@@ -1,0 +1,110 @@
+{
+  "name": "Prescription",
+  "type": "object",
+  "properties": {
+    "patient_id": {
+      "type": "string",
+      "description": "ID do paciente"
+    },
+    "consultation_id": {
+      "type": "string",
+      "description": "ID da consulta"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "receita_simples",
+        "receita_controlada",
+        "atestado",
+        "solicitacao_exame",
+        "encaminhamento",
+        "declaracao"
+      ],
+      "description": "Tipo do documento"
+    },
+    "content": {
+      "type": "string",
+      "description": "Conte\u00fado do documento"
+    },
+    "medications": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "dosage": {
+            "type": "string"
+          },
+          "frequency": {
+            "type": "string"
+          },
+          "duration": {
+            "type": "string"
+          },
+          "instructions": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "Medicamentos prescritos"
+    },
+    "template_name": {
+      "type": "string",
+      "description": "Nome do template usado"
+    },
+    "valid_days": {
+      "type": "number",
+      "description": "Dias de afastamento (para atestados)"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Observa\u00e7\u00f5es"
+    }
+  },
+  "required": [
+    "patient_id",
+    "type",
+    "content"
+  ],
+  "rls": {
+    "create": null,
+    "read": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,101 @@
+{
+  "name": "Exam",
+  "type": "object",
+  "properties": {
+    "patient_id": {
+      "type": "string",
+      "description": "ID do paciente"
+    },
+    "consultation_id": {
+      "type": "string",
+      "description": "ID da consulta relacionada"
+    },
+    "name": {
+      "type": "string",
+      "description": "Nome do exame"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "laboratorial",
+        "imagem",
+        "cardiologico",
+        "outros"
+      ],
+      "description": "Tipo do exame"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "Data do exame"
+    },
+    "file_url": {
+      "type": "string",
+      "description": "URL do arquivo"
+    },
+    "file_type": {
+      "type": "string",
+      "enum": [
+        "pdf",
+        "image"
+      ],
+      "description": "Tipo do arquivo"
+    },
+    "laboratory": {
+      "type": "string",
+      "description": "Laborat\u00f3rio/Cl\u00ednica"
+    },
+    "results_summary": {
+      "type": "string",
+      "description": "Resumo dos resultados"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Observa\u00e7\u00f5es m\u00e9dicas"
+    }
+  },
+  "required": [
+    "patient_id",
+    "name",
+    "date"
+  ],
+  "rls": {
+    "create": null,
+    "read": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

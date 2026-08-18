@@ -1,0 +1,74 @@
+{
+  "name": "AccessLog",
+  "type": "object",
+  "properties": {
+    "user_email": {
+      "type": "string",
+      "description": "Email do usu\u00e1rio"
+    },
+    "action": {
+      "type": "string",
+      "enum": [
+        "login",
+        "logout",
+        "view_patient",
+        "edit_patient",
+        "create_patient",
+        "view_consultation",
+        "create_consultation",
+        "edit_consultation",
+        "create_prescription",
+        "upload_exam",
+        "delete_record",
+        "export_data"
+      ],
+      "description": "A\u00e7\u00e3o realizada"
+    },
+    "entity_type": {
+      "type": "string",
+      "description": "Tipo da entidade acessada"
+    },
+    "entity_id": {
+      "type": "string",
+      "description": "ID da entidade acessada"
+    },
+    "patient_name": {
+      "type": "string",
+      "description": "Nome do paciente (para auditoria)"
+    },
+    "ip_address": {
+      "type": "string",
+      "description": "Endere\u00e7o IP"
+    },
+    "user_agent": {
+      "type": "string",
+      "description": "Navegador/Dispositivo"
+    },
+    "details": {
+      "type": "string",
+      "description": "Detalhes adicionais"
+    }
+  },
+  "required": [
+    "user_email",
+    "action"
+  ],
+  "rls": {
+    "create": null,
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

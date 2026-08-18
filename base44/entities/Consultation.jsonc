@@ -1,0 +1,128 @@
+{
+  "name": "Consultation",
+  "type": "object",
+  "properties": {
+    "patient_id": {
+      "type": "string",
+      "description": "ID do paciente"
+    },
+    "date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data e hora da consulta"
+    },
+    "chief_complaint": {
+      "type": "string",
+      "description": "Queixa principal"
+    },
+    "history_present_illness": {
+      "type": "string",
+      "description": "Hist\u00f3ria da doen\u00e7a atual"
+    },
+    "vital_signs": {
+      "type": "object",
+      "properties": {
+        "blood_pressure": {
+          "type": "string"
+        },
+        "heart_rate": {
+          "type": "string"
+        },
+        "temperature": {
+          "type": "string"
+        },
+        "respiratory_rate": {
+          "type": "string"
+        },
+        "oxygen_saturation": {
+          "type": "string"
+        },
+        "weight": {
+          "type": "string"
+        },
+        "height": {
+          "type": "string"
+        }
+      },
+      "description": "Sinais vitais"
+    },
+    "physical_exam": {
+      "type": "string",
+      "description": "Exame f\u00edsico"
+    },
+    "diagnosis": {
+      "type": "string",
+      "description": "Diagn\u00f3stico"
+    },
+    "icd_code": {
+      "type": "string",
+      "description": "CID-10"
+    },
+    "treatment_plan": {
+      "type": "string",
+      "description": "Plano de tratamento"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Observa\u00e7\u00f5es"
+    },
+    "follow_up_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Data de retorno"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "agendada",
+        "em_andamento",
+        "concluida",
+        "cancelada"
+      ],
+      "default": "agendada"
+    }
+  },
+  "required": [
+    "patient_id",
+    "date"
+  ],
+  "rls": {
+    "create": null,
+    "read": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

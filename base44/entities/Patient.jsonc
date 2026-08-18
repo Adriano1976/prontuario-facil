@@ -1,0 +1,159 @@
+{
+  "name": "Patient",
+  "type": "object",
+  "properties": {
+    "full_name": {
+      "type": "string",
+      "description": "Nome completo do paciente"
+    },
+    "cpf": {
+      "type": "string",
+      "description": "CPF do paciente (criptografado)"
+    },
+    "birth_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Data de nascimento"
+    },
+    "gender": {
+      "type": "string",
+      "enum": [
+        "masculino",
+        "feminino",
+        "outro",
+        "prefiro_nao_informar"
+      ],
+      "description": "G\u00eanero"
+    },
+    "phone": {
+      "type": "string",
+      "description": "Telefone de contato"
+    },
+    "email": {
+      "type": "string",
+      "description": "Email do paciente"
+    },
+    "address": {
+      "type": "string",
+      "description": "Endere\u00e7o completo"
+    },
+    "emergency_contact": {
+      "type": "string",
+      "description": "Contato de emerg\u00eancia"
+    },
+    "emergency_phone": {
+      "type": "string",
+      "description": "Telefone de emerg\u00eancia"
+    },
+    "health_insurance": {
+      "type": "string",
+      "description": "Conv\u00eanio m\u00e9dico"
+    },
+    "insurance_number": {
+      "type": "string",
+      "description": "N\u00famero da carteirinha"
+    },
+    "blood_type": {
+      "type": "string",
+      "enum": [
+        "A+",
+        "A-",
+        "B+",
+        "B-",
+        "AB+",
+        "AB-",
+        "O+",
+        "O-",
+        "desconhecido"
+      ],
+      "description": "Tipo sangu\u00edneo"
+    },
+    "allergies": {
+      "type": "string",
+      "description": "Alergias conhecidas"
+    },
+    "chronic_conditions": {
+      "type": "string",
+      "description": "Condi\u00e7\u00f5es cr\u00f4nicas"
+    },
+    "medications_in_use": {
+      "type": "string",
+      "description": "Medicamentos em uso cont\u00ednuo"
+    },
+    "lgpd_consent": {
+      "type": "boolean",
+      "description": "Consentimento LGPD aceito"
+    },
+    "lgpd_consent_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Data do consentimento LGPD"
+    },
+    "lgpd_consent_ip": {
+      "type": "string",
+      "description": "IP do consentimento"
+    },
+    "photo_url": {
+      "type": "string",
+      "description": "Foto do paciente"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Observa\u00e7\u00f5es gerais"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "ativo",
+        "inativo"
+      ],
+      "default": "ativo"
+    }
+  },
+  "required": [
+    "full_name",
+    "cpf",
+    "birth_date",
+    "phone",
+    "lgpd_consent"
+  ],
+  "rls": {
+    "create": null,
+    "read": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "update": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}
