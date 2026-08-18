@@ -26,6 +26,17 @@ import StatsCard from '@/components/medical/StatsCard';
 import PatientSearch from '@/components/medical/PatientSearch';
 import { logAccess, ACCESS_ACTIONS } from '@/components/medical/AccessLogger';
 
+/**
+ * Página do dashboard mostrando métricas-chave de saúde e atividade recente.
+ * Exibe estatísticas de pacientes, consultas, prescrições e agendamentos.
+ * Inclui ações rápidas e funcionalidade de busca de paciente.
+ *
+ * @component
+ * @returns {JSX.Element} - Dashboard com cartões de estatísticas, eventos recentes e ações rápidas.
+ *
+ * @example
+ * <Dashboard />
+ */
 export default function Dashboard() {
     const { data: patients, isLoading: loadingPatients } = useQuery({
         queryKey: ['patients'],

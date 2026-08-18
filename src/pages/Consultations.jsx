@@ -29,6 +29,18 @@ const STATUS_CONFIG = {
     cancelada: { label: 'Cancelada', color: 'bg-rose-100 text-rose-700' },
 };
 
+/**
+ * Página de lista de consultas mostrando todas as consultas de paciente.
+ * Suporta busca e filtro por status e intervalo de data.
+ * Mostra detalhes-chave de consulta e informações de paciente.
+ * Fornece navegação para detalhes de consulta e criação de nova consulta.
+ *
+ * @component
+ * @returns {JSX.Element} - Página com lista de consultas, barra de busca e opções de filtro.
+ *
+ * @example
+ * <Consultations />
+ */
 export default function Consultations() {
     const [search, setSearch] = useState('');
     const [statusFilter, setStatusFilter] = useState('all');

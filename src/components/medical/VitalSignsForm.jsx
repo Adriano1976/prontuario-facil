@@ -3,6 +3,27 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Heart, Thermometer, Activity, Wind, Droplets, Scale, Ruler } from 'lucide-react';
 
+/**
+ * Componente para entrada e gerenciamento de sinais vitais (PA, FC, temperatura, etc).
+ * Exibe um formulário com campos para todas as medições de sinais vitais com indicadores visuais.
+ *
+ * @component
+ * @param {Object} props - Props do componente.
+ * @param {Object} props.vitalSigns - Objeto contendo valores atuais dos sinais vitais.
+ * @param {string} [props.vitalSigns.blood_pressure] - Leitura de pressão arterial (ex: '120/80').
+ * @param {string} [props.vitalSigns.heart_rate] - Frequência cardíaca em bpm.
+ * @param {string} [props.vitalSigns.temperature] - Temperatura corporal em Celsius.
+ * @param {string} [props.vitalSigns.respiratory_rate] - Frequência respiratória em irpm.
+ * @param {string} [props.vitalSigns.oxygen_saturation] - Percentual de SpO2.
+ * @param {string} [props.vitalSigns.weight] - Peso do paciente em kg.
+ * @param {string} [props.vitalSigns.height] - Altura do paciente em metros.
+ * @param {Function} props.onChange - Callback quando qualquer sinal vital muda. Recebe objeto atualizado.
+ * @returns {JSX.Element} - Formulário com campos de entrada de sinais vitais.
+ *
+ * @example
+ * const [vitais, setVitais] = useState({});
+ * <VitalSignsForm vitalSigns={vitais} onChange={setVitais} />
+ */
 export default function VitalSignsForm({ vitalSigns, onChange }) {
     const handleChange = (field, value) => {
         onChange({

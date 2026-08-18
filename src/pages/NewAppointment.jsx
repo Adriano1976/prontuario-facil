@@ -24,6 +24,19 @@ import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import TimeSlotPicker from '@/components/appointments/TimeSlotPicker';
 
+/**
+ * Página de criação de novo agendamento.
+ * Permite agendamento de consultas para pacientes com médicos disponíveis.
+ * Fornece seleção de data com disponibilidade de horário baseada no cronograma do médico.
+ * Suporta edição de agendamentos existentes.
+ *
+ * @component
+ * @returns {JSX.Element} - Formulário com seleção de paciente, seleção de médico, seletor de data/hora e envio.
+ *
+ * @example
+ * <NewAppointment /> // Novo agendamento
+ * <NewAppointment /> // URL pode incluir ?patient_id=paciente-123 para pré-seleção
+ */
 export default function NewAppointment() {
     const navigate = useNavigate();
     const queryClient = useQueryClient();

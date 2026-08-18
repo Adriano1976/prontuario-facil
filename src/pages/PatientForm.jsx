@@ -34,6 +34,19 @@ const GENDERS = [
     { value: 'prefiro_nao_informar', label: 'Prefiro não informar' }
 ];
 
+/**
+ * Página de formulário para criar ou editar informações de paciente.
+ * Manipula dados pessoais, informações de contato, histórico de saúde e consentimento LGPD.
+ * Suporta upload de foto do paciente e inclui validação.
+ * Pode ser usado para criar novos pacientes ou editar os existentes.
+ *
+ * @component
+ * @returns {JSX.Element} - Formulário com campos de detalhes de paciente, manipulação de envio e diálogo de consentimento.
+ *
+ * @example
+ * <PatientForm /> // Para novo paciente
+ * <PatientForm /> // Para edição (passe ?id=paciente-123 em URL)
+ */
 export default function PatientForm() {
     const navigate = useNavigate();
     const queryClient = useQueryClient();

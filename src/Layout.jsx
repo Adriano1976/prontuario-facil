@@ -36,6 +36,22 @@ const NAV_ITEMS = [
     { name: 'Logs de Acesso', icon: Shield, page: 'AccessLogs' },
 ];
 
+/**
+ * Componente de wrapper de layout principal para páginas autenticadas.
+ * Exibe barra lateral de navegação, header com menu de usuário e área de conteúdo principal.
+ * Design responsível com suporte a menu móvel.
+ *
+ * @component
+ * @param {Object} props - Props do componente.
+ * @param {React.ReactNode} props.children - Conteúdo da página a renderizar na área principal.
+ * @param {string} [props.currentPageName] - Nome da página atual para destacar na navegação.
+ * @returns {JSX.Element} - Layout com navegação e conteúdo principal.
+ *
+ * @example
+ * <Layout currentPageName="Pacientes">
+ *   <PaginaPacientes />
+ * </Layout>
+ */
 export default function Layout({ children, currentPageName }) {
     const navigate = useNavigate();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);

@@ -26,6 +26,29 @@ const STATUS_CONFIG = {
     cancelada: { label: 'Cancelada', color: 'bg-rose-100 text-rose-700', icon: XCircle },
 };
 
+/**
+ * Componente de linha do tempo exibindo histórico de consultas do paciente com eventos associados.
+ * Mostra consultas, prescrições, exames e agendamentos em ordem cronológica.
+ * Cada tipo de evento tem estilos distintos e ícones para rápida identificação visual.
+ *
+ * @component
+ * @param {Object} props - Props do componente.
+ * @param {Array<Object>} props.consultations - Array de objetos de consulta com datas e status.
+ * @param {Array<Object>} props.prescriptions - Array de objetos de prescrição.
+ * @param {Array<Object>} props.exams - Array de objetos de exame.
+ * @param {Array<Object>} props.appointments - Array de objetos de agendamento.
+ * @param {string} props.patientId - ID do paciente cuja linha do tempo é exibida.
+ * @returns {JSX.Element} - Linha do tempo vertical com cartões de eventos.
+ *
+ * @example
+ * <ConsultationTimeline
+ *   consultations={consultations}
+ *   prescriptions={prescriptions}
+ *   exams={exams}
+ *   appointments={appointments}
+ *   patientId="paciente-123"
+ * />
+ */
 export default function ConsultationTimeline({ consultations, prescriptions, exams, appointments, patientId }) {
     // Combine and sort by date
     const events = [

@@ -3,6 +3,17 @@ import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
 
 
+/**
+ * Página de erro exibida quando uma rota/página solicitada não é encontrada.
+ * Mostra uma mensagem de erro 404 amigável com sugestões.
+ * Verifica o status de autenticação do usuário antes de renderizar.
+ *
+ * @component
+ * @returns {JSX.Element} - Página de erro 404 com opções de navegação.
+ *
+ * @example
+ * <Route path="*" element={<PageNotFound />} />\
+ */
 export default function PageNotFound({}) {
     const location = useLocation();
     const pageName = location.pathname.substring(1);

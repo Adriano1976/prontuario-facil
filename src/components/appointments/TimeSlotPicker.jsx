@@ -3,6 +3,30 @@ import { format, addMinutes, parseISO, isBefore } from 'date-fns';
 import { Button } from "@/components/ui/button";
 import { Clock } from 'lucide-react';
 
+/**
+ * Componente para seleção de horários disponíveis de agendamento para médico e data específicos.
+ * Gera horários baseado em horário de trabalho do médico e filtra agendamentos reservados.
+ * Exibe horários disponíveis em grid de botões.
+ *
+ * @component
+ * @param {Object} props - Props do componente.
+ * @param {Object} props.doctor - Objeto de médico com horas de trabalho e duração de agendamento.
+ * @param {string} props.selectedDate - Data selecionada para agendamentos (string ISO).
+ * @param {Array<Object>} props.appointments - Agendamentos existentes a excluir dos horários livres.
+ * @param {Function} props.onSelectTime - Callback quando um horário é selecionado.
+ * @param {Date|null} [props.selectedTime] - Horário atualmente selecionado.
+ * @returns {JSX.Element|null} - Grid de botões de horário ou null se sem médico/data.
+ *
+ * @example
+ * const [horaSelec, setHoraSelec] = useState(null);
+ * <TimeSlotPicker
+ *   doctor={medico}
+ *   selectedDate="2024-08-18"
+ *   appointments={agendamentos}
+ *   onSelectTime={setHoraSelec}
+ *   selectedTime={horaSelec}
+ * />
+ */
 export default function TimeSlotPicker({ doctor, selectedDate, appointments, onSelectTime, selectedTime }) {
     if (!doctor || !selectedDate) return null;
 

@@ -23,6 +23,18 @@ import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { motion } from 'framer-motion';
 
+/**
+ * Página de lista de pacientes com capacidades de busca e filtro.
+ * Mostra todos os pacientes registrados com suas informações-chave.
+ * Suporta filtragem por status e busca por nome, CPF, telefone ou email.
+ * Fornece navegação para detalhes de paciente e criação de novo paciente.
+ *
+ * @component
+ * @returns {JSX.Element} - Página com tabela de pacientes, barra de busca e opções de filtro.
+ *
+ * @example
+ * <Patients />
+ */
 export default function Patients() {
     const [search, setSearch] = useState('');
     const [statusFilter, setStatusFilter] = useState('all');

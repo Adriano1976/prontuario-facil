@@ -43,6 +43,18 @@ import {
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
+/**
+ * Página de detalhe do paciente mostrando perfil completo e histórico médico.
+ * Exibe informações do paciente, linha do tempo de consulta, exames e prescrições.
+ * Fornece opções para editar dados do paciente e gerenciar registros médicos.
+ * Suporta adicionando novos exames e prescrições.
+ *
+ * @component
+ * @returns {JSX.Element} - Página com perfil de paciente, abas para diferentes dados médicos e botões de ação.
+ *
+ * @example
+ * <PatientDetail /> // URL deve conter ?id=paciente-123
+ */
 export default function PatientDetail() {
     const navigate = useNavigate();
     const queryClient = useQueryClient();

@@ -12,11 +12,24 @@ const THEMES = {
 
 const ChartContext = React.createContext(null)
 
+/**
+ * Hook para acessar configuração e contexto do gráfico.
+ * Fornece configuração de gráfico para renderização e tema de componentes Recharts.
+ * Deve ser usado dentro de um componente ChartContainer.
+ *
+ * @returns {Object} - Objeto de contexto do gráfico.
+ * @returns {Object} returns.config - Objeto de configuração de gráfico com configuração de tema e dados.
+ * @throws {Error} Se useChart for chamado fora de um ChartContainer.
+ *
+ * @example
+ * const { config } = useChart();
+ * return <Bar data={data} config={config} />;
+ */
 function useChart() {
   const context = React.useContext(ChartContext)
 
   if (!context) {
-    throw new Error("useChart must be used within a <ChartContainer />")
+    throw new Error("useChart must be used within a <ChartContainer />"))
   }
 
   return context
@@ -262,7 +275,24 @@ const ChartLegendContent = React.forwardRef((
 })
 ChartLegendContent.displayName = "ChartLegend"
 
-// Helper to extract item config from a payload.
+// Ajudante para extrair configuração de item de um payload.
+/**
+ * Extrai configuração de gráfico para um item de payload específico.
+ * Procura a configuração do item na configuração de gráfico por chave.
+ * Manipula estruturas de payload aninhadas para renderização de tooltip e legenda.
+ *
+ * @param {Object} config - Objeto de configuração de gráfico com definições de item.
+ * @param {Object} payload - Item de payload de gráfico (de Recharts).
+ * @param {string} key - A chave de configuração a procurar.
+ * @returns {Object|undefined} - Objeto de configuração para o item de payload, ou undefined.
+ *
+ * @example
+ * const config = {
+ *   pacientes: { label: 'Pacientes', color: '#0ea5e9' },
+ *   consultas: { label: 'Consultas', color: '#10b981' }
+ * };
+ * const itemConfig = getPayloadConfigFromPayload(config, payload, 'pacientes');
+ */
 function getPayloadConfigFromPayload(
   config,
   payload,

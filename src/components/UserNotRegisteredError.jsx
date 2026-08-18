@@ -1,5 +1,17 @@
 import React from 'react';
 
+/**
+ * Página de erro exibida quando um usuário não está registrado/autorizado para usar a aplicação.
+ * Mostra uma mensagem amigável com sugestões para resolver o problema de acesso.
+ *
+ * @component
+ * @returns {JSX.Element} - Mensagem de erro em tela cheia.
+ *
+ * @example
+ * if (!estaAutorizado) {
+ *   return <UserNotRegisteredError />;
+ * }
+ */
 const UserNotRegisteredError = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-white to-slate-50">

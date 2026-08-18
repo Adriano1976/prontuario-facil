@@ -16,6 +16,27 @@ const STATUS_COLORS = {
     faltou: 'bg-rose-100 text-rose-700 border-rose-200',
 };
 
+/**
+ * Visão de calendário semanal de agendamentos mostrando cronogramas de médicos e agendamentos de pacientes.
+ * Exibe um grid com horários e agendamentos de médicos com badges de status.
+ * Permite navegação entre semanas e clique em agendamentos para detalhes.
+ *
+ * @component
+ * @param {Object} props - Props do componente.
+ * @param {Array<Object>} props.appointments - Array de objetos de agendamento com datas e status.
+ * @param {Array<Object>} props.doctors - Array de objetos de médico com informações de cronograma.
+ * @param {Array<Object>} props.patients - Array de objetos de paciente.
+ * @param {Function} props.onAppointmentClick - Callback quando um cartão de agendamento é clicado.
+ * @returns {JSX.Element} - Grid de calendário semanal com agendamentos.
+ *
+ * @example
+ * <AppointmentCalendar
+ *   appointments={agendamentos}
+ *   doctors={medicos}
+ *   patients={pacientes}
+ *   onAppointmentClick={(apt) => abrirDetalheAgendamento(apt.id)}
+ * />
+ */
 export default function AppointmentCalendar({ appointments, doctors, patients, onAppointmentClick }) {
     const [currentWeek, setCurrentWeek] = useState(new Date());
     const weekStart = startOfWeek(currentWeek, { locale: ptBR });

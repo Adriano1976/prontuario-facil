@@ -6,30 +6,105 @@ import { Check, ChevronRight, Circle } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
+/**
+ * Componente MenubarMenu para criar estrutura de menu.
+ * Wrapper em torno da primitiva menubar do Radix UI.
+ * Use com MenubarTrigger, MenubarContent e outros subcomponentes do menubar.
+ *
+ * @component
+ * @returns {JSX.Element} - Elemento de contéiner de menu.
+ *
+ * @example
+ * <Menubar>
+ *   <MenubarMenu>
+ *     <MenubarTrigger>Arquivo</MenubarTrigger>
+ *     <MenubarContent>...</MenubarContent>
+ *   </MenubarMenu>
+ * </Menubar>
+ */
 function MenubarMenu({
   ...props
 }) {
   return <MenubarPrimitive.Menu {...props} />;
 }
 
+/**
+ * Componente MenubarGroup para agrupar itens de menu relacionados.
+ * Wrapper em torno da primitiva menubar group do Radix UI.
+ * Use dentro de MenubarContent para agrupar comandos relacionados.
+ *
+ * @component
+ * @returns {JSX.Element} - Elemento de contéiner de grupo de menu.
+ *
+ * @example
+ * <MenubarContent>
+ *   <MenubarGroup>
+ *     <MenuItem>Opção 1</MenuItem>
+ *     <MenuItem>Opção 2</MenuItem>
+ *   </MenubarGroup>
+ * </MenubarContent>
+ */
 function MenubarGroup({
   ...props
 }) {
   return <MenubarPrimitive.Group {...props} />;
 }
 
+/**
+ * Componente MenubarPortal para renderizar conteúdo de menu em um portal.
+ * Wrapper em torno da primitiva menubar portal do Radix UI.
+ * Garante que o conteúdo do menu seja renderizado fora do fluxo DOM normal.
+ *
+ * @component
+ * @returns {JSX.Element} - Contéiner portal para conteúdo do menu.
+ *
+ * @example
+ * <MenubarPortal>
+ *   <MenubarContent>...</MenubarContent>
+ * </MenubarPortal>
+ */
 function MenubarPortal({
   ...props
 }) {
   return <MenubarPrimitive.Portal {...props} />;
 }
 
+/**
+ * Componente MenubarRadioGroup para criar grupos de botões de rádio em menus.
+ * Wrapper em torno da primitiva menubar radio group do Radix UI.
+ * Use para opções de menu mutuamente exclusivas.
+ *
+ * @component
+ * @returns {JSX.Element} - Elemento de contéiner de grupo de rádio.
+ *
+ * @example
+ * <MenubarRadioGroup value="densidade" onValueChange={setDensidade}>
+ *   <MenubarRadioItem value="compacto">Compacto</MenubarRadioItem>
+ *   <MenubarRadioItem value="normal">Normal</MenubarRadioItem>
+ * </MenubarRadioGroup>
+ */
 function MenubarRadioGroup({
   ...props
 }) {
   return <MenubarPrimitive.RadioGroup {...props} />;
 }
 
+/**
+ * Componente MenubarSub para criar submenus aninhados.
+ * Wrapper em torno da primitiva menubar sub do Radix UI.
+ * Use para criar estruturas de menu hierárquicas.
+ *
+ * @component
+ * @returns {JSX.Element} - Elemento de contéiner de submenu.
+ *
+ * @example
+ * <MenubarSub>
+ *   <MenubarSubTrigger>Mais</MenubarSubTrigger>
+ *   <MenubarSubContent>
+ *     <MenuItem>Opção Sub 1</MenuItem>
+ *   </MenubarSubContent>
+ * </MenubarSub>
+ */
 function MenubarSub({
   ...props
 }) {

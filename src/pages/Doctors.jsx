@@ -34,6 +34,18 @@ const DAYS_OF_WEEK = [
     { value: 6, label: 'Sábado' },
 ];
 
+/**
+ * Página de gerenciamento de médicos.
+ * Lista todos os médicos registrados com suas especialidades e cronogramas.
+ * Permite adicionar, editar e excluir perfis de médico.
+ * Configura dias de trabalho, horários e duração de agendamento por médico.
+ *
+ * @component
+ * @returns {JSX.Element} - Página com lista de médicos e diálogo de editor para operações de criar/editar.
+ *
+ * @example
+ * <Doctors />
+ */
 export default function Doctors() {
     const queryClient = useQueryClient();
     const [showEditor, setShowEditor] = useState(false);

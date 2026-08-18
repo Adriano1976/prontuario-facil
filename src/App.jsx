@@ -64,6 +64,17 @@ const AuthenticatedApp = () => {
 };
 
 
+/**
+ * Componente principal da aplicação.
+ * Configura o provedor de autenticação, roteamento, cliente de query e elementos de UI globais.
+ * Manipula inicialização da app, estados de erro e roteamento de páginas baseado em autenticação.
+ *
+ * @component
+ * @returns {JSX.Element} - Aplicação com provedores e rotas.
+ *
+ * @example
+ * ReactDOM.render(<App />, document.getElementById('root'));
+ */
 function App() {
 
   return (

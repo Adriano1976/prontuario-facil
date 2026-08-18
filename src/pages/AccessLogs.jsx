@@ -42,6 +42,18 @@ const ACTION_CONFIG = {
     export_data: { label: 'Exportar Dados', color: 'bg-amber-100 text-amber-700', icon: Download },
 };
 
+/**
+ * Página de logs de acesso para auditoria e conformidade.
+ * Exibe todas as ações de usuário no sistema para conformidade LGPD e segurança.
+ * Suporta filtro por tipo de ação, intervalo de data e usuário.
+ * Mostra paciente, usuário, timestamp e informações detalhadas de ação.
+ *
+ * @component
+ * @returns {JSX.Element} - Página com tabela de logs de acesso, barra de busca e opções de filtro.
+ *
+ * @example
+ * <AccessLogs />
+ */
 export default function AccessLogs() {
     const [search, setSearch] = useState('');
     const [actionFilter, setActionFilter] = useState('all');

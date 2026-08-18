@@ -8,8 +8,24 @@ import {
   ToastViewport,
 } from "@/components/ui/toast";
 
-export function Toaster() {
-  const { toasts } = useToast();
+/**
+ * Componente Toaster que renderiza todas as notificações toast ativas.
+ * Deve ser colocado na raiz da app para exibir toasts globalmente.
+ * Gerencia automaticamente o ciclo de vida e renderização de toasts.
+ *
+ * @component
+ * @returns {JSX.Element} - Provedor de toast com viewport e toasts ativos.
+ *
+ * @example
+ * // Em App.jsx raiz
+ * return (
+ *   <div>
+ *     <SuaApp />
+ *     <Toaster />
+ *   </div>
+ * );
+ */
+export function Toaster() {\n  const { toasts } = useToast();
 
   return (
     <ToastProvider>

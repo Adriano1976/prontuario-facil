@@ -23,6 +23,21 @@ const badgeVariants = cva(
   }
 )
 
+/**
+ * Componente de badge para exibir pequenos rótulos ou indicadores de status.
+ * Suporta múltiplas variáes visuais (padrão, secundário, destrutivo, contorno).
+ * Usado para destacar tags, categorias ou informações de status.
+ *
+ * @component
+ * @param {Object} props - Props do componente.
+ * @param {string} [props.variant='default'] - Varião visual ('default', 'secondary', 'destructive', 'outline').
+ * @param {string} [props.className] - Classes CSS adicionais.
+ * @returns {JSX.Element} - Elemento badge estilizado.
+ *
+ * @example
+ * <Badge>Novo</Badge>
+ * <Badge variant="destructive">Urgente</Badge>
+ */
 function Badge({
   className,
   variant,

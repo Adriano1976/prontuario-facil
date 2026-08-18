@@ -16,6 +16,30 @@ const EXAM_TYPES = [
     { value: 'outros', label: 'Outros' },
 ];
 
+/**
+ * Componente para upload de exames médicos com anexos de arquivos e metadados.
+ * Manipula seleção de tipo de exame, data, informações de laboratório e uploads de arquivos.
+ * Exibe preview de arquivo para imagens e gerencia criação de exames.
+ *
+ * @component
+ * @param {Object} props - Props do componente.
+ * @param {boolean} props.open - Se o diálogo de upload está visível.
+ * @param {Function} props.onOpenChange - Callback para controlar visibilidade do diálogo.
+ * @param {Object} props.patient - Objeto do paciente para o qual o exame está sendo feito upload.
+ * @param {string} props.consultationId - ID da consulta associada.
+ * @param {Function} props.onSave - Callback quando o exame é criado com sucesso.
+ * @returns {JSX.Element} - Diálogo modal com formulário de upload de exame.
+ *
+ * @example
+ * const [uploadAberto, setUploadAberto] = useState(false);
+ * <ExamUploader
+ *   open={uploadAberto}
+ *   onOpenChange={setUploadAberto}
+ *   patient={paciente}
+ *   consultationId="consulta-123"
+ *   onSave={() => atualizarExames()}
+ * />
+ */
 export default function ExamUploader({ 
     open, 
     onOpenChange, 

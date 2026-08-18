@@ -19,6 +19,34 @@ const DOCUMENT_TYPES = [
     { value: 'declaracao', label: 'Declaração' },
 ];
 
+/**
+ * Componente para criação e edição de prescrições médicas.
+ * Suporta múltiplos tipos de documentos (receitas, atestados, solicitações de exame).
+ * Permite gerenciamento de medicações e seleção de templates.
+ *
+ * @component
+ * @param {Object} props - Props do componente.
+ * @param {boolean} props.open - Se o diálogo do editor está visível.
+ * @param {Function} props.onOpenChange - Callback para controlar visibilidade do diálogo.
+ * @param {Object} props.patient - Paciente para o qual prescrição está sendo criada.
+ * @param {string} props.consultationId - ID da consulta associada.
+ * @param {Function} props.onSave - Callback quando prescrição é salva com sucesso.
+ * @param {Object} [props.initialData] - Dados pré-preenchidos para edição.
+ * @param {string} [props.initialData.type] - Tipo de documento.
+ * @param {string} [props.initialData.content] - Conteúdo do documento.
+ * @param {Array<Object>} [props.initialData.medications] - Lista de medicações.
+ * @param {number} [props.initialData.valid_days] - Validade da prescrição em dias.
+ * @returns {JSX.Element} - Diálogo modal com formulário de editor de prescrição.
+ *
+ * @example
+ * <PrescriptionEditor
+ *   open={editorAberto}
+ *   onOpenChange={setEditorAberto}
+ *   patient={paciente}
+ *   consultationId="consulta-123"
+ *   onSave={() => atualizarPrescricoes()}
+ * />
+ */
 export default function PrescriptionEditor({ 
     open, 
     onOpenChange, 

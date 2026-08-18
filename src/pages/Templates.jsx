@@ -59,6 +59,18 @@ const AVAILABLE_VARIABLES = [
     { var: '{DIAS_AFASTAMENTO}', desc: 'Dias de afastamento (atestados)' },
 ];
 
+/**
+ * Página de gerenciamento de templates médicos.
+ * Gerencia receitas, atestados e templates de documentos.
+ * Permite criar, editar e excluir templates com substituição de variável.
+ * Suporta marcar templates como padrão ou ativo/inativo.
+ *
+ * @component
+ * @returns {JSX.Element} - Página com lista de templates e diálogo de editor para operações de criar/editar.
+ *
+ * @example
+ * <Templates />
+ */
 export default function Templates() {
     const queryClient = useQueryClient();
     const [showEditor, setShowEditor] = useState(false);

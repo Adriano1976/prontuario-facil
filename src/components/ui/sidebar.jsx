@@ -26,6 +26,26 @@ const SIDEBAR_KEYBOARD_SHORTCUT = "b"
 
 const SidebarContext = React.createContext(null)
 
+/**
+ * Hook para acessar contexto de sidebar e gerenciar estado da sidebar.
+ * Fornece estado de aberto/fechado da sidebar, métodos toggle e comportamento responsivo.
+ * Deve ser usado dentro de um componente SidebarProvider.
+ *
+ * @returns {Object} - Objeto de contexto de sidebar.
+ * @returns {boolean} returns.open - Se a sidebar está aberta no momento.
+ * @returns {Function} returns.setOpen - Função para definir estado de aberto da sidebar.
+ * @returns {Function} returns.toggleSidebar - Função para alternar estado da sidebar.
+ * @returns {string} returns.state - Estado atual da sidebar ('expandida' ou 'recolhida').
+ * @throws {Error} Se useSidebar for chamado fora de um SidebarProvider.
+ *
+ * @example
+ * const { open, toggleSidebar } = useSidebar();
+ * return (
+ *   <button onClick={toggleSidebar}>
+ *     {open ? 'Fechar' : 'Abrir'}
+ *   </button>
+ * );
+ */
 function useSidebar() {
   const context = React.useContext(SidebarContext)
   if (!context) {

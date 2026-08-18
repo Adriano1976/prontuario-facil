@@ -1,6 +1,31 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
+/**
+ * Componente de cartão de estatísticas exibindo uma única métrica com ícone e tendência.
+ * Mostra título, valor numérico, indicador de tendência opcional e ícone animado.
+ * Usado em dashboards para exibir métricas-chave de saúde.
+ *
+ * @component
+ * @param {Object} props - Props do componente.
+ * @param {string} props.title - Título do cartão (ex: 'Total de Pacientes').
+ * @param {number|string} props.value - Valor principal a exibir (ex: '42').
+ * @param {React.ComponentType} props.icon - Componente de ícone do lucide-react a exibir.
+ * @param {string} props.color - Esquema de cores ('sky', 'emerald', 'violet', 'amber', 'rose').
+ * @param {number} [props.trend] - Tendência percentual (+/- valor). Mostra como texto verde/vermelho.
+ * @param {number} [props.delay=0] - Atraso de animação em segundos para énfase em cascata.
+ * @returns {JSX.Element} - Cartão de estatísticas animado.
+ *
+ * @example
+ * <StatsCard
+ *   title="Pacientes"
+ *   value={42}
+ *   icon={Users}
+ *   color="sky"
+ *   trend={+15}
+ *   delay={0.1}
+ * />
+ */
 export default function StatsCard({ title, value, icon: Icon, color, trend, delay = 0 }) {
     const colorClasses = {
         sky: 'from-sky-500 to-sky-600 shadow-sky-500/25',

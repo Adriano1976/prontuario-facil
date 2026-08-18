@@ -6,6 +6,23 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 
+/**
+ * Componente de busca para encontrar pacientes por nome, CPF ou telefone.
+ * Exibe resultados filtrados em dropdown com links de navegação.
+ *
+ * @component
+ * @param {Object} props - Props do componente.
+ * @param {Array<Object>} props.patients - Array de objetos de paciente a pesquisar.
+ * @param {string} props.patients[].id - Identificador único do paciente.
+ * @param {string} props.patients[].full_name - Nome completo do paciente.
+ * @param {string} [props.patients[].cpf] - Número do CPF do paciente.
+ * @param {string} [props.patients[].phone] - Telefone do paciente.
+ * @param {boolean} props.isLoading - Se a lista de pacientes está carregando.
+ * @returns {JSX.Element} - Input de busca com dropdown de resultados animado.
+ *
+ * @example
+ * <PatientSearch patients={listaPacientes} isLoading={carregandoPacientes} />
+ */
 export default function PatientSearch({ patients, isLoading }) {
     const [query, setQuery] = useState('');
     const [isFocused, setIsFocused] = useState(false);

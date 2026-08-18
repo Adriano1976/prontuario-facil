@@ -5,6 +5,21 @@ import { createAxiosClient } from '@base44/sdk/dist/utils/axios-client';
 
 const AuthContext = createContext();
 
+/**
+ * Componente AuthProvider para gerenciar estado de autenticação de usuário e inicialização de app.
+ * Verifica configurações públicas de app, manipula autenticação de usuário e gerencia estado de login/logout.
+ * Deve envolver componentes de aplicação que precisam de acesso a contexto de autenticação.
+ *
+ * @component
+ * @param {Object} props - Props do componente.
+ * @param {React.ReactNode} props.children - Componentes filhos a renderizar dentro do provedor.
+ * @returns {JSX.Element} - Provedor de contexto envolvendo filhos.
+ *
+ * @example
+ * <AuthProvider>
+ *   <App />
+ * </AuthProvider>
+ */
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -17,6 +32,16 @@ export const AuthProvider = ({ children }) => {
     checkAppState();
   }, []);
 
+  /**
+   * Verifica estado de aplicação incluindo configurações públicas e autenticação de usuário.
+   * Verifica se a app requer autenticação e se o usuário está registrado.
+   * Manipula vários cenários de erro de autenticação (requerida, não registrada, expirada).
+   *
+   * @async
+   * @returns {Promise<void>}
+   *
+   * @private
+   */
   const checkAppState = async () => {
     try {
       setIsLoadingPublicSettings(true);
@@ -87,6 +112,16 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  /**
+   * Verifica status de autenticação de usuário atual com o servidor.
+   * Busca as informações de usuário autenticado.
+   * Define estado de autenticação e manipula erros de autenticação.
+   *
+   * @async
+   * @returns {Promise<void>}
+   *
+   * @private
+   */
   const checkUserAuth = async () => {
     try {
       // Now check if the user is authenticated
@@ -110,6 +145,15 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  /**
+   * Desconecta o usuário atual e opcionalmente redireciona para a página de login.
+   * Limpa estado de usuário e remove token de autenticação.
+   *
+   * @param {boolean} [shouldRedirect=true] - Se deve redirecionar para página de login após logout.
+   * @returns {void}
+   *
+   * @private
+   */
   const logout = (shouldRedirect = true) => {
     setUser(null);
     setIsAuthenticated(false);
@@ -123,6 +167,14 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  /**
+   * Redireciona usuário para a página de login.
+   * Usa método integrado de redirecionamento do SDK com a URL atual como destino de retorno.
+   *
+   * @returns {void}
+   *
+   * @private
+   */
   const navigateToLogin = () => {
     // Use the SDK's redirectToLogin method
     base44.auth.redirectToLogin(window.location.href);
@@ -145,6 +197,30 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
+/**
+ * Hook para acessar contexto de autenticação e informações de usuário.
+ * Fornece usuário atual, status de autenticação e métodos relacionados a autenticação.
+ * Deve ser usado dentro de um componente AuthProvider.
+ *
+ * @returns {Object} - Objeto de contexto de autenticação.
+ * @returns {Object|null} returns.user - Objeto de usuário autenticado atual ou null.
+ * @returns {boolean} returns.isAuthenticated - Se o usuário está atualmente autenticado.
+ * @returns {boolean} returns.isLoadingAuth - Se a autenticação está carregando.
+ * @returns {boolean} returns.isLoadingPublicSettings - Se as configurações públicas de app estão carregando.
+ * @returns {Object|null} returns.authError - Objeto de erro se autenticação falhou, null caso contrário.
+ * @returns {Object|null} returns.appPublicSettings - Dados de configurações públicas de app.
+ * @returns {Function} returns.logout - Função para desconectar o usuário atual.
+ * @returns {Function} returns.navigateToLogin - Função para redirecionar para página de login.
+ * @returns {Function} returns.checkAppState - Função para verificar novamente estado de app e autenticação.
+ *
+ * @throws {Error} Se useAuth for chamado fora de um AuthProvider.
+ *
+ * @example
+ * const { user, isAuthenticated, logout } = useAuth();
+ * if (!isAuthenticated) {
+ *   return <LoginPage />;
+ * }
+ */
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {

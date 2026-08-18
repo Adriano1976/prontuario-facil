@@ -34,6 +34,18 @@ const STATUS_CONFIG = {
     cancelada: { label: 'Cancelada', color: 'bg-rose-100 text-rose-700' },
 };
 
+/**
+ * Página de detalhe de uma única consulta.
+ * Mostra informações abrangentes de consulta incluindo sinais vitais, diagnóstico e anotacões.
+ * Exibe prescrições e exames associados.
+ * Permite editar status de consulta e adicionar novos exames/prescrições.
+ *
+ * @component
+ * @returns {JSX.Element} - Página com detalhes de consulta, registros médicos e botões de ação.
+ *
+ * @example
+ * <Consultation /> // URL deve conter ?id=consulta-123
+ */
 export default function Consultation() {
     const navigate = useNavigate();
     const queryClient = useQueryClient();

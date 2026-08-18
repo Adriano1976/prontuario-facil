@@ -4,6 +4,18 @@ import { useAuth } from './AuthContext';
 import { base44 } from '@/api/base44Client';
 import { pagesConfig } from '@/pages.config';
 
+/**
+ * Componente que rastreia navegação de páginas e registra atividade de usuário.
+ * Grava quais páginas os usuários acessam para fins de auditoria e análise.
+ * Funciona em background sem afetar a UI.
+ *
+ * @component
+ * @returns {null} - Este componente não renderiza nenhuma UI.
+ *
+ * @example
+ * // Adicione na raiz da app para rastrear toda navegação
+ * <NavigationTracker />
+ */
 export default function NavigationTracker() {
     const location = useLocation();
     const { isAuthenticated } = useAuth();

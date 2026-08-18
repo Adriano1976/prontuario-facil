@@ -22,6 +22,19 @@ import { motion } from 'framer-motion';
 import VitalSignsForm from '@/components/medical/VitalSignsForm';
 import { logAccess, ACCESS_ACTIONS } from '@/components/medical/AccessLogger';
 
+/**
+ * Página de criação de nova consulta.
+ * Formulário para registrar consultas de paciente com sinais vitais, diagnóstico e plano de tratamento.
+ * Inclui busca de paciente, entrada de sinais vitais e opções de prescrição/exame.
+ * Suporta edição de consultas existentes.
+ *
+ * @component
+ * @returns {JSX.Element} - Formulário com seleção de paciente, detalhes de consulta e entrada de sinais vitais.
+ *
+ * @example
+ * <NewConsultation /> // Nova consulta
+ * <NewConsultation /> // URL pode incluir ?patient_id=paciente-123 para pré-seleção
+ */
 export default function NewConsultation() {
     const navigate = useNavigate();
     const queryClient = useQueryClient();

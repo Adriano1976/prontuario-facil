@@ -5,6 +5,26 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Shield, CheckCircle2, FileText } from 'lucide-react';
 
+/**
+ * Componente de diálogo para consentimento LGPD (Lei Geral de Proteção de Dados).
+ * Exibe termos e condições que devem ser aceitos antes de usar o sistema.
+ * Garante conformidade com regulamentos de proteção de dados.
+ *
+ * @component
+ * @param {Object} props - Props do componente.
+ * @param {boolean} props.open - Se o diálogo está visível.
+ * @param {Function} props.onOpenChange - Callback para controlar visibilidade do diálogo.
+ * @param {Function} props.onAccept - Callback quando usuário aceita os termos LGPD.
+ * @returns {JSX.Element} - Diálogo modal com termos LGPD e checkbox de aceitação.
+ *
+ * @example
+ * const [consentAberto, setConsentAberto] = useState(false);
+ * <LGPDConsent
+ *   open={consentAberto}
+ *   onOpenChange={setConsentAberto}
+ *   onAccept={() => salvarPreferenciasConsentimento()}
+ * />
+ */
 export default function LGPDConsent({ open, onOpenChange, onAccept }) {
     const [accepted, setAccepted] = useState(false);
 

@@ -7,6 +7,22 @@ import { Button } from "@/components/ui/button"
 
 const CarouselContext = React.createContext(null)
 
+/**
+ * Hook para acessar contexto de carousel e controlar estado do carousel.
+ * Fornece métodos para navegar carousel, verificar estado e acessar configuração.
+ * Deve ser usado dentro de um componente Carousel.
+ *
+ * @returns {Object} - Objeto de contexto de carousel com métodos de navegação e estado.
+ * @returns {Function} returns.scrollPrev - Rolar para item anterior do carousel.
+ * @returns {Function} returns.scrollNext - Rolar para próximo item do carousel.
+ * @returns {number} returns.scrollSnapIndex - Índice de scroll atual.
+ * @returns {number} returns.scrollProgress - Progresso de scroll atual (0-1).
+ * @throws {Error} Se useCarousel for chamado fora de um componente Carousel.
+ *
+ * @example
+ * const carousel = useCarousel();
+ * carousel.scrollNext();
+ */
 function useCarousel() {
   const context = React.useContext(CarouselContext)
 

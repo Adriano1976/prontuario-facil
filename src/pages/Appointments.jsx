@@ -32,6 +32,18 @@ const STATUS_CONFIG = {
     faltou: { label: 'Faltou', color: 'bg-rose-100 text-rose-700' },
 };
 
+/**
+ * Página de gerenciamento de agendamentos com vistas de calendário e lista.
+ * Mostra todos os agendamentos programados com indicadores de status.
+ * Permite visualizar, atualizar e gerenciar status de agendamento.
+ * Fornece navegação rápida para criação de novo agendamento.
+ *
+ * @component
+ * @returns {JSX.Element} - Página com vista de calendário, lista de agendamentos e opções de atualização de status.
+ *
+ * @example
+ * <Appointments />
+ */
 export default function Appointments() {
     const queryClient = useQueryClient();
     const [selectedAppointment, setSelectedAppointment] = useState(null);

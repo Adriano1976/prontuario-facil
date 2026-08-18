@@ -1,5 +1,26 @@
 import { base44 } from '@/api/base44Client';
 
+/**
+ * Registra acesso de usuário no sistema para conformidade LGPD e auditoria.
+ * Grava quem acessou o quê, quando e de onde para fins de segurança e conformidade regulatória.
+ *
+ * @async
+ * @param {string} acao - A ação executada (ex: 'visualizar_paciente', 'editar_consulta').
+ * @param {string|null} [tipoEntidade=null] - O tipo de entidade acessada (ex: 'Paciente', 'Consulta').
+ * @param {string|null} [idEntidade=null] - O ID da entidade acessada.
+ * @param {string|null} [nomePaciente=null] - O nome do paciente associado à ação.
+ * @param {Object|null} [detalhes=null] - Detalhes adicionais sobre a ação.
+ * @returns {Promise<void>}
+ *
+ * @example
+ * await logAccess(
+ *   ACCESS_ACTIONS.VIEW_PATIENT,
+ *   'Paciente',
+ *   'paciente-123',
+ *   'João Silva',
+ *   { motivo: 'Consulta de rotina' }
+ * );
+ */
 export async function logAccess(action, entityType = null, entityId = null, patientName = null, details = null) {
     try {
         const user = await base44.auth.me();
