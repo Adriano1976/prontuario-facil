@@ -25,6 +25,7 @@ import {
 import { motion } from 'framer-motion';
 import LGPDConsent from '@/components/medical/LGPDConsent';
 import { logAccess, ACCESS_ACTIONS } from '@/components/medical/AccessLogger';
+import { useToast } from '@/components/ui/use-toast';
 
 const BLOOD_TYPES = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-', 'desconhecido'];
 const GENDERS = [
@@ -50,6 +51,7 @@ const GENDERS = [
 export default function PatientForm() {
     const navigate = useNavigate();
     const queryClient = useQueryClient();
+    const { toast } = useToast();
     const urlParams = new URLSearchParams(window.location.search);
     const patientId = urlParams.get('id');
 
@@ -118,6 +120,13 @@ export default function PatientForm() {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['patients'] });
             navigate(createPageUrl('Patients'));
+        },
+        onError: (error) => {
+            toast({
+                variant: 'destructive',
+                title: 'Não foi possível salvar o paciente',
+                description: error?.message || 'Verifique a conexão com o servidor e tente novamente.',
+            });
         }
     });
 
