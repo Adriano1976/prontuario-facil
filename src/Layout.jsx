@@ -25,6 +25,17 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { useToast } from "@/components/ui/use-toast";
 
 const NAV_ITEMS = [
     { name: 'Dashboard', icon: LayoutDashboard, page: 'Dashboard' },
@@ -35,6 +46,8 @@ const NAV_ITEMS = [
     { name: 'Templates', icon: FileText, page: 'Templates' },
     { name: 'Logs de Acesso', icon: Shield, page: 'AccessLogs' },
 ];
+
+const BOTTOM_NAV_ITEMS = NAV_ITEMS.slice(0, 4);
 
 /**
  * Componente de wrapper de layout principal para páginas autenticadas.
@@ -55,6 +68,9 @@ const NAV_ITEMS = [
 export default function Layout({ children, currentPageName }) {
     const navigate = useNavigate();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
+    const { toast } = useToast();
 
     const { data: user } = useQuery({
         queryKey: ['current-user'],
@@ -63,6 +79,22 @@ export default function Layout({ children, currentPageName }) {
 
     const handleLogout = async () => {
         await base44.auth.logout();
+    };
+
+    const handleDeleteAccount = async () => {
+        if (!user?.id) return;
+        setIsDeleting(true);
+        try {
+            await base44.entities.User.delete(user.id);
+            await base44.auth.logout();
+        } catch (error) {
+            setIsDeleting(false);
+            toast({
+                variant: "destructive",
+                title: "Erro ao excluir conta",
+                description: error?.message || "Não foi possível excluir a conta. Tente novamente.",
+            });
+        }
     };
 
     // Pages that should not show navigation
@@ -76,7 +108,7 @@ export default function Layout({ children, currentPageName }) {
     return (
         <div className="min-h-screen bg-slate-50">
             {/* Top Navigation */}
-            <nav className="bg-white border-b border-slate-200 sticky top-0 z-50">
+            <nav className="bg-white border-b border-slate-200 sticky top-0 z-50 safe-area-top">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex items-center justify-between h-16">
                         {/* Logo */}
@@ -186,6 +218,50 @@ export default function Layout({ children, currentPageName }) {
             <main>
                 {children}
             </main>
+
+            {/* Bottom Navigation (mobile only) */}
+            <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-slate-200 safe-area-bottom">
+                <div className="flex items-center justify-around">
+                    {BOTTOM_NAV_ITEMS.map(item => {
+                        const Icon = item.icon;
+                        const isActive = currentPageName === item.page;
+                        return (
+                            <Link
+                                key={item.page}
+                                to={createPageUrl(item.page)}
+                                className={`flex flex-col items-center justify-center gap-1 py-2 px-3 min-h-[44px] flex-1 transition-colors ${
+                                    isActive ? 'text-sky-700' : 'text-slate-500'
+                                }`}
+                            >
+                                <Icon className="h-5 w-5" />
+                                <span className="text-[10px] font-medium">{item.name}</span>
+                            </Link>
+                        );
+                    })}
+                </div>
+            </nav>
+
+            {/* Account Deletion Confirmation Dialog */}
+            <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle className="text-rose-600">Excluir Conta</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            Esta ação é <strong>irreversível</strong>. Sua conta será permanentemente excluída e você perderá o acesso ao sistema. Dados associados podem ser afetados. Tem certeza que deseja continuar?
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel disabled={isDeleting}>Cancelar</AlertDialogCancel>
+                        <AlertDialogAction
+                            onClick={handleDeleteAccount}
+                            disabled={isDeleting}
+                            className="bg-rose-600 hover:bg-rose-700 text-white"
+                        >
+                            {isDeleting ? "Excluindo..." : "Excluir definitivamente"}
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </div>
     );
 }

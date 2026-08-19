@@ -25,7 +25,8 @@ import {
  *   </div>
  * );
  */
-export function Toaster() {\n  const { toasts } = useToast();
+export function Toaster() {
+  const { toasts } = useToast();
 
   return (
     <ToastProvider>
@@ -46,4 +47,4 @@ export function Toaster() {\n  const { toasts } = useToast();
       <ToastViewport />
     </ToastProvider>
   );
-} 
+}

@@ -85,4 +85,18 @@
   body {
     @apply bg-background text-foreground;
   }
+
+    /* Safe area insets for mobile notches and status bars */
+  .safe-area-top {
+    padding-top: env(safe-area-inset-top);
+  }
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  /* Disable text selection on interactive chrome (Android long-press) */
+  button, [role="button"], a, nav {
+    user-select: none;
+    -webkit-user-select: none;
+  }
 }

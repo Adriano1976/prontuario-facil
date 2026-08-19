@@ -1,4 +1,4 @@
-import { clsx } from "clsx"
+﻿import { clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 
 /**
@@ -15,8 +15,18 @@ import { twMerge } from "tailwind-merge"
  */
 export function cn(...inputs) {
   return twMerge(clsx(inputs))
-} 
-
+}
 
 /**
- * Checks if the application is running inside an iframe.\n * Useful for detecting if the app is embedded in another website.\n * Returns false if the app is at the top level, true if nested in an iframe.\n *\n * @type {boolean}\n *\n * @example\n * if (isIframe) {\n *   // App is embedded, adjust UI accordingly\n * }\n */\nexport const isIframe = window.self !== window.top;
+ * Checks if the application is running inside an iframe.
+ * Useful for detecting if the app is embedded in another website.
+ * Returns false if the app is at the top level, true if nested in an iframe.
+ *
+ * @type {boolean}
+ *
+ * @example
+ * if (isIframe) {
+ *   // App is embedded, adjust UI accordingly
+ * }
+ */
+export const isIframe = window.self !== window.top;

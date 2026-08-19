@@ -74,7 +74,12 @@ const getAppParamValue = (paramName, { defaultValue = undefined, removeFromUrl =
  * const config = getAppParams();
  * // { appId: '...', token: '...', functionsVersion: '1.0', ... }
  */
-const getAppParams = () => {\n\tif (getAppParamValue("clear_access_token") === 'true') {\n\t\tstorage.removeItem('base44_access_token');\n\t\tstorage.removeItem('token');\n\t}\n\treturn {
+const getAppParams = () => {
+	if (getAppParamValue("clear_access_token") === 'true') {
+		storage.removeItem('base44_access_token');
+		storage.removeItem('token');
+	}
+	return {
 		appId: getAppParamValue("app_id", { defaultValue: import.meta.env.VITE_BASE44_APP_ID }),
 		token: getAppParamValue("access_token", { removeFromUrl: true }),
 		fromUrl: getAppParamValue("from_url", { defaultValue: window.location.href }),

@@ -1,4 +1,5 @@
 import { Toaster } from "@/components/ui/toaster"
+import { ThemeProvider } from 'next-themes';
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
 import NavigationTracker from '@/lib/NavigationTracker'
@@ -80,10 +81,12 @@ function App() {
   return (
     <AuthProvider>
       <QueryClientProvider client={queryClientInstance}>
-        <Router>
-          <NavigationTracker />
-          <AuthenticatedApp />
-        </Router>
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
+          <Router>
+            <NavigationTracker />
+            <AuthenticatedApp />
+          </Router>
+        </ThemeProvider>
         <Toaster />
       </QueryClientProvider>
     </AuthProvider>
