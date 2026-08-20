@@ -25,6 +25,8 @@ import { motion } from 'framer-motion';
 import StatsCard from '@/components/medical/StatsCard';
 import PatientSearch from '@/components/medical/PatientSearch';
 import { logAccess, ACCESS_ACTIONS } from '@/components/medical/AccessLogger';
+import ReportsView from '@/components/medical/ReportsView';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 /**
  * Página do dashboard mostrando métricas-chave de saúde e atividade recente.
@@ -155,6 +157,12 @@ export default function Dashboard() {
                     />
                 </div>
 
+                <Tabs defaultValue="visao-geral" className="w-full">
+                    <TabsList className="mb-6">
+                        <TabsTrigger value="visao-geral">Visão geral</TabsTrigger>
+                        <TabsTrigger value="relatorios">Relatórios</TabsTrigger>
+                    </TabsList>
+                    <TabsContent value="visao-geral" className="mt-0">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     {/* Próximas Consultas */}
                     <motion.div 
@@ -318,6 +326,11 @@ export default function Dashboard() {
                         </Card>
                     </motion.div>
                 </div>
+                    </TabsContent>
+                    <TabsContent value="relatorios">
+                        <ReportsView />
+                    </TabsContent>
+                </Tabs>
             </div>
         </div>
     );
