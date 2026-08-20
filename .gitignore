@@ -93,3 +93,7 @@ typings/
 !.yarn/plugins
 !.yarn/sdks
 !.yarn/versions
+
+# Reversa
+.reversa/config.user.toml
+_reversa_sdd/
