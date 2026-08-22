@@ -1,0 +1,64 @@
+{
+  "generated_at": "2026-08-20T00:00:00Z",
+  "project_root": "D:\\Projetos\\prontuario-facil",
+  "languages": [
+    { "name": "JavaScript (JSX)", "extensions": [".jsx"], "file_count": 80 },
+    { "name": "JavaScript", "extensions": [".js"], "file_count": 5 },
+    { "name": "TypeScript", "extensions": [".ts"], "file_count": 1 },
+    { "name": "CSS", "extensions": [".css"], "file_count": 1 }
+  ],
+  "primary_language": "JavaScript (JSX)",
+  "frameworks": [
+    { "name": "React", "version": "18.2.0", "source": "package.json" },
+    { "name": "Vite", "version": "6.1.0", "source": "package.json" },
+    { "name": "react-router-dom", "version": "7.18.2", "source": "package.json" },
+    { "name": "Tailwind CSS", "version": "3.4.17", "source": "package.json" },
+    { "name": "@tanstack/react-query", "version": "5.84.1", "source": "package.json" },
+    { "name": "@base44/sdk", "version": "0.8.43", "source": "package.json" },
+    { "name": "@base44/vite-plugin", "version": "1.0.30", "source": "package.json" },
+    { "name": "Radix UI (shadcn/ui primitives)", "version": "varios", "source": "package.json" }
+  ],
+  "package_manager": "npm",
+  "entry_points": [
+    { "path": "index.html", "type": "html_entry" },
+    { "path": "src/main.jsx", "type": "app_entry" },
+    { "path": "src/App.jsx", "type": "app_root" },
+    { "path": "src/pages.config.js", "type": "router_config" }
+  ],
+  "config_files": [
+    ".env.local", "vite.config.js", "jsconfig.json", "tailwind.config.js",
+    "postcss.config.js", "eslint.config.js", "components.json", "base44/config.jsonc"
+  ],
+  "ci_cd": [],
+  "docker": {},
+  "database_hints": [
+    { "path": "base44/entities/", "type": "baas_entity_schemas" }
+  ],
+  "test_framework": null,
+  "test_file_count": 0,
+  "modules": [
+    "pacientes",
+    "consultas",
+    "agendamentos",
+    "medicos",
+    "templates",
+    "logs-acesso",
+    "dashboard"
+  ],
+  "total_files": 346,
+  "external_integrations": [
+    { "name": "Base44 (BaaS)", "type": "backend_as_a_service", "evidence": ["src/api/base44Client.js", "base44/config.jsonc"] },
+    { "name": "Stripe", "type": "payments", "evidence": ["package.json"], "status": "instalado_mas_sem_uso_no_codigo" },
+    { "name": "react-leaflet", "type": "maps", "evidence": ["package.json"], "status": "instalado_mas_sem_uso_no_codigo" },
+    { "name": "jspdf/html2canvas", "type": "pdf_export", "evidence": ["package.json"], "status": "instalado_mas_sem_uso_no_codigo" }
+  ],
+  "organization_suggestion": {
+    "granularity": "hybrid",
+    "rationale": "A aplicação combina roteamento centralizado de páginas (pages.config.js) com organização por domínio médico (entities, pages e components por área), sugerindo organização híbrida.",
+    "signals": [
+      { "type": "centralized_routing", "evidence": ["src/pages.config.js", "src/App.jsx"] },
+      { "type": "domain_folders", "evidence": ["src/pages/", "base44/entities/", "src/components/appointments/", "src/components/medical/"] }
+    ],
+    "features": []
+  }
+}
