@@ -1,0 +1,561 @@
+{
+  "generated_at": "2026-08-22T00:00:00Z",
+  "modules": [
+    {
+      "name": "pacientes",
+      "path": "src/pages",
+      "purpose": "Gestão completa de pacientes: listagem, cadastro, edição, visualização detalhada com histórico médico, exames, prescrições e agendamentos",
+      "primary_files": [
+        "src/pages/Patients.jsx",
+        "src/pages/PatientForm.jsx",
+        "src/pages/PatientDetail.jsx",
+        "src/components/medical/ConsultationTimeline.jsx",
+        "src/components/medical/ExamUploader.jsx",
+        "src/components/medical/PrescriptionEditor.jsx",
+        "src/components/medical/AccessLogger.jsx",
+        "src/components/medical/LGPDConsent.jsx",
+        "base44/entities/Patient.jsonc"
+      ],
+      "functions": [
+        {
+          "name": "Patients (componente principal)",
+          "file": "src/pages/Patients.jsx",
+          "params": [],
+          "returns": "JSX.Element",
+          "confidence": "confirmed",
+          "description": "Página de listagem com busca, filtro por status e navegação para detalhes/criação"
+        },
+        {
+          "name": "PatientForm (componente principal)",
+          "file": "src/pages/PatientForm.jsx",
+          "params": [],
+          "returns": "JSX.Element",
+          "confidence": "confirmed",
+          "description": "Formulário para criar/editar paciente com validação, upload de foto, consentimento LGPD"
+        },
+        {
+          "name": "PatientDetail (componente principal)",
+          "file": "src/pages/PatientDetail.jsx",
+          "params": [],
+          "returns": "JSX.Element",
+          "confidence": "confirmed",
+          "description": "Visualização detalhada do paciente com abas de histórico, ações rápidas (agendar, nova consulta, receita, exame)"
+        },
+        {
+          "name": "calculateAge",
+          "file": "src/pages/Patients.jsx",
+          "params": ["birthDate: string"],
+          "returns": "number | null",
+          "confidence": "confirmed",
+          "description": "Calcula idade a partir da data de nascimento"
+        },
+        {
+          "name": "calculateAge",
+          "file": "src/pages/PatientDetail.jsx",
+          "params": ["birthDate: string"],
+          "returns": "number | null",
+          "confidence": "confirmed",
+          "description": "Calcula idade a partir da data de nascimento (duplicado em PatientDetail)"
+        },
+        {
+          "name": "formatCPF",
+          "file": "src/pages/PatientForm.jsx",
+          "params": ["value: string"],
+          "returns": "string",
+          "confidence": "confirmed",
+          "description": "Formata CPF no padrão 000.000.000-00"
+        },
+        {
+          "name": "formatPhone",
+          "file": "src/pages/PatientForm.jsx",
+          "params": ["value: string"],
+          "returns": "string",
+          "confidence": "confirmed",
+          "description": "Formata telefone para (00) 00000-0000 ou (00) 0000-0000"
+        },
+        {
+          "name": "handleChange",
+          "file": "src/pages/PatientForm.jsx",
+          "params": ["field: string", "value: any"],
+          "returns": "void",
+          "confidence": "confirmed",
+          "description": "Atualiza campo específico do formData"
+        },
+        {
+          "name": "handlePhotoChange",
+          "file": "src/pages/PatientForm.jsx",
+          "params": ["event: ChangeEvent"],
+          "returns": "void",
+          "confidence": "confirmed",
+          "description": "Processa upload de foto do paciente com preview"
+        },
+        {
+          "name": "handleLGPDAccept",
+          "file": "src/pages/PatientForm.jsx",
+          "params": [],
+          "returns": "void",
+          "confidence": "confirmed",
+          "description": "Registra aceite do consentimento LGPD com timestamp e IP"
+        },
+        {
+          "name": "handleSubmit",
+          "file": "src/pages/PatientForm.jsx",
+          "params": ["event: FormEvent"],
+          "returns": "void",
+          "confidence": "confirmed",
+          "description": "Valida LGPD e dispara mutation de salvar (create/update)"
+        },
+        {
+          "name": "logAccess",
+          "file": "src/components/medical/AccessLogger.jsx",
+          "params": ["action: string", "entityType: string?", "entityId: string?", "patientName: string?", "details: Object?"],
+          "returns": "Promise<void>",
+          "confidence": "confirmed",
+          "description": "Registra acesso no AccessLog para auditoria LGPD"
+        },
+        {
+          "name": "applyTemplate",
+          "file": "src/components/medical/PrescriptionEditor.jsx",
+          "params": ["templateId: string"],
+          "returns": "void",
+          "confidence": "confirmed",
+          "description": "Aplica template substituindo variáveis {PACIENTE_NOME}, {PACIENTE_CPF}, {DATA}, {DATA_EXTENSO}"
+        },
+        {
+          "name": "handlePrint",
+          "file": "src/components/medical/PrescriptionEditor.jsx",
+          "params": [],
+          "returns": "void",
+          "confidence": "confirmed",
+          "description": "Gera HTML para impressão da prescrição/atestado em nova janela"
+        },
+        {
+          "name": "handleFileChange",
+          "file": "src/components/medical/ExamUploader.jsx",
+          "params": ["event: ChangeEvent"],
+          "returns": "void",
+          "confidence": "confirmed",
+          "description": "Processa arquivo de exame com preview para imagens"
+        }
+      ],
+      "entities": [
+        {
+          "name": "Patient",
+          "source": "base44/entities/Patient.jsonc",
+          "fields": [
+            { "name": "id", "type": "string", "required": true, "description": "ID único do paciente (gerado pelo Base44)" },
+            { "name": "full_name", "type": "string", "required": true, "description": "Nome completo do paciente" },
+            { "name": "cpf", "type": "string", "required": true, "description": "CPF do paciente (criptografado no armazenamento)" },
+            { "name": "birth_date", "type": "string", "format": "date", "required": true, "description": "Data de nascimento" },
+            { "name": "gender", "type": "string", "enum": ["masculino", "feminino", "outro", "prefiro_nao_informar"], "required": false, "description": "Gênero" },
+            { "name": "phone", "type": "string", "required": true, "description": "Telefone de contato" },
+            { "name": "email", "type": "string", "required": false, "description": "Email do paciente" },
+            { "name": "address", "type": "string", "required": false, "description": "Endereço completo" },
+            { "name": "emergency_contact", "type": "string", "required": false, "description": "Nome do contato de emergência" },
+            { "name": "emergency_phone", "type": "string", "required": false, "description": "Telefone de emergência" },
+            { "name": "health_insurance", "type": "string", "required": false, "description": "Convênio médico" },
+            { "name": "insurance_number", "type": "string", "required": false, "description": "Número da carteirinha do convênio" },
+            { "name": "blood_type", "type": "string", "enum": ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-", "desconhecido"], "required": false, "default": "desconhecido", "description": "Tipo sanguíneo" },
+            { "name": "allergies", "type": "string", "required": false, "description": "Alergias conhecidas" },
+            { "name": "chronic_conditions", "type": "string", "required": false, "description": "Condições crônicas" },
+            { "name": "medications_in_use", "type": "string", "required": false, "description": "Medicamentos em uso contínuo" },
+            { "name": "lgpd_consent", "type": "boolean", "required": true, "description": "Consentimento LGPD aceito" },
+            { "name": "lgpd_consent_date", "type": "string", "format": "date-time", "required": false, "description": "Data/hora do consentimento LGPD" },
+            { "name": "lgpd_consent_ip", "type": "string", "required": false, "description": "IP do consentimento (client-side)" },
+            { "name": "photo_url", "type": "string", "required": false, "description": "URL da foto do paciente" },
+            { "name": "notes", "type": "string", "required": false, "description": "Observações gerais" },
+            { "name": "status", "type": "string", "enum": ["ativo", "inativo"], "required": false, "default": "ativo", "description": "Status do paciente" },
+            { "name": "created_by_id", "type": "string", "required": false, "description": "ID do usuário que criou (para RLS)" },
+            { "name": "created_date", "type": "string", "format": "date-time", "required": false, "description": "Data de criação (para ordenação)" }
+          ],
+          "confidence": "confirmed"
+        },
+        {
+          "name": "AccessLog",
+          "source": "base44/entities/AccessLog.jsonc (inferido pelo uso em AccessLogger.jsx)",
+          "fields": [
+            { "name": "user_email", "type": "string", "required": true, "description": "Email do usuário que executou a ação" },
+            { "name": "action", "type": "string", "required": true, "description": "Ação executada (valores de ACCESS_ACTIONS)" },
+            { "name": "entity_type", "type": "string", "required": false, "description": "Tipo de entidade acessada" },
+            { "name": "entity_id", "type": "string", "required": false, "description": "ID da entidade acessada" },
+            { "name": "patient_name", "type": "string", "required": false, "description": "Nome do paciente associado" },
+            { "name": "ip_address", "type": "string", "required": false, "default": "client-side", "description": "Endereço IP" },
+            { "name": "user_agent", "type": "string", "required": false, "description": "User agent do navegador" },
+            { "name": "details", "type": "object", "required": false, "description": "Detalhes adicionais da ação" }
+          ],
+          "confidence": "inferred"
+        }
+      ],
+      "business_rules": [
+        {
+          "description": "CPF é campo obrigatório e deve ser único (implícito pela validação de formulário)",
+          "location": "src/pages/PatientForm.jsx:256-262",
+          "confidence": "inferred"
+        },
+        {
+          "description": "Consentimento LGPD é obrigatório para novos pacientes (não para edição)",
+          "location": "src/pages/PatientForm.jsx:157-162",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Idade calculada dinamicamente a partir de birth_date",
+          "location": "src/pages/Patients.jsx:59-69; src/pages/PatientDetail.jsx:124-134",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Formatação automática de CPF (000.000.000-00) e telefone ((00) 00000-0000)",
+          "location": "src/pages/PatientForm.jsx:166-177",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "RLS: Usuário só acessa próprios pacientes ou se for admin",
+          "location": "base44/entities/Patient.jsonc:120-158",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Foto do paciente armazenada via upload no Base44 (file_url)",
+          "location": "src/pages/PatientForm.jsx:105-108",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Todo acesso a paciente é logado automaticamente (VIEW_PATIENT, EDIT_PATIENT, CREATE_PATIENT, DELETE_RECORD)",
+          "location": "src/components/medical/AccessLogger.jsx:24-41; src/pages/PatientDetail.jsx:100-104; src/pages/PatientForm.jsx:113-118",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Status do paciente: 'ativo' ou 'inativo' (default: ativo)",
+          "location": "base44/entities/Patient.jsonc:104-111",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Tipo sanguíneo limitado a enum ABO/Rh + 'desconhecido'",
+          "location": "base44/entities/Patient.jsonc:56-70; src/pages/PatientForm.jsx:30",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Gênero limitado a enum: masculino, feminino, outro, prefiro_nao_informar",
+          "location": "base44/entities/Patient.jsonc:18-26; src/pages/PatientForm.jsx:31-36",
+          "confidence": "confirmed"
+        }
+      ],
+      "dependencies": [
+        "consultas",
+        "agendamentos",
+        "medicos",
+        "templates"
+      ],
+      "algorithms": [
+        {
+          "name": "Cálculo de idade",
+          "description": "Diferença de anos entre data atual e birth_date, ajustando se aniversário ainda não ocorreu este ano",
+          "location": "src/pages/Patients.jsx:59-69",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "Filtro combinado de busca",
+          "description": "Busca por nome (case-insensitive), CPF, telefone ou email + filtro por status (ativo/inativo/todos)",
+          "location": "src/pages/Patients.jsx:47-57",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "Template variable substitution",
+          "description": "Substitui {PACIENTE_NOME}, {PACIENTE_CPF}, {DATA}, {DATA_EXTENSO} no conteúdo do template",
+          "location": "src/components/medical/PrescriptionEditor.jsx:95-101",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "Event timeline merge & sort",
+          "description": "Combina consultas, prescrições, exames e agendamentos ordenados por data decrescente",
+          "location": "src/components/medical/ConsultationTimeline.jsx:54-59",
+          "confidence": "confirmed"
+        }
+      ],
+      "complexity": "high",
+      "metrics": {
+        "files_analyzed": 9,
+        "total_lines": 2089,
+        "entities": 2,
+        "functions": 14,
+        "business_rules": 10,
+        "algorithms": 4
+      }
+    }
+  ,
+    {
+      "name": "consultas",
+      "path": "src/pages",
+      "purpose": "Ciclo de atendimento clínico: listagem de consultas com busca/filtros, formulário de criação/edição (anamnese, sinais vitais, diagnóstico CID-10, conduta), visualização detalhada, emissão de documentos médicos com templates e upload de exames",
+      "primary_files": [
+        "src/pages/Consultations.jsx",
+        "src/pages/Consultation.jsx",
+        "src/pages/NewConsultation.jsx",
+        "src/components/medical/VitalSignsForm.jsx",
+        "src/components/medical/PrescriptionEditor.jsx",
+        "src/components/medical/ExamUploader.jsx",
+        "src/components/medical/AccessLogger.jsx",
+        "src/api/base44Client.js",
+        "base44/entities/Consultation.jsonc",
+        "base44/entities/Prescription.jsonc",
+        "base44/entities/Exam.jsonc"
+      ],
+      "functions": [
+        {
+          "name": "Consultations (componente principal)",
+          "file": "src/pages/Consultations.jsx",
+          "params": [],
+          "returns": "JSX.Element",
+          "confidence": "confirmed",
+          "description": "Página de listagem com busca por paciente/queixa/diagnóstico, filtros por status e intervalo de data"
+        },
+        {
+          "name": "Consultation (componente principal)",
+          "file": "src/pages/Consultation.jsx",
+          "params": [],
+          "returns": "JSX.Element",
+          "confidence": "confirmed",
+          "description": "Visualização detalhada da consulta com sinais vitais, anamnese, diagnóstico, prescrições, exames e ações rápidas"
+        },
+        {
+          "name": "NewConsultation (componente principal)",
+          "file": "src/pages/NewConsultation.jsx",
+          "params": [],
+          "returns": "JSX.Element",
+          "confidence": "confirmed",
+          "description": "Formulário para criar/editar consulta com seleção de paciente, sinais vitais, anamnese, diagnóstico e conduta"
+        },
+        {
+          "name": "VitalSignsForm",
+          "file": "src/components/medical/VitalSignsForm.jsx",
+          "params": ["vitalSigns: Object", "onChange: Function"],
+          "returns": "JSX.Element",
+          "confidence": "confirmed",
+          "description": "Formulário de 7 sinais vitais (PA, FC, temp, FR, SpO2, peso, altura)"
+        },
+        {
+          "name": "PrescriptionEditor",
+          "file": "src/components/medical/PrescriptionEditor.jsx",
+          "params": ["open: boolean", "onOpenChange: Function", "patient: Object", "consultationId: string", "onSave: Function", "initialData?: Object"],
+          "returns": "JSX.Element",
+          "confidence": "confirmed",
+          "description": "Editor modal de 6 tipos de documentos com templates, medicamentos e impressão"
+        },
+        {
+          "name": "ExamUploader",
+          "file": "src/components/medical/ExamUploader.jsx",
+          "params": ["open: boolean", "onOpenChange: Function", "patient: Object", "consultationId: string", "onSave: Function"],
+          "returns": "JSX.Element",
+          "confidence": "confirmed",
+          "description": "Upload modal de exame com anexo (PDF/imagem), preview e metadados"
+        },
+        {
+          "name": "logAccess",
+          "file": "src/components/medical/AccessLogger.jsx",
+          "params": ["action: string", "entityType: string?", "entityId: string?", "patientName: string?", "details: Object?"],
+          "returns": "Promise<void>",
+          "confidence": "confirmed",
+          "description": "Registra acesso no AccessLog para auditoria LGPD"
+        },
+        {
+          "name": "applyTemplate",
+          "file": "src/components/medical/PrescriptionEditor.jsx",
+          "params": ["templateId: string"],
+          "returns": "void",
+          "confidence": "confirmed",
+          "description": "Aplica template substituindo {PACIENTE_NOME}, {PACIENTE_CPF}, {DATA}, {DATA_EXTENSO}"
+        },
+        {
+          "name": "handlePrint",
+          "file": "src/components/medical/PrescriptionEditor.jsx",
+          "params": [],
+          "returns": "void",
+          "confidence": "confirmed",
+          "description": "Gera HTML para impressão da prescrição/atestado em nova janela"
+        },
+        {
+          "name": "handleFileChange",
+          "file": "src/components/medical/ExamUploader.jsx",
+          "params": ["event: ChangeEvent"],
+          "returns": "void",
+          "confidence": "confirmed",
+          "description": "Processa arquivo de exame com preview para imagens"
+        }
+      ],
+      "entities": [
+        {
+          "name": "Consultation",
+          "source": "base44/entities/Consultation.jsonc",
+          "fields": [
+            { "name": "id", "type": "string", "required": true, "description": "ID único da consulta" },
+            { "name": "patient_id", "type": "string", "required": true, "description": "FK para Patient" },
+            { "name": "date", "type": "string", "format": "date-time", "required": true, "description": "Data e hora da consulta" },
+            { "name": "chief_complaint", "type": "string", "required": false, "description": "Queixa principal" },
+            { "name": "history_present_illness", "type": "string", "required": false, "description": "História da doença atual (HDA)" },
+            { "name": "vital_signs", "type": "object", "required": false, "default": "{}", "description": "Sinais vitais (7 campos aninhados)" },
+            { "name": "physical_exam", "type": "string", "required": false, "description": "Exame físico" },
+            { "name": "diagnosis", "type": "string", "required": false, "description": "Diagnóstico" },
+            { "name": "icd_code", "type": "string", "required": false, "description": "Código CID-10" },
+            { "name": "treatment_plan", "type": "string", "required": false, "description": "Plano de tratamento" },
+            { "name": "notes", "type": "string", "required": false, "description": "Observações" },
+            { "name": "follow_up_date", "type": "string", "format": "date", "required": false, "description": "Data de retorno" },
+            { "name": "status", "type": "string", "enum": ["agendada", "em_andamento", "concluida", "cancelada"], "required": false, "default": "agendada", "description": "Status da consulta" },
+            { "name": "created_by_id", "type": "string", "required": false, "description": "Criador (RLS)" },
+            { "name": "created_date", "type": "string", "format": "date-time", "required": false, "description": "Data de criação" }
+          ],
+          "confidence": "confirmed"
+        },
+        {
+          "name": "Prescription",
+          "source": "base44/entities/Prescription.jsonc",
+          "fields": [
+            { "name": "id", "type": "string", "required": true, "description": "ID único" },
+            { "name": "patient_id", "type": "string", "required": true, "description": "FK para Patient" },
+            { "name": "consultation_id", "type": "string", "required": false, "description": "FK para Consultation" },
+            { "name": "type", "type": "string", "enum": ["receita_simples", "receita_controlada", "atestado", "solicitacao_exame", "encaminhamento", "declaracao"], "required": true, "description": "Tipo do documento" },
+            { "name": "content", "type": "string", "required": true, "description": "Conteúdo com variáveis resolvidas" },
+            { "name": "medications", "type": "array", "required": false, "description": "Medicamentos (só se type inclui 'receita')" },
+            { "name": "template_name", "type": "string", "required": false, "description": "Nome do template aplicado" },
+            { "name": "valid_days", "type": "number", "required": false, "description": "Dias de afastamento (só 'atestado')" },
+            { "name": "notes", "type": "string", "required": false, "description": "Observações" },
+            { "name": "created_date", "type": "string", "format": "date-time", "required": false, "description": "Data de criação (ordenação)" }
+          ],
+          "confidence": "confirmed"
+        },
+        {
+          "name": "Exam",
+          "source": "base44/entities/Exam.jsonc",
+          "fields": [
+            { "name": "id", "type": "string", "required": true, "description": "ID único" },
+            { "name": "patient_id", "type": "string", "required": true, "description": "FK para Patient" },
+            { "name": "consultation_id", "type": "string", "required": false, "description": "FK para Consultation (nullable)" },
+            { "name": "name", "type": "string", "required": true, "description": "Nome do exame" },
+            { "name": "type", "type": "string", "enum": ["laboratorial", "imagem", "cardiologico", "outros"], "required": false, "description": "Tipo do exame" },
+            { "name": "date", "type": "string", "format": "date", "required": true, "description": "Data do exame" },
+            { "name": "file_url", "type": "string", "required": false, "description": "URL do anexo (Base44 upload)" },
+            { "name": "file_type", "type": "string", "enum": ["pdf", "image"], "required": false, "description": "Tipo do arquivo" },
+            { "name": "laboratory", "type": "string", "required": false, "description": "Laboratório/clínica" },
+            { "name": "results_summary", "type": "string", "required": false, "description": "Resumo dos resultados" },
+            { "name": "notes", "type": "string", "required": false, "description": "Observações médicas" }
+          ],
+          "confidence": "confirmed"
+        },
+        {
+          "name": "AccessLog",
+          "source": "base44/entities/AccessLog.jsonc (inferido)",
+          "fields": [
+            { "name": "user_email", "type": "string", "required": true, "description": "Email do usuário" },
+            { "name": "action", "type": "string", "required": true, "description": "Ação (valores de ACCESS_ACTIONS)" },
+            { "name": "entity_type", "type": "string", "required": false, "description": "Tipo de entidade" },
+            { "name": "entity_id", "type": "string", "required": false, "description": "ID da entidade" },
+            { "name": "patient_name", "type": "string", "required": false, "description": "Nome do paciente" },
+            { "name": "ip_address", "type": "string", "required": false, "default": "client-side", "description": "IP" },
+            { "name": "user_agent", "type": "string", "required": false, "description": "User agent" },
+            { "name": "details", "type": "object", "required": false, "description": "Detalhes adicionais" }
+          ],
+          "confidence": "inferred"
+        }
+      ],
+      "business_rules": [
+        {
+          "description": "Consulta exige patient_id e date",
+          "location": "base44/entities/Consultation.jsonc:85-88",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Status da consulta: agendada/em_andamento/concluida/cancelada",
+          "location": "Consultation.jsonc:74-83",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Criação exige paciente selecionado no formulário",
+          "location": "NewConsultation.jsx:398",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Pacientes elegíveis: status ativo",
+          "location": "NewConsultation.jsx:63-66",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Prescrição exige patient_id/type/content; medications só para receitas",
+          "location": "Prescription.jsonc:66-70; PrescriptionEditor.jsx:132",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "valid_days só para tipo atestado",
+          "location": "PrescriptionEditor.jsx:133",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Exame exige patient_id/name/date; anexo via UploadFile",
+          "location": "ExamUploader.jsx:77-106",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Templates filtrados por type + is_active=true",
+          "location": "PrescriptionEditor.jsx:65-69",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Auditoria: VIEW/CREATE/EDIT_CONSULTATION, UPLOAD_EXAM",
+          "location": "AccessLogger.jsx + pages",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "RLS idêntico ao Patient (criador ou admin)",
+          "location": "Consultation/Prescription/Exam.jsonc",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "follow_up_date = data de retorno",
+          "location": "Consultation.jsx:343-350",
+          "confidence": "confirmed"
+        },
+        {
+          "description": "Ao salvar consulta, redireciona para PatientDetail do paciente",
+          "location": "NewConsultation.jsx:121-128",
+          "confidence": "confirmed"
+        }
+      ],
+      "dependencies": [
+        "pacientes",
+        "templates",
+        "logs-acesso"
+      ],
+      "algorithms": [
+        {
+          "name": "Filtro combinado de consultas",
+          "description": "Busca por nome do paciente, queixa principal ou diagnóstico + filtro por status + intervalo de data (today/week/month/upcoming)",
+          "location": "src/pages/Consultations.jsx:61-92",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "Template variable substitution",
+          "description": "Substitui {PACIENTE_NOME}, {PACIENTE_CPF}, {DATA}, {DATA_EXTENSO} no conteúdo do template",
+          "location": "src/components/medical/PrescriptionEditor.jsx:95-101",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "Gerenciamento de medicações",
+          "description": "Add/update/remove imutável de objetos medicamento no array",
+          "location": "src/components/medical/PrescriptionEditor.jsx:106-124",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "Preview de arquivo de exame",
+          "description": "FileReader.readAsDataURL para imagens; PDF sem preview",
+          "location": "src/components/medical/ExamUploader.jsx:62-75",
+          "confidence": "confirmed"
+        }
+      ],
+      "complexity": "high",
+      "metrics": {
+        "files_analyzed": 11,
+        "total_lines": 2158,
+        "entities": 5,
+        "functions": 10,
+        "business_rules": 12,
+        "algorithms": 4
+      }
+    }
+  ]
+}
