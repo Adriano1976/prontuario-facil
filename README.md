@@ -39,6 +39,8 @@ Acesse [Base44.com](http://Base44.com) e clique em Publicar.
 
 Documentação: [https://docs.base44.com/Integrations/Using-GitHub](https://docs.base44.com/Integrations/Using-GitHub)
 
+Suporte: [https://app.base44.com/support](https://app.base44.com/support)
+
 ##
  
 <br><br>
@@ -49,6 +51,3 @@ Documentação: [https://docs.base44.com/Integrations/Using-GitHub](https://docs
    <br>
   <img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=87CEFA&height=120&section=footer"/>
 </div>
-
-Suporte: [https://app.base44.com/support](https://app.base44.com/support)
-
