@@ -35,6 +35,17 @@ Execute o app: `npm run dev`
 
 Acesse [Base44.com](http://Base44.com) e clique em Publicar.
 
+##
+ 
+<br><br>
+
+<div align="center">
+  <p><b><h3> Contagem de visitantes </h3></b></p>  
+  <img src="https://vbr.nathanchung.dev/badge?page_id=Adriano1976/prontuario-facil/" style="height: 30px;" />
+   <br>
+  <img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=87CEFA&height=120&section=footer"/>
+</div>
+
 **Documentação e Suporte**
 
 Documentação: [https://docs.base44.com/Integrations/Using-GitHub](https://docs.base44.com/Integrations/Using-GitHub)
