@@ -35,6 +35,10 @@ Execute o app: `npm run dev`
 
 Acesse [Base44.com](http://Base44.com) e clique em Publicar.
 
+**Documentação e Suporte**
+
+Documentação: [https://docs.base44.com/Integrations/Using-GitHub](https://docs.base44.com/Integrations/Using-GitHub)
+
 ##
  
 <br><br>
@@ -45,10 +49,6 @@ Acesse [Base44.com](http://Base44.com) e clique em Publicar.
    <br>
   <img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=87CEFA&height=120&section=footer"/>
 </div>
-
-**Documentação e Suporte**
-
-Documentação: [https://docs.base44.com/Integrations/Using-GitHub](https://docs.base44.com/Integrations/Using-GitHub)
 
 Suporte: [https://app.base44.com/support](https://app.base44.com/support)
 
