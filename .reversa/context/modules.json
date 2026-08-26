@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-22T00:00:00Z",
+  "generated_at": "2026-08-25T00:00:00Z",
   "modules": [
     {
       "name": "pacientes",
@@ -555,6 +555,707 @@
         "functions": 10,
         "business_rules": 12,
         "algorithms": 4
+      }
+    }
+  ,
+    {
+      "name": "agendamentos",
+      "path": "src/pages + src/components/appointments",
+      "purpose": "Marcação de consultas de pacientes com médicos: vista de calendário semanal, lista de próximos, criação com seleção de horários baseada em working_days/working_hours/appointment_duration, gerenciamento de status e envio de e-mail de confirmação",
+      "primary_files": [
+        "src/pages/Appointments.jsx",
+        "src/pages/NewAppointment.jsx",
+        "src/components/appointments/AppointmentCalendar.jsx",
+        "src/components/appointments/TimeSlotPicker.jsx",
+        "base44/entities/Appointment.jsonc",
+        "base44/entities/Doctor.jsonc"
+      ],
+      "functions": [
+        {
+          "name": "Appointments (componente principal)",
+          "file": "src/pages/Appointments.jsx",
+          "params": [],
+          "returns": "JSX.Element",
+          "confidence": "confirmed",
+          "description": "Página com Tabs (calendário/lista) e Dialog de detalhes/status"
+        },
+        {
+          "name": "NewAppointment (componente principal)",
+          "file": "src/pages/NewAppointment.jsx",
+          "params": [],
+          "returns": "JSX.Element",
+          "confidence": "confirmed",
+          "description": "Formulário de criação com selects de paciente/médico, Calendar e TimeSlotPicker, e envio de e-mail de confirmação"
+        },
+        {
+          "name": "AppointmentCalendar",
+          "file": "src/components/appointments/AppointmentCalendar.jsx",
+          "params": ["appointments: Array", "doctors: Array", "patients: Array", "onAppointmentClick: Function"],
+          "returns": "JSX.Element",
+          "confidence": "confirmed",
+          "description": "Grid semanal 7x12 (08:00-19:00) com badges coloridos por status e navegação entre semanas"
+        },
+        {
+          "name": "TimeSlotPicker",
+          "file": "src/components/appointments/TimeSlotPicker.jsx",
+          "params": ["doctor: Object", "selectedDate: Date|string", "appointments: Array", "onSelectTime: Function", "selectedTime?: string"],
+          "returns": "JSX.Element | null",
+          "confidence": "confirmed",
+          "description": "Gera slots baseado em working_days/working_hours/appointment_duration e desabilita slots com conflito"
+        },
+        {
+          "name": "handleAppointmentClick",
+          "file": "src/pages/Appointments.jsx",
+          "params": ["apt: Appointment"],
+          "returns": "void",
+          "confidence": "confirmed",
+          "description": "Abre Dialog com detalhes do agendamento selecionado"
+        },
+        {
+          "name": "getDoctor / getPatient",
+          "file": "src/pages/Appointments.jsx",
+          "params": ["id: string"],
+          "returns": "Object | undefined",
+          "confidence": "confirmed",
+          "description": "Lookup local em doctors/patients por id"
+        },
+        {
+          "name": "handleSubmit",
+          "file": "src/pages/NewAppointment.jsx",
+          "params": ["event: FormEvent"],
+          "returns": "void",
+          "confidence": "confirmed",
+          "description": "Dispara saveMutation com duration = doctor.appointment_duration || 30"
+        },
+        {
+          "name": "saveMutation (mutationFn)",
+          "file": "src/pages/NewAppointment.jsx",
+          "params": ["data: AppointmentPayload"],
+          "returns": "Promise<void>",
+          "confidence": "confirmed",
+          "description": "Cria Appointment e envia SendEmail se patient.email existe"
+        },
+        {
+          "name": "updateStatusMutation",
+          "file": "src/pages/Appointments.jsx",
+          "params": ["{id, status}: {id: string, status: string}"],
+          "returns": "void",
+          "confidence": "confirmed",
+          "description": "Atualiza apenas o campo status do Appointment selecionado"
+        },
+        {
+          "name": "generateTimeSlots",
+          "file": "src/components/appointments/TimeSlotPicker.jsx",
+          "params": [],
+          "returns": "Date[]",
+          "confidence": "confirmed",
+          "description": "Gera array de slots entre working_hours.start e end, no passo de appointment_duration, apenas se working_days inclui o dia"
+        },
+        {
+          "name": "isSlotAvailable",
+          "file": "src/components/appointments/TimeSlotPicker.jsx",
+          "params": ["slot: Date"],
+          "returns": "boolean",
+          "confidence": "confirmed",
+          "description": "Retorna true se slot não colide com nenhum appointment existente (intervalo [aptTime, aptEnd))"
+        },
+        {
+          "name": "getAppointmentsForSlot",
+          "file": "src/components/appointments/AppointmentCalendar.jsx",
+          "params": ["day: Date", "hour: number"],
+          "returns": "Appointment[]",
+          "confidence": "confirmed",
+          "description": "Filtra appointments por isSameDay + getHours (granularidade de hora cheia)"
+        }
+      ],
+      "entities": [
+        {
+          "name": "Appointment",
+          "source": "base44/entities/Appointment.jsonc",
+          "fields": [
+            { "name": "id", "type": "string", "required": true, "description": "ID único" },
+            { "name": "patient_id", "type": "string", "required": true, "description": "FK para Patient" },
+            { "name": "doctor_id", "type": "string", "required": true, "description": "FK para Doctor" },
+            { "name": "date", "type": "string", "format": "date-time", "required": true, "description": "Data/hora do agendamento" },
+            { "name": "duration", "type": "number", "required": false, "default": 30, "description": "Duração em minutos" },
+            { "name": "type", "type": "string", "enum": ["primeira_consulta", "retorno", "exame", "procedimento"], "required": false, "default": "primeira_consulta" },
+            { "name": "status", "type": "string", "enum": ["agendado", "confirmado", "em_atendimento", "concluido", "cancelado", "faltou"], "required": false, "default": "agendado" },
+            { "name": "notes", "type": "string", "required": false, "description": "Observações" },
+            { "name": "reminder_sent", "type": "boolean", "required": false, "default": false, "description": "Flag de lembrete (sem uso no código)" },
+            { "name": "reminder_sent_date", "type": "string", "format": "date-time", "required": false, "description": "Quando o lembrete foi enviado (sem uso no código)" },
+            { "name": "consultation_id", "type": "string", "required": false, "description": "FK para Consultation (sem auto-vínculo)" },
+            { "name": "created_by_id", "type": "string", "required": false, "description": "Criador (RLS)" }
+          ],
+          "confidence": "confirmed"
+        },
+        {
+          "name": "Doctor",
+          "source": "base44/entities/Doctor.jsonc",
+          "fields": [
+            { "name": "full_name", "type": "string", "required": true, "description": "Nome completo" },
+            { "name": "specialty", "type": "string", "required": true, "description": "Especialidade" },
+            { "name": "crm", "type": "string", "required": true, "description": "Número do CRM" },
+            { "name": "email", "type": "string", "required": false },
+            { "name": "phone", "type": "string", "required": false },
+            { "name": "photo_url", "type": "string", "required": false },
+            { "name": "working_days", "type": "array", "items": { "type": "number" }, "required": false, "description": "0=domingo..6=sábado" },
+            { "name": "working_hours", "type": "object", "properties": { "start": { "type": "string" }, "end": { "type": "string" } }, "required": false },
+            { "name": "appointment_duration", "type": "number", "required": false, "default": 30 },
+            { "name": "is_active", "type": "boolean", "required": false, "default": true }
+          ],
+          "confidence": "confirmed"
+        }
+      ],
+      "business_rules": [
+        { "description": "Apenas médicos com is_active=true aparecem no Select de NewAppointment", "location": "src/pages/NewAppointment.jsx:64", "confidence": "confirmed" },
+        { "description": "Apenas pacientes com status=ativo aparecem no Select", "location": "src/pages/NewAppointment.jsx:59", "confidence": "confirmed" },
+        { "description": "duration = doctor.appointment_duration || 30 (fallback)", "location": "src/pages/NewAppointment.jsx:100", "confidence": "confirmed" },
+        { "description": "TimeSlotPicker retorna [] se working_days não inclui dayOfWeek", "location": "src/components/appointments/TimeSlotPicker.jsx:38-40", "confidence": "confirmed" },
+        { "description": "TimeSlotPicker usa working_hours do médico com fallback 08:00-18:00", "location": "src/components/appointments/TimeSlotPicker.jsx:42-43", "confidence": "confirmed" },
+        { "description": "Slot indisponível se conflita com appointment existente (intervalo fechado-aberto)", "location": "src/components/appointments/TimeSlotPicker.jsx:61-69", "confidence": "confirmed" },
+        { "description": "Calendar desabilita datas passadas (date < new Date())", "location": "src/pages/NewAppointment.jsx:187", "confidence": "confirmed" },
+        { "description": "E-mail de confirmação enviado apenas se paciente tem email", "location": "src/pages/NewAppointment.jsx:80-86", "confidence": "confirmed" },
+        { "description": "upcomingAppointments exclui status=cancelado e datas passadas", "location": "src/pages/Appointments.jsx:83-85", "confidence": "confirmed" },
+        { "description": "RLS: criador ou admin", "location": "base44/entities/Appointment.jsonc:69-106", "confidence": "confirmed" },
+        { "description": "Status pode ser alterado via Select sem restrição de transição", "location": "src/pages/Appointments.jsx:200-212", "confidence": "inferred" },
+        { "description": "consultation_id não é auto-preenchido em nenhum fluxo", "location": "inferido por ausência no código", "confidence": "inferred" },
+        { "description": "reminder_sent e reminder_sent_date são campos órfãos", "location": "inferido por ausência no código", "confidence": "inferred" }
+      ],
+      "dependencies": [
+        "pacientes",
+        "medicos",
+        "consultas",
+        "logs-acesso"
+      ],
+      "algorithms": [
+        {
+          "name": "Geração de slots de horário",
+          "description": "Loop de start a end no passo de duration, filtrado por working_days",
+          "location": "src/components/appointments/TimeSlotPicker.jsx:33-59",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "Detecção de conflito entre slots",
+          "description": "Testa intervalo fechado-aberto: slotTime >= aptTime && slotTime < aptEnd",
+          "location": "src/components/appointments/TimeSlotPicker.jsx:61-69",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "Filtro de próximos agendamentos",
+          "description": "date > new Date() && status != cancelado",
+          "location": "src/pages/Appointments.jsx:83-85",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "Filtro de appointments por slot do calendário",
+          "description": "isSameDay(day, aptDate) && aptDate.getHours() === hour",
+          "location": "src/components/appointments/AppointmentCalendar.jsx:47-52",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "Envio de e-mail de confirmação",
+          "description": "Disparado inline na mutationFn antes do onSuccess",
+          "location": "src/pages/NewAppointment.jsx:80-86",
+          "confidence": "confirmed"
+        }
+      ],
+      "complexity": "medium",
+      "metrics": {
+        "files_analyzed": 5,
+        "total_lines": 869,
+        "entities": 2,
+        "functions": 12,
+        "business_rules": 13,
+        "algorithms": 5
+      }
+    }
+  ,
+    {
+      "name": "medicos",
+      "path": "src/pages",
+      "purpose": "CRUD de médicos com configuração de agenda (working_days, working_hours, appointment_duration, is_active). É o dono da entidade Doctor; consumido por agendamentos (TimeSlotPicker e Select de NewAppointment)",
+      "primary_files": [
+        "src/pages/Doctors.jsx",
+        "base44/entities/Doctor.jsonc"
+      ],
+      "functions": [
+        {
+          "name": "Doctors (componente principal)",
+          "file": "src/pages/Doctors.jsx",
+          "returns": "JSX.Element",
+          "confidence": "confirmed",
+          "description": "Página com grid de cards (avatar inicial, dados, agenda) e Dialog de editor (criar/editar). Sem confirmação de exclusão; sem upload de foto."
+        },
+        {
+          "name": "handleEdit",
+          "file": "src/pages/Doctors.jsx",
+          "params": ["doctor: Object"],
+          "returns": "void",
+          "confidence": "confirmed",
+          "description": "Carrega doctor em formData e abre o Dialog de edição"
+        },
+        {
+          "name": "handleSubmit",
+          "file": "src/pages/Doctors.jsx",
+          "params": ["event: FormEvent"],
+          "returns": "void",
+          "confidence": "confirmed",
+          "description": "preventDefault + saveMutation.mutate(formData); distinção create/update via editingDoctor"
+        },
+        {
+          "name": "resetForm",
+          "file": "src/pages/Doctors.jsx",
+          "returns": "void",
+          "confidence": "confirmed",
+          "description": "Restaura defaults: working_days=[1..5], working_hours=08:00-18:00, duration=30, is_active=true"
+        },
+        {
+          "name": "toggleWorkingDay",
+          "file": "src/pages/Doctors.jsx",
+          "params": ["day: number"],
+          "returns": "void",
+          "confidence": "confirmed",
+          "description": "Toggle aditivo do dia no array working_days; ordena crescentemente"
+        },
+        {
+          "name": "saveMutation (mutationFn)",
+          "file": "src/pages/Doctors.jsx",
+          "params": ["data: DoctorPayload"],
+          "returns": "Promise<void>",
+          "confidence": "confirmed",
+          "description": "Se editingDoctor: Doctor.update(id, data); senão Doctor.create(data). onSuccess invalida ['doctors'] e fecha o Dialog"
+        },
+        {
+          "name": "deleteMutation",
+          "file": "src/pages/Doctors.jsx",
+          "params": ["id: string"],
+          "returns": "Promise<void>",
+          "confidence": "confirmed",
+          "description": "Doctor.delete(id); onSuccess invalida ['doctors']. Sem AlertDialog de confirmação."
+        }
+      ],
+      "entities": [
+        {
+          "name": "Doctor",
+          "source": "base44/entities/Doctor.jsonc",
+          "fields": [
+            { "name": "id", "type": "string", "required": true, "description": "UUID Base44" },
+            { "name": "full_name", "type": "string", "required": true, "description": "Nome completo" },
+            { "name": "specialty", "type": "string", "required": true, "description": "Especialidade" },
+            { "name": "crm", "type": "string", "required": true, "description": "Número do CRM (sem validação de formato/UF)" },
+            { "name": "email", "type": "string", "required": false, "description": "Email do médico" },
+            { "name": "phone", "type": "string", "required": false, "description": "Telefone (sem máscara)" },
+            { "name": "photo_url", "type": "string", "required": false, "description": "Foto (campo declarado, sem upload implementado)" },
+            { "name": "working_days", "type": "array<number>", "required": false, "description": "[0..6] 0=domingo; default [1,2,3,4,5]" },
+            { "name": "working_hours", "type": "object", "required": false, "description": "{start: 'HH:MM', end: 'HH:MM'}; default 08:00-18:00" },
+            { "name": "appointment_duration", "type": "number", "required": false, "default": 30, "description": "Duração em minutos" },
+            { "name": "is_active", "type": "boolean", "required": false, "default": true, "description": "Filtrado em NewAppointment (Select)" },
+            { "name": "created_by_id", "type": "string", "required": false, "description": "Criador (RLS)" },
+            { "name": "created_date", "type": "string", "format": "date-time", "required": false, "description": "Ordenação -created_date" }
+          ],
+          "confidence": "confirmed"
+        }
+      ],
+      "business_rules": [
+        { "description": "full_name, specialty, crm são obrigatórios (schema + required nos Inputs)", "location": "Doctor.jsonc + Doctors.jsx:222-244", "confidence": "confirmed" },
+        { "description": "working_days default em [1..5] (seg-sex) só no frontend (formData inicial e resetForm)", "location": "Doctors.jsx:60, 99", "confidence": "confirmed" },
+        { "description": "working_hours default 08:00-18:00 só no frontend", "location": "Doctors.jsx:61, 100", "confidence": "confirmed" },
+        { "description": "appointment_duration default 30; sem mínimo; convertido via parseInt", "location": "Doctors.jsx:62, 302", "confidence": "confirmed" },
+        { "description": "working_days é ordenado crescentemente após toggle (sort numérico)", "location": "Doctors.jsx:122", "confidence": "confirmed" },
+        { "description": "is_active=false esconde o médico do Select em NewAppointment", "location": "Doctors.jsx + NewAppointment.jsx:64", "confidence": "confirmed" },
+        { "description": "RLS: create/delete restritos a admin; update livre para criador ou admin; read aberto", "location": "Doctor.jsonc:63-87", "confidence": "confirmed" },
+        { "description": "photo_url existe no schema mas não há upload na UI (avatar = inicial do nome)", "location": "Doctors.jsx:165-166 + Doctor.jsonc:25-28", "confidence": "confirmed" },
+        { "description": "Sem confirmação antes de excluir (deleteMutation.mutate direto)", "location": "Doctors.jsx:200", "confidence": "inferred" },
+        { "description": "Sem validação CRM (formato/UF) nem validação working_hours.start < end", "location": "Doctors.jsx:280-305", "confidence": "inferred" },
+        { "description": "Sem chamada a logAccess em nenhuma operação CRUD", "location": "ausência no Doctors.jsx", "confidence": "inferred" }
+      ],
+      "dependencies": [
+        "agendamentos"
+      ],
+      "algorithms": [
+        {
+          "name": "Toggle aditivo de working_days",
+          "description": "Remove o dia se já existe; senão adiciona e ordena o array",
+          "location": "Doctors.jsx:117-124",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "Disparo condicional create vs update",
+          "description": "saveMutation detecta editingDoctor e escolhe Doctor.update ou Doctor.create",
+          "location": "Doctors.jsx:71-85",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "Render de iniciais como avatar",
+          "description": "doctor.full_name?.charAt(0).toUpperCase() exibido em círculo gradiente violeta",
+          "location": "Doctors.jsx:165-166",
+          "confidence": "confirmed"
+        }
+      ],
+      "complexity": "low",
+      "metrics": {
+        "files_analyzed": 2,
+        "total_lines": 331,
+        "entities": 1,
+        "functions": 7,
+        "business_rules": 11,
+        "algorithms": 3
+      }
+    },
+    {
+      "name": "templates",
+      "path": "src/pages",
+      "purpose": "Gerenciamento de modelos de documentos médicos (7 tipos) com variáveis substituíveis, marcação de padrão e ativação/desativação. Fornecedor de conteúdo-base do PrescriptionEditor",
+      "primary_files": [
+        "src/pages/Templates.jsx",
+        "base44/entities/Template.jsonc"
+      ],
+      "functions": [
+        {
+          "name": "Templates (componente principal)",
+          "file": "src/pages/Templates.jsx",
+          "returns": "JSX.Element",
+          "confidence": "confirmed",
+          "description": "Listagem agrupada por tipo (reduce), editor Dialog e AlertDialog de exclusão"
+        },
+        {
+          "name": "groupedTemplates (reduce)",
+          "file": "src/pages/Templates.jsx",
+          "params": [],
+          "returns": "Object<string, Template[]>",
+          "confidence": "confirmed",
+          "description": "Agrupa templates por type; ordem de exibição segue TEMPLATE_TYPES fixo"
+        },
+        {
+          "name": "insertVariable",
+          "file": "src/pages/Templates.jsx",
+          "params": ["variable: string"],
+          "returns": "void",
+          "confidence": "confirmed",
+          "description": "Concatena a variável ao final do content (ignora posição do cursor)"
+        },
+        {
+          "name": "handleEdit",
+          "file": "src/pages/Templates.jsx",
+          "params": ["template: Object"],
+          "returns": "void",
+          "confidence": "confirmed",
+          "description": "Popula formData com normalização is_default||false e is_active!==false"
+        },
+        {
+          "name": "handleDelete",
+          "file": "src/pages/Templates.jsx",
+          "params": ["template: Object"],
+          "returns": "void",
+          "confidence": "confirmed",
+          "description": "Guarda templateToDelete e abre AlertDialog de confirmação"
+        },
+        {
+          "name": "saveMutation (mutationFn)",
+          "file": "src/pages/Templates.jsx",
+          "params": ["data: TemplatePayload"],
+          "returns": "Promise<void>",
+          "confidence": "confirmed",
+          "description": "editingTemplate ? Template.update : Template.create; onSuccess invalida ['templates']"
+        },
+        {
+          "name": "deleteMutation",
+          "file": "src/pages/Templates.jsx",
+          "params": ["id: string"],
+          "returns": "Promise<void>",
+          "confidence": "confirmed",
+          "description": "Template.delete(id); onSuccess invalida ['templates']"
+        }
+      ],
+      "entities": [
+        {
+          "name": "Template",
+          "source": "base44/entities/Template.jsonc",
+          "fields": [
+            { "name": "id", "type": "string", "required": true, "description": "UUID Base44" },
+            { "name": "name", "type": "string", "required": true, "description": "Nome do template" },
+            { "name": "type", "type": "string", "enum": ["receita_simples", "receita_controlada", "atestado", "solicitacao_exame", "encaminhamento", "declaracao", "anamnese"], "required": true, "description": "Tipo do documento" },
+            { "name": "content", "type": "string", "required": true, "description": "Conteúdo com variáveis {VAR}" },
+            { "name": "variables", "type": "array", "items": { "type": "string" }, "required": false, "description": "Campo órfão — nunca escrito pela UI" },
+            { "name": "is_default", "type": "boolean", "required": false, "default": false },
+            { "name": "is_active", "type": "boolean", "required": false, "default": true },
+            { "name": "created_by_id", "type": "string", "required": false, "description": "Criador (RLS)" }
+          ],
+          "confidence": "confirmed"
+        }
+      ],
+      "business_rules": [
+        { "description": "Template exige name/type/content", "location": "Template.jsonc:43-47", "confidence": "confirmed" },
+        { "description": "Tipo restrito a enum de 7 valores espelhado em TEMPLATE_TYPES", "location": "Template.jsonc:9-21 + Templates.jsx:44-52", "confidence": "confirmed" },
+        { "description": "Criação exige role admin (RLS)", "location": "Template.jsonc:48-53", "confidence": "confirmed" },
+        { "description": "Leitura aberta a autenticados", "location": "Template.jsonc:54", "confidence": "confirmed" },
+        { "description": "Edição/exclusão: criador ou admin", "location": "Template.jsonc:55-78", "confidence": "confirmed" },
+        { "description": "Exclusão sempre com confirmação explícita", "location": "Templates.jsx:401-419", "confidence": "confirmed" },
+        { "description": "is_active=false esconde do PrescriptionEditor (filtro no consumidor)", "location": "PrescriptionEditor.jsx:65-69", "confidence": "confirmed" },
+        { "description": "{DIAS_AFASTAMENTO} anunciada na UI mas sem substituidor encontrado", "location": "Templates.jsx:59 vs PrescriptionEditor", "confidence": "inferred" },
+        { "description": "Múltiplos is_default do mesmo tipo possíveis (sem exclusividade)", "location": "ausência no código", "confidence": "inferred" }
+      ],
+      "dependencies": [
+        "pacientes",
+        "consultas"
+      ],
+      "algorithms": [
+        {
+          "name": "Agrupamento por tipo",
+          "description": "reduce que indexa templates por type em objeto",
+          "location": "src/pages/Templates.jsx:158-162",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "Inserção de variável",
+          "description": "Concatenação ao final do content via setState funcional",
+          "location": "src/pages/Templates.jsx:146-151",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "Normalização de booleanos na edição",
+          "description": "is_default||false vs is_active!==false (assimetria deliberada ou acidental)",
+          "location": "src/pages/Templates.jsx:135-136",
+          "confidence": "confirmed"
+        }
+      ],
+      "complexity": "low",
+      "metrics": {
+        "files_analyzed": 2,
+        "total_lines": 502,
+        "entities": 1,
+        "functions": 8,
+        "business_rules": 9,
+        "algorithms": 3
+      }
+    },
+    {
+      "name": "logs-acesso",
+      "path": "src/pages",
+      "purpose": "Tela de auditoria LGPD read-only: visualiza AccessLog com busca textual, filtro por ação e período, stats agregadas e tabela. Alimentada transversalmente pelo AccessLogger",
+      "primary_files": [
+        "src/pages/AccessLogs.jsx",
+        "src/components/medical/AccessLogger.jsx",
+        "base44/entities/AccessLog.jsonc"
+      ],
+      "functions": [
+        {
+          "name": "AccessLogs (componente principal)",
+          "file": "src/pages/AccessLogs.jsx",
+          "returns": "JSX.Element",
+          "confidence": "confirmed",
+          "description": "Página read-only com busca, filtro por ação e data, painel de stats e tabela"
+        },
+        {
+          "name": "filteredLogs (filter)",
+          "file": "src/pages/AccessLogs.jsx",
+          "returns": "AccessLog[]",
+          "confidence": "confirmed",
+          "description": "Filtro triplo combinado: busca (email/paciente) + ação exata + período today/week/month"
+        },
+        {
+          "name": "logAccess",
+          "file": "src/components/medical/AccessLogger.jsx",
+          "params": ["action: string", "entityType?: string", "entityId?: string", "patientName?: string", "details?: any"],
+          "returns": "Promise<void>",
+          "confidence": "confirmed",
+          "description": "Produtor transversal: auth.me() + AccessLog.create; falha silenciosa com console.error"
+        },
+        {
+          "name": "ACCESS_ACTIONS (constante)",
+          "file": "src/components/medical/AccessLogger.jsx",
+          "returns": "Object",
+          "confidence": "confirmed",
+          "description": "12 constantes de ação espelhando o enum do schema"
+        }
+      ],
+      "entities": [
+        {
+          "name": "AccessLog",
+          "source": "base44/entities/AccessLog.jsonc",
+          "fields": [
+            { "name": "id", "type": "string", "required": true, "description": "UUID Base44" },
+            { "name": "user_email", "type": "string", "required": true },
+            { "name": "action", "type": "string", "enum": ["login", "logout", "view_patient", "edit_patient", "create_patient", "view_consultation", "create_consultation", "edit_consultation", "create_prescription", "upload_exam", "delete_record", "export_data"], "required": true },
+            { "name": "entity_type", "type": "string", "required": false },
+            { "name": "entity_id", "type": "string", "required": false },
+            { "name": "patient_name", "type": "string", "required": false },
+            { "name": "ip_address", "type": "string", "required": false, "default": "client-side", "description": "Sempre 'client-side' na prática" },
+            { "name": "user_agent", "type": "string", "required": false },
+            { "name": "details", "type": "string", "required": false, "description": "Schema diz string; logger envia object/null (inconsistência)" }
+          ],
+          "confidence": "confirmed"
+        }
+      ],
+      "business_rules": [
+        { "description": "Log exige user_email + action", "location": "AccessLog.jsonc:52-55", "confidence": "confirmed" },
+        { "description": "Create aberto a qualquer autenticado; leitura/update/delete admin-only (append-only para usuários)", "location": "AccessLog.jsonc:56-72", "confidence": "confirmed" },
+        { "description": "Limite fixo de 500 registros por consulta", "location": "AccessLogs.jsx:64", "confidence": "confirmed" },
+        { "description": "Ordenação sempre -created_date", "location": "AccessLogs.jsx:64", "confidence": "confirmed" },
+        { "description": "Stats por substring includes: view/edit/create/delete", "location": "AccessLogs.jsx:174-188", "confidence": "confirmed" },
+        { "description": "export_data nunca logado; ícone Download decorativo", "location": "ausência no código", "confidence": "inferred" },
+        { "description": "Falha de log não interrompe a UX (catch silencioso)", "location": "AccessLogger.jsx:38-40", "confidence": "confirmed" }
+      ],
+      "dependencies": [
+        "pacientes",
+        "consultas",
+        "dashboard"
+      ],
+      "algorithms": [
+        {
+          "name": "Filtro triplo combinado",
+          "description": "Busca case-insensitive + igualdade de ação + janela de data (today toDateString / week -7d / month -1m)",
+          "location": "src/pages/AccessLogs.jsx:67-94",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "Classificação heurística para stats",
+          "description": "Contagem por substring da action (view/edit/create/delete)",
+          "location": "src/pages/AccessLogs.jsx:174-188",
+          "confidence": "confirmed"
+        }
+      ],
+      "complexity": "low",
+      "metrics": {
+        "files_analyzed": 3,
+        "total_lines": 408,
+        "entities": 1,
+        "functions": 4,
+        "business_rules": 7,
+        "algorithms": 2
+      }
+    },
+    {
+      "name": "dashboard",
+      "path": "src/pages + src/components/medical",
+      "purpose": "Hub central: consolida métricas de Patient/Consultation/Prescription/Appointment, busca global de pacientes, ações rápidas, relatórios analíticos (volume mensal e ranking de especialidades) e registra LOGIN na auditoria",
+      "primary_files": [
+        "src/pages/Dashboard.jsx",
+        "src/components/medical/StatsCard.jsx",
+        "src/components/medical/PatientSearch.jsx",
+        "src/components/medical/ReportsView.jsx"
+      ],
+      "functions": [
+        {
+          "name": "Dashboard (componente principal)",
+          "file": "src/pages/Dashboard.jsx",
+          "returns": "JSX.Element",
+          "confidence": "confirmed",
+          "description": "4 queries paralelas, agregações client-side, Tabs visao-geral/relatorios"
+        },
+        {
+          "name": "PatientSearch",
+          "file": "src/components/medical/PatientSearch.jsx",
+          "params": ["patients: Array", "isLoading: boolean"],
+          "returns": "JSX.Element",
+          "confidence": "confirmed",
+          "description": "Busca client-side nome/CPF/telefone com dropdown top-5 e navegação para PatientDetail"
+        },
+        {
+          "name": "StatsCard",
+          "file": "src/components/medical/StatsCard.jsx",
+          "params": ["title: string", "value: number|string", "icon: ComponentType", "color: string", "trend?: number", "delay?: number"],
+          "returns": "JSX.Element",
+          "confidence": "confirmed",
+          "description": "Card de métrica animado com esquema de cores"
+        },
+        {
+          "name": "ReportsView",
+          "file": "src/components/medical/ReportsView.jsx",
+          "returns": "JSX.Element",
+          "confidence": "confirmed",
+          "description": "Relatórios: BarChart volume mensal (12 meses) + ranking de especialidades"
+        },
+        {
+          "name": "monthlyData (useMemo)",
+          "file": "src/components/medical/ReportsView.jsx",
+          "returns": "Array<{month, key, consultas}>",
+          "confidence": "confirmed",
+          "description": "Janela móvel de 12 meses com contagem de appointments concluídos após cutoff"
+        },
+        {
+          "name": "specialtyData (useMemo)",
+          "file": "src/components/medical/ReportsView.jsx",
+          "returns": "Array<{name, count}>",
+          "confidence": "confirmed",
+          "description": "Join O(a×d) appointments×doctors agrupado por specialty ordenado desc"
+        },
+        {
+          "name": "logAccess(LOGIN) useEffect",
+          "file": "src/pages/Dashboard.jsx",
+          "returns": "void",
+          "confidence": "confirmed",
+          "description": "Dispara log de login a cada mount do dashboard"
+        }
+      ],
+      "entities": [
+        {
+          "name": "(consumidor de 5 entidades)",
+          "source": "queries em Dashboard.jsx e ReportsView.jsx",
+          "fields": [
+            { "name": "Patient.list(-created_date, 100)", "type": "query" },
+            { "name": "Consultation.list(-date, 50)", "type": "query" },
+            { "name": "Prescription.list(-created_date, 100)", "type": "query" },
+            { "name": "Appointment.list(-date, 100)", "type": "query" },
+            { "name": "Appointment.filter({status:'concluido'}, -date, 500)", "type": "query" },
+            { "name": "Doctor.list(-created_date, 200)", "type": "query" }
+          ],
+          "confidence": "confirmed"
+        }
+      ],
+      "business_rules": [
+        { "description": "Acesso ao dashboard registra LOGIN na auditoria", "location": "Dashboard.jsx:89-91", "confidence": "confirmed" },
+        { "description": "Paciente ativo = status ativo", "location": "Dashboard.jsx:74", "confidence": "confirmed" },
+        { "description": "Próximos = futuro E não cancelado, top 5", "location": "Dashboard.jsx:68-72,84-87", "confidence": "confirmed" },
+        { "description": "todayConsultations inclui canceladas (inconsistente com appointments)", "location": "Dashboard.jsx:63-66", "confidence": "confirmed" },
+        { "description": "Busca exige >= 2 caracteres", "location": "PatientSearch.jsx:36", "confidence": "confirmed" },
+        { "description": "Relatórios usam apenas appointments concluídos", "location": "ReportsView.jsx:15", "confidence": "confirmed" },
+        { "description": "Taxa de Atendimento fixa 94% hardcoded", "location": "Dashboard.jsx:153", "confidence": "confirmed" },
+        { "description": "Documentos Emitidos limitado à lista de 100 prescrições", "location": "Dashboard.jsx:146", "confidence": "inferred" },
+        { "description": "Especialidade sem médico resolvido = Não especificada", "location": "ReportsView.jsx:51", "confidence": "confirmed" }
+      ],
+      "dependencies": [
+        "pacientes",
+        "consultas",
+        "agendamentos",
+        "medicos",
+        "templates",
+        "logs-acesso"
+      ],
+      "algorithms": [
+        {
+          "name": "Agregações client-side de métricas",
+          "description": "Filtros today/upcoming/ativos sobre listas carregadas",
+          "location": "src/pages/Dashboard.jsx:63-87",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "Janela móvel de 12 meses",
+          "description": "subMonths(now, i) i=11..0 + incremento por appointment após cutoff",
+          "location": "src/components/medical/ReportsView.jsx:23-44",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "Ranking de especialidades",
+          "description": "Join linear O(a×d), fallback 'Não especificada', sort desc",
+          "location": "src/components/medical/ReportsView.jsx:46-57",
+          "confidence": "confirmed"
+        },
+        {
+          "name": "Debounce implícito no blur",
+          "description": "setTimeout(200ms) antes de fechar dropdown permite clique no item",
+          "location": "src/components/medical/PatientSearch.jsx:47",
+          "confidence": "confirmed"
+        }
+      ],
+      "complexity": "medium",
+      "metrics": {
+        "files_analyzed": 4,
+        "total_lines": 707,
+        "entities": 5,
+        "functions": 10,
+        "business_rules": 9,
+        "algorithms": 5
       }
     }
   ]

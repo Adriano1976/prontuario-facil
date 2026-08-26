@@ -8,12 +8,12 @@
   "doc_level": "completo",
   "output_folder": "_reversa_sdd",
   "forward_folder": "_reversa_forward",
-  "phase": "escavacao",
+  "phase": "interpretacao",
   "completed": [
-    "scout"
+    "scout",
+    "escavacao"
   ],
   "pending": [
-    "escavacao",
     "interpretacao",
     "geracao",
     "revisao"
@@ -30,14 +30,24 @@
     "archaeologist": {
       "modules_analyzed": [
         "pacientes",
-        "consultas"
+        "consultas",
+        "agendamentos",
+        "medicos",
+        "templates",
+        "logs-acesso",
+        "dashboard"
       ],
-      "completed_at": "2026-08-22T00:00:00Z",
+      "completed_at": "2026-08-26T00:00:00Z",
       "files": [
         "_reversa_sdd/code-analysis.md",
         "_reversa_sdd/data-dictionary.md",
         "_reversa_sdd/flowcharts/pacientes.md",
         "_reversa_sdd/flowcharts/consultas.md",
+        "_reversa_sdd/flowcharts/agendamentos.md",
+        "_reversa_sdd/flowcharts/medicos.md",
+        "_reversa_sdd/flowcharts/templates.md",
+        "_reversa_sdd/flowcharts/logs-acesso.md",
+        "_reversa_sdd/flowcharts/dashboard.md",
         ".reversa/context/modules.json"
       ]
     }

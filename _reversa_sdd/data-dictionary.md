@@ -276,3 +276,474 @@ Template 1───n Prescription    (via Template.type = Prescription.type)
 - **Entidades**: 3 confirmadas (`Consultation`, `Prescription`, `Exam`) + `Template` referenciada + `AccessLog` inferida
 - **Enums**: 3 (`status`, `Prescription.type`, `Exam.type`) + 1 (`file_type`)
 - **Chave estrangeira primária**: `patient_id` presente em Consultation, Prescription e Exam
+
+---
+
+# Dicionário de Dados — Módulo `agendamentos`
+
+> Gerado pelo Archaeologist em 2026-08-25 | Nível: **completo** | Fonte: `base44/entities/Appointment.jsonc`, `base44/entities/Doctor.jsonc` + código
+
+---
+
+## Entidade: `Appointment`
+
+| Campo | Tipo | Obrig. | Default | Enum / Formato | Descrição | Confiança |
+|-------|------|--------|---------|----------------|-----------|-----------|
+| `id` | string | ✓ | — | UUID (Base44) | Identificador único | 🟢 |
+| `patient_id` | string | ✓ | — | FK → Patient.id | Paciente agendado | 🟢 |
+| `doctor_id` | string | ✓ | — | FK → Doctor.id | Médico responsável | 🟢 |
+| `date` | string | ✓ | — | ISO 8601 date-time | Data e hora do agendamento | 🟢 |
+| `duration` | number | | `30` | minutos | Duração do slot | 🟢 |
+| `type` | string | | `primeira_consulta` | `primeira_consulta`, `retorno`, `exame`, `procedimento` | Tipo da consulta | 🟢 |
+| `status` | string | | `agendado` | `agendado`, `confirmado`, `em_atendimento`, `concluido`, `cancelado`, `faltou` | Estado atual | 🟢 |
+| `notes` | string | | — | texto livre | Observações | 🟢 |
+| `reminder_sent` | boolean | | `false` | — | Flag de lembrete enviado | 🟡 (campo órfão, sem uso no código) |
+| `reminder_sent_date` | string | | — | ISO 8601 date-time | Quando o lembrete foi enviado | 🟡 (campo órfão, sem uso no código) |
+| `consultation_id` | string | | — | FK → Consultation.id | Vínculo com a consulta realizada | 🟡 (campo declarado, sem auto-vínculo no fluxo) |
+| `created_by_id` | string | | — | UUID | Criador (RLS) | 🟢 |
+
+### Máquina de estados (mapeada no código)
+
+| Estado | Cor/Classe (Tailwind) | Label |
+|--------|----------------------|-------|
+| `agendado` | `bg-amber-100 text-amber-700` | Agendado |
+| `confirmado` | `bg-sky-100 text-sky-700` | Confirmado |
+| `em_atendimento` | `bg-violet-100 text-violet-700` | Em Atendimento |
+| `concluido` | `bg-emerald-100 text-emerald-700` | Concluído |
+| `cancelado` | `bg-slate-100 text-slate-700` | Cancelado |
+| `faltou` | `bg-rose-100 text-rose-700` | Faltou |
+
+**Transições explícitas na UI**: `agendado → confirmado` (botão), `qualquer → cancelado` (botão). O `Select` permite todas as combinações.
+
+---
+
+## Entidade: `Doctor` (Referenciada)
+
+| Campo | Tipo | Obrig. | Default | Enum / Formato | Descrição | Confiança |
+|-------|------|--------|---------|----------------|-----------|-----------|
+| `id` | string | ✓ | — | UUID (Base44) | Identificador único | 🟢 |
+| `full_name` | string | ✓ | — | — | Nome completo | 🟢 |
+| `specialty` | string | ✓ | — | — | Especialidade médica | 🟢 |
+| `crm` | string | ✓ | — | — | Número do CRM | 🟢 |
+| `email` | string | | — | email | Email do médico | 🟢 |
+| `phone` | string | | — | — | Telefone | 🟢 |
+| `photo_url` | string | | — | URL (Base44 file_url) | Foto | 🟢 |
+| `working_days` | array of number | | — | `[0..6]` (0=domingo) | Dias da semana que atende | 🟢 |
+| `working_hours.start` | string | | — | `"HH:MM"` | Início do expediente | 🟢 |
+| `working_hours.end` | string | | — | `"HH:MM"` | Fim do expediente | 🟢 |
+| `appointment_duration` | number | | `30` | minutos | Duração padrão de cada consulta | 🟢 |
+| `is_active` | boolean | | `true` | — | Médico ativo (filtrado no NewAppointment) | 🟢 |
+| `created_by_id` | string | | — | UUID | Criador (RLS) | 🟢 |
+
+**RLS**:
+- `create`: apenas `admin`
+- `read`: aberto (null)
+- `update`: criador ou `admin`
+- `delete`: apenas `admin`
+
+---
+
+## Relacionamentos (ERD textual)
+
+```
+Patient  1───n Appointment
+Doctor   1───n Appointment
+Appointment n───1 Consultation   (via consultation_id, sem auto-vínculo)
+```
+
+---
+
+## Regras de Validação / Constraints
+
+| Campo | Regra | Onde |
+|-------|-------|------|
+| `Appointment.patient_id` | Obrigatório; paciente deve estar com `status='ativo'` | `Appointment.jsonc`, `NewAppointment.jsx:59` |
+| `Appointment.doctor_id` | Obrigatório; médico deve estar com `is_active=true` | `Appointment.jsonc`, `NewAppointment.jsx:64` |
+| `Appointment.date` | Obrigatório; ISO 8601; UI bloqueia datas passadas via `<Calendar disabled>` | `NewAppointment.jsx:187` |
+| `Appointment.duration` | Default 30 min; sobrescrito por `doctor.appointment_duration` | `NewAppointment.jsx:100` |
+| `Doctor.working_days` | Se vazio, `TimeSlotPicker` não gera slots | `TimeSlotPicker.jsx:38-40` |
+| `Doctor.working_hours` | Defaults 08:00-18:00 se ausentes | `TimeSlotPicker.jsx:42-43` |
+
+---
+
+## RLS (Row Level Security) — Appointment
+
+```json
+{
+  "create": null,
+  "read":   { "$or": [{ "created_by_id": "{{user.id}}" }, { "user_condition": { "role": "admin" } }] },
+  "update": { "$or": [{ "created_by_id": "{{user.id}}" }, { "user_condition": { "role": "admin" } }] },
+  "delete": { "$or": [{ "created_by_id": "{{user.id}}" }, { "user_condition": { "role": "admin" } }] }
+}
+```
+
+- **Implicação**: Usuário comum só vê/edita/exclui próprios agendamentos. Admin vê tudo.
+- **Aplicado no Base44** — sem verificação client-side adicional.
+
+---
+
+## Transformações de Dados (Frontend → Backend)
+
+| Origem | Transformação | Destino |
+|--------|---------------|---------|
+| `selectedDate` (Date) | `slot.toISOString()` | `Appointment.date` |
+| `doctor.appointment_duration` | spread no payload com fallback 30 | `Appointment.duration` |
+| `status` (do `STATUS_CONFIG` Select) | identidade | `Appointment.status` |
+| `patient.email` + texto fixo | template literal + `format(date, "dd/MM/yyyy 'às' HH:mm", { locale: ptBR })` | `SendEmail.body` |
+| `formData.type` | identidade | `Appointment.type` |
+
+---
+
+## Métricas
+
+- **Entidades**: 2 (`Appointment` confirmada, `Doctor` referenciada)
+- **Enums principais**: 2 (`Appointment.status` com 6 valores, `Appointment.type` com 4 valores)
+- **Campos obrigatórios (Appointment)**: 3 (`patient_id`, `doctor_id`, `date`)
+- **Campos órfãos**: 2 (`reminder_sent`, `reminder_sent_date` — sem código de leitura/escrita)
+- **Ações de auditoria relacionadas**: nenhuma chamada explícita a `logAccess` neste módulo (lacuna)
+
+---
+
+# Dicionário de Dados — Módulo `medicos`
+
+> Gerado pelo Archaeologist em 2026-08-25 | Nível: **completo** | Fonte: `base44/entities/Doctor.jsonc` + `src/pages/Doctors.jsx`
+
+---
+
+## Entidade: `Doctor` (dono do módulo)
+
+| Campo | Tipo | Obrig. | Default | Enum / Formato | Descrição | Validação no Frontend | Confiança |
+|-------|------|--------|---------|----------------|-----------|----------------------|-----------|
+| `id` | string | ✓ | — | UUID (Base44) | Identificador único | — | 🟢 |
+| `full_name` | string | ✓ | — | — | Nome completo do médico | `required` no Input | 🟢 |
+| `specialty` | string | ✓ | — | — | Especialidade médica | `required` no Input | 🟢 |
+| `crm` | string | ✓ | — | — | Número do CRM | `required` no Input | 🟢 |
+| `email` | string | | — | email | Email | `type="email"` | 🟢 |
+| `phone` | string | | — | — | Telefone | sem máscara | 🟢 |
+| `photo_url` | string | | — | URL (Base44 file_url) | Foto | **campo declarado, sem upload implementado na UI** | 🟡 |
+| `working_days` | array of number | | `[1,2,3,4,5]` | `[0..6]` (0=domingo) | Dias da semana em que atende | 7 checkboxes (dom..sáb) com toggle aditivo | 🟢 |
+| `working_hours.start` | string | | `08:00` | `"HH:MM"` | Início do expediente | `<input type="time">` | 🟢 |
+| `working_hours.end` | string | | `18:00` | `"HH:MM"` | Fim do expediente | `<input type="time">` | 🟢 |
+| `appointment_duration` | number | | `30` | minutos | Duração padrão de cada consulta | `<input type="number">` → `parseInt` | 🟢 |
+| `is_active` | boolean | | `true` | — | Médico ativo (filtrado em NewAppointment) | `<Switch>` | 🟢 |
+| `created_by_id` | string | | — | UUID | Criador (RLS) | Preenchido pelo Base44 | 🟢 |
+| `created_date` | string | | — | ISO 8601 date-time | Data de criação (ordenação `-created_date`) | Preenchido pelo Base44 | 🟢 |
+
+**Notas sobre defaults aplicados no frontend (não no schema)**:
+- `working_days` default: `[1,2,3,4,5]` (seg-sex)
+- `working_hours`: `{ start: '08:00', end: '18:00' }`
+- `appointment_duration`: `30`
+- `is_active`: `true`
+
+---
+
+## RLS (Row Level Security) — Doctor
+
+```json
+{
+  "create": { "user_condition": { "role": "admin" } },
+  "read":   null,
+  "update": { "$or": [
+              { "created_by_id": "{{user.id}}" },
+              { "user_condition": { "role": "admin" } }
+            ] },
+  "delete": { "user_condition": { "role": "admin" } }
+}
+```
+
+**Diferenças em relação aos outros módulos**:
+- `create` e `delete` **exigem admin** (outros módulos são livres para o próprio criador).
+- `read` é aberto (null) — qualquer usuário autenticado lê a lista (necessário para o `Select` em `NewAppointment`).
+- Esta é a única entidade com permissões administrativas explícitas.
+
+---
+
+## Relacionamentos (ERD textual)
+
+```
+Doctor  1───n Appointment
+            (working_days, working_hours, appointment_duration
+             alimentam TimeSlotPicker; is_active filtra o Select)
+```
+
+---
+
+## Regras de Validação / Constraints
+
+| Campo | Regra | Onde |
+|-------|-------|------|
+| `Doctor.full_name` | Obrigatório | `Doctors.jsx:222-228` |
+| `Doctor.specialty` | Obrigatório | `Doctors.jsx:229-236` |
+| `Doctor.crm` | Obrigatório, sem validação de formato/UF | `Doctors.jsx:237-244` |
+| `Doctor.email` | Formato email (navegador) | `Doctors.jsx:246-252` |
+| `Doctor.phone` | Livre (sem máscara) | `Doctors.jsx:253-259` |
+| `Doctor.working_days` | Array de inteiros 0-6; toggle aditivo via `toggleWorkingDay` | `Doctors.jsx:117-124` |
+| `Doctor.working_hours.start/end` | `"HH:MM"`, sem validação cruzada (start < end) | `Doctors.jsx:281-296` |
+| `Doctor.appointment_duration` | `parseInt(e.target.value)`; sem mínimo | `Doctors.jsx:302` |
+| `Doctor.is_active` | Boolean via Switch | `Doctors.jsx:308-313` |
+
+---
+
+## Transformações de Dados (Frontend → Backend)
+
+| Origem | Transformação | Destino |
+|--------|---------------|---------|
+| `appointment_duration` (string do input) | `parseInt(e.target.value)` | `Doctor.appointment_duration` (number) |
+| `working_days` (checkbox toggle) | `days.filter(d => d !== day)` ou `[...days, day].sort()` | `Doctor.working_days` (array ordenado) |
+| `working_hours` (dois inputs) | `{ ...formData.working_hours, start: e.target.value }` | `Doctor.working_hours` (objeto parcial substituído) |
+| `formData` completo | identidade (sem sanitização) | `Doctor.create(data)` / `Doctor.update(id, data)` |
+
+---
+
+## Índices e Ordenação
+
+| Entidade | Query Comum | Ordenação |
+|----------|-------------|-----------|
+| `Doctor` | `list()` | `-created_date` (mais recentes primeiro) |
+
+---
+
+## Métricas
+
+- **Entidades**: 1 (`Doctor` confirmada)
+- **Enums**: nenhum declarado no schema (status é `is_active` boolean)
+- **Campos obrigatórios**: 3 (`full_name`, `specialty`, `crm`)
+- **Campos declarados sem uso na UI**: 1 (`photo_url` — não há controle de upload)
+- **Ações de auditoria relacionadas**: nenhuma chamada a `logAccess` no CRUD de médicos (lacuna)
+
+---
+
+# Dicionário de Dados — Módulo `templates`
+
+> Gerado pelo Archaeologist em 2026-08-26 | Nível: **completo** | Fonte: `base44/entities/Template.jsonc` + `src/pages/Templates.jsx`
+
+---
+
+## Entidade: `Template`
+
+| Campo | Tipo | Obrig. | Default | Enum / Formato | Descrição | Validação no Frontend | Confiança |
+|-------|------|--------|---------|----------------|-----------|----------------------|-----------|
+| `id` | string | ✓ | — | UUID (Base44) | Identificador único | — | 🟢 |
+| `name` | string | ✓ | — | texto | Nome do template | `required` no Input | 🟢 |
+| `type` | string | ✓ | `receita_simples` (form) | 7 valores (abaixo) | Tipo do documento | Select obrigatório | 🟢 |
+| `content` | string | ✓ | — | texto com variáveis `{VAR}` | Conteúdo do template | Textarea `required`, 12 rows | 🟢 |
+| `variables` | array of string | | — | lista de nomes de variáveis | Variáveis disponíveis | **campo órfão — nunca escrito pela UI** | 🟡 |
+| `is_default` | boolean | | `false` | — | Template padrão do tipo | Switch | 🟢 |
+| `is_active` | boolean | | `true` | — | Template ativo (filtro do PrescriptionEditor) | Switch | 🟢 |
+| `created_by_id` | string | | — | UUID | Criador (RLS) | Preenchido pelo Base44 | 🟢 |
+
+### Enum `type` (7 valores)
+
+| Valor | Label pt-BR |
+|-------|-------------|
+| `receita_simples` | Receita Simples |
+| `receita_controlada` | Receita Controlada |
+| `atestado` | Atestado Médico |
+| `solicitacao_exame` | Solicitação de Exame |
+| `encaminhamento` | Encaminhamento |
+| `declaracao` | Declaração |
+| `anamnese` | Anamnese |
+
+### Variáveis documentadas na UI (`AVAILABLE_VARIABLES`)
+
+| Variável | Descrição | Substituída no PrescriptionEditor? |
+|----------|-----------|------------------------------------|
+| `{PACIENTE_NOME}` | Nome completo do paciente | Sim |
+| `{PACIENTE_CPF}` | CPF do paciente | Sim |
+| `{DATA}` | Data atual DD/MM/YYYY | Sim |
+| `{DATA_EXTENSO}` | Data por extenso | Sim |
+| `{DIAS_AFASTAMENTO}` | Dias de afastamento (atestados) | **Não encontrado substituidor** 🔴 |
+
+---
+
+## RLS (Row Level Security) — Template
+
+```json
+{
+  "create": { "user_condition": { "role": "admin" } },
+  "read":   null,
+  "update": { "$or": [
+              { "created_by_id": "{{user.id}}" },
+              { "user_condition": { "role": "admin" } }
+            ] },
+  "delete": { "$or": [
+              { "created_by_id": "{{user.id}}" },
+              { "user_condition": { "role": "admin" } }
+            ] }
+}
+```
+
+- Criação restrita a admin; leitura aberta; edição/exclusão do criador ou admin.
+
+---
+
+## Transformações de Dados (Frontend → Backend)
+
+| Origem | Transformação | Destino |
+|--------|---------------|---------|
+| `formData` completo | identidade | `Template.create/update` |
+| `template.is_active` na edição | `!== false` (undefined vira true) | form state |
+| `template.is_default` na edição | `\|\| false` | form state |
+| variável clicada | concatenação ao final de content | `formData.content` |
+
+---
+
+## Métricas
+
+- **Campos**: 7 (+ id)
+- **Obrigatórios**: 3 (`name`, `type`, `content`)
+- **Enums**: 1 (`type`, 7 valores)
+- **Campos órfãos**: 1 (`variables`)
+- **RLS distinto**: create admin-only (como Doctor)
+
+---
+
+# Dicionário de Dados — Módulo `logs-acesso`
+
+> Gerado pelo Archaeologist em 2026-08-26 | Nível: **completo** | Fonte: `base44/entities/AccessLog.jsonc` + `src/pages/AccessLogs.jsx`
+
+> **Nota**: Nas extrações anteriores este schema estava 🟡 INFERIDO. Agora CONFIRMADO pelo arquivo `AccessLog.jsonc`.
+
+---
+
+## Entidade: `AccessLog`
+
+| Campo | Tipo | Obrig. | Default | Enum / Formato | Descrição | Confiança |
+|-------|------|--------|---------|----------------|-----------|-----------|
+| `id` | string | ✓ | — | UUID (Base44) | Identificador único | 🟢 |
+| `user_email` | string | ✓ | — | email | Email do usuário da ação | 🟢 |
+| `action` | string | ✓ | — | enum 12 valores | Ação realizada | 🟢 |
+| `entity_type` | string | | — | texto (`Patient`, `Consultation`...) | Tipo da entidade acessada | 🟢 |
+| `entity_id` | string | | — | UUID | ID da entidade acessada | 🟢 |
+| `patient_name` | string | | — | texto | Nome do paciente (auditoria LGPD) | 🟢 |
+| `ip_address` | string | | — | texto | IP (na prática sempre `'client-side'`) | 🟢 |
+| `user_agent` | string | | — | texto | navigator.userAgent | 🟢 |
+| `details` | string (schema) | | — | texto | Detalhes adicionais (**logger envia object/null** → inconsistência) | 🟡 |
+| `created_date` | string | | — | date-time | Timestamp (ordenação `-created_date`) | 🟢 |
+
+### Enum `action` (12 valores)
+
+| Valor | Categoria (stats UI) | Badge |
+|-------|---------------------|-------|
+| `login` | — (fora das stats) | sky |
+| `logout` | — | slate |
+| `view_patient` | Visualizações | emerald |
+| `view_consultation` | Visualizações | emerald |
+| `edit_patient` | Edições* | amber |
+| `edit_consultation` | Edições* | amber |
+| `create_patient` | Edições* | violet |
+| `create_consultation` | Edições* | violet |
+| `create_prescription` | Edições* | violet |
+| `upload_exam` | — | sky |
+| `delete_record` | Exclusões | rose |
+| `export_data` | — (nunca logado) | amber |
+
+\* Categoria "Edições" usa heurística substring: `includes('edit') || includes('create')`.
+
+---
+
+## RLS (Row Level Security) — AccessLog
+
+```json
+{
+  "create": null,
+  "read":   { "user_condition": { "role": "admin" } },
+  "update": { "user_condition": { "role": "admin" } },
+  "delete": { "user_condition": { "role": "admin" } }
+}
+```
+
+- Padrão invertido em relação às demais entidades: escrita livre (para o logger transversal), leitura admin-only.
+- Logs são imutáveis para usuários comuns (append-only).
+
+---
+
+## Regras de Validação / Constraints
+
+| Campo | Regra | Onde |
+|-------|-------|------|
+| `action` | Restrito ao enum de 12 valores | schema + ACTION_CONFIG keys |
+| Consulta UI | Limite fixo de 500 registros, `-created_date` | AccessLogs.jsx:64 |
+| Filtros | search (email/paciente), action exato, data today/week/month | AccessLogs.jsx:67-94 |
+
+---
+
+## Métricas
+
+- **Campos**: 9 (+ id)
+- **Obrigatórios**: 2 (`user_email`, `action`)
+- **Enums**: 1 (`action`, 12 valores)
+- **Inconsistência de tipo**: 1 (`details` string vs object enviado)
+- **Padrão RLS único**: create aberto + read/update/delete admin-only
+
+---
+
+# Dicionário de Dados — Módulo `dashboard`
+
+> Gerado pelo Archaeologist em 2026-08-26 | Nível: **completo** | Fonte: queries de `Dashboard.jsx`, `PatientSearch.jsx`, `ReportsView.jsx`
+
+---
+
+## Entidades Consumidas (somente leitura)
+
+| Entidade | Query | Limite | Ordenação | Uso no módulo |
+|----------|-------|--------|-----------|---------------|
+| Patient | `list()` | 100 | `-created_date` | Stats ativos, PatientSearch, nomes nos próximos agendamentos |
+| Consultation | `list()` | 50 | `-date` | today/upcoming consultas |
+| Prescription | `list()` | 100 | `-created_date` | Card "Documentos Emitidos" (contagem ≤100) |
+| Appointment | `list()` | 100 | `-date` | today/upcoming + ReportsView |
+| Appointment (reports) | `filter({status:'concluido'})` | 500 | `-date` | Volume mensal e ranking |
+| Doctor | `list()` | 200 | `-created_date` | Join especialidades em ReportsView |
+
+---
+
+## Estruturas Derivadas (client-side)
+
+### `monthlyData` (ReportsView)
+
+| Campo | Tipo | Descrição |
+|-------|------|-----------|
+| `month` | string | `MMM/yy` pt-BR (ex: `ago/26`) |
+| `key` | string | `${year}-${monthIndex}` (0-based) |
+| `consultas` | number | Contagem de appointments concluídos no mês |
+
+Janela: 12 meses retroativos a partir de agora (`subMonths(now, i)` para i=11..0).
+
+### `specialtyData` (ReportsView)
+
+| Campo | Tipo | Descrição |
+|-------|------|-----------|
+| `name` | string | Especialidade ou `'Não especificada'` |
+| `count` | number | Appointments concluídos da especialidade |
+
+Ordenado desc por count. Join O(a×d) via find.
+
+### Filtros derivados (Dashboard.jsx)
+
+| Derivado | Filtro | Nota |
+|----------|--------|------|
+| `todayConsultations` | `toDateString() == hoje` | **inclui canceladas** |
+| `upcomingConsultations` | `date > now && status != 'cancelada'`, slice 5 | |
+| `activePatients` | `count(status == 'ativo')` | |
+| `todayAppointments` | hoje && `!= 'cancelado'` | exclui cancelados |
+| `upcomingAppointments` | `date > now && status != 'cancelado'`, slice 5 | |
+
+---
+
+## Transformações de Dados
+
+| Origem | Transformação | Destino |
+|--------|---------------|---------|
+| mount do Dashboard | `logAccess(LOGIN, null, null, null, 'Acesso ao dashboard')` | `AccessLog.create` |
+| query do usuário | `base44.auth.me().email` | `AccessLog.user_email` |
+| `appointment.type` | `.replace(/_/g, ' ')` | badge de exibição |
+| datas | `format(date, ...ptBR)` | exibição dd/MM HH:mm |
+
+---
+
+## Métricas
+
+- **Entidades consumidas**: 6 queries sobre 5 entidades (todas leitura)
+- **Escritas**: apenas indireta (logAccess LOGIN)
+- **Métrica hardcoded**: 1 ("Taxa de Atendimento" = 94%)
+- **Contagem truncada**: 1 ("Documentos Emitidos" limitado à lista de 100)

@@ -18,15 +18,15 @@
 
 ## Fase 2: Escavação 🏗️
 
-> O Reversa preenche esta seção com os módulos reais após o Scout concluir o reconhecimento.
+> Lista de módulos derivada de `.reversa/context/surface.json` (atualizada em 2026-08-25 após sync com `pages.config.js`).
 
-- [x] **Arqueólogo** — Análise do módulo `pacientes`
-- [x] **Arqueólogo** — Análise do módulo `consultas`
-- [ ] **Arqueólogo** — Análise do módulo `agendamentos`
-- [ ] **Arqueólogo** — Análise do módulo `medicos`
-- [ ] **Arqueólogo** — Análise do módulo `templates`
-- [ ] **Arqueólogo** — Análise do módulo `logs-acesso`
-- [ ] **Arqueólogo** — Análise do módulo `dashboard`
+- [x] **Arqueólogo** — Análise do módulo `pacientes` (→ `src/pages/Patients.jsx`)
+- [x] **Arqueólogo** — Análise do módulo `consultas` (→ `src/pages/Consultations.jsx` + Consultation/NewConsultation)
+- [x] **Arqueólogo** — Análise do módulo `agendamentos` (→ `src/pages/Appointments.jsx` + NewAppointment + components/appointments)
+- [x] **Arqueólogo** — Análise do módulo `medicos` (→ `src/pages/Doctors.jsx`)
+- [x] **Arqueólogo** — Análise do módulo `templates` (→ `src/pages/Templates.jsx`) ✅ 2026-08-26
+- [x] **Arqueólogo** — Análise do módulo `logs-acesso` (→ `src/pages/AccessLogs.jsx`) ✅ 2026-08-26
+- [x] **Arqueólogo** — Análise do módulo `dashboard` (→ `src/pages/Dashboard.jsx` + StatsCard, PatientSearch, ReportsView) ✅ 2026-08-26
 
 ## Fase 3: Interpretação 🧠
 
