@@ -1,0 +1,170 @@
+# Perguntas para Validação Humana — prontuario-facil
+
+> Gerado pelo Reversa-Reviewer em 2026-08-28.
+> `answer_mode: file` — preencha o campo **Resposta** de cada item e avise com `reversa` quando terminar.
+
+---
+
+## Q-01 — Dashboard: `design.md` e `tasks.md` ausentes
+
+**Unit:** `dashboard/`
+**Arquivo:** (ausente)
+**Severidade:** 🔴 Crítico — bloqueia reimplementação
+**Contexto:** A unit `dashboard/` possui apenas `screens.md` (gerado pelo Visor). Os arquivos canônicos `requirements.md`, `design.md` e `tasks.md` não foram gerados pelo Writer. Sem eles, não há especificação das regras de negócio dos KPIs (Pacientes Ativos, Agendamentos Hoje, Documentos Emitidos, Taxa de Atendimento), nem da lógica de cálculo de cada métrica.
+
+**Pergunta:**
+Os KPIs do Dashboard são calculados em tempo real via queries, ou são valores pré-computados/cacheados? Há alguma definição de período (ex: "Agendamentos Hoje" considera qual fuso horário? Usa a data do servidor ou do cliente)?
+
+**Resposta:** _(preencha aqui)_
+
+---
+
+## Q-02 — Dashboard: `screens.md` sem escala de confiança
+
+**Unit:** `dashboard/`
+**Arquivo:** `dashboard/screens.md`
+**Severidade:** 🔴 Moderado
+**Contexto:** O `screens.md` do Dashboard não usa o sistema de confiança 🟢/🟡/🔴 em nenhum elemento. Não é possível saber o que foi confirmado na imagem e o que foi inferido. Em especial, o "gráfico mini" de Taxa de Atendimento e o estado vazio dos "Próximos Agendamentos" merecem classificação.
+
+**Pergunta:**
+O gráfico mini na KPI card de "Taxa de Atendimento" é realmente um sparkline/mini chart ou apenas um indicador visual de cor (ex: barra de progresso)?
+
+**Resposta:** _(preencha aqui)_
+
+---
+
+## Q-03 — Agendamentos: formulário sem campos de data/hora
+
+**Unit:** `agendamentos/`
+**Arquivo:** `agendamentos/screens.md` (Tela: Novo Agendamento, linha 26–35)
+**Severidade:** 🔴 Crítico — bloqueia reimplementação
+**Contexto:** O formulário "Novo Agendamento" documentado no `screens.md` lista Paciente, Médico, Tipo de Consulta e Observações — mas **omite completamente os campos de data e hora**. Porém, a BR-A01 em `requirements.md` exige `date` como campo obrigatório. Há uma contradição direta: a UI não mostra como o usuário informa a data do agendamento.
+
+**Pergunta:**
+Como o usuário informa data e hora no formulário de Novo Agendamento? Há um campo de date/time picker? Ou o agendamento é criado a partir de um clique direto na grade de calendário (sem formulário separado para data)?
+
+**Resposta:** _(preencha aqui)_
+
+---
+
+## Q-04 — Agendamentos: status `confirmado` não tem gatilho documentado
+
+**Unit:** `agendamentos/`
+**Arquivo:** `agendamentos/requirements.md` (BR-A03)
+**Severidade:** 🟡 Moderado
+**Contexto:** O ciclo de status `agendado` → `confirmado` → `em_atendimento` → `concluido` está documentado, mas não há nenhuma spec de quem e como confirma o agendamento. A tela de calendário não mostra botão de confirmação. O campo `reminder_sent` sugere que pode haver confirmação automática por lembrete, mas isso não está especificado.
+
+**Pergunta:**
+A transição para `confirmado` é feita manualmente pelo médico/admin via interface, ou automaticamente pelo sistema após envio do lembrete? O campo `reminder_sent` tem relação com essa transição?
+
+**Resposta:** _(preencha aqui)_
+
+---
+
+## Q-05 — Consultas: `design.md` e `tasks.md` ausentes
+
+**Unit:** `consultas/`
+**Arquivo:** (ausente)
+**Severidade:** 🔴 Crítico — bloqueia reimplementação
+**Contexto:** A unit `consultas/` possui `requirements.md` e `screens.md`, mas não tem `design.md` nem `tasks.md`. O fluxo de criação de documentos (receitas, atestados, exames) está parcialmente documentado na UI, mas sem spec de design que explique como os Templates se integram à consulta, e sem tasks de implementação.
+
+**Pergunta:**
+Quando o usuário clica em "Nova Receita" / "Atestado" / "Exame" na tela de Visualização de Consulta, o modal de Novo Documento preenche automaticamente algum campo com dados da consulta atual (paciente, data)? Ou o usuário preenche tudo manualmente?
+
+**Resposta:** _(preencha aqui)_
+
+---
+
+## Q-06 — Consultas: campo `medications` sem spec completa
+
+**Unit:** `consultas/`
+**Arquivo:** `consultas/requirements.md` (BR-C03) e `consultas/screens.md` (Modal: Novo Documento)
+**Severidade:** 🟡 Moderado
+**Contexto:** A BR-C03 menciona que `medications` só é preenchível se o tipo do documento for "receita". O `screens.md` mostra "Medicamentos (Seção com botão '+ Adicionar')" — mas não documenta os campos internos de cada medicamento (nome, dosagem, posologia, quantidade, etc.) nem como a seção é ocultada/exibida para outros tipos de documento.
+
+**Pergunta:**
+Quais são os campos internos de cada medicamento na receita? Há validação de nome contra alguma base (ANVISA, livre)? A seção de medicamentos some completamente no formulário quando o tipo não é receita, ou apenas fica desabilitada?
+
+**Resposta:** _(preencha aqui)_
+
+---
+
+## Q-07 — Pacientes: `design.md` e `tasks.md` ausentes
+
+**Unit:** `pacientes/`
+**Arquivo:** (ausente)
+**Severidade:** 🔴 Crítico — bloqueia reimplementação
+**Contexto:** A unit `pacientes/` possui `requirements.md` e `screens.md`, mas sem `design.md` (fluxo de cadastro, validação do CPF, consentimento LGPD) e sem `tasks.md`.
+
+**Pergunta:**
+O botão "Ver Termo" no bloco LGPD abre o termo completo para o usuário aceitar diretamente no sistema (e registra `lgpd_consent = true` + data + IP), ou apenas exibe o texto para download/leitura? O consentimento pode ser dado depois de salvar o paciente?
+
+**Resposta:** _(preencha aqui)_
+
+---
+
+## Q-08 — Médicos: `design.md` e `tasks.md` ausentes
+
+**Unit:** `medicos/`
+**Arquivo:** (ausente)
+**Severidade:** 🔴 Crítico — bloqueia reimplementação
+**Contexto:** A unit `medicos/` possui `requirements.md` e `screens.md`, mas sem `design.md` e `tasks.md`. Falta especificar como os horários de atendimento do médico são usados pelo módulo Agendamentos para filtrar slots disponíveis.
+
+**Pergunta:**
+O sistema bloqueia automaticamente agendamentos fora do `working_hours` e dos `working_days` do médico, ou apenas exibe a informação sem validação?
+
+**Resposta:** _(preencha aqui)_
+
+---
+
+## Q-09 — Templates: `design.md` e `tasks.md` ausentes
+
+**Unit:** `templates/`
+**Arquivo:** (ausente)
+**Severidade:** 🔴 Crítico — bloqueia reimplementação
+**Contexto:** A unit `templates/` possui `requirements.md` e `screens.md`, mas sem `design.md` e `tasks.md`. As variáveis dinâmicas (`{PACIENTE_NOME}`, `{DATA}`, `{DIAS_AFASTAMENTO}`, etc.) estão listadas no `screens.md`, mas não há spec de como são substituídas na geração do documento.
+
+**Pergunta:**
+As variáveis do template são substituídas no momento em que o documento é **salvo** ou somente no momento em que é **impresso**? Há alguma variável que depende de input manual no momento da emissão (ex: `{DIAS_AFASTAMENTO}` precisa ser digitado pelo médico)?
+
+**Resposta:** _(preencha aqui)_
+
+---
+
+## Q-10 — Logs de Acesso: `design.md` e `tasks.md` ausentes + lacuna de gatilho
+
+**Unit:** `logs-acesso/`
+**Arquivo:** (ausente) e `logs-acesso/requirements.md`
+**Severidade:** 🔴 Crítico — bloqueia reimplementação
+**Contexto:** Além dos canônicos ausentes, não há spec de **quem dispara** a criação de um log. A BR-L02 lista os tipos de ação, mas não documenta em quais eventos do sistema cada tipo é registrado (ex: Login → quando? ao carregar o dashboard? ao autenticar?). O `screens.md` mostra "Acesso ao dashboard" como Detalhe de um Login, sugerindo que o login registra a rota inicial — mas isso é inferência.
+
+**Pergunta:**
+Os logs são gravados por middleware automático (toda rota autenticada gera um log), ou são eventos manuais chamados explicitamente no código de cada módulo? Existe paginação na tela de logs, ou a tabela carrega todos os registros de uma vez?
+
+**Resposta:** _(preencha aqui)_
+
+---
+
+## Q-11 — code-spec-matrix.md: dashboard não mapeado
+
+**Arquivo:** `_reversa_sdd/code-spec-matrix.md`
+**Severidade:** 🟡 Moderado
+**Contexto:** A `code-spec-matrix.md` lista os módulos Pacientes, Consultas, Agendamentos, Médicos, Templates e Logs de Acesso — mas **não inclui o Dashboard**. Pelo `state.json`, o Archaeologist analisou o módulo `dashboard` e existe a pasta `_reversa_sdd/dashboard/`. A matrix está incompleta.
+
+**Pergunta:**
+Qual arquivo do legado corresponde ao Dashboard? (Provável: `src/pages/Dashboard.jsx` ou similar). Confirme para que a matrix possa ser atualizada.
+
+**Resposta:** _(preencha aqui)_
+
+---
+
+## Q-12 — Permissões: contradição em Consultas vs. Pacientes
+
+**Arquivo:** `consultas/requirements.md` (seção 4) e `pacientes/requirements.md` (seção 4)
+**Severidade:** 🟡 Moderado
+**Contexto:** Em Pacientes, Create é descrito como "Aberto para autenticados (`null`)" — enquanto em Consultas, Create é "Aberto para profissionais autenticados". A diferença de wording sugere que pode haver uma distinção de papel (`role`) para criação de consultas que não existe para pacientes, ou pode ser apenas inconsistência de texto.
+
+**Pergunta:**
+Qualquer usuário autenticado pode criar um paciente? Ou é necessário ser um "profissional de saúde" (papel específico)? O sistema distingue papel de "recepcionista" vs. "médico" além do papel `admin`?
+
+**Resposta:** _(preencha aqui)_
