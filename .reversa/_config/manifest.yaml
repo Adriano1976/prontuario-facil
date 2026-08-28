@@ -49,6 +49,7 @@ agents:
   - reversa-brainstorm
   - reversa-framer
   - reversa-explorer
+  - reversa-extract-soul
   - reversa-challenger
   - reversa-arbiter
   - reversa-pre-spec
