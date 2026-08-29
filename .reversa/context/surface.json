@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-20T00:00:00Z",
+  "generated_at": "2026-08-28T00:00:00Z",
   "project_root": "D:\\Projetos\\prontuario-facil",
   "languages": [
     { "name": "JavaScript (JSX)", "extensions": [".jsx"], "file_count": 80 },
@@ -43,7 +43,8 @@
     "medicos",
     "templates",
     "logs-acesso",
-    "dashboard"
+    "dashboard",
+    "modo-offline"
   ],
   "total_files": 346,
   "external_integrations": [
@@ -59,6 +60,18 @@
       { "type": "centralized_routing", "evidence": ["src/pages.config.js", "src/App.jsx"] },
       { "type": "domain_folders", "evidence": ["src/pages/", "base44/entities/", "src/components/appointments/", "src/components/medical/"] }
     ],
-    "features": []
+    "features": [
+      {
+        "id": "modo-offline",
+        "name": "Modo Offline (Mock Local)",
+        "evidence": [
+          "src/api/mockClient.js",
+          "src/api/mockSeed.js",
+          "src/api/base44Client.js (OFFLINE switch)",
+          "src/lib/AuthContext.jsx (OFFLINE_USER short-circuit)"
+        ],
+        "trigger": "import.meta.env.VITE_OFFLINE === 'true'"
+      }
+    ]
   }
 }

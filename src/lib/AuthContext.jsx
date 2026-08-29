@@ -1,6 +1,7 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { appParams } from '@/lib/app-params';
+import { OFFLINE_USER } from '@/api/mockClient';
 import { createAxiosClient } from '@base44/sdk/dist/utils/axios-client';
 
 const AuthContext = createContext();
@@ -43,6 +44,15 @@ export const AuthProvider = ({ children }) => {
    * @private
    */
   const checkAppState = async () => {
+    // Modo offline: não há servidor Base44; autentica com usuário fixo de demonstração.
+    if (import.meta.env.VITE_OFFLINE === 'true') {
+      setIsLoadingPublicSettings(false);
+      setIsLoadingAuth(false);
+      setIsAuthenticated(true);
+      setUser(OFFLINE_USER);
+      return;
+    }
+
     try {
       setIsLoadingPublicSettings(true);
       setAuthError(null);

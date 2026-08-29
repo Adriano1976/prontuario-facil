@@ -168,3 +168,59 @@ Qual arquivo do legado corresponde ao Dashboard? (Provável: `src/pages/Dashboar
 Qualquer usuário autenticado pode criar um paciente? Ou é necessário ser um "profissional de saúde" (papel específico)? O sistema distingue papel de "recepcionista" vs. "médico" além do papel `admin`?
 
 **Resposta:** _(preencha aqui)_
+
+---
+
+## Q-13 — Modo Offline: intenção e plano de vida
+
+**Unit:** `modo-offline/` (nova)
+**Arquivos:** `src/api/mockClient.js`, `src/api/mockSeed.js`, diffs em `src/api/base44Client.js` e `src/lib/AuthContext.jsx`
+**Severidade:** 🟡 Moderado
+**Contexto:** Foi adicionado um modo offline (`VITE_OFFLINE=true`) que substitui o SDK Base44 real por um mock persistido em `localStorage`, com usuário fixo `demo@medrecord.local`. Não há documentação sobre o porquê desta adição, qual o público-alvo (demo, dev, QA, offline-real-de-pobre?) nem qual o plano de evolução.
+
+**Pergunta:**
+Qual é a finalidade do modo offline? Demos para stakeholders? Ambiente de dev sem credenciais Base44? Suporte a cenários sem internet? Plano de remover no futuro ou feature permanente?
+
+**Resposta:** _(preencha aqui)_
+
+---
+
+## Q-14 — Modo Offline: postura LGPD no seed
+
+**Unit:** `modo-offline/`
+**Arquivos:** `src/api/mockSeed.js`
+**Severidade:** 🔴 Crítico
+**Contexto:** O seed inclui 5 pacientes com CPF, data de nascimento, telefone, email e status. Esses dados ficam gravados em `localStorage` no navegador de quem rodar `npm run dev` com `VITE_OFFLINE=true`. Não há termo de consentimento, não há anonimização, e os CPFs não são marcados como "fictícios". Em um dispositivo compartilhado, isso constitui vazamento de dados pessoais (mesmo que fictícios).
+
+**Pergunta:**
+Os CPFs e dados dos pacientes no seed são fictícios/claramente inventados, ou foram copiados de base real? Deve haver um aviso na UI quando o modo offline está ativo indicando que os dados ficam apenas locais? O seed deve ser anonimizado?
+
+**Resposta:** _(preencha aqui)_
+
+---
+
+## Q-15 — Modo Offline: cobertura de operações
+
+**Unit:** `modo-offline/`
+**Arquivos:** `src/api/mockClient.js`
+**Severidade:** 🟡 Moderado
+**Contexto:** O mock implementa `list`, `filter`, `create`, `update`, `delete`, `UploadFile`, `auth.me/logout/redirectToLogin`, `appLogs.logUserInApp`. Faltam operações comuns do SDK Base44 que podem existir em alguma page e quebrar offline: `entities.<X>.get(id)`, `entities.<X>.bulkCreate/update`, `entities.<X>.count`, `integrations.Core.SendEmail`, `integrations.Core.InvokeLLM`, ou queries customizadas. Também não há suporte a filtros avançados (apenas `===`).
+
+**Pergunta:**
+O modo offline deve cobrir 100% das operações usadas pela app, ou apenas um subset é aceitável (com degradação consciente)? Há expectativa de cobrir upload de arquivos persistido?
+
+**Resposta:** _(preencha aqui)_
+
+---
+
+## Q-16 — Autenticação: impacto do short-circuit
+
+**Unit:** `autenticação/` (transversal; sem unit dedicada)
+**Arquivos:** `src/lib/AuthContext.jsx`
+**Severidade:** 🟡 Moderado
+**Contexto:** Quando `VITE_OFFLINE=true`, o `checkAppState()` pula o fetch de `publicSettings` e a chamada `base44.auth.me()` — seta `OFFLINE_USER` direto e marca como autenticado. Isso significa que qualquer navegação/componente que dependa de `user.email`, `user.role`, `user.created_by_id` ou de `publicSettings` pode apresentar comportamento divergente do modo online. Hoje o `AccessLogger.jsx` faz `logAccess(LOGIN, ...)` com o email do usuário — em offline, todos os logs terão `user_email: 'demo@medrecord.local'`.
+
+**Pergunta:**
+Em offline, o `user_email` de todos os logs será `demo@medrecord.local`. Isso é aceitável para o uso pretendido, ou deve haver um modo de identificar a "sessão" (ex: user_id variável)? Algum componente depende de papéis (admin/medico/recepcionista) que podem quebrar offline?
+
+**Resposta:** _(preencha aqui)_

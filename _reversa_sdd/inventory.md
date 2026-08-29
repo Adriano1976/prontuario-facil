@@ -104,6 +104,7 @@ prontuario-facil/
 | **templates** | Templates | Template | PrescriptionEditor (uso) |
 | **logs de acesso** | AccessLogs | AccessLog | AccessLogger |
 | **dashboard** | Dashboard | Patient, Consultation, Prescription, Appointment | StatsCard, ReportsView |
+| **modo offline** | — (transversal) | todas (mock) | — (client-side) |
 
 ## Pontos de entrada
 
@@ -146,3 +147,22 @@ prontuario-facil/
 
 - Repositório pequeno (9 commits). Feature recente: relatórios no dashboard.
 - Últimos commits indicam iterações: identidade visual, navegação mobile, exclusão de conta, docstrings em pt-BR.
+
+---
+
+## Mudanças recentes (delta 2026-08-28)
+
+> Atualização incremental do inventário — apenas o que mudou desde o snapshot de 2026-08-20.
+
+**Novos arquivos:**
+- `src/api/mockClient.js` — cliente SDK falso com persistência em `localStorage`
+- `src/api/mockSeed.js` — dados de demonstração (8 entidades) carregados na primeira execução de cada coleção
+
+**Arquivos modificados:**
+- `src/api/base44Client.js` — switch por `import.meta.env.VITE_OFFLINE` para escolher entre SDK real e mock
+- `src/lib/AuthContext.jsx` — short-circuit em `checkAppState()` que autentica como `OFFLINE_USER` quando offline
+
+**Nova unit documentada:**
+- `_reversa_sdd/modo-offline/` — feature transversal ativada por env var
+
+**Sem impacto em:** estrutura de pastas, dependências de `package.json`, rotas, schema de entidades Base44, build/deploy.

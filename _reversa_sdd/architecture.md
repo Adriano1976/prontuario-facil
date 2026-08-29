@@ -28,6 +28,8 @@ C4Container
     Rel(spa, db, "Lê/Escreve dados via SDK Base44", "JSON over HTTPS/Local")
 ```
 
+> **Variante de deployment (adicionada em 2026-08-28):** quando `VITE_OFFLINE=true`, o container `spa` substitui o uso do SDK Base44 por um mock client (`src/api/mockClient.js`) que persiste no `localStorage` do navegador. Mesmo container, mesma UI, repositório de dados diferente. Não há mudanças nos contratos consumidos pelas pages.
+
 ## 3. Fluxo de Dados Principal
 
 1. **Agendamento**: Médico seleciona Paciente (Ativo) e Médico → Cria `Appointment`.

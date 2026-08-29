@@ -34,3 +34,11 @@ As regras estão aplicadas via lógica de filtro no Frontend (em páginas como `
 // Exemplo de lógica encontrada (Consultation.jsonc)
 "read": { "$or": [{ "created_by_id": "{{user.id}}" }, { "user_condition": { "role": "admin" } }] }
 ```
+
+## 4. ⚠️ Limitações em Modo Offline (adicionado em 2026-08-28)
+
+Quando `VITE_OFFLINE=true`:
+- O mock client (`src/api/mockClient.js`) **não aplica RLS** — todo registro é visível/editável por qualquer sessão.
+- Não há distinção de papel — `OFFLINE_USER` tem `id`, `email`, `full_name` apenas. Não carrega `role`, `created_by_id` ou campos derivados.
+- Filtros aplicados no frontend (ex: `created_by_id == me`) continuarão filtrando, mas o conjunto visível é o mesmo para qualquer "usuário" (porque só há um).
+- `AccessLog.user_email` será sempre `demo@medrecord.local`.

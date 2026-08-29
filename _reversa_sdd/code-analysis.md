@@ -294,7 +294,7 @@ O módulo **consultas** implementa o ciclo de atendimento clínico do prontuári
 | `src/components/medical/PrescriptionEditor.jsx` | Component | 336 | Editor de documentos com 6 tipos, medicações e templates |
 | `src/components/medical/ExamUploader.jsx` | Component | 270 | Upload de exame (PDF/imagem), preview e metadados |
 | `src/components/medical/AccessLogger.jsx` | Utility | 56 | Auditoria de acessos (LGPD) |
-| `src/api/base44Client.js` | Client | 23 | Instância do SDK Base44 |
+| `src/api/base44Client.js` | Client | 28 | Seletor entre SDK Base44 real e mock local via `VITE_OFFLINE` |
 | `base44/entities/Consultation.jsonc` | Schema | 128 | Entidade Consultation + RLS |
 | `base44/entities/Prescription.jsonc` | Schema | 110 | Entidade Prescription + RLS |
 | `base44/entities/Exam.jsonc` | Schema | 101 | Entidade Exam + RLS |
@@ -1481,6 +1481,71 @@ dashboard
 | Regras de negócio | 9 |
 | Algoritmos não-triviais | 5 |
 | Complexidade ciclomática estimada | Média (agregações múltiplas + tabs + dropdown) |
+
+---
+
+## 10. Modo Offline (Mock Local) — adicionado em 2026-08-28
+
+> Feature transversal ativada por env var `VITE_OFFLINE=true`. Permite rodar a SPA sem o backend Base44, persistindo em `localStorage`.
+
+### 10.1 Arquivos
+
+| Arquivo | Tipo | Linhas | Função |
+|---------|------|--------|--------|
+| `src/api/mockClient.js` | Client | 141 | SDK falso: repositórios por entidade, integração `Core.UploadFile`, `auth`, `appLogs` |
+| `src/api/mockSeed.js` | Seed | 43 | Dados iniciais para 8 entidades (Doctor, Patient, Appointment, Consultation, Prescription, Exam, Template, AccessLog) |
+
+### 10.2 Mudanças em arquivos existentes
+
+| Arquivo | Diff | Efeito |
+|---------|------|--------|
+| `src/api/base44Client.js` | Importa `createMockClient`; lê `VITE_OFFLINE`; ternário entre `createClient()` real e `createMockClient()` | Troca o cliente exportado em runtime (compile-time, via Vite) |
+| `src/lib/AuthContext.jsx` | Curto-circuito no início de `checkAppState()` quando `VITE_OFFLINE === 'true'` | Pula a chamada `base44.auth.me()` e seta `OFFLINE_USER` direto |
+
+### 10.3 Contratos expostos
+
+O mock espelha a mesma forma do SDK real:
+
+| SDK real | Mock | Implementação |
+|----------|------|---------------|
+| `base44.entities.<X>.list(sort?, limit?)` | idem | `sortAndLimit(load(X), sort, limit)` |
+| `base44.entities.<X>.filter(conds, sort?, limit?)` | idem | `load(X).filter(...)` com comparação estrita por chave/valor |
+| `base44.entities.<X>.create(data)` | idem | `{ id: uid(), created_date: now, ...data }` com fallback de `date = now` |
+| `base44.entities.<X>.update(id, data)` | idem | spread + mantém `id`; rejeita com `'Not found'` se índice `-1` |
+| `base44.entities.<X>.delete(id)` | idem | filtra e retorna `{ success: true }` |
+| `base44.integrations.Core.UploadFile({ file })` | idem | `FileReader.readAsDataURL` → `{ file_url: dataUrl }` |
+| `base44.auth.me()` | idem | resolve `OFFLINE_USER` |
+| `base44.auth.logout()` | idem | resolve `undefined` (no-op) |
+| `base44.auth.redirectToLogin()` | idem | no-op |
+| `base44.appLogs.logUserInApp()` | idem | resolve `undefined` (no-op) |
+
+`entities` é um `Proxy` que devolve um repo novo por nome de entidade acessada — não há registry estático.
+
+### 10.4 Persistência
+
+- Chave: `mock_db_<EntityName>` em `localStorage`
+- Lazy load: se vazio, semeia de `mockSeed[entity]` e grava
+- Tolerante a JSON corrompido (cai pro seed)
+- Não há TTL nem limpeza — dados persistem entre reloads até o usuário limpar storage
+
+### 10.5 Limitações funcionais 🟡
+
+| # | Limitação | Severidade |
+|---|-----------|------------|
+| L1 | Sem RLS — qualquer um lê/escreve qualquer entidade | Alta |
+| L2 | Sem conflito entre abas/janelas (escritas concorrentes) | Média |
+| L3 | Upload de arquivo vira Data URL em memória (não persiste — perdido no próximo reload) | Alta |
+| L4 | Filtros são estritos (`===`), sem operadores `in`, `contains`, `gte`, `lte` | Média |
+| L5 | `sortAndLimit` aceita apenas 1 campo, sem suporte a múltiplos | Baixa |
+| L6 | Sem `get(id)` direto — o caller tem que usar `filter` | Média |
+| L7 | LGPD: dados de pacientes seed ficam no `localStorage` do navegador — risco em dispositivos compartilhados | Alta |
+
+### 10.6 Compatibilidade
+
+- Sem novas dependências em `package.json`
+- Sem novas rotas ou páginas
+- Sem mudança nos schemas `base44/entities/*.jsonc` (o mock apenas reflete a forma esperada)
+- Toggle é **compile-time** (Vite injeta `import.meta.env` em build); não dá para alternar online↔offline sem rebuild
 
 ---
 

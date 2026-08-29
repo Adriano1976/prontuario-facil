@@ -747,3 +747,48 @@ Ordenado desc por count. Join O(a×d) via find.
 - **Escritas**: apenas indireta (logAccess LOGIN)
 - **Métrica hardcoded**: 1 ("Taxa de Atendimento" = 94%)
 - **Contagem truncada**: 1 ("Documentos Emitidos" limitado à lista de 100)
+
+---
+
+# Apêndice A — Seed do Modo Offline (adicionado em 2026-08-28)
+
+> Dados de demonstração carregados na primeira execução de cada entidade quando `VITE_OFFLINE=true`. Fonte: `src/api/mockSeed.js`.
+
+## Sumário do seed
+
+| Entidade | Registros | IDs | Notas |
+|----------|-----------|-----|-------|
+| `Doctor` | 3 | `doc-1`, `doc-2`, `doc-3` | `doc-3` é `is_active: false` |
+| `Patient` | 5 | `pat-1` … `pat-5` | `pat-4` é `status: inativo`; inclui `cpf`, `birth_date`, `gender` |
+| `Appointment` | 4 | `apt-1` … `apt-4` | 1 `concluido`, 1 `cancelado`, 2 `agendado`; cruzam `pat-*` e `doc-*` |
+| `Consultation` | 2 | `con-1`, `con-2` | `con-2` é sem `appointment_id` (avulsa); inclui `chief_complaint`, `anamnesis`, `diagnosis` |
+| `Prescription` | 2 | `prx-1`, `prx-2` | 1 por consulta; `medication`, `dosage`, `frequency`, `instructions` |
+| `Exam` | 1 | `exm-1` | `type: laboratorial`; `file_url: ''` (sem upload) |
+| `Template` | 2 | `tpl-1`, `tpl-2` | tipos `prescription` e `consultation` |
+| `AccessLog` | 1 | `log-1` | `action: view_patient`, `ip_address: 'client-side'` |
+
+## Relacionamentos materializados
+
+```
+pat-1 → apt-1 → (sem consulta)
+pat-2 → apt-2 → con-1 → prx-1, exm-1
+pat-3 → apt-3 → (sem consulta)
+pat-5 → apt-4
+pat-1 → con-2 → prx-2          (consulta sem appointment)
+```
+
+## Diferenças em relação ao schema Base44
+
+- `Patient` seed não inclui `lgpd_consent`, `lgpd_consent_date`, `lgpd_consent_ip`, `photo`, `blood_type`, `address`, `insurance`, `emergency_contact` — campos opcionais do schema, omitidos para brevidade.
+- `Exam` seed traz `file_url: ''` (string vazia, não `null`) — divergência menor com o JSONC que provavelmente define `file_url` opcional.
+- `Appointment` seed não traz `type` (campo de tipo de consulta) nem `reminder_sent`.
+- `AccessLog` seed ignora `user_email: 'demo@medrecord.local'` (não vem do `auth.me()` porque o mock retorna `OFFLINE_USER.email`).
+
+## Campos auto-gerados pelo mock em runtime
+
+Para qualquer `create(data)`:
+- `id` — `crypto.randomUUID()` ou fallback `id-<ts>-<rand>`
+- `created_date` — `new Date().toISOString()` no momento da criação
+- `date` — se ausente, recebe o mesmo timestamp de `created_date`
+
+Esses campos **não vêm no seed** para nenhum registro; só passam a existir após a primeira mutação via UI.
