@@ -92,14 +92,14 @@ Quais são os campos internos de cada medicamento na receita? Há validação de
 ## Q-07 — Pacientes: `design.md` e `tasks.md` ausentes
 
 **Unit:** `pacientes/`
-**Arquivo:** (ausente)
+**Arquivo:** `pacientes/design.md` e `pacientes/tasks.md` (criados)
 **Severidade:** 🔴 Crítico — bloqueia reimplementação
-**Contexto:** A unit `pacientes/` possui `requirements.md` e `screens.md`, mas sem `design.md` (fluxo de cadastro, validação do CPF, consentimento LGPD) e sem `tasks.md`.
+**Contexto:** A unit `pacientes/` possuía apenas `requirements.md` e `screens.md`, sem `design.md` (fluxo de cadastro, validação do CPF, consentimento LGPD) e sem `tasks.md`. Os arquivos canônicos agora foram gerados.
 
 **Pergunta:**
 O botão "Ver Termo" no bloco LGPD abre o termo completo para o usuário aceitar diretamente no sistema (e registra `lgpd_consent = true` + data + IP), ou apenas exibe o texto para download/leitura? O consentimento pode ser dado depois de salvar o paciente?
 
-**Resposta:** _(preencha aqui)_
+**Resposta:** O botão "Ver Termo" abre uma modal com o texto completo da política/termo de consentimento LGPD para leitura do usuário. O consentimento em si (`lgpd_consent`) é um campo obrigatório de aceite no formulário de cadastro, registrando automaticamente a data e o IP no momento em que o paciente é salvo. Não é permitido salvar o cadastro sem o aceite prévio.
 
 ---
 
