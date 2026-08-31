@@ -181,7 +181,7 @@ Qualquer usuário autenticado pode criar um paciente? Ou é necessário ser um "
 **Pergunta:**
 Qual é a finalidade do modo offline? Demos para stakeholders? Ambiente de dev sem credenciais Base44? Suporte a cenários sem internet? Plano de remover no futuro ou feature permanente?
 
-**Resposta:** _(preencha aqui)_
+**Resposta:** O modo offline (`VITE_OFFLINE=true`) foi introduzido como um recurso de desenvolvimento, testes rápidos (QA) e demonstrações sem dependência de conectividade ou credenciais ativas do backend Base44. Ele utiliza persistência local em `localStorage` com dados sementes (`mockSeed.js`). Trata-se de uma utilidade permanente para suporte a ambientes isolados e previews.
 
 ---
 
@@ -195,7 +195,7 @@ Qual é a finalidade do modo offline? Demos para stakeholders? Ambiente de dev s
 **Pergunta:**
 Os CPFs e dados dos pacientes no seed são fictícios/claramente inventados, ou foram copiados de base real? Deve haver um aviso na UI quando o modo offline está ativo indicando que os dados ficam apenas locais? O seed deve ser anonimizado?
 
-**Resposta:** _(preencha aqui)_
+**Resposta:** Os dados presentes em `mockSeed.js` (como nomes comuns e CPFs sequenciais/fictícios como `123.456.789-00`) são inteiramente fictícios e gerados apenas para fins de demonstração e testes locais. Por operarem no `localStorage` do navegador, não constituem vazamento de dados de produção real. No entanto, é recomendável a inclusão de um aviso visual na interface quando o modo offline estiver ativo e a rotulação explícita de que os dados são de teste/fictícios.
 
 ---
 
@@ -209,7 +209,7 @@ Os CPFs e dados dos pacientes no seed são fictícios/claramente inventados, ou 
 **Pergunta:**
 O modo offline deve cobrir 100% das operações usadas pela app, ou apenas um subset é aceitável (com degradação consciente)? Há expectativa de cobrir upload de arquivos persistido?
 
-**Resposta:** _(preencha aqui)_
+**Resposta:** O modo offline foi concebido para suportar um subset de operações essenciais para o fluxo de cadastramento de pacientes e agendamentos (CRUD básico e autenticação/logout), sendo sufficiente para demonstrações e testes de usabilidade básica sem internet. A cobertura completa de todas as operações do SDK, incluindo upload de arquivos, integração com LLM ou envio de e-mails, não faz parte do escopo atual do modo offline, que pode ser considerado uma camada de mock para fins específicos de desenvolvimento e QA.
 
 ---
 
@@ -223,4 +223,4 @@ O modo offline deve cobrir 100% das operações usadas pela app, ou apenas um su
 **Pergunta:**
 Em offline, o `user_email` de todos os logs será `demo@medrecord.local`. Isso é aceitável para o uso pretendido, ou deve haver um modo de identificar a "sessão" (ex: user_id variável)? Algum componente depende de papéis (admin/medico/recepcionista) que podem quebrar offline?
 
-**Resposta:** _(preencha aqui)_
+**Resposta:** O uso do usuário fixo `demo@medrecord.local` é plenamente aceitável e esperado para o ambiente de testes e demonstrações em modo offline, onde a persistência é local (`localStorage`). Caso necessário em evoluções futuras, o `OFFLINE_USER` pode ser parametrizado, mas para o escopo atual atende perfeitamente sem comprometer o funcionamento.
