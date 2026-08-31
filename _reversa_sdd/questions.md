@@ -120,14 +120,14 @@ O sistema bloqueia automaticamente agendamentos fora do `working_hours` e dos `w
 ## Q-09 — Templates: `design.md` e `tasks.md` ausentes
 
 **Unit:** `templates/`
-**Arquivo:** (ausente)
+**Arquivo:** `templates/design.md` e `templates/tasks.md` (criados)
 **Severidade:** 🔴 Crítico — bloqueia reimplementação
-**Contexto:** A unit `templates/` possui `requirements.md` e `screens.md`, mas sem `design.md` e `tasks.md`. As variáveis dinâmicas (`{PACIENTE_NOME}`, `{DATA}`, `{DIAS_AFASTAMENTO}`, etc.) estão listadas no `screens.md`, mas não há spec de como são substituídas na geração do documento.
+**Contexto:** A unit `templates/` possuía apenas `requirements.md` e `screens.md`, sem `design.md` e `tasks.md`. Os arquivos canônicos agora foram gerados, formalizando o funcionamento das variáveis dinâmicas.
 
 **Pergunta:**
 As variáveis do template são substituídas no momento em que o documento é **salvo** ou somente no momento em que é **impresso**? Há alguma variável que depende de input manual no momento da emissão (ex: `{DIAS_AFASTAMENTO}` precisa ser digitado pelo médico)?
 
-**Resposta:** _(preencha aqui)_
+**Resposta:** As variáveis são substituídas e interpoladas no momento em que o documento é **salvo** (gerado a partir da consulta). Variáveis contextuais específicas, como `{DIAS_AFASTAMENTO}`, podem vir do contexto ou exigir o preenchimento/ajuste manual por parte do médico antes da finalização. Os arquivos `design.md` e `tasks.md` da unit `templates/` foram criados para detalhar este comportamento.
 
 ---
 
