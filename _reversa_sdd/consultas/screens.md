@@ -49,11 +49,14 @@ Modal flutuante para criação de documentos baseados em templates.
 ### Elementos de Interface
 - **Campos:**
   - Tipo de Documento (Dropdown, ex: "Receita Simples").
-  - Template (Dropdown para modelos pré-salvos).
-  - Conteúdo (Campo de texto enriquecido/textarea).
-  - Medicamentos (Seção com botão "+ Adicionar").
-  - Observações (Textarea opcional).
-- **Ações:** Botão "Imprimir" e "Salvar".
+  - Template (Dropdown para modelos pré-salvos, ex: "Selecionar template...").
+  - Conteúdo (Textarea para o corpo do documento, placeholder "Digite o conteúdo do documento...").
+  - Medicamentos (Seção condicional exibida para receitas, com botão "+ Adicionar").
+  - Observações (Textarea opcional, placeholder "Observações adicionais...").
+- **Ações:** 
+  - Botão "Imprimir" (com ícone de impressora).
+  - Botão "Salvar" (primário, verde, com ícone de disquete).
+  - Botão de fechar (`X` no canto superior direito).
 
 ## Tela: Modal: Upload de Exame
 Modal flutuante para arquivar exames de imagem ou laudos em PDF/imagem.

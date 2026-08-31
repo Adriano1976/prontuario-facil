@@ -71,7 +71,7 @@ A transição para `confirmado` é feita manualmente pelo médico/admin via inte
 **Pergunta:**
 Quando o usuário clica em "Nova Receita" / "Atestado" / "Exame" na tela de Visualização de Consulta, o modal de Novo Documento preenche automaticamente algum campo com dados da consulta atual (paciente, data)? Ou o usuário preenche tudo manualmente?
 
-**Resposta:** _(preencha aqui)_
+**Resposta:** O modal de Novo Documento herda automaticamente o vínculo com a consulta atual e o paciente associado (`patient_id` e `consultation_id`). Além disso, ao selecionar um modelo no dropdown de "Template", o conteúdo pré-configurado do template (incluindo variáveis substituídas como nome do paciente e data) é injetado automaticamente no campo de texto do documento.
 
 ---
 
@@ -85,7 +85,7 @@ Quando o usuário clica em "Nova Receita" / "Atestado" / "Exame" na tela de Visu
 **Pergunta:**
 Quais são os campos internos de cada medicamento na receita? Há validação de nome contra alguma base (ANVISA, livre)? A seção de medicamentos some completamente no formulário quando o tipo não é receita, ou apenas fica desabilitada?
 
-**Resposta:** _(preencha aqui)_
+**Resposta:** Cada medicamento na receita possui os seguintes campos internos: **Nome do medicamento**, **Dosagem (ex: 500mg)**, **Frequência (ex: 8/8h)**, **Duração (ex: 7 dias)** e um campo de instruções especiais (`Instruções especiais...`), além de botões para adicionar novos itens e excluir individuais. Não há validação automatizada de nome contra bases externas (preenchimento livre). Quando o tipo de documento selecionado não é uma receita, a seção de medicamentos é **oculta completamente** do formulário.
 
 ---
 
