@@ -15,7 +15,7 @@
 **Pergunta:**
 Os KPIs do Dashboard são calculados em tempo real via queries, ou são valores pré-computados/cacheados? Há alguma definição de período (ex: "Agendamentos Hoje" considera qual fuso horário? Usa a data do servidor ou do cliente)?
 
-**Resposta:** _(preencha aqui)_
+**Resposta:** _(Os arquivos que estavam faltando já foram devidamente criados)_
 
 ---
 
@@ -29,7 +29,7 @@ Os KPIs do Dashboard são calculados em tempo real via queries, ou são valores 
 **Pergunta:**
 O gráfico mini na KPI card de "Taxa de Atendimento" é realmente um sparkline/mini chart ou apenas um indicador visual de cor (ex: barra de progresso)?
 
-**Resposta:** _(preencha aqui)_
+**Resposta:** _(Não há sparkline, mini chart nem barra de progresso)_
 
 ---
 
