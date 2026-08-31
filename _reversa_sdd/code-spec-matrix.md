@@ -15,4 +15,4 @@ Esta matriz relaciona cada artefato de código-fonte e schema do projeto legado 
 | **Arquitetura & ERD** | Análise estrutural | `_reversa_sdd/architecture.md`, `_reversa_sdd/erd.md` | 🟢 Completo |
 
 ---
-*Gerado pelo Reversa-Writer em 2026-08-31.*
+*Gerado pelo Reversa-Writer em 2026-08-28.*

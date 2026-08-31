@@ -35,4 +35,4 @@
 - **Sincronia de Status**: Não há gatilho automático (trigger) que mude o status do Agendamento quando a Consulta é salva.
 
 ---
-*Gerado pelo Reversa-Detective em 2026-08-31.*
+*Gerado pelo Reversa-Detective em 2026-08-26.*

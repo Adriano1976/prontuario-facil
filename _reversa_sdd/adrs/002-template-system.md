@@ -17,4 +17,4 @@ Criar uma entidade `Template` desacoplada das consultas:
 - **Negativas**: Se um médico precisar de um documento que foge dos tipos pré-definidos, ele fica limitado aos enums do sistema.
 
 ---
-*Gerado pelo Reversa-Architect em 2026-08-31.*
+*Gerado pelo Reversa-Architect em 2026-08-26.*

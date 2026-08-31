@@ -147,4 +147,4 @@ VITE_OFFLINE=false
 - [x] Linhas marcadas em `code-spec-matrix.md`
 
 ---
-*Gerado pelo Reversa-Writer em 2026-08-31.*
+*Gerado pelo Reversa-Writer em 2026-08-28.*

@@ -202,4 +202,4 @@ Fora de escopo agora.
 | Seed hardcoded em JS | Sem dependência externa | Mudanças exigem rebuild |
 
 ---
-*Gerado pelo Reversa-Writer em 2026-08-31.*
+*Gerado pelo Reversa-Writer em 2026-08-28.*

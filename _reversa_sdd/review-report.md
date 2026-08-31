@@ -22,4 +22,4 @@ Este relatório encerra o ciclo de engenharia reversa do projeto **prontuario-fa
 O diretório `_reversa_sdd/` está completamente populado e pronto para servir como base de especificação para o ciclo forward (`/reversa-forward`) ou para migrações/reimplementações (`/reversa-migrate`).
 
 ---
-*Gerado pelo Reversa-Reviewer em 2026-08-31.*
+*Gerado pelo Reversa-Reviewer em 2026-08-26.*

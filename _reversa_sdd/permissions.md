@@ -44,4 +44,4 @@ Quando `VITE_OFFLINE=true`:
 - `AccessLog.user_email` será sempre `demo@medrecord.local`.
 
 ---
-*Gerado pelo Reversa-Writer em 2026-08-31.*
+*Gerado pelo Reversa-Writer em 2026-08-28.*

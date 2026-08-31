@@ -17,4 +17,4 @@ Baseado em `base44/entities/Template.jsonc`:
 - **Read**: Leitura de templates ativos liberada para profissionais de saúde.
 
 ---
-*Gerado pelo Reversa-Writer em 2026-08-31.*
+*Gerado pelo Reversa-Writer em 2026-08-26.*

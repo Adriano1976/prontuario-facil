@@ -124,4 +124,4 @@ OFFLINE_USER = {
 - [ ] Setar `VITE_OFFLINE=false` (ou ausente) volta ao comportamento online (requer credenciais Base44 válidas).
 
 ---
-*Gerado pelo Reversa-Writer em 2026-08-31.*
+*Gerado pelo Reversa-Writer em 2026-08-28.*

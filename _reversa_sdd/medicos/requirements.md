@@ -18,4 +18,4 @@ Baseado em `base44/entities/Doctor.jsonc`:
 - **Read**: Leitura livre para usuários autenticados da clínica.
 
 ---
-*Gerado pelo Reversa-Writer em 2026-08-31.*
+*Gerado pelo Reversa-Writer em 2026-08-26.*

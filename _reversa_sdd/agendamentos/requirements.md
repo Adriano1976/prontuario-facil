@@ -21,4 +21,4 @@ Baseado em `base44/entities/Appointment.jsonc`:
 - **Read / Update / Delete**: Restrito ao criador (`created_by_id == user.id`) OU papel `admin`.
 
 ---
-*Gerado pelo Reversa-Writer em 2026-08-31.*
+*Gerado pelo Reversa-Writer em 2026-08-26.*
