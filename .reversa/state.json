@@ -52,6 +52,7 @@
       ]
     }
   },
+  "redator_progress": "dashboard/tasks.md",
   "engines": [
     "codex",
     "antigravity",
