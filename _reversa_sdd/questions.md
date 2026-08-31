@@ -167,7 +167,7 @@ Qual arquivo do legado corresponde ao Dashboard? (Provável: `src/pages/Dashboar
 **Pergunta:**
 Qualquer usuário autenticado pode criar um paciente? Ou é necessário ser um "profissional de saúde" (papel específico)? O sistema distingue papel de "recepcionista" vs. "médico" além do papel `admin`?
 
-**Resposta:** _(preencha aqui)_
+**Resposta:** O schema base da entidade (`Patient.jsonc` e `Consultation.jsonc`) possui RLS de criação aberto para qualquer usuário autenticado (`"create": null`), sem restrição rígida de papel (`role`) na camada de dados. A distinção de "profissionais autenticados" na documentação anterior tratava-se de uma generalização de texto (wording), pois o sistema permite que operadores/recepcionistas cadastrem pacientes e agendamentos, enquanto a restrição restrita de papel ocorre apenas em cadastros administrativos (como médicos e templates, restritos a `role == 'admin'`).
 
 ---
 
