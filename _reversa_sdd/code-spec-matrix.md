@@ -4,6 +4,7 @@ Esta matriz relaciona cada artefato de código-fonte e schema do projeto legado 
 
 | Módulo / Funcionalidade | Arquivo(s) Legado(s) de Origem | Especificação SDD Correspondente | Status |
 | :--- | :--- | :--- | :---: |
+| **Dashboard** | `src/pages/Dashboard.jsx` | `_reversa_sdd/dashboard/screens.md` | 🟢 Completo |
 | **Pacientes** | `src/pages/Patients.jsx`, `base44/entities/Patient.jsonc` | `_reversa_sdd/pacientes/requirements.md` | 🟢 Completo |
 | **Consultas** | `src/pages/Consultations.jsx`, `base44/entities/Consultation.jsonc`, `Prescription.jsonc`, `Exam.jsonc` | `_reversa_sdd/consultas/requirements.md` | 🟢 Completo |
 | **Agendamentos** | `src/pages/Appointments.jsx`, `base44/entities/Appointment.jsonc`, `AppointmentCalendar.jsx` | `_reversa_sdd/agendamentos/requirements.md` | 🟢 Completo |

@@ -154,7 +154,7 @@ Os logs são gravados por middleware automático (toda rota autenticada gera um 
 **Pergunta:**
 Qual arquivo do legado corresponde ao Dashboard? (Provável: `src/pages/Dashboard.jsx` ou similar). Confirme para que a matrix possa ser atualizada.
 
-**Resposta:** _(preencha aqui)_
+**Resposta:** O arquivo legado correspondente ao Dashboard foi confirmado como `src/pages/Dashboard.jsx`. A matriz `_reversa_sdd/code-spec-matrix.md` foi atualizada para incluir a linha do Dashboard.
 
 ---
 
