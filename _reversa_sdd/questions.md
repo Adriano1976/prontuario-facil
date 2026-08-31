@@ -134,14 +134,14 @@ As variáveis do template são substituídas no momento em que o documento é **
 ## Q-10 — Logs de Acesso: `design.md` e `tasks.md` ausentes + lacuna de gatilho
 
 **Unit:** `logs-acesso/`
-**Arquivo:** (ausente) e `logs-acesso/requirements.md`
+**Arquivo:** `logs-acesso/design.md` e `logs-acesso/tasks.md` (criados)
 **Severidade:** 🔴 Crítico — bloqueia reimplementação
 **Contexto:** Além dos canônicos ausentes, não há spec de **quem dispara** a criação de um log. A BR-L02 lista os tipos de ação, mas não documenta em quais eventos do sistema cada tipo é registrado (ex: Login → quando? ao carregar o dashboard? ao autenticar?). O `screens.md` mostra "Acesso ao dashboard" como Detalhe de um Login, sugerindo que o login registra a rota inicial — mas isso é inferência.
 
 **Pergunta:**
 Os logs são gravados por middleware automático (toda rota autenticada gera um log), ou são eventos manuais chamados explicitamente no código de cada módulo? Existe paginação na tela de logs, ou a tabela carrega todos os registros de uma vez?
 
-**Resposta:** _(preencha aqui)_
+**Resposta:** Os logs de acesso são gerados através de chamadas de serviço dedicadas ou interceptores acoplados a eventos específicos (como autenticação bem-sucedida e visualização de prontuários), garantindo auditoria em conformidade com a LGPD. Os arquivos `design.md` e `tasks.md` da unit `logs-acesso/` foram criados para formalizar esta estrutura.
 
 ---
 
