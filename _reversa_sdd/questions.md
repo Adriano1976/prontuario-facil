@@ -15,7 +15,7 @@
 **Pergunta:**
 Os KPIs do Dashboard são calculados em tempo real via queries, ou são valores pré-computados/cacheados? Há alguma definição de período (ex: "Agendamentos Hoje" considera qual fuso horário? Usa a data do servidor ou do cliente)?
 
-**Resposta:** _(Os arquivos que estavam faltando já foram devidamente criados)_
+**Resposta:** Os arquivos que estavam faltando já foram devidamente criados.
 
 ---
 
@@ -29,7 +29,7 @@ Os KPIs do Dashboard são calculados em tempo real via queries, ou são valores 
 **Pergunta:**
 O gráfico mini na KPI card de "Taxa de Atendimento" é realmente um sparkline/mini chart ou apenas um indicador visual de cor (ex: barra de progresso)?
 
-**Resposta:** _(Não há sparkline, mini chart nem barra de progresso)_
+**Resposta:** Não há sparkline, mini chart nem barra de progresso.
 
 ---
 
@@ -43,7 +43,7 @@ O gráfico mini na KPI card de "Taxa de Atendimento" é realmente um sparkline/m
 **Pergunta:**
 Como o usuário informa data e hora no formulário de Novo Agendamento? Há um campo de date/time picker? Ou o agendamento é criado a partir de um clique direto na grade de calendário (sem formulário separado para data)?
 
-**Resposta:** _(preencha aqui)_
+**Resposta:** O formulário de Novo Agendamento possui uma seção explícita chamada "Data e Horário" localizada entre a seção "Paciente e Médico" e a seção "Detalhes". Essa seção conta com um widget de calendário embutido (mini-calendar/date picker) que permite navegar entre meses/anos e selecionar diretamente o dia do agendamento.
 
 ---
 
@@ -57,7 +57,7 @@ Como o usuário informa data e hora no formulário de Novo Agendamento? Há um c
 **Pergunta:**
 A transição para `confirmado` é feita manualmente pelo médico/admin via interface, ou automaticamente pelo sistema após envio do lembrete? O campo `reminder_sent` tem relação com essa transição?
 
-**Resposta:** _(preencha aqui)_
+**Resposta:** A transição para `confirmado` é realizada manualmente pelo usuário (médico, recepcionista ou admin) ao alterar o status do agendamento na interface. Os campos `reminder_sent` e `reminder_sent_date` são flags de controle de notificação e não possuem gatilhos de automação de status.
 
 ---
 

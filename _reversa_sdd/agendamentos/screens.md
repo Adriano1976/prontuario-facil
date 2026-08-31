@@ -27,12 +27,14 @@ Formulário para reservar um horário e vincular paciente e profissional de saú
 - **Paciente e Médico:**
   - Paciente (Dropdown para seleção, obrigatório com `*`).
   - Médico (Dropdown para seleção, obrigatório com `*`).
+- **Data e Horário:**
+  - Widget de Calendário interativo (Date Picker embutido com navegação de mês/ano e grade de dias para escolha da data da consulta).
 - **Detalhes:**
   - Tipo de Consulta (Dropdown com opções como "Primeira Consulta", etc.).
-  - Observações (Textarea para texto livre).
+  - Observações (Textarea para texto livre com placeholder "Observações sobre o agendamento...").
 - **Ações:**
   - Botão "Cancelar".
-  - Botão "Confirmar Agendamento".
+  - Botão "Confirmar Agendamento" (ícone de salvar/documento + texto).
 
 ---
 *Gerado pelo Reversa-Visor em 2026-08-27.*
