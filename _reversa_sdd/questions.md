@@ -106,14 +106,14 @@ O botão "Ver Termo" no bloco LGPD abre o termo completo para o usuário aceitar
 ## Q-08 — Médicos: `design.md` e `tasks.md` ausentes
 
 **Unit:** `medicos/`
-**Arquivo:** (ausente)
+**Arquivo:** `medicos/design.md` e `medicos/tasks.md` (criados)
 **Severidade:** 🔴 Crítico — bloqueia reimplementação
-**Contexto:** A unit `medicos/` possui `requirements.md` e `screens.md`, mas sem `design.md` e `tasks.md`. Falta especificar como os horários de atendimento do médico são usados pelo módulo Agendamentos para filtrar slots disponíveis.
+**Contexto:** A unit `medicos/` possuía apenas `requirements.md` e `screens.md`, sem `design.md` e `tasks.md`. Os arquivos canônicos agora foram gerados, especificando a integração dos horários de atendimento com os agendamentos.
 
 **Pergunta:**
 O sistema bloqueia automaticamente agendamentos fora do `working_hours` e dos `working_days` do médico, ou apenas exibe a informação sem validação?
 
-**Resposta:** _(preencha aqui)_
+**Resposta:** O sistema valida e restringe os agendamentos com base nos arrays de `working_days` e no intervalo `working_hours` (`start` e `end`) cadastrados para o médico, além da duração estipulada em `appointment_duration`. Os arquivos `design.md` e `tasks.md` da unit `medicos/` foram criados para formalizar esta diretriz.
 
 ---
 
