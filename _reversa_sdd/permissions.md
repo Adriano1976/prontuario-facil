@@ -42,3 +42,6 @@ Quando `VITE_OFFLINE=true`:
 - Não há distinção de papel — `OFFLINE_USER` tem `id`, `email`, `full_name` apenas. Não carrega `role`, `created_by_id` ou campos derivados.
 - Filtros aplicados no frontend (ex: `created_by_id == me`) continuarão filtrando, mas o conjunto visível é o mesmo para qualquer "usuário" (porque só há um).
 - `AccessLog.user_email` será sempre `demo@medrecord.local`.
+
+---
+*Gerado pelo Reversa-Writer em 2026-08-31.*

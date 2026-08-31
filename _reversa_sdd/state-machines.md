@@ -54,3 +54,6 @@ stateDiagram-v2
 | `agendado` | `confirmado` | Clique no Botão "Confirmar" | Nenhuma |
 | `qualquer` | `cancelado` | Clique no Botão "Cancelar" | Exige confirmação de diálogo |
 | `em_atendimento` | `concluido` | Mudança manual no Select | Nenhuma |
+
+---
+*Gerado pelo Reversa-Writer em 2026-08-31.*

@@ -33,3 +33,6 @@
 ## 3. Lacunas e Inconsistências Detectadas 🔴
 - **Divergência no Dashboard**: O contador de Consultas de hoje inclui as canceladas, enquanto o de Agendamentos as exclui.
 - **Sincronia de Status**: Não há gatilho automático (trigger) que mude o status do Agendamento quando a Consulta é salva.
+
+---
+*Gerado pelo Reversa-Detective em 2026-08-31.*

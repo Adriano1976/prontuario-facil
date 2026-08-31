@@ -200,3 +200,6 @@ Fora de escopo agora.
 | Auth bypass (não mock de token) | Menos código | Sem granularidade de papel |
 | Sem banner offline | UI idêntica ao online | Usuário pode esquecer que está em offline |
 | Seed hardcoded em JS | Sem dependência externa | Mudanças exigem rebuild |
+
+---
+*Gerado pelo Reversa-Writer em 2026-08-31.*

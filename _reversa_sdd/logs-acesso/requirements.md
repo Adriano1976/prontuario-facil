@@ -14,3 +14,6 @@ Baseado em `base44/entities/AccessLog.jsonc`:
 ## 4. Permissões e Segurança (RLS)
 - **Create**: Aberto ao sistema.
 - **Read / Update / Delete**: Restrito exclusivamente a `role == 'admin'`.
+
+---
+*Gerado pelo Reversa-Writer em 2026-08-31.*

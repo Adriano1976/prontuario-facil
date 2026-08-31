@@ -36,3 +36,6 @@ C4Container
 2. **Atendimento**: No horário, Médico muda `Appointment` para `em_atendimento` → Cria `Consultation`.
 3. **Documentação**: Durante a `Consultation`, Médico usa `Templates` → Cria `Prescription` / `Exam`.
 4. **Finalização**: Médico marca `Consultation` como `concluida` → `Appointment` atualizado para `concluido`.
+
+---
+*Gerado pelo Reversa-Architect em 2026-08-31.*

@@ -15,3 +15,6 @@ Criar uma entidade `Template` desacoplada das consultas:
 ## Consequências
 - **Positivas**: Alta produtividade para o médico; padronização dos documentos da clínica.
 - **Negativas**: Se um médico precisar de um documento que foge dos tipos pré-definidos, ele fica limitado aos enums do sistema.
+
+---
+*Gerado pelo Reversa-Architect em 2026-08-31.*

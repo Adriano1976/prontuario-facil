@@ -69,3 +69,6 @@ Nenhum estado interno complexo além dos dados derivados (`activePatients`, `tod
 - **Limites de Lista:** Dependência de limites fixos (100/50) pode causar inconsistência se o volume de dados crescer. 🟡
 
 > Este design foi inferido a partir do código existente. Validar com a equipe de produto para confirmar a lógica da taxa de atendimento e os limites de paginação.
+
+---
+*Gerado pelo Reversa-Writer em 2026-08-31.*

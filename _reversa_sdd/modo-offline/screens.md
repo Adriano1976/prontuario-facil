@@ -51,3 +51,6 @@ O fluxo de navegação entre as units é o mesmo do modo online (ver `_reversa_s
 ## 6. Mapeamento tela → unit
 
 Cada tela continua mapeada à sua unit de origem (não à `modo-offline/`). Esta unit aparece como **transversal** em `surface.json` → `organization_suggestion.features`.
+
+---
+*Gerado pelo Reversa-Visor em 2026-08-31.*

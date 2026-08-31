@@ -15,3 +15,6 @@ Implementar um modelo de **Ownership + Admin Override**:
 ## Consequências
 - **Positivas**: Isolamento simples de implementar; escalável para múltiplos médicos.
 - **Negativas**: Difícil de implementar "compartilhamento" de pacientes entre médicos sem mudar a lógica para uma matriz de permissões mais complexa (ACL).
+
+---
+*Gerado pelo Reversa-Architect em 2026-08-31.*

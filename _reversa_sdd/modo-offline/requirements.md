@@ -122,3 +122,6 @@ OFFLINE_USER = {
 - [ ] Criar, editar e excluir pacientes reflete na próxima leitura (persistência local).
 - [ ] Limpar o `localStorage` e recarregar restaura os dados do seed.
 - [ ] Setar `VITE_OFFLINE=false` (ou ausente) volta ao comportamento online (requer credenciais Base44 válidas).
+
+---
+*Gerado pelo Reversa-Writer em 2026-08-31.*

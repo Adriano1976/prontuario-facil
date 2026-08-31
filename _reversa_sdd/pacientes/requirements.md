@@ -20,3 +20,6 @@ Baseado em `base44/entities/Patient.jsonc`:
 ## 4. Permissões e Segurança (RLS)
 - **Create**: Aberto para autenticados (`null`).
 - **Read / Update / Delete**: Restrito ao criador do registro (`created_by_id == user.id`) OU a usuários com papel `admin`.
+
+---
+*Gerado pelo Reversa-Writer em 2026-08-31.*

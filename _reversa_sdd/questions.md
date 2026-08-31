@@ -64,14 +64,14 @@ A transição para `confirmado` é feita manualmente pelo médico/admin via inte
 ## Q-05 — Consultas: `design.md` e `tasks.md` ausentes
 
 **Unit:** `consultas/`
-**Arquivo:** (ausente)
+**Arquivo:** `consultas/design.md` e `consultas/tasks.md` (criados)
 **Severidade:** 🔴 Crítico — bloqueia reimplementação
-**Contexto:** A unit `consultas/` possui `requirements.md` e `screens.md`, mas não tem `design.md` nem `tasks.md`. O fluxo de criação de documentos (receitas, atestados, exames) está parcialmente documentado na UI, mas sem spec de design que explique como os Templates se integram à consulta, e sem tasks de implementação.
+**Contexto:** A unit `consultas/` possuía apenas `requirements.md` e `screens.md`, sem `design.md` nem `tasks.md`. Os artefatos canônicos agora foram gerados, detalhando a arquitetura de componentes, a integração de templates, a lógica condicional de medicamentos e o plano de tarefas.
 
 **Pergunta:**
 Quando o usuário clica em "Nova Receita" / "Atestado" / "Exame" na tela de Visualização de Consulta, o modal de Novo Documento preenche automaticamente algum campo com dados da consulta atual (paciente, data)? Ou o usuário preenche tudo manualmente?
 
-**Resposta:** O modal de Novo Documento herda automaticamente o vínculo com a consulta atual e o paciente associado (`patient_id` e `consultation_id`). Além disso, ao selecionar um modelo no dropdown de "Template", o conteúdo pré-configurado do template (incluindo variáveis substituídas como nome do paciente e data) é injetado automaticamente no campo de texto do documento.
+**Resposta:** O modal de Novo Documento herda automaticamente o vínculo com a consulta atual e o paciente associado (`patient_id` e `consultation_id`). Além disso, ao selecionar um modelo no dropdown de "Template", o conteúdo pré-configurado do template (incluindo variáveis substituídas como nome do paciente e data) é injetado automaticamente no campo de texto do documento. Os arquivos `design.md` e `tasks.md` da unit `consultas/` foram criados para sanar esta pendência.
 
 ---
 

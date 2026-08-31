@@ -15,3 +15,6 @@ Baseado em `base44/entities/Template.jsonc`:
 ## 4. Permissões e Segurança (RLS)
 - **Create / Update / Delete**: Restrito a `role == 'admin'`.
 - **Read**: Leitura de templates ativos liberada para profissionais de saúde.
+
+---
+*Gerado pelo Reversa-Writer em 2026-08-31.*

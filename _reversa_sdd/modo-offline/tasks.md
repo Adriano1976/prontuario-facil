@@ -145,3 +145,6 @@ VITE_OFFLINE=false
 - [x] Menções cruzadas em `code-analysis.md` §10, `data-dictionary.md` Apêndice A, `architecture.md`, `permissions.md` §4
 - [x] 4 perguntas detective abertas (Q-13..Q-16) em `questions.md`
 - [x] Linhas marcadas em `code-spec-matrix.md`
+
+---
+*Gerado pelo Reversa-Writer em 2026-08-31.*

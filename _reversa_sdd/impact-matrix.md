@@ -15,3 +15,6 @@ Esta matriz ajuda a entender o risco de alterações em cada módulo do sistema.
 - **Hooks Compartilhados**: `useToast`, `useStorage`.
 - **Componentes UI (Radix/Shadcn)**: Utilizados em praticamente todos os módulos para diálogos e selects.
 - **SDK Base44**: Camada de persistência única. Qualquer mudança no `config.jsonc` impacta todas as entidades.
+
+---
+*Gerado pelo Reversa-Architect em 2026-08-31.*

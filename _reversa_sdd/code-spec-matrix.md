@@ -13,3 +13,6 @@ Esta matriz relaciona cada artefato de código-fonte e schema do projeto legado 
 | **Modo Offline (Mock Local)** | `src/api/mockClient.js`, `src/api/mockSeed.js`, switch em `base44Client.js` e `AuthContext.jsx` | `_reversa_sdd/modo-offline/requirements.md` | 🟡 Em geração |
 | **Domínio e Regras** | Análise transversal | `_reversa_sdd/domain.md` | 🟢 Completo |
 | **Arquitetura & ERD** | Análise estrutural | `_reversa_sdd/architecture.md`, `_reversa_sdd/erd.md` | 🟢 Completo |
+
+---
+*Gerado pelo Reversa-Writer em 2026-08-31.*

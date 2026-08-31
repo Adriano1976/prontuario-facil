@@ -9,3 +9,6 @@
 - [ ] **CONS-05**: Implementar formulário de Atendimento e anamnese com registro de sinais vitais e CID-10. 🟡
 - [ ] **CONS-06**: Implementar o Modal de Novo Documento com suporte dinâmico a templates e bloco condicional de medicamentos. 🟡
 - [ ] **CONS-07**: Implementar Modal de Upload de Exames e laudos laboratoriais. 🟡
+
+---
+*Gerado pelo Reversa-Writer em 2026-08-31.*

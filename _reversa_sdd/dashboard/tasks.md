@@ -83,3 +83,6 @@
 
 ## Lacunas Pendentes (🔴)
 - **T-10 (Taxa de Atendimento):** A taxa de atendimento está exibida com um valor fixo de 94%. Precisamos validar com o Produto/Negócios qual é o cálculo correto (ex: `(consultas concluidas / consultas agendadas) * 100` num dado período) ou se de fato será removida.
+
+---
+*Gerado pelo Reversa-Writer em 2026-08-31.*

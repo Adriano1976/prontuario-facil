@@ -19,3 +19,6 @@ O módulo de **Consultas** (`Consultation`) é responsável por gerenciar o cicl
   - O bloco de **Medicamentos** é exibido exclusivamente quando o tipo de documento é do tipo **Receita** (ex: "Receita Simples").
   - Para outros tipos de documentos (como atestados ou laudos), a seção de medicamentos é completamente ocultada.
   - Cada item na lista de medicamentos possui campos independentes para: Nome do medicamento, Dosagem, Frequência, Duração e Instruções Especiais.
+
+---
+*Gerado pelo Reversa-Writer em 2026-08-31.*

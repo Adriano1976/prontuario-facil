@@ -61,3 +61,6 @@ E um evento de auditoria de "Acesso ao dashboard" deve ser gravado via logAccess
 | Arquivo | Função / Classe | Cobertura |
 |---------|-----------------|-----------|
 | `src/pages/Dashboard.jsx` | `Dashboard` | 🟢 |
+
+---
+*Gerado pelo Reversa-Writer em 2026-08-31.*
