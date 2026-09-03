@@ -1,53 +1,358 @@
-# prontuario-facil
-Prontuário eletrônico LGPD compliant para clínicas, com gestão completa de pacientes, consultas, exames e agendamentos. Desenvolvido com React, Supabase e Tailwind. Observação: esta aplicação foi feita na plataforma Base44 com o auxílio de IA
+<div align="center">
 
-**Bem-vindo ao seu projeto Base44** 
+# Prontuário Fácil
 
-**Sobre**
+**Prontuário eletrônico LGPD compliant para clínicas médicas**
 
-Visualize e edite seu app em [Base44.com](http://Base44.com) 
+Gestão completa de pacientes, consultas, agendamentos, exames e prescrições.
 
-Este projeto contém tudo que você precisa para executar seu app localmente.
+![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-6-646CFF?logo=vite&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3-06B6D4?logo=tailwindcss&logoColor=white)
+![Base44](https://img.shields.io/badge/Base44-BaaS-FF6B35)
+![LGPD](https://img.shields.io/badge/LGPD-Compliant-22C55E)
 
-**Edite o código no seu ambiente de desenvolvimento local**
+</div>
 
-Qualquer alteração enviada para o repositório também será refletida no Base44 Builder.
+---
 
-**Pré-requisitos:** 
+## Sobre
 
-1. Clone o repositório usando a URL Git do projeto 
-2. Navegue até o diretório do projeto
-3. Instale as dependências: `npm install`
-4. Crie um arquivo `.env.local` e defina as variáveis de ambiente corretas
+O **Prontuário Fácil** é uma aplicação web Single Page Application construída em React/Vite que funciona como um prontuário eletrônico aderente à LGPD para clínicas médicas. Seu objetivo é prover a gestão completa e centralizada de pacientes, consultas, agendamentos e exames para médicos e administradores de clínicas.
+
+> **Nota:** Esta aplicação foi desenvolvida na plataforma [Base44](https://base44.com) com auxílio de inteligência artificial. O README original do template mencionava Supabase, mas o backend é inteiramente gerenciado pelo Base44 (BaaS).
+
+---
+
+## Stack Tecnológica
+
+| Camada | Tecnologia | Versão |
+|--------|-----------|--------|
+| **Frontend** | React | 18.2 |
+| **Build** | Vite | 6.1 |
+| **Estilo** | Tailwind CSS | 3.4 |
+| **Componentes** | Radix UI (shadcn/ui) | — |
+| **Estado** | Tanstack React Query | 5.84 |
+| **Roteamento** | React Router DOM | 7.18 |
+| **Forms** | React Hook Form + Zod | 7.54 / 3.24 |
+| **Gráficos** | Recharts | 2.15 |
+| **Animações** | Framer Motion | 11.16 |
+| **Maps** | React Leaflet | 4.2 |
+| **PDF** | jsPDF + html2canvas | 4.2 / 1.4 |
+| **Backend** | Base44 SDK (BaaS) | 0.8.43 |
+
+---
+
+## Arquitetura
+
+### Diagrama de Contexto (C4 Level 1)
+
+```mermaid
+C4Context
+    title Diagrama de Contexto - Prontuário Fácil
+    Person(p, "Profissional de Saúde", "Médico, Enfermeiro ou Admin")
+    System(pf, "Prontuário Fácil", "Gestão de prontuários, agendas e documentos médicos.")
+    System_Ext(mail, "Serviço de E-mail", "Envio de confirmações de agendamento.")
+
+    Rel(p, pf, "Gerencia pacientes, agenda consultas e emite documentos")
+    Rel(pf, mail, "Envia lembretes via", "SMTP/API")
+```
+
+### Diagrama de Containers (C4 Level 2)
+
+```mermaid
+C4Container
+    title Diagrama de Containers
+    Person(user, "Usuário", "Médico ou Admin")
+    Container(spa, "Single Page Application", "React, Tailwind, Lucide", "Interface do usuário e lógica de negócio client-side")
+    ContainerDb(db, "Repositório de Dados", "Base44 / LocalStorage / Cloud", "Armazena Entidades (Pacientes, Consultas, etc)")
+
+    Rel(user, spa, "Usa via navegador")
+    Rel(spa, db, "Lê/Escreve dados via SDK Base44", "JSON over HTTPS/Local")
+```
+
+> **Modo Offline:** Quando `VITE_OFFLINE=true`, a aplicação substitui o SDK Base44 por um mock client (`src/api/mockClient.js`) que persiste dados no `localStorage` do navegador. Mesma UI, mesma arquitetura, repositório de dados diferente.
+
+---
+
+## Funcionalidades
+
+| Módulo | Descrição |
+|--------|-----------|
+| **Pacientes** | CRUD completo, status ativo/inativo, campos LGPD (consentimento, CPF criptografado) |
+| **Agendamentos** | Calendário, seleção de horários, fluxo de status (agendado → confirmado → em atendimento → concluído) |
+| **Consultas** | Anamnese, sinais vitais, diagnóstico CID-10, timeline de atendimento |
+| **Templates** | Modelos de documentos (prescrições, atestados, laudos) com filtro por tipo |
+| **Prescrições** | Editor de receitas com lista de medicamentos (nome, dosagem, frequência, duração) |
+| **Exames** | Upload e gestão de laudos laboratoriais |
+| **Dashboard** | Métricas: consultas de hoje, agendamentos, taxa de atendimento, gráficos |
+| **Logs de Acesso** | Auditoria LGPD — todo acesso sensível é registrado |
+| **Modo Offline** | Mock local ativado por env var, para demonstração e desenvolvimento sem backend |
+
+---
+
+## Getting Started
+
+### Pré-requisitos
+
+- Node.js 18+
+- npm ou yarn
+
+### Instalação
+
+```bash
+# Clone o repositório
+git clone https://github.com/seu-usuario/prontuario-facil.git
+cd prontuario-facil
+
+# Instale as dependências
+npm install
+```
+
+### Variáveis de Ambiente
+
+Crie um arquivo `.env.local` na raiz do projeto:
+
+```env
+# Configuração Base44 (obrigatório para modo online)
+VITE_BASE44_APP_ID=seu_app_id
+VITE_BASE44_APP_BASE_URL=https://seu-app.base44.app
+
+# Modo Offline (opcional — usa mock local em vez do backend)
+VITE_OFFLINE=true
+```
+
+**Parâmetros via query string** (alternativa ao `.env.local`):
+- `app_id` — ID do aplicativo
+- `access_token` — Token de acesso
+- `app_base_url` — URL base do backend
+
+### Scripts Disponíveis
+
+```bash
+npm run dev        # Inicia o servidor de desenvolvimento
+npm run build      # Gera o build de produção
+npm run preview    # Visualiza o build localmente
+npm run lint       # Verifica problemas de código
+npm run lint:fix   # Corrige problemas automaticamente
+npm run typecheck  # Valida tipos com TypeScript
+```
+
+### Acessando o App
+
+Após executar `npm run dev`, acesse:
 
 ```
-VITE_BASE44_APP_ID=seu_id_app
-VITE_BASE44_APP_BASE_URL=sua_url_backend
-
-exemplo:
-VITE_BASE44_APP_ID=cbef744a8545c389ef439ea6
-VITE_BASE44_APP_BASE_URL=https://minha-lista-tarefas-81bfaad7.base44.app
+http://localhost:5173
 ```
 
-Execute o app: `npm run dev`
+---
 
-**Publique suas alterações**
+## Estrutura do Projeto
 
-Acesse [Base44.com](http://Base44.com) e clique em Publicar.
+```
+prontuario-facil/
+├── base44/                    # Configuração da plataforma Base44
+│   ├── config.jsonc           # Nome do app, comandos de build
+│   └── entities/              # Schemas das entidades (BaaS)
+│       ├── Patient.jsonc
+│       ├── Doctor.jsonc
+│       ├── Appointment.jsonc
+│       ├── Consultation.jsonc
+│       ├── Exam.jsonc
+│       ├── Prescription.jsonc
+│       ├── Template.jsonc
+│       └── AccessLog.jsonc
+├── src/
+│   ├── api/
+│   │   ├── base44Client.js    # Cliente SDK Base44
+│   │   ├── mockClient.js      # Mock local (modo offline)
+│   │   └── mockSeed.js        # Dados de demonstração
+│   ├── components/
+│   │   ├── appointments/      # Calendário, seleção de horários
+│   │   ├── medical/           # Componentes clínicos
+│   │   └── ui/                # shadcn/ui (~60 componentes)
+│   ├── lib/
+│   │   ├── AuthContext.jsx    # Contexto de autenticação
+│   │   └── utils.js          # Utilitários (cn())
+│   ├── pages/                 # Telas da aplicação
+│   ├── App.jsx                # Raiz com providers e rotas
+│   ├── Layout.jsx             # Layout com navegação
+│   └── pages.config.js       # Mapa central de páginas/rotas
+├── _reversa_sdd/              # Documentação completa (Reversa)
+├── package.json
+├── tailwind.config.js
+└── vite.config.js
+```
 
-**Documentação e Suporte**
+---
 
-Documentação: [https://docs.base44.com/Integrations/Using-GitHub](https://docs.base44.com/Integrations/Using-GitHub)
+## Modelo de Dados
 
-Suporte: [https://app.base44.com/support](https://app.base44.com/support)
+```mermaid
+erDiagram
+    Patient ||--o{ Appointment : possui
+    Doctor ||--o{ Appointment : atende
+    Appointment ||--o| Consultation : gera
+    Patient ||--o{ Consultation : possui
+    Consultation ||--o{ Prescription : contem
+    Consultation ||--o{ Exam : solicita
+    Template ||--o{ Prescription : modela
 
-##
- 
-<br><br>
+    Patient {
+        string id PK
+        string full_name
+        string email
+        string phone
+        string cpf_encrypted
+        string blood_type
+        string status
+        boolean lgpd_consent
+        date lgpd_consent_date
+        string created_by_id FK
+    }
+
+    Doctor {
+        string id PK
+        string full_name
+        string specialty
+        string email
+    }
+
+    Appointment {
+        string id PK
+        string patient_id FK
+        string doctor_id FK
+        datetime appointment_date
+        string status
+        string type
+    }
+
+    Consultation {
+        string id PK
+        string patient_id FK
+        string doctor_id FK
+        string appointment_id FK
+        text notes
+        string diagnosis
+        jsonb vital_signs
+    }
+
+    Prescription {
+        string id PK
+        string consultation_id FK
+        string template_id FK
+        string document_type
+        text content
+        jsonb medications
+    }
+
+    Exam {
+        string id PK
+        string consultation_id FK
+        string patient_id FK
+        string exam_type
+        string file_url
+        text results
+    }
+
+    Template {
+        string id PK
+        string name
+        string type
+        text content
+    }
+```
+
+---
+
+## Regras de Negócio
+
+### Gestão de Pacientes
+- Apenas pacientes com status `ativo` podem ser selecionados para novos agendamentos ou consultas
+- CPF armazenado de forma criptografada
+- Campos LGPD: `lgpd_consent`, `lgpd_consent_date`, `lgpd_consent_ip`
+
+### Fluxo de Agendamentos
+
+```mermaid
+stateDiagram-v2
+    [*] --> agendado
+    agendado --> confirmado : Confirmação
+    agendado --> cancelado : Cancelamento
+    confirmado --> em_atendimento : Início do atendimento
+    confirmado --> cancelado : Cancelamento
+    em_atendimento --> concluido : Consulta finalizada
+```
+
+### Controle de Acesso (RBAC)
+
+| Entidade | Create | Read | Update | Delete |
+|----------|--------|------|--------|--------|
+| Patient | Autenticados | `created_by_id` ou admin | `created_by_id` ou admin | `created_by_id` ou admin |
+| Appointment | Autenticados | `created_by_id` ou admin | `created_by_id` ou admin | `created_by_id` ou admin |
+| Consultation | Autenticados | `created_by_id` ou admin | `created_by_id` ou admin | `created_by_id` ou admin |
+| Doctor | Admin | Público | Admin | Admin |
+| Template | Admin | Profissionais de saúde | Admin | Admin |
+| AccessLog | Sistema | Admin | Admin | Admin |
+
+---
+
+## Documentação Completa
+
+Este projeto possui documentação detalhada gerada pelo framework **Reversa** de engenharia reversa, disponível em `_reversa_sdd/`:
+
+| Artefato | Descrição |
+|----------|-----------|
+| `inventory.md` | Inventário completo do projeto |
+| `soul.md` | Síntese executiva e decisões fundadoras |
+| `architecture.md` | Diagramas C4 detalhados |
+| `domain.md` | Regras de negócio e glossário |
+| `erd.md` | Modelo de dados completo |
+| `data-dictionary.md` | Dicionário de dados por entidade |
+| `code-analysis.md` | Análise módulo a módulo |
+| `permissions.md` | Matriz de permissões RBAC |
+| `state-machines.md` | Máquinas de estado |
+| `impact-matrix.md` | Matriz de impacto entre módulos |
+| `confidence-report.md` | Relatório de confiança da documentação |
+
+### Módulos Documentados
+
+Cada módulo possui specs completas em `_reversa_sdd/[modulo]/`:
+
+- `requirements.md` — Requisitos funcionais
+- `design.md` — Decisões de design técnico
+- `tasks.md` — Plano de implementação
+- `screens.md` — Especificação de telas
+
+---
+
+## Contribuindo
+
+1. Fork o repositório
+2. Crie uma branch para sua feature (`git checkout -b feature/nova-feature`)
+3. Commit suas alterações (`git commit -m 'Adiciona nova feature'`)
+4. Push para a branch (`git push origin feature/nova-feature`)
+5. Abra um Pull Request
+
+### Convenções
+
+- **Commits:** Siga as convenções do projeto (ver `.github/skills/`)
+- **Código:** Utilize componentes shadcn/ui sempre que possível
+- **Estilo:** Prefira classes Tailwind utilitárias over CSS customizado
+- **Testes:** Adicione testes quando aplicável (framework ainda não configurado)
+
+---
+
+## License
+
+MIT
+
+---
 
 <div align="center">
-  <p><b><h3> Contagem de visitantes </h3></b></p>  
+  <p><b>Contagem de visitantes</b></p>
   <img src="https://vbr.nathanchung.dev/badge?page_id=Adriano1976/prontuario-facil/" style="height: 30px;" />
-   <br>
+  <br>
   <img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=87CEFA&height=120&section=footer"/>
 </div>
