@@ -1,146 +1,58 @@
 # Relatório de Confiança — prontuario-facil
 
-> Gerado pelo Reversa-Reviewer em 2026-08-28.
-> `doc_level: completo` | Revisão cruzada via Codex: **não realizada** (Codex não disponível nesta sessão).
+> Regenerado pelo Reversa-Reviewer em 2026-09-02. `doc_level: completo`.
 
----
+## Resumo geral
 
-## Resumo Executivo
+Contagem literal dos marcadores 🟢/🟡/🔴 nos arquivos das units.
 
-| Métrica | Valor |
-|---------|-------|
-| Units revisadas | 7 (dashboard, pacientes, consultas, agendamentos, medicos, templates, logs-acesso) |
-| Arquivos canônicos esperados | 21 (3 por unit × 7 units) |
-| Arquivos canônicos presentes | **7 de 21** (33%) |
-| `screens.md` presentes | 7 de 7 (100%) |
-| `requirements.md` presentes | 6 de 7 (86%) — dashboard ausente |
-| `design.md` presentes | **0 de 7** (0%) |
-| `tasks.md` presentes | **0 de 7** (0%) |
-| Globais verificados | `code-spec-matrix.md` ✅, `impact-matrix.md` ✅ |
-| Lacunas 🔴 identificadas | **7 críticas** |
-| Lacunas 🟡 identificadas | 5 moderadas |
-| Lacunas 🟢 cosméticas | 3 |
-| Perguntas geradas (`questions.md`) | 12 |
+| Nível | Quantidade | Percentual |
+|---|---:|---:|
+| 🟢 CONFIRMADO | 84 | 67,7% |
+| 🟡 INFERIDO | 28 | 22,6% |
+| 🔴 LACUNA | 12 | 9,7% |
+| **Total** | **124** | **100%** |
 
----
+**Confiança geral:** **79%** — `(84 + 27 × 0,5) / 124 × 100`.
 
-## Confiança por Unit
+## Confiança por unit
 
-### `dashboard/`
+| Unit | 🟢 | 🟡 | 🔴 | Confiança |
+|---|---:|---:|---:|---:|
+| `dashboard/` | 37 | 3 | 6 | 79% |
+| `consultas/` | 6 | 4 | 0 | 83% |
+| `agendamentos/` | 4 | 0 | 0 | 100% |
+| `pacientes/` | 6 | 3 | 0 | 83% |
+| `medicos/` | 6 | 3 | 0 | 83% |
+| `templates/` | 7 | 3 | 0 | 81% |
+| `logs-acesso/` | 6 | 2 | 0 | 88% |
+| `modo-offline/` | 12 | 10 | 6 | 61% |
 
-| Artefato | Presente | Classificação dominante | Observação |
-|----------|----------|------------------------|------------|
-| `requirements.md` | ❌ | — | Ausente |
-| `design.md` | ❌ | — | Ausente |
-| `tasks.md` | ❌ | — | Ausente |
-| `screens.md` | ✅ | 🟡 INFERIDO | Sem escala 🟢/🟡/🔴; KPIs sem lógica de cálculo |
+## Presença dos artefatos canônicos
 
-**Confiança geral da unit:** 🔴 10% — apenas UI parcialmente documentada, sem nenhum canônico.
+| Métrica | Resultado |
+|---|---:|
+| Units analisadas | 8 |
+| `requirements.md` presentes | 8/8 |
+| `design.md` presentes | 7/8 |
+| `tasks.md` presentes | 7/8 |
+| `screens.md` presentes | 8/8 |
 
----
+## Lacunas 🔴 pendentes
 
-### `pacientes/`
+- `dashboard/requirements.md`: fórmula/fonte da Taxa de Atendimento.
+- `agendamentos/`: `design.md` e `tasks.md` ausentes.
+- Marcadores 🔴 remanescentes em `dashboard/` e `modo-offline/` correspondem a comportamentos ainda não implementados ou dependentes de decisão técnica; ver `gaps.md`.
 
-| Artefato | Presente | Classificação dominante | Observação |
-|----------|----------|------------------------|------------|
-| `requirements.md` | ✅ | 🟢 CONFIRMADO | BRs bem fundamentadas no schema |
-| `design.md` | ❌ | — | Ausente |
-| `tasks.md` | ❌ | — | Ausente |
-| `screens.md` | ✅ | 🟢 CONFIRMADO | UI completa e bem detalhada |
+## Reclassificações e respostas processadas
 
-**Confiança geral da unit:** 🟡 55% — dados e UI cobertos; fluxo LGPD e validações sem spec.
+- Q-01…Q-16: **16 respondidas** e marcadas como `✅ Respondida` em `questions.md`.
+- Reclassificações principais: gatilho de confirmação, medicamentos, LGPD, horários médicos, interpolação, logs, matriz do Dashboard e status do modo offline.
+- Revisão cruzada externa: não realizada.
 
----
+## Próximos passos
 
-### `consultas/`
-
-| Artefato | Presente | Classificação dominante | Observação |
-|----------|----------|------------------------|------------|
-| `requirements.md` | ✅ | 🟢 CONFIRMADO | BRs sólidas; subcampos de `medications` incompletos |
-| `design.md` | ❌ | — | Ausente |
-| `tasks.md` | ❌ | — | Ausente |
-| `screens.md` | ✅ | 🟢 CONFIRMADO | 5 telas documentadas; boa cobertura de modais |
-
-**Confiança geral da unit:** 🟡 60% — UI mais completa do sistema, mas fluxo de emissão de documentos sem spec de design.
-
----
-
-### `agendamentos/`
-
-| Artefato | Presente | Classificação dominante | Observação |
-|----------|----------|------------------------|------------|
-| `requirements.md` | ✅ | 🟢 CONFIRMADO | BRs bem definidas; gatilho de `confirmado` em lacuna |
-| `design.md` | ❌ | — | Ausente |
-| `tasks.md` | ❌ | — | Ausente |
-| `screens.md` | ✅ | 🟡 INFERIDO | **Contradição crítica**: formulário omite campo de data/hora (BR-A01 exige `date`) |
-
-**Confiança geral da unit:** 🔴 40% — contradição UI vs. regra de negócio; campo de data não documentado.
-
----
-
-### `medicos/`
-
-| Artefato | Presente | Classificação dominante | Observação |
-|----------|----------|------------------------|------------|
-| `requirements.md` | ✅ | 🟢 CONFIRMADO | Schema claro; falta BR sobre bloqueio de horários |
-| `design.md` | ❌ | — | Ausente |
-| `tasks.md` | ❌ | — | Ausente |
-| `screens.md` | ✅ | 🟢 CONFIRMADO | UI completa do cadastro e edição |
-
-**Confiança geral da unit:** 🟡 55% — estrutura sólida; integração com Agendamentos não especificada.
-
----
-
-### `templates/`
-
-| Artefato | Presente | Classificação dominante | Observação |
-|----------|----------|------------------------|------------|
-| `requirements.md` | ✅ | 🟢 CONFIRMADO | BRs bem fundamentadas; enum de 7 tipos não listado explicitamente |
-| `design.md` | ❌ | — | Ausente |
-| `tasks.md` | ❌ | — | Ausente |
-| `screens.md` | ✅ | 🟢 CONFIRMADO | UI completa; variáveis dinâmicas bem documentadas |
-
-**Confiança geral da unit:** 🟡 60% — UI e dados cobertos; lógica de interpolação não especificada.
-
----
-
-### `logs-acesso/`
-
-| Artefato | Presente | Classificação dominante | Observação |
-|----------|----------|------------------------|------------|
-| `requirements.md` | ✅ | 🟢 CONFIRMADO | Append-only e enum de ações documentados |
-| `design.md` | ❌ | — | Ausente |
-| `tasks.md` | ❌ | — | Ausente |
-| `screens.md` | ✅ | 🟢 CONFIRMADO | UI simples e bem documentada; sem info de paginação |
-
-**Confiança geral da unit:** 🟡 55% — gatilho de criação de logs não especificado.
-
----
-
-## Confiança Global do Projeto
-
-| Indicador | Valor |
-|-----------|-------|
-| % de arquivos canônicos presentes | 33% |
-| Arquivos com confiança 🟢 | `pacientes/requirements.md`, `consultas/requirements.md`, `agendamentos/requirements.md`, `medicos/requirements.md`, `templates/requirements.md`, `logs-acesso/requirements.md`, todos os `screens.md` (exceto dashboard) |
-| Arquivos com 🟡 (inferências dominantes) | `dashboard/screens.md` (sem escala de confiança), `agendamentos/screens.md` (contradição) |
-| Arquivos críticos ausentes | `design.md` (todas as 7 units), `tasks.md` (todas as 7 units), `dashboard/requirements.md` |
-| **Confiança geral estimada** | **🟡 48%** |
-
----
-
-## Próximos Passos Recomendados
-
-1. **Preencher `_reversa_sdd/questions.md`** — 12 perguntas aguardam resposta do Adriano. Priorize Q-01, Q-03, Q-05 (críticas para reimplementação).
-2. **Rodar o Writer** — após as respostas, o Writer deve gerar `design.md` e `tasks.md` para todas as 7 units e `requirements.md` para `dashboard/`.
-3. **Corrigir `agendamentos/screens.md`** — adicionar campo de data/hora do formulário de Novo Agendamento (Q-03).
-4. **Atualizar `code-spec-matrix.md`** — incluir linha do `dashboard/` após confirmar arquivo legado (Q-11).
-5. **Reclassificar `dashboard/screens.md`** — aplicar escala 🟢/🟡/🔴 em todos os elementos.
-
----
-
-## Revisão Cruzada
-
-- Engine externa consultada: **não realizada**
-- Motivo: Codex não disponível nesta sessão
-- Recomendação: em `doc_level: completo`, a revisão cruzada é opcional. Execute com `/reversa-reviewer` em sessão com Codex ativo para segunda opinião.
+- [ ] Definir a fórmula real da Taxa de Atendimento.
+- [ ] Definir paginação/limite da tabela de Logs de Acesso.
+- [ ] Solicitar ao Writer `agendamentos/design.md` e `agendamentos/tasks.md`.
+- [ ] Implementar o badge/aviso visual do modo offline em etapa de código.

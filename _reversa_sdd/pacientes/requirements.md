@@ -6,7 +6,7 @@ O módulo de **Pacientes** é a entidade central do sistema `prontuario-facil`. 
 ## 2. Regras de Negócio (BRs)
 - **BR-P01**: Apenas pacientes com status `ativo` podem ser selecionados para novos agendamentos ou consultas. 🟢
 - **BR-P02**: O campo `blood_type` deve ser estritamente um dos valores permitidos do enum ABO/Rh (`A+`, `A-`, `B+`, `B-`, `AB+`, `AB-`, `O+`, `O-`, `desconhecido`). 🟢
-- **BR-P03**: Os campos obrigatórios para cadastro são: `full_name`, `cpf`, `birth_date`, `phone` e `lgpd_consent`. 🟢
+- **BR-P03**: Os campos obrigatórios para cadastro são: `full_name`, `cpf`, `birth_date`, `phone` e `lgpd_consent`. O botão "Ver Termo" abre uma modal de leitura; o aceite deve ocorrer no próprio formulário antes do salvamento. No momento do save são registrados `lgpd_consent_date` e `lgpd_consent_ip`, e o cadastro é recusado sem aceite. 🟢
 
 ## 3. Estrutura de Dados (Schema)
 Baseado em `base44/entities/Patient.jsonc`:

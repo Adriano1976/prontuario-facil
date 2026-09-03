@@ -6,7 +6,8 @@ O módulo de **Agendamentos** (`Appointment`) gerencia a agenda da clínica, per
 ## 2. Regras de Negócio (BRs)
 - **BR-A01**: Um agendamento exige obrigatoriamente um `patient_id`, um `doctor_id` e uma `date`. 🟢
 - **BR-A02**: Pacientes selecionados para agendamento devem possuir `status: 'ativo'`. 🟢
-- **BR-A03**: O ciclo de status do agendamento é: `agendado` → `confirmado` → `em_atendimento` → `concluido` (ou `cancelado` / `faltou`). 🟢
+- **BR-A03**: O ciclo de status do agendamento é: `agendado` → `confirmado` → `em_atendimento` → `concluido` (ou `cancelado` / `faltou`). A transição para `confirmado` é manual, realizada por médico, recepcionista ou administrador na interface; `reminder_sent` e `reminder_sent_date` são apenas flags de notificação, sem automação de status. 🟢
+- **BR-A04**: O horário de um agendamento deve respeitar os `working_days` e o intervalo `working_hours` (`start`/`end`) do médico, além de caber na duração definida por `appointment_duration`. 🟢
 
 ## 3. Estrutura de Dados (Schema)
 Baseado em `base44/entities/Appointment.jsonc`:
@@ -17,7 +18,7 @@ Baseado em `base44/entities/Appointment.jsonc`:
 - **Outros**: `notes`, `reminder_sent` (boolean), `reminder_sent_date`.
 
 ## 4. Permissões e Segurança (RLS)
-- **Create**: Aberto para profissionais autenticados.
+- **Create**: Aberto para autenticados (`null`); restrições de papel aplicam-se somente a cadastros administrativos.
 - **Read / Update / Delete**: Restrito ao criador (`created_by_id == user.id`) OU papel `admin`.
 
 ---

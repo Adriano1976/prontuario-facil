@@ -6,6 +6,7 @@ O módulo de **Logs de Acesso** (`AccessLog`) registra as auditorias de seguran�
 ## 2. Regras de Negócio (BRs)
 - **BR-L01**: Os registros são de inserção exclusiva pelo sistema (*append-only*), vedada edição ou exclusão por usuários comuns. 🟢
 - **BR-L02**: Ação registrada deve pertencer ao enum de ações suportadas (ex: `create`, `read`, `update`, `delete`, `export_data`, etc.). 🟢
+- **BR-L03**: Logs são gerados por chamadas de serviço dedicadas ou interceptadores ligados a eventos específicos, incluindo autenticação bem-sucedida e visualização de prontuários/pacientes; não há logging automático de toda rota autenticada. 🟢
 
 ## 3. Estrutura de Dados (Schema)
 Baseado em `base44/entities/AccessLog.jsonc`:

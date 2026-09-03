@@ -90,13 +90,13 @@
 
 **Por que essa simplicidade:** nenhuma página atual da app usa filtros complexos além de `===` em campos simples. Auditar antes de expandir.
 
-### D-08: Sem banner visual de "modo offline"
+### D-08: Aviso visual de "modo offline"
 
-**Decisão (provisória):** **NÃO** adicionar indicador visual de que o app está em modo offline. A detecção é por inspeção de env var, não por UI.
+**Decisão:** recomenda-se implementar badge/aviso persistente no header quando o modo offline estiver ativo, com rótulo explícito de que os dados são fictícios/de teste. A implementação visual permanece pendente. 🟡
 
-**Risco:** usuário pode esquecer que está em offline, criar dados fictícios que parecem reais e tirar conclusões erradas. P1 em `requirements.md` §7.
+**Risco:** sem o aviso, usuário pode esquecer que está em offline, criar dados fictícios que parecem reais e tirar conclusões erradas.
 
-**Mitigação futura (TO-DO):** badge persistente no header quando offline. Pendente de confirmação do usuário (ver Q-13 em `questions.md`).
+**Mitigação:** badge persistente no header com os textos "Modo Offline" e "Dados fictícios/de teste"; implementação pendente no código legado.
 
 ## 2. Estrutura de Arquivos
 

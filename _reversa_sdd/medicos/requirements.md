@@ -6,6 +6,7 @@ O módulo de **Médicos** (`Doctor`) gerencia os profissionais de saúde cadastr
 ## 2. Regras de Negócio (BRs)
 - **BR-M01**: Apenas usuários com papel `admin` podem criar, atualizar ou excluir registros de médicos. 🟢
 - **BR-M02**: O campo `working_days` armazena os dias da semana ativos (0=domingo a 6=sábado). 🟢
+- **BR-M03**: Agendamentos vinculados ao médico são validados contra `working_days`, o intervalo `working_hours` (`start`/`end`) e `appointment_duration`; horários fora desses limites são rejeitados. 🟢
 
 ## 3. Estrutura de Dados (Schema)
 Baseado em `base44/entities/Doctor.jsonc`:

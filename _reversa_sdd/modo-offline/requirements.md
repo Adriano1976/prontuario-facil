@@ -104,11 +104,11 @@ OFFLINE_USER = {
 - **NÃO** cobre `entities.<X>.get(id)` direto — callers devem usar `filter({ id }, ...)` ou iterar a lista.
 - **NÃO** cobre `integrations.Core.SendEmail`, `InvokeLLM`, ou qualquer integração além de `UploadFile`.
 
-## 7. Pontos de Atenção 🔴
+## 7. Pontos de Atenção
 
 | # | Item | Severidade |
 |---|------|-----------|
-| P1 | Dados seed em `localStorage` — risco LGPD em dispositivo compartilhado (Q-14) | Alta |
+| P1 | Dados seed fictícios em `localStorage` — recomenda-se aviso visual em dispositivo compartilhado (Q-14) | Média 🟡 |
 | P2 | Ausência de RLS no mock — qualquer página que assume restrição pode apresentar comportamento divergente (Q-16) | Média |
 | P3 | Cobertura parcial de operações SDK — pages que usam `get`, `count`, `bulk*` ou filtros avançados quebram silenciosamente (Q-15) | Média |
 | P4 | Sem migração de dados entre releases — se `mockSeed` mudar de formato, dados antigos podem corromper | Baixa |

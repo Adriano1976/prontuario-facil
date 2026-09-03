@@ -5,7 +5,7 @@
 
 ---
 
-## Q-01 — Dashboard: `design.md` e `tasks.md` ausentes
+## Q-01 — Dashboard: `design.md` e `tasks.md` ausentes — ✅ Respondida
 
 **Unit:** `dashboard/`
 **Arquivo:** (ausente)
@@ -19,7 +19,7 @@ Os KPIs do Dashboard são calculados em tempo real via queries, ou são valores 
 
 ---
 
-## Q-02 — Dashboard: `screens.md` sem escala de confiança
+## Q-02 — Dashboard: `screens.md` sem escala de confiança — ✅ Respondida
 
 **Unit:** `dashboard/`
 **Arquivo:** `dashboard/screens.md`
@@ -33,7 +33,7 @@ O gráfico mini na KPI card de "Taxa de Atendimento" é realmente um sparkline/m
 
 ---
 
-## Q-03 — Agendamentos: formulário sem campos de data/hora
+## Q-03 — Agendamentos: formulário sem campos de data/hora — ✅ Respondida
 
 **Unit:** `agendamentos/`
 **Arquivo:** `agendamentos/screens.md` (Tela: Novo Agendamento, linha 26–35)
@@ -47,7 +47,7 @@ Como o usuário informa data e hora no formulário de Novo Agendamento? Há um c
 
 ---
 
-## Q-04 — Agendamentos: status `confirmado` não tem gatilho documentado
+## Q-04 — Agendamentos: status `confirmado` não tem gatilho documentado — ✅ Respondida
 
 **Unit:** `agendamentos/`
 **Arquivo:** `agendamentos/requirements.md` (BR-A03)
@@ -61,7 +61,7 @@ A transição para `confirmado` é feita manualmente pelo médico/admin via inte
 
 ---
 
-## Q-05 — Consultas: `design.md` e `tasks.md` ausentes
+## Q-05 — Consultas: `design.md` e `tasks.md` ausentes — ✅ Respondida
 
 **Unit:** `consultas/`
 **Arquivo:** `consultas/design.md` e `consultas/tasks.md` (criados)
@@ -75,7 +75,7 @@ Quando o usuário clica em "Nova Receita" / "Atestado" / "Exame" na tela de Visu
 
 ---
 
-## Q-06 — Consultas: campo `medications` sem spec completa
+## Q-06 — Consultas: campo `medications` sem spec completa — ✅ Respondida
 
 **Unit:** `consultas/`
 **Arquivo:** `consultas/requirements.md` (BR-C03) e `consultas/screens.md` (Modal: Novo Documento)
@@ -89,7 +89,7 @@ Quais são os campos internos de cada medicamento na receita? Há validação de
 
 ---
 
-## Q-07 — Pacientes: `design.md` e `tasks.md` ausentes
+## Q-07 — Pacientes: `design.md` e `tasks.md` ausentes — ✅ Respondida
 
 **Unit:** `pacientes/`
 **Arquivo:** `pacientes/design.md` e `pacientes/tasks.md` (criados)
@@ -103,7 +103,7 @@ O botão "Ver Termo" no bloco LGPD abre o termo completo para o usuário aceitar
 
 ---
 
-## Q-08 — Médicos: `design.md` e `tasks.md` ausentes
+## Q-08 — Médicos: `design.md` e `tasks.md` ausentes — ✅ Respondida
 
 **Unit:** `medicos/`
 **Arquivo:** `medicos/design.md` e `medicos/tasks.md` (criados)
@@ -117,7 +117,7 @@ O sistema bloqueia automaticamente agendamentos fora do `working_hours` e dos `w
 
 ---
 
-## Q-09 — Templates: `design.md` e `tasks.md` ausentes
+## Q-09 — Templates: `design.md` e `tasks.md` ausentes — ✅ Respondida
 
 **Unit:** `templates/`
 **Arquivo:** `templates/design.md` e `templates/tasks.md` (criados)
@@ -131,7 +131,7 @@ As variáveis do template são substituídas no momento em que o documento é **
 
 ---
 
-## Q-10 — Logs de Acesso: `design.md` e `tasks.md` ausentes + lacuna de gatilho
+## Q-10 — Logs de Acesso: `design.md` e `tasks.md` ausentes + lacuna de gatilho — ✅ Respondida
 
 **Unit:** `logs-acesso/`
 **Arquivo:** `logs-acesso/design.md` e `logs-acesso/tasks.md` (criados)
@@ -145,7 +145,7 @@ Os logs são gravados por middleware automático (toda rota autenticada gera um 
 
 ---
 
-## Q-11 — code-spec-matrix.md: dashboard não mapeado
+## Q-11 — code-spec-matrix.md: dashboard não mapeado — ✅ Respondida
 
 **Arquivo:** `_reversa_sdd/code-spec-matrix.md`
 **Severidade:** 🟡 Moderado
@@ -158,7 +158,7 @@ Qual arquivo do legado corresponde ao Dashboard? (Provável: `src/pages/Dashboar
 
 ---
 
-## Q-12 — Permissões: contradição em Consultas vs. Pacientes
+## Q-12 — Permissões: contradição em Consultas vs. Pacientes — ✅ Respondida
 
 **Arquivo:** `consultas/requirements.md` (seção 4) e `pacientes/requirements.md` (seção 4)
 **Severidade:** 🟡 Moderado
@@ -171,7 +171,7 @@ Qualquer usuário autenticado pode criar um paciente? Ou é necessário ser um "
 
 ---
 
-## Q-13 — Modo Offline: intenção e plano de vida
+## Q-13 — Modo Offline: intenção e plano de vida — ✅ Respondida
 
 **Unit:** `modo-offline/` (nova)
 **Arquivos:** `src/api/mockClient.js`, `src/api/mockSeed.js`, diffs em `src/api/base44Client.js` e `src/lib/AuthContext.jsx`
@@ -185,7 +185,7 @@ Qual é a finalidade do modo offline? Demos para stakeholders? Ambiente de dev s
 
 ---
 
-## Q-14 — Modo Offline: postura LGPD no seed
+## Q-14 — Modo Offline: postura LGPD no seed — ✅ Respondida
 
 **Unit:** `modo-offline/`
 **Arquivos:** `src/api/mockSeed.js`
@@ -199,7 +199,7 @@ Os CPFs e dados dos pacientes no seed são fictícios/claramente inventados, ou 
 
 ---
 
-## Q-15 — Modo Offline: cobertura de operações
+## Q-15 — Modo Offline: cobertura de operações — ✅ Respondida
 
 **Unit:** `modo-offline/`
 **Arquivos:** `src/api/mockClient.js`
@@ -213,7 +213,7 @@ O modo offline deve cobrir 100% das operações usadas pela app, ou apenas um su
 
 ---
 
-## Q-16 — Autenticação: impacto do short-circuit
+## Q-16 — Autenticação: impacto do short-circuit — ✅ Respondida
 
 **Unit:** `autenticação/` (transversal; sem unit dedicada)
 **Arquivos:** `src/lib/AuthContext.jsx`
@@ -224,3 +224,18 @@ O modo offline deve cobrir 100% das operações usadas pela app, ou apenas um su
 Em offline, o `user_email` de todos os logs será `demo@medrecord.local`. Isso é aceitável para o uso pretendido, ou deve haver um modo de identificar a "sessão" (ex: user_id variável)? Algum componente depende de papéis (admin/medico/recepcionista) que podem quebrar offline?
 
 **Resposta:** O uso do usuário fixo `demo@medrecord.local` é plenamente aceitável e esperado para o ambiente de testes e demonstrações em modo offline, onde a persistência é local (`localStorage`). Caso necessário em evoluções futuras, o `OFFLINE_USER` pode ser parametrizado, mas para o escopo atual atende perfeitamente sem comprometer o funcionamento.
+
+---
+
+## Pendências residuais após Q-01…Q-16
+
+Estas não substituem as perguntas respondidas; são lacunas que permanecem abertas:
+
+### R-01 — Dashboard: fórmula da Taxa de Atendimento
+O código exibe `94%` fixo/mockado. Ainda falta definir a fórmula, a fonte dos dados e o período de cálculo. 🔴
+
+### R-02 — Logs de Acesso: paginação
+Ainda não foi informado se a tabela possui paginação/limite de linhas ou carrega todos os registros. 🔴
+
+### R-03 — Agendamentos: artefatos canônicos ausentes
+`agendamentos/design.md` e `agendamentos/tasks.md` ainda não existem. Gap técnico para o Writer, sem pergunta adicional ao usuário. 🔴

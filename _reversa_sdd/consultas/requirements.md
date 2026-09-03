@@ -6,7 +6,7 @@ O módulo de **Consultas** (`Consultation`) gerencia o registro clínico do aten
 ## 2. Regras de Negócio (BRs)
 - **BR-C01**: Toda consulta deve estar obrigatoriamente vinculada a um `patient_id` válido. 🟢
 - **BR-C02**: O status da consulta segue o ciclo: `agendada` → `em_andamento` → `concluida` (ou `cancelada`). 🟢
-- **BR-C03**: O campo `medications` em prescrições vinculadas só deve ser preenchido se o tipo do documento for do tipo receita. 🟢
+- **BR-C03**: O campo `medications` em prescrições vinculadas só deve ser preenchido se o tipo do documento for do tipo receita. Cada item contém Nome do medicamento, Dosagem, Frequência, Duração e Instruções especiais; o preenchimento é livre, sem validação contra base externa. Para tipos diferentes de receita, a seção de medicamentos fica oculta. 🟢
 
 ## 3. Estrutura de Dados (Schema)
 Baseado em `base44/entities/Consultation.jsonc`:
@@ -18,7 +18,7 @@ Baseado em `base44/entities/Consultation.jsonc`:
 - **Status**: `status` (enum: `agendada`, `em_andamento`, `concluida`, `cancelada`, default: `agendada`).
 
 ## 4. Permissões e Segurança (RLS)
-- **Create**: Aberto para profissionais autenticados.
+- **Create**: Aberto para autenticados (`null`); a distinção de papel é aplicada apenas em CRUD administrativo.
 - **Read / Update / Delete**: Restrito ao criador do registro (`created_by_id == user.id`) OU a usuários com papel `admin`.
 
 ---
