@@ -52,7 +52,7 @@
       ]
     }
   },
-  "redator_progress": "dashboard/tasks.md",
+  "redator_progress": "agendamentos/tasks.md",
   "engines": [
     "codex",
     "antigravity",
