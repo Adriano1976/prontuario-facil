@@ -8,12 +8,12 @@ Contagem literal dos marcadores 🟢/🟡/🔴 nos arquivos das units.
 
 | Nível | Quantidade | Percentual |
 |---|---:|---:|
-| 🟢 CONFIRMADO | 84 | 67,7% |
-| 🟡 INFERIDO | 28 | 22,6% |
-| 🔴 LACUNA | 12 | 9,7% |
-| **Total** | **124** | **100%** |
+| 🟢 CONFIRMADO | 141 | 70,9% |
+| 🟡 INFERIDO | 36 | 18,1% |
+| 🔴 LACUNA | 22 | 11,1% |
+| **Total** | **199** | **100%** |
 
-**Confiança geral:** **79%** — `(84 + 27 × 0,5) / 124 × 100`.
+**Confiança geral:** **80%** — `(141 + 36 × 0,5) / 199 × 100`.
 
 ## Confiança por unit
 
@@ -21,11 +21,11 @@ Contagem literal dos marcadores 🟢/🟡/🔴 nos arquivos das units.
 |---|---:|---:|---:|---:|
 | `dashboard/` | 37 | 3 | 6 | 79% |
 | `consultas/` | 6 | 4 | 0 | 83% |
-| `agendamentos/` | 4 | 0 | 0 | 100% |
+| `agendamentos/` | 57 | 8 | 6 | 83% |
 | `pacientes/` | 6 | 3 | 0 | 83% |
 | `medicos/` | 6 | 3 | 0 | 83% |
 | `templates/` | 7 | 3 | 0 | 81% |
-| `logs-acesso/` | 6 | 2 | 0 | 88% |
+| `logs-acesso/` | 8 | 2 | 3 | 79% |
 | `modo-offline/` | 12 | 10 | 6 | 61% |
 
 ## Presença dos artefatos canônicos
@@ -34,14 +34,14 @@ Contagem literal dos marcadores 🟢/🟡/🔴 nos arquivos das units.
 |---|---:|
 | Units analisadas | 8 |
 | `requirements.md` presentes | 8/8 |
-| `design.md` presentes | 7/8 |
-| `tasks.md` presentes | 7/8 |
+| `design.md` presentes | 8/8 |
+| `tasks.md` presentes | 8/8 |
 | `screens.md` presentes | 8/8 |
 
 ## Lacunas 🔴 pendentes
 
-- `dashboard/requirements.md`: fórmula/fonte da Taxa de Atendimento.
-- `agendamentos/`: `design.md` e `tasks.md` ausentes.
+- `dashboard/requirements.md`: fórmula/fonte/período da Taxa de Atendimento.
+- `logs-acesso/`: política de paginação e estratégia acima do limite de 500 registros.
 - Marcadores 🔴 remanescentes em `dashboard/` e `modo-offline/` correspondem a comportamentos ainda não implementados ou dependentes de decisão técnica; ver `gaps.md`.
 
 ## Reclassificações e respostas processadas
@@ -54,5 +54,5 @@ Contagem literal dos marcadores 🟢/🟡/🔴 nos arquivos das units.
 
 - [ ] Definir a fórmula real da Taxa de Atendimento.
 - [ ] Definir paginação/limite da tabela de Logs de Acesso.
-- [ ] Solicitar ao Writer `agendamentos/design.md` e `agendamentos/tasks.md`.
+- [x] Solicitar ao Writer `agendamentos/design.md` e `agendamentos/tasks.md`; ambos foram criados.
 - [ ] Implementar o badge/aviso visual do modo offline em etapa de código.

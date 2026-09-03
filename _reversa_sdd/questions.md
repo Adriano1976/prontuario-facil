@@ -238,4 +238,6 @@ O código exibe `94%` fixo/mockado. Ainda falta definir a fórmula, a fonte dos 
 Ainda não foi informado se a tabela possui paginação/limite de linhas ou carrega todos os registros. 🔴
 
 ### R-03 — Agendamentos: artefatos canônicos ausentes
-`agendamentos/design.md` e `agendamentos/tasks.md` ainda não existem. Gap técnico para o Writer, sem pergunta adicional ao usuário. 🔴
+`agendamentos/design.md` e `agendamentos/tasks.md` estavam ausentes. Gap técnico para o Writer, sem pergunta adicional ao usuário. 🔴
+
+**Status em 2026-09-02:** ✅ Resolvida. Os dois artefatos canônicos foram criados e verificados em `_reversa_sdd/agendamentos/`. 🟢

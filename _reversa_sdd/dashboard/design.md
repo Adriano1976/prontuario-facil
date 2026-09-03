@@ -50,7 +50,7 @@
 | Decisão | Evidência no código | Confiança |
 |---------|---------------------|-----------|
 | Log de acesso ao abrir o dashboard | `useEffect(() => logAccess(...))` em `Dashboard.jsx` linha 89 | 🟢 |
-| Taxa de Atendimento fixa (94%) | Valor hard‑coded em `StatsCard` linha 152‑154 | 🔴 |
+| Taxa de Atendimento fixa (94%) | Valor hard-coded em `Dashboard.jsx:140-141` | 🟢 |
 | Limite de 100 pacientes e 50 consultas | Argumentos `list('-created_date', 100)` e `list('-date', 50)` nas queries | 🟢 |
 | Uso de animações `framer-motion` para entradas da UI | Componentes `motion.div` nas linhas 104‑108, 168‑172, 242‑246 | 🟢 |
 
@@ -65,7 +65,7 @@ Nenhum estado interno complexo além dos dados derivados (`activePatients`, `tod
 
 ## Riscos e Lacunas
 
-- **Taxa de Atendimento:** Valor mockado (`"94%"`) sem fonte de cálculo – requer confirmação de requisito real. 🔴
+- **Taxa de Atendimento:** Valor mockado (`"94%"`) sem fórmula, fonte ou período de cálculo; a fórmula sugerida pelo responsável é apenas hipótese. 🔴
 - **Limites de Lista:** Dependência de limites fixos (100/50) pode causar inconsistência se o volume de dados crescer. 🟡
 
 > Este design foi inferido a partir do código existente. Validar com a equipe de produto para confirmar a lógica da taxa de atendimento e os limites de paginação.

@@ -14,14 +14,14 @@ Página do dashboard mostrando métricas-chave de saúde e atividade recente. Ex
 - [Pacientes Ativos] Total de pacientes cadastrados com o status igual a 'ativo'. 🟢
 - [Agendamentos Hoje] Total de agendamentos onde a data coincide com o dia atual e o status é diferente de 'cancelado'. 🟢
 - [Documentos Emitidos] Calculado com base no total retornado (até 100) das prescrições ordenadas por data de criação. 🟢
-- [Taxa de Atendimento] O valor é atualmente exibido fixo/mockado em "94%". 🔴
+- [Taxa de Atendimento] O valor é atualmente exibido fixo/mockado em "94%"; não há fórmula, fonte agregada ou período definidos no legado. 🔴
 - [Próximos Agendamentos] Exibe até 5 agendamentos onde a data é no futuro (maior que a data/hora atual) e o status é diferente de 'cancelado'. 🟢
 
 ## Requisitos Funcionais
 
 | ID | Requisito | Prioridade | Critério de Aceite |
 |----|-----------|-----------|-------------------|
-| RF-01 | Exibir KPIs numéricos e percentuais | Must | Os valores refletem os dados no banco/API e exibem 94% fixo na taxa |
+| RF-01 | Exibir KPIs numéricos e percentuais | Must | Os valores refletem os dados no banco/API; até a definição de produto, a taxa permanece explicitamente mockada em 94% |
 | RF-02 | Exibir lista de "Próximos Agendamentos" | Must | Listar apenas consultas futuras não canceladas (limite de 5) |
 | RF-03 | Disponibilizar botões de "Ações Rápidas" | Should | Os botões devem direcionar para os fluxos corretos (Novo Paciente, Nova Consulta, etc) |
 | RF-04 | Disponibilizar barra de busca global de pacientes | Must | Permitir pesquisa por nome/CPF usando o componente `PatientSearch` |
@@ -44,6 +44,11 @@ Então o KPI "Pacientes Ativos" deve mostrar o total de pacientes com status "at
 E a lista de Próximos Agendamentos não deve conter consultas passadas ou canceladas
 E um evento de auditoria de "Acesso ao dashboard" deve ser gravado via logAccess
 ```
+
+### Taxa de Atendimento — decisão pendente
+
+- A implementação atual confirma apenas o placeholder `94%` em `src/pages/Dashboard.jsx:140-141`. 🟢
+- A fórmula sugerida `concluídos / (concluídos + cancelados + faltou) × 100`, a entidade `Appointment` como fonte e o período de cálculo são hipóteses para validação, não requisitos confirmados. 🔴
 
 ## Prioridade (MoSCoW)
 

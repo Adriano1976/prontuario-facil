@@ -49,9 +49,9 @@
   - Origem no legado: linhas 104‑108, 168‑172, 242‑246.
   - Critério de pronto: Animações visíveis ao carregar a página.
   - Confiança: 🟢
-- [ ] **T-10**: Substituir valor hard‑coded da "Taxa de Atendimento" por cálculo real ou confirmar que o mock está adequado.
+- [ ] **T-10**: Definir com Produto a fórmula, fonte e período da "Taxa de Atendimento" e substituir o valor hard-coded somente após essa decisão.
   - Origem no legado: `src/pages/Dashboard.jsx:152‑154` (valor "94%")
-  - Critério de pronto: Valor proveniente de lógica de negócio ou verificado com produto.
+  - Critério de pronto: fórmula, fonte e período registrados na spec; implementação calcula a taxa a partir dos dados definidos ou mantém o mock explicitamente aprovado.
   - Confiança: 🔴
 - [ ] **T-11**: Implementar tratamento de erro para cada query (exibir mensagens de falha ao usuário).
   - Origem no legado: não explicitado – necessidade inferida.
@@ -82,7 +82,7 @@
 5. T-11 e TT-* (Polimento, UI de fallback e Testes).
 
 ## Lacunas Pendentes (🔴)
-- **T-10 (Taxa de Atendimento):** A taxa de atendimento está exibida com um valor fixo de 94%. Precisamos validar com o Produto/Negócios qual é o cálculo correto (ex: `(consultas concluidas / consultas agendadas) * 100` num dado período) ou se de fato será removida.
+- **T-10 (Taxa de Atendimento):** O legado exibe 94% fixo. A fórmula sugerida `concluídos / (concluídos + cancelados + faltou) × 100`, a fonte `Appointment` e o período ainda não foram aprovados pelo Produto. 🔴
 
 ---
 *Gerado pelo Reversa-Writer em 2026-08-31.*
