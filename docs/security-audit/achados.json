@@ -1,0 +1,167 @@
+{
+  "projeto": {
+    "nome": "Prontuário Fácil",
+    "data": "04/09/2026",
+    "escopo": "Código-fonte completo (frontend React/Vite, SDK Base44, configs de ambiente e layout)",
+    "stack_detectada": {
+      "linguagem": "JavaScript (ES6+) / React 18 / Node",
+      "framework": "Vite + React Router DOM v7 + TanStack React Query v5",
+      "orm": "Base44 SDK (Base44 Entity Framework)",
+      "autenticacao": "Base44 Auth SDK (base44.auth.me / access_token via URL & LocalStorage)",
+      "frontend": "React 18 + TailwindCSS + Radix UI",
+      "arquivos_deploy": [
+        "vite.config.js",
+        ".env.local"
+      ]
+    },
+    "nota_metodologica": "A auditoria analisou o projeto Prontuário Fácil adaptando as 5 categorias à arquitetura BaaS/SaaS do Base44: (1) Isolamento Tenant/RLS: checado como o SDK Base44 lida com listagens e queries e a dependência de RLS backend; (2) Permissão no Navegador: verificado se as views/ações de admin (ex: listagem de logs de acesso, gerenciamento de médicos e templates, exclusão de conta) possuem guards de role ou se qualquer usuário autenticado pode acessá-las; (3) IDOR: auditadas buscas e mutations por ID (Patient, Consultation, Prescription, Exam) sem validação de posse no cliente; (4) Chaves Expostas: auditados .env.local, cliente SDK e passagem de tokens sensíveis via parâmetros de URL/LocalStorage; (5) XSS: auditados sinks HTML (dangerouslySetInnerHTML em componentes)."
+  },
+  "achados": [
+    {
+      "id": "F-01",
+      "categoria": "permissao_navegador",
+      "severidade": "alta",
+      "arquivo": "src/Layout.jsx",
+      "linhas": "40-48",
+      "trecho_codigo": "const NAV_ITEMS = [\n    { name: 'Dashboard', icon: LayoutDashboard, page: 'Dashboard' },\n    { name: 'Pacientes', icon: Users, page: 'Patients' },\n    { name: 'Agendamentos', icon: Calendar, page: 'Appointments' },\n    { name: 'Consultas', icon: Stethoscope, page: 'Consultations' },\n    { name: 'Médicos', icon: UserCog, page: 'Doctors' },\n    { name: 'Templates', icon: FileText, page: 'Templates' },\n    { name: 'Logs de Acesso', icon: Shield, page: 'AccessLogs' },\n];",
+      "descricao": "Menu de navegação e rotas sensíveis (Logs de Acesso, Médicos, Templates) expostas a todos os usuários sem verificação de privilégio/role de administrador no frontend.",
+      "por_que_exploravel": "Qualquer usuário comum autenticado possui links diretos no menu para visualização de logs de auditoria LGPD (AccessLogs.jsx), gerenciamento de médicos (Doctors.jsx) e modelos de documentos (Templates.jsx), permitindo que recepcionistas ou usuários sem perfil de auditor visualizem histórico completo de acessos a dados sensíveis de pacientes.",
+      "condicoes_exploracao": "Estar autenticado no sistema como qualquer usuário válido.",
+      "recomendacao": "Restringir a exibição dos itens de navegação 'Logs de Acesso', 'Médicos' e 'Templates' no Layout.jsx com base no papel do usuário (ex: user?.role === 'admin') e adicionar verificação de rota protegida no componente da página."
+    },
+    {
+      "id": "F-02",
+      "categoria": "chaves_expostas",
+      "severidade": "alta",
+      "arquivo": "src/lib/app-params.js",
+      "linhas": "38-48",
+      "trecho_codigo": "const urlParams = new URLSearchParams(window.location.search);\nconst searchParam = urlParams.get(paramName);\nif (searchParam) {\n    storage.setItem(storageKey, searchParam);\n    return searchParam;\n}",
+      "descricao": "Recebimento de token de acesso sensível via parâmetro de URL (`access_token`) sem remoção imediata da URL nem proteção contra vazamento por cabeçalho Referer/histórico.",
+      "por_que_exploravel": "Quando o token é passado na Query String (`?access_token=...`), ele é persistido no histórico do navegador e pode vazar em links externos ou requisições de terceiros via cabeçalho HTTP Referer. Embora haja a opção removeFromUrl no getAppParams, se o parâmetro access_token for passado diretamente para getAppParamValue em outro ponto sem a flag ativada, a URL mantém a credencial exposta.",
+      "condicoes_exploracao": "Usuário acessar uma URL compartilhada ou redirecionada contendo ?access_token=...",
+      "recomendacao": "Evitar o envio de access_token via parâmetro de query string da URL. Utilizar fluxo OAuth PKCE ou cookies HTTP-Only SameSite para autenticação."
+    },
+    {
+      "id": "F-03",
+      "categoria": "idor",
+      "severidade": "alta",
+      "arquivo": "src/pages/PatientDetail.jsx",
+      "linhas": "61-98",
+      "trecho_codigo": "const patientId = urlParams.get('id');\nconst { data: patientData } = useQuery({\n    queryKey: ['patient', patientId],\n    queryFn: () => base44.entities.Patient.filter({ id: patientId }),\n});\nconst deleteMutation = useMutation({\n    mutationFn: () => base44.entities.Patient.delete(patientId),\n});",
+      "descricao": "Acesso direto a recursos de pacientes, exames, consultas e prescrições via parâmetro de URL (`id`) sem validação de permissão de posse no frontend.",
+      "por_que_exploravel": "Um usuário autenticado pode alterar o parâmetro `id` na URL para visualizar, criar exames/receitas ou até excluir qualquer paciente do banco de dados, caso as regras de segurança no backend Base44 (Entity RLS) não estejam rigorosamente configuradas para cada tenant/médico.",
+      "condicoes_exploracao": "Backend Base44 sem regras estritas de Row-Level Security por tenant/médico.",
+      "recomendacao": "Garantir que as regras de segurança no backend (Base44 Entity Policies) restrinjam o acesso apenas aos pacientes associados à clínica/médico autenticado e tratar potenciais erros de permissão no frontend."
+    },
+    {
+      "id": "F-04",
+      "categoria": "banco_sem_tranca",
+      "severidade": "media",
+      "arquivo": "src/pages/Dashboard.jsx",
+      "linhas": "45-62",
+      "trecho_codigo": "queryFn: () => base44.entities.Patient.list('-created_date', 100),\nqueryFn: () => base44.entities.Consultation.list('-date', 50),\nqueryFn: () => base44.entities.Prescription.list('-created_date', 100),\nqueryFn: () => base44.entities.Appointment.list('-date', 100),",
+      "descricao": "Queries de listagem ampla em entidades críticas (Patient, Consultation, Prescription, Appointment) sem filtro explícito por organização ou tenant no frontend.",
+      "por_que_exploravel": "As chamadas da API `.list()` buscam os registros sem passar um filtro de organização/médico (`tenant_id` ou `doctor_id`). Caso as políticas de isolamento de tenant no backend Base44 falhem ou estejam em modo permissivo, dados médicos confidenciais de outros médicos/clínicas serão expostos no dashboard.",
+      "condicoes_exploracao": "Falta ou inconsistência de isolamento multi-tenant no backend BaaS.",
+      "recomendacao": "Especificar filtros explícitos de escopo/tenant nas chamadas do SDK e validar que o backend rejeite requisições fora do escopo do usuário."
+    },
+    {
+      "id": "F-05",
+      "categoria": "inputs_sem_tratamento",
+      "severidade": "baixa",
+      "arquivo": "src/components/ui/chart.jsx",
+      "linhas": "74-89",
+      "trecho_codigo": "<style\n  dangerouslySetInnerHTML={{\n    __html: Object.entries(THEMES)\n      .map(([theme, prefix]) => `...`)\n  }} />",
+      "descricao": "Uso do sink perigoso `dangerouslySetInnerHTML` para injeção de CSS em runtime dentro do componente de gráficos.",
+      "por_que_exploravel": "Embora o código atual monte apenas regras CSS baseadas em chaves de objeto de configuração controladas internamente pelo desenvolvedor, o uso direto de `dangerouslySetInnerHTML` sem sanitização representa um risco residual se a propriedade `config` do gráfico vier a receber dados dinâmicos não sanitizados do usuário.",
+      "condicoes_exploracao": "Injeção de propriedades controladas por dados externos na configuração do gráfico.",
+      "recomendacao": "Validar e sanitizar a chave do tema ou utilizar CSS-in-JS/propriedades customizadas CSS padrão ao invés de dangerouslySetInnerHTML."
+    }
+  ],
+  "pontos_fortes": [
+    {
+      "categoria": "Autenticação e Sessão",
+      "arquivo": "src/lib/AuthContext.jsx",
+      "descricao": "Verificação centralizada do estado de autenticação via `base44.auth.me()` com tratamento de token expirado e direcionamento para página de login."
+    },
+    {
+      "categoria": "Auditoria LGPD",
+      "arquivo": "src/components/medical/AccessLogger.js",
+      "descricao": "Registro sistemático de eventos de acesso (visualização de paciente, criação de consulta, exclusão de registro) para conformidade com a LGPD via `AccessLog`."
+    },
+    {
+      "categoria": "Comunicação Segura SDK",
+      "arquivo": "src/api/base44Client.js",
+      "descricao": "Utilização do SDK oficial `@base44/sdk` com suporte a modo offline encapsulado para ambiente de desenvolvimento/testes."
+    }
+  ],
+  "categorias_nao_aplicaveis": [],
+  "pontos_fracos_resumo": [
+    "Falta de controle de acesso baseado em funções (RBAC) no frontend para páginas de administração e auditoria (AccessLogs, Doctors, Templates).",
+    "Tratamento de tokens de acesso passados na Query String da URL sem proteção contra vazamento por Referer ou histórico do navegador.",
+    "Dependência total do isolamento de dados no backend BaaS (Base44) sem filtros de tenant declarativos no cliente para Patient, Consultation e Prescription."
+  ],
+  "recomendacoes_priorizadas": [
+    {
+      "prioridade": "P1",
+      "titulo": "Implementar controle de acesso baseado em roles (RBAC) no Layout e nas rotas sensíveis",
+      "descricao": "Restringir o acesso a `AccessLogs`, `Doctors` e `Templates` apenas a usuários com o papel 'admin' no `Layout.jsx` e criar uma guarda de rota no frontend."
+    },
+    {
+      "prioridade": "P1",
+      "titulo": "Eliminar o envio de access_token via parâmetros de URL",
+      "descricao": "Modificar a estratégia de autenticação para utilizar cookies seguros SameSite HTTP-Only ou armazenamento seguro na memória/sessionStorage."
+    },
+    {
+      "prioridade": "P2",
+      "titulo": "Reforçar RLS / Isolamento de tenant no backend Base44 e adicionar filtros explícitos no SDK",
+      "descricao": "Auditar as políticas de entidade no Base44 para garantir que requisições por ID (`Patient.filter({ id })`) ou listagens (`Patient.list()`) retornem apenas dados pertencentes ao médico/clínica autenticado."
+    },
+    {
+      "prioridade": "P3",
+      "titulo": "Sanitizar inputs dinâmicos em componentes UI de estilo",
+      "descricao": "Substituir o uso de `dangerouslySetInnerHTML` em `src/components/ui/chart.jsx` por injeção segura de estilos ou CSS custom properties."
+    }
+  ],
+  "issues_github": [
+    {
+      "titulo": "[Segurança] Exposição de rotas administrativas e de auditoria para usuários não-admin",
+      "labels": ["security", "alta", "rbac"],
+      "achados_relacionados": ["F-01"],
+      "descricao": "Qualquer usuário autenticado tem acesso aos links e às páginas de 'Logs de Acesso', 'Médicos' e 'Templates', permitindo visualização de auditoria LGPD sem privilégios.",
+      "evidencia": "`src/Layout.jsx:40-48` — `NAV_ITEMS` inclui `AccessLogs`, `Doctors` e `Templates` incondicionalmente.",
+      "impacto": "Usuários comuns podem visualizar logs de auditoria contendo e-mails e ações de outros usuários e dados de pacientes.",
+      "sugestao_correcao": "Verificar `user?.role === 'admin'` antes de renderizar os itens no menu e bloquear a navegação direta dentro de `AccessLogs.jsx`.",
+      "criterios_aceite": [
+        "Usuários comuns não veem os itens 'Logs de Acesso', 'Médicos' e 'Templates' no menu.",
+        "Acesso direto via URL para /AccessLogs redireciona usuários não autorizados."
+      ]
+    },
+    {
+      "titulo": "[Segurança] Possível vazamento de token de autenticação via Query String de URL",
+      "labels": ["security", "alta", "auth"],
+      "achados_relacionados": ["F-02"],
+      "descricao": "A função `getAppParamValue` lê `access_token` diretamente dos parâmetros de busca da URL, podendo expor credenciais no histórico do navegador e no cabeçalho Referer.",
+      "evidencia": "`src/lib/app-params.js:38-48` — `urlParams.get('access_token')` salva o token sem removê-lo por padrão em todas as chamadas.",
+      "impacto": "Comprometimento da conta do usuário se a URL com token for compartilhada ou registrada em logs de tráfego/proxy.",
+      "sugestao_correcao": "Remover o token da barra de endereço imediatamente após a leitura e migrar o fluxo de autenticação para mecanismos seguros sem query string.",
+      "criterios_aceite": [
+        "O parâmetro `access_token` é limpo da URL instantaneamente no carregamento da página.",
+        "Tokens não são persistidos em URLs ou links compartilháveis."
+      ]
+    },
+    {
+      "titulo": "[Segurança] Verificação de políticas de posse (IDOR) e isolamento de tenant para entidades médicas",
+      "labels": ["security", "alta", "idor", "tenant-isolation"],
+      "achados_relacionados": ["F-03", "F-04"],
+      "descricao": "As chamadas `Patient.filter({ id })` e `Patient.list()` confiam unicamente na filtragem por ID ou retornam todos os registros sem validação de escopo de tenant no frontend.",
+      "evidencia": "`src/pages/PatientDetail.jsx:68-98` e `src/pages/Dashboard.jsx:45-62` — chamadas diretas ao SDK Base44.",
+      "impacto": "Acesso não autorizado a dados de saúde de pacientes de outros médicos ou clínicas caso as políticas de segurança no BaaS estejam frouxas.",
+      "sugestao_correcao": "Revisar as regras de acesso a entidades (Entity Policies) no console do Base44 para garantir RLS rigoroso.",
+      "criterios_aceite": [
+        "Requisições de filtro por ID de outro tenant retornam erro 403 / lista vazia no backend.",
+        "Listagens globais retornam estritamente registros do usuário/tenant logado."
+      ]
+    }
+  ]
+}
