@@ -45,30 +45,55 @@ O **Prontuário Fácil** é uma aplicação web Single Page Application constru�
 
 ## Arquitetura
 
-### Diagrama de Contexto (C4 Level 1)
+### Diagrama de Contexto
 
 ```mermaid
-C4Context
-    title Diagrama de Contexto - Prontuário Fácil
-    Person(p, "Profissional de Saúde", "Médico, Enfermeiro ou Admin")
-    System(pf, "Prontuário Fácil", "Gestão de prontuários, agendas e documentos médicos.")
-    System_Ext(mail, "Serviço de E-mail", "Envio de confirmações de agendamento.")
+flowchart LR
+    subgraph Usuario["👤 Profissional de Saúde"]
+        U["Médico, Enfermeiro\nou Admin"]
+    end
 
-    Rel(p, pf, "Gerencia pacientes, agenda consultas e emite documentos")
-    Rel(pf, mail, "Envia lembretes via", "SMTP/API")
+    subgraph Sistema["🏥 Prontuário Fácil"]
+        A["Gestão de Prontuários"]
+        B["Agendamentos"]
+        C["Consultas"]
+        D["Documentos"]
+    end
+
+    subgraph Externo["📧 Serviços Externos"]
+        E["E-mail\nLembretes"]
+    end
+
+    U -->|"Gerencia pacientes,\nagenda consultas,\nemite documentos"| A
+    U -->|"Agenda e\nconfirma"| B
+    U -->|"Realiza\natendimentos"| C
+    U -->|"Cria prescrições\ne atestados"| D
+    A --> E
+    B --> E
 ```
 
-### Diagrama de Containers (C4 Level 2)
+### Diagrama de Containers
 
 ```mermaid
-C4Container
-    title Diagrama de Containers
-    Person(user, "Usuário", "Médico ou Admin")
-    Container(spa, "Single Page Application", "React, Tailwind, Lucide", "Interface do usuário e lógica de negócio client-side")
-    ContainerDb(db, "Repositório de Dados", "Base44 / LocalStorage / Cloud", "Armazena Entidades (Pacientes, Consultas, etc)")
+flowchart LR
+    subgraph Usuario["👤 Usuário"]
+        U["Médico ou Admin"]
+    end
 
-    Rel(user, spa, "Usa via navegador")
-    Rel(spa, db, "Lê/Escreve dados via SDK Base44", "JSON over HTTPS/Local")
+    subgraph SPA["💻 Single Page Application"]
+        UI["Interface React\nTailwind + shadcn/ui"]
+        LOGIC["Lógica de Negócio\nclient-side"]
+    end
+
+    subgraph Backend["🗄️ Repositório de Dados"]
+        B44["Base44 SDK\nJSON over HTTPS"]
+        MOCK["Mock Client\nlocalStorage"]
+    end
+
+    U -->|"Usa via navegador"| UI
+    UI --> LOGIC
+    LOGIC -->|"Online:\nSDK Base44"| B44
+    LOGIC -->|"Offline:\nVITE_OFFLINE=true"| MOCK
 ```
 
 > **Modo Offline:** Quando `VITE_OFFLINE=true`, a aplicação substitui o SDK Base44 por um mock client (`src/api/mockClient.js`) que persiste dados no `localStorage` do navegador. Mesma UI, mesma arquitetura, repositório de dados diferente.
@@ -191,51 +216,40 @@ prontuario-facil/
 
 ```mermaid
 erDiagram
-    Patient ||--o{ Appointment : possui
-    Doctor ||--o{ Appointment : atende
-    Appointment ||--o| Consultation : gera
-    Patient ||--o{ Consultation : possui
-    Consultation ||--o{ Prescription : contem
-    Consultation ||--o{ Exam : solicita
-    Template ||--o{ Prescription : modela
+    Patient ||--o{ Appointment : "possui"
+    Doctor ||--o{ Appointment : "atende"
+    Appointment ||--o| Consultation : "gera"
+    Patient ||--o{ Consultation : "possui"
+    Consultation ||--o{ Prescription : "contém"
+    Consultation ||--o{ Exam : "solicita"
+    Template ||--o{ Prescription : "modela"
 
     Patient {
         string id PK
         string full_name
-        string email
-        string phone
         string cpf_encrypted
-        string blood_type
         string status
         boolean lgpd_consent
-        date lgpd_consent_date
-        string created_by_id FK
     }
 
     Doctor {
         string id PK
         string full_name
         string specialty
-        string email
     }
 
     Appointment {
         string id PK
         string patient_id FK
         string doctor_id FK
-        datetime appointment_date
         string status
-        string type
     }
 
     Consultation {
         string id PK
         string patient_id FK
-        string doctor_id FK
         string appointment_id FK
-        text notes
         string diagnosis
-        jsonb vital_signs
     }
 
     Prescription {
@@ -243,24 +257,18 @@ erDiagram
         string consultation_id FK
         string template_id FK
         string document_type
-        text content
-        jsonb medications
     }
 
     Exam {
         string id PK
         string consultation_id FK
-        string patient_id FK
         string exam_type
-        string file_url
-        text results
     }
 
     Template {
         string id PK
         string name
         string type
-        text content
     }
 ```
 
@@ -277,12 +285,12 @@ erDiagram
 
 ```mermaid
 stateDiagram-v2
-    [*] --> agendado
-    agendado --> confirmado : Confirmação
-    agendado --> cancelado : Cancelamento
-    confirmado --> em_atendimento : Início do atendimento
-    confirmado --> cancelado : Cancelamento
-    em_atendimento --> concluido : Consulta finalizada
+    [*] --> agendado : Criação
+    agendado --> confirmado : ✅ Confirmação
+    agendado --> cancelado : ❌ Cancelamento
+    confirmado --> em_atendimento : 🏥 Início
+    confirmado --> cancelado : ❌ Cancelamento
+    em_atendimento --> concluido : ✅ Finalização
 ```
 
 ### Controle de Acesso (RBAC)
