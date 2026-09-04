@@ -48,7 +48,7 @@ O **Prontuário Fácil** é uma aplicação web Single Page Application constru�
 ### Diagrama de Contexto
 
 ```mermaid
-flowchart LR
+flowchart TD
     subgraph Usuario["👤 Profissional de Saúde"]
         U["Médico, Enfermeiro\nou Admin"]
     end
@@ -75,7 +75,7 @@ flowchart LR
 ### Diagrama de Containers
 
 ```mermaid
-flowchart LR
+flowchart TD
     subgraph Usuario["👤 Usuário"]
         U["Médico ou Admin"]
     end
