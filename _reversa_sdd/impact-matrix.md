@@ -1,6 +1,8 @@
 # Matriz de Impacto — prontuario-facil
 
-Esta matriz ajuda a entender o risco de alterações em cada módulo do sistema.
+> ⚠️ **Alias/espelho.** A Spec Impact Matrix canônica está em **`traceability/spec-impact-matrix.md`**. Este arquivo é mantido na raiz como atalho de referência e não deve divergir do canônico.
+
+## Resumo
 
 | Módulo Alterado | Impacto em Outros Módulos | Nível de Risco | Motivo |
 | :--- | :--- | :---: | :--- |
@@ -16,5 +18,7 @@ Esta matriz ajuda a entender o risco de alterações em cada módulo do sistema.
 - **Componentes UI (Radix/Shadcn)**: Utilizados em praticamente todos os módulos para diálogos e selects.
 - **SDK Base44**: Camada de persistência única. Qualquer mudança no `config.jsonc` impacta todas as entidades.
 
+> Para a matriz completa com impacto reverso, ver `traceability/spec-impact-matrix.md`.
+
 ---
-*Gerado pelo Reversa-Architect em 2026-08-31.*
+*Gerado pelo Reversa-Architect em 2026-08-31. Conteúdo completo consolidado em `traceability/spec-impact-matrix.md`.*
