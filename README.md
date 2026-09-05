@@ -117,63 +117,6 @@ flowchart TD
 
 ---
 
-## Getting Started
-
-### Pré-requisitos
-
-- Node.js 18+
-- npm ou yarn
-
-### Instalação
-
-```bash
-# Clone o repositório
-git clone https://github.com/seu-usuario/prontuario-facil.git
-cd prontuario-facil
-
-# Instale as dependências
-npm install
-```
-
-### Variáveis de Ambiente
-
-Crie um arquivo `.env.local` na raiz do projeto:
-
-```env
-# Configuração Base44 (obrigatório para modo online)
-VITE_BASE44_APP_ID=seu_app_id
-VITE_BASE44_APP_BASE_URL=https://seu-app.base44.app
-
-# Modo Offline (opcional — usa mock local em vez do backend)
-VITE_OFFLINE=true
-```
-
-**Parâmetros via query string** (alternativa ao `.env.local`):
-- `app_id` — ID do aplicativo
-- `access_token` — Token de acesso
-- `app_base_url` — URL base do backend
-
-### Scripts Disponíveis
-
-```bash
-npm run dev        # Inicia o servidor de desenvolvimento
-npm run build      # Gera o build de produção
-npm run preview    # Visualiza o build localmente
-npm run lint       # Verifica problemas de código
-npm run lint:fix   # Corrige problemas automaticamente
-npm run typecheck  # Valida tipos com TypeScript
-```
-
-### Acessando o App
-
-Após executar `npm run dev`, acesse:
-
-```
-http://localhost:5173
-```
-
----
-
 ## Estrutura do Projeto
 
 ```
@@ -241,9 +184,7 @@ erDiagram
     Patient {
         string id PK
         string full_name
-        string cpf_encrypted
         string status
-        boolean lgpd_consent
     }
 
     Doctor {
@@ -262,14 +203,12 @@ erDiagram
     Consultation {
         string id PK
         string patient_id FK
-        string appointment_id FK
         string diagnosis
     }
 
     Prescription {
         string id PK
         string consultation_id FK
-        string template_id FK
         string document_type
     }
 
@@ -287,8 +226,6 @@ erDiagram
 
     AccessLog {
         string id PK
-        string patient_id FK
-        string user_email
         string action
         datetime timestamp
     }
@@ -296,7 +233,6 @@ erDiagram
     User_Account {
         string id PK
         string email
-        string full_name
         string role
     }
 ```
@@ -445,6 +381,63 @@ O projeto passou por auditoria de segurança automatizada (04/09/2026). Relatór
 | **Testes automatizados** | ❌ Não configurado | Nenhum framework de teste instalado (`test_file_count: 0`) |
 | **RBAC frontend** | ⚠️ Parcial | Rotas admin expostas sem verificação de role (ver F-01) |
 | **Dependências não usadas** | ⚠️ Presentes | Stripe, react-leaflet incluídas no `package.json` mas não utilizadas no `src/` |
+
+---
+
+## Getting Started
+
+### Pré-requisitos
+
+- Node.js 18+
+- npm ou yarn
+
+### Instalação
+
+```bash
+# Clone o repositório
+git clone https://github.com/seu-usuario/prontuario-facil.git
+cd prontuario-facil
+
+# Instale as dependências
+npm install
+```
+
+### Variáveis de Ambiente
+
+Crie um arquivo `.env.local` na raiz do projeto:
+
+```env
+# Configuração Base44 (obrigatório para modo online)
+VITE_BASE44_APP_ID=seu_app_id
+VITE_BASE44_APP_BASE_URL=https://seu-app.base44.app
+
+# Modo Offline (opcional — usa mock local em vez do backend)
+VITE_OFFLINE=true
+```
+
+**Parâmetros via query string** (alternativa ao `.env.local`):
+- `app_id` — ID do aplicativo
+- `access_token` — Token de acesso
+- `app_base_url` — URL base do backend
+
+### Scripts Disponíveis
+
+```bash
+npm run dev        # Inicia o servidor de desenvolvimento
+npm run build      # Gera o build de produção
+npm run preview    # Visualiza o build localmente
+npm run lint       # Verifica problemas de código
+npm run lint:fix   # Corrige problemas automaticamente
+npm run typecheck  # Valida tipos com TypeScript
+```
+
+### Acessando o App
+
+Após executar `npm run dev`, acesse:
+
+```
+http://localhost:5173
+```
 
 ---
 
