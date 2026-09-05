@@ -59,4 +59,6 @@ Esse `soul.md` é uma síntese, não substitui:
 - `inventory.md` (Scout) para mapeamento de superfície
 - `code-analysis.md` (Archaeologist) para detalhes módulo a módulo
 - `domain.md` (Detective) para regras de negócio implícitas
-- `architecture.md` (Architect) para diagramas C4 e ERD completo
+- `architecture.md` (Architect) para visão geral arquitetural
+- `c4-context.md` / `c4-containers.md` / `c4-components.md` (Architect) para diagramas C4 (Níveis 1–3)
+- `erd-complete.md` (Architect) para o ERD completo

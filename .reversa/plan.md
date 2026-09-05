@@ -33,9 +33,11 @@
 - [x] **Detetive** — Arqueologia Git e ADRs retroativos ✅ 2026-08-31
 - [x] **Detetive** — Regras de negócio implícitas e máquinas de estado ✅ 2026-08-31
 - [x] **Detetive** — Matriz de permissões (RBAC/ACL) ✅ 2026-08-31
-- [x] **Arquiteto** — Diagramas C4 (Contexto, Containers, Componentes) ✅ 2026-08-31
-- [x] **Arquiteto** — ERD completo e integrações externas ✅ 2026-08-31
-- [x] **Arquiteto** — Spec Impact Matrix ✅ 2026-08-31
+- [x] **Arquiteto** — Diagramas C4 (Contexto, Containers, Componentes) ✅ 2026-08-31 → canônicos: `c4-context.md`, `c4-containers.md`, `c4-components.md`
+- [x] **Arquiteto** — ERD completo e integrações externas ✅ 2026-08-31 → canônico: `erd-complete.md`
+- [x] **Arquiteto** — Spec Impact Matrix ✅ 2026-08-31 → canônica: `traceability/spec-impact-matrix.md`
+
+> Layout do Architect alinhado ao canônico do SKILL em 2026-09-05: os artefatos consolidados da raiz (`architecture.md`, `erd.md`, `impact-matrix.md`) viraram apontadores/espelhos dos arquivos canônicos separados.
 
 ## Fase 4: Geração 📝
 
