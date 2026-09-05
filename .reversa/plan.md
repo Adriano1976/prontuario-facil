@@ -8,9 +8,9 @@
 
 ## Fase 1: Reconhecimento 🔍
 
-- [x] **Scout** — Mapeamento de estrutura de pastas e tecnologias
-- [x] **Scout** — Análise de dependências e gerenciadores de pacotes
-- [x] **Scout** — Identificação de entry points, CI/CD e configurações
+- [x] **Scout** — Mapeamento de estrutura de pastas e tecnologias ✅ 2026-08-20
+- [x] **Scout** — Análise de dependências e gerenciadores de pacotes ✅ 2026-08-20
+- [x] **Scout** — Identificação de entry points, CI/CD e configurações ✅ 2026-08-20
 
 ## Decisão de organização das specs 🗂️
 
@@ -20,35 +20,35 @@
 
 > Lista de módulos derivada de `.reversa/context/surface.json` (atualizada em 2026-08-25 após sync com `pages.config.js`).
 
-- [x] **Arqueólogo** — Análise do módulo `pacientes` (→ `src/pages/Patients.jsx`)
-- [x] **Arqueólogo** — Análise do módulo `consultas` (→ `src/pages/Consultations.jsx` + Consultation/NewConsultation)
-- [x] **Arqueólogo** — Análise do módulo `agendamentos` (→ `src/pages/Appointments.jsx` + NewAppointment + components/appointments)
-- [x] **Arqueólogo** — Análise do módulo `medicos` (→ `src/pages/Doctors.jsx`)
+- [x] **Arqueólogo** — Análise do módulo `pacientes` (→ `src/pages/Patients.jsx`) ✅ 2026-08-22
+- [x] **Arqueólogo** — Análise do módulo `consultas` (→ `src/pages/Consultations.jsx` + Consultation/NewConsultation) ✅ 2026-08-22
+- [x] **Arqueólogo** — Análise do módulo `agendamentos` (→ `src/pages/Appointments.jsx` + NewAppointment + components/appointments) ✅ 2026-08-25
+- [x] **Arqueólogo** — Análise do módulo `medicos` (→ `src/pages/Doctors.jsx`) ✅ 2026-08-25
 - [x] **Arqueólogo** — Análise do módulo `templates` (→ `src/pages/Templates.jsx`) ✅ 2026-08-26
 - [x] **Arqueólogo** — Análise do módulo `logs-acesso` (→ `src/pages/AccessLogs.jsx`) ✅ 2026-08-26
 - [x] **Arqueólogo** — Análise do módulo `dashboard` (→ `src/pages/Dashboard.jsx` + StatsCard, PatientSearch, ReportsView) ✅ 2026-08-26
 
 ## Fase 3: Interpretação 🧠
 
-- [ ] **Detetive** — Arqueologia Git e ADRs retroativos
-- [ ] **Detetive** — Regras de negócio implícitas e máquinas de estado
-- [ ] **Detetive** — Matriz de permissões (RBAC/ACL)
-- [ ] **Arquiteto** — Diagramas C4 (Contexto, Containers, Componentes)
-- [ ] **Arquiteto** — ERD completo e integrações externas
-- [ ] **Arquiteto** — Spec Impact Matrix
+- [x] **Detetive** — Arqueologia Git e ADRs retroativos ✅ 2026-08-31
+- [x] **Detetive** — Regras de negócio implícitas e máquinas de estado ✅ 2026-08-31
+- [x] **Detetive** — Matriz de permissões (RBAC/ACL) ✅ 2026-08-31
+- [x] **Arquiteto** — Diagramas C4 (Contexto, Containers, Componentes) ✅ 2026-08-31
+- [x] **Arquiteto** — ERD completo e integrações externas ✅ 2026-08-31
+- [x] **Arquiteto** — Spec Impact Matrix ✅ 2026-08-31
 
 ## Fase 4: Geração 📝
 
-- [ ] **Redator** — Specs SDD por componente
-- [ ] **Redator** — OpenAPI (se aplicável)
-- [ ] **Redator** — User Stories (se aplicável)
-- [ ] **Redator** — Code/Spec Matrix
+- [x] **Redator** — Specs SDD por componente ✅ 2026-09-02
+- [x] **Redator** — OpenAPI (se aplicável) ✅ 2026-09-02 — não aplicável
+- [x] **Redator** — User Stories (se aplicável) ✅ 2026-09-02 — não aplicável
+- [x] **Redator** — Code/Spec Matrix ✅ 2026-09-02
 
 ## Fase 5: Revisão ✅
 
-- [ ] **Revisor** — Revisão cruzada de specs
-- [ ] **Revisor** — Resolução de lacunas com o usuário
-- [ ] **Revisor** — Relatório de confiança final
+- [x] **Revisor** — Revisão cruzada de specs ✅ 2026-08-31
+- [x] **Revisor** — Resolução de lacunas com o usuário ✅ 2026-09-03
+- [x] **Revisor** — Relatório de confiança final ✅ 2026-09-03
 
 ---
 
@@ -56,9 +56,9 @@
 
 > Execute estes agentes quando os recursos estiverem disponíveis — podem rodar em qualquer fase.
 
-- [ ] **Visor** — Análise de interface via screenshots
-- [ ] **Data Master** — Análise completa do banco de dados
-- [ ] **Design System** — Extração de tokens de design
+- [x] **Visor** — Análise de interface via screenshots ✅ 2026-08-28
+- [x] **Data Master** — Análise completa do banco de dados ✅ 2026-08-27
+- [x] **Design System** — Extração de tokens de design ✅ 2026-08-27
 - [ ] **Tracer** — Análise dinâmica (requer sistema acessível)
 
 ---
