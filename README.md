@@ -11,6 +11,7 @@ Gestão completa de pacientes, consultas, agendamentos, exames e prescrições.
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3-06B6D4?logo=tailwindcss&logoColor=white)
 ![Base44](https://img.shields.io/badge/Base44-BaaS-FF6B35)
 ![LGPD](https://img.shields.io/badge/LGPD-Compliant-22C55E)
+![Reversa](https://img.shields.io/badge/Reversa-Documentation-8B5CF6)
 
 </div>
 
@@ -204,7 +205,18 @@ prontuario-facil/
 │   ├── App.jsx                # Raiz com providers e rotas
 │   ├── Layout.jsx             # Layout com navegação
 │   └── pages.config.js       # Mapa central de páginas/rotas
-├── _reversa_sdd/              # Documentação completa (Reversa)
+├── _reversa_sdd/              # Documentação completa (Reversa v1.3.2)
+│   ├── c4-context.md          # C4 Nível 1 — Contexto
+│   ├── c4-containers.md       # C4 Nível 2 — Containers
+│   ├── c4-components.md       # C4 Nível 3 — Componentes
+│   ├── erd-complete.md        # ERD completo (9 entidades)
+│   └── traceability/          # Rastreabilidade specs↔código
+├── docs/
+│   └── security-audit/        # Auditoria de segurança
+│       ├── relatorio-auditoria-seguranca.md
+│       └── relatorio-auditoria-seguranca.pdf
+├── .agents/skills/            # Skills do framework Reversa
+├── .github/skills/            # Skills de auditoria e convenções
 ├── package.json
 ├── tailwind.config.js
 └── vite.config.js
@@ -223,6 +235,8 @@ erDiagram
     Consultation ||--o{ Prescription : "contém"
     Consultation ||--o{ Exam : "solicita"
     Template ||--o{ Prescription : "modela"
+    Patient ||--o{ AccessLog : "auditado"
+    User_Account ||--o{ AccessLog : "registra"
 
     Patient {
         string id PK
@@ -270,6 +284,21 @@ erDiagram
         string name
         string type
     }
+
+    AccessLog {
+        string id PK
+        string patient_id FK
+        string user_email
+        string action
+        datetime timestamp
+    }
+
+    User_Account {
+        string id PK
+        string email
+        string full_name
+        string role
+    }
 ```
 
 ---
@@ -308,20 +337,36 @@ stateDiagram-v2
 
 ## Documentação Completa
 
-Este projeto possui documentação detalhada gerada pelo framework **Reversa** de engenharia reversa, disponível em `_reversa_sdd/`:
+Este projeto possui documentação detalhada gerada pelo framework **Reversa** (v1.3.2) de engenharia reversa, disponível em `_reversa_sdd/`:
+
+### Arquitetura (C4)
+
+| Artefato | Descrição |
+|----------|-----------|
+| `c4-context.md` | Diagrama de contexto (Nível 1) — sistema, personas e integrações |
+| `c4-containers.md` | Diagrama de containers (Nível 2) — SPA, repositório de dados, variante offline |
+| `c4-components.md` | Diagrama de componentes (Nível 3) — decomposição interna da SPA |
+
+### Modelo de Dados
+
+| Artefato | Descrição |
+|----------|-----------|
+| `erd-complete.md` | ERD completo com 9 entidades, atributos e cardinalidades |
+| `data-dictionary.md` | Dicionário de dados por entidade |
+| `database/` | Diagramas ERD, relacionamentos e regras de negócio |
+
+### Análise e Rastreabilidade
 
 | Artefato | Descrição |
 |----------|-----------|
 | `inventory.md` | Inventário completo do projeto |
 | `soul.md` | Síntese executiva e decisões fundadoras |
-| `architecture.md` | Diagramas C4 detalhados |
 | `domain.md` | Regras de negócio e glossário |
-| `erd.md` | Modelo de dados completo |
-| `data-dictionary.md` | Dicionário de dados por entidade |
 | `code-analysis.md` | Análise módulo a módulo |
+| `code-spec-matrix.md` | Mapeamento código↔especificação |
+| `traceability/spec-impact-matrix.md` | Matriz de impacto entre módulos |
 | `permissions.md` | Matriz de permissões RBAC |
 | `state-machines.md` | Máquinas de estado |
-| `impact-matrix.md` | Matriz de impacto entre módulos |
 | `confidence-report.md` | Relatório de confiança da documentação |
 
 ### Módulos Documentados
@@ -332,6 +377,40 @@ Cada módulo possui specs completas em `_reversa_sdd/[modulo]/`:
 - `design.md` — Decisões de design técnico
 - `tasks.md` — Plano de implementação
 - `screens.md` — Especificação de telas
+
+---
+
+## Segurança
+
+O projeto passou por auditoria de segurança automatizada (04/09/2026). Relatório completo em `docs/security-audit/`.
+
+### Resumo dos Achados
+
+| Severidade | Qtde | Descrição |
+|------------|------|-----------|
+| 🟠 **Alta** | 3 | Rotas admin sem RBAC, token em URL, IDOR |
+| 🟡 **Média** | 1 | Queries sem filtro de tenant |
+| 🔵 **Baixa** | 1 | `dangerouslySetInnerHTML` em componente |
+
+### Achados Principais
+
+| ID | Severidade | Categoria | Descrição |
+|----|------------|-----------|-----------|
+| F-01 | 🟠 Alta | Permissão no navegador | Rotas admin (AccessLogs, Doctors, Templates) expostas a todos os usuários autenticados sem verificação de role |
+| F-02 | 🟠 Alta | Chaves expostas | Token de acesso passado via query string da URL sem remoção |
+| F-03 | 🟠 Alta | IDOR | Acesso direto a recursos (Patient, Consultation) via parâmetro `id` na URL sem validação de posse |
+| F-04 | 🟡 Média | Isolamento de dados | Queries amplas em Patient, Consultation, Prescription sem filtro de organização/tenant |
+| F-05 | 🔵 Baixa | XSS | Uso de `dangerouslySetInnerHTML` em `src/components/ui/chart.jsx` |
+
+### Pontos Fortes
+
+- ✅ Autenticação e sessão centralizadas via `base44.auth.me()`
+- ✅ Auditoria LGPD com registro de eventos de acesso (`AccessLog`)
+- ✅ Comunicação segura via SDK oficial `@base44/sdk`
+- ✅ Modo offline encapsulado para desenvolvimento/testes
+
+> **Relatório completo:** `docs/security-audit/relatorio-auditoria-seguranca.md`
+> **Dados estruturados:** `docs/security-audit/achados.json`
 
 ---
 
@@ -349,6 +428,23 @@ Cada módulo possui specs completas em `_reversa_sdd/[modulo]/`:
 - **Código:** Utilize componentes shadcn/ui sempre que possível
 - **Estilo:** Prefira classes Tailwind utilitárias over CSS customizado
 - **Testes:** Adicione testes quando aplicável (framework ainda não configurado)
+
+### Antes de Submeter
+
+- Execute `npm run lint` e `npm run typecheck`
+- Verifique se não há regressões de segurança (ver seção **Segurança**)
+- Para auditoria completa, use a skill `security-code-audit` (`.github/skills/security-code-audit/`)
+
+---
+
+## Notas Conhecidas
+
+| Item | Status | Descrição |
+|------|--------|-----------|
+| **CI/CD** | ❌ Não configurado | Nenhum pipeline de integração contínua (sem `.github/workflows/`) |
+| **Testes automatizados** | ❌ Não configurado | Nenhum framework de teste instalado (`test_file_count: 0`) |
+| **RBAC frontend** | ⚠️ Parcial | Rotas admin expostas sem verificação de role (ver F-01) |
+| **Dependências não usadas** | ⚠️ Presentes | Stripe, react-leaflet incluídas no `package.json` mas não utilizadas no `src/` |
 
 ---
 
