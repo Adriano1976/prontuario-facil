@@ -15,7 +15,10 @@
     "detective",
     "architect",
     "geracao",
-    "revisao"
+    "revisao",
+    "visor",
+    "data-master",
+    "design-system"
   ],
   "pending": [],
   "checkpoints": {
@@ -50,9 +53,100 @@
         "_reversa_sdd/flowcharts/dashboard.md",
         ".reversa/context/modules.json"
       ]
+    },
+    "detective": {
+      "completed_at": "2026-08-31T00:00:00Z",
+      "files": [
+        "_reversa_sdd/domain.md",
+        "_reversa_sdd/state-machines.md",
+        "_reversa_sdd/permissions.md",
+        "_reversa_sdd/adrs/001-rbac-strategy.md",
+        "_reversa_sdd/adrs/002-template-system.md"
+      ]
+    },
+    "architect": {
+      "completed_at": "2026-08-31T00:00:00Z",
+      "files": [
+        "_reversa_sdd/architecture.md",
+        "_reversa_sdd/erd.md",
+        "_reversa_sdd/impact-matrix.md"
+      ]
+    },
+    "geracao": {
+      "completed_at": "2026-09-02T00:00:00Z",
+      "files": [
+        "_reversa_sdd/pacientes/requirements.md",
+        "_reversa_sdd/pacientes/design.md",
+        "_reversa_sdd/pacientes/screens.md",
+        "_reversa_sdd/pacientes/tasks.md",
+        "_reversa_sdd/consultas/requirements.md",
+        "_reversa_sdd/consultas/design.md",
+        "_reversa_sdd/consultas/screens.md",
+        "_reversa_sdd/consultas/tasks.md",
+        "_reversa_sdd/agendamentos/requirements.md",
+        "_reversa_sdd/agendamentos/design.md",
+        "_reversa_sdd/agendamentos/screens.md",
+        "_reversa_sdd/agendamentos/tasks.md",
+        "_reversa_sdd/medicos/requirements.md",
+        "_reversa_sdd/medicos/design.md",
+        "_reversa_sdd/medicos/screens.md",
+        "_reversa_sdd/medicos/tasks.md",
+        "_reversa_sdd/templates/requirements.md",
+        "_reversa_sdd/templates/design.md",
+        "_reversa_sdd/templates/screens.md",
+        "_reversa_sdd/templates/tasks.md",
+        "_reversa_sdd/logs-acesso/requirements.md",
+        "_reversa_sdd/logs-acesso/design.md",
+        "_reversa_sdd/logs-acesso/screens.md",
+        "_reversa_sdd/logs-acesso/tasks.md",
+        "_reversa_sdd/dashboard/requirements.md",
+        "_reversa_sdd/dashboard/design.md",
+        "_reversa_sdd/dashboard/screens.md",
+        "_reversa_sdd/dashboard/tasks.md",
+        "_reversa_sdd/modo-offline/requirements.md",
+        "_reversa_sdd/modo-offline/design.md",
+        "_reversa_sdd/modo-offline/screens.md",
+        "_reversa_sdd/modo-offline/tasks.md",
+        "_reversa_sdd/code-spec-matrix.md"
+      ]
+    },
+    "revisao": {
+      "completed_at": "2026-09-03T00:00:00Z",
+      "files": [
+        "_reversa_sdd/review-report.md",
+        "_reversa_sdd/gaps.md",
+        "_reversa_sdd/questions.md",
+        "_reversa_sdd/confidence-report.md"
+      ]
+    },
+    "visor": {
+      "completed_at": "2026-08-28T00:00:00Z",
+      "files": [
+        "_reversa_sdd/ui/inventory.md",
+        "_reversa_sdd/ui/flow.md"
+      ]
+    },
+    "data-master": {
+      "completed_at": "2026-08-27T00:00:00Z",
+      "files": [
+        "_reversa_sdd/database/relationships.md",
+        "_reversa_sdd/database/erd.md",
+        "_reversa_sdd/database/data-dictionary.md",
+        "_reversa_sdd/database/business-rules.md"
+      ]
+    },
+    "design-system": {
+      "completed_at": "2026-08-27T00:00:00Z",
+      "files": [
+        "_reversa_sdd/design-system/typography.md",
+        "_reversa_sdd/design-system/tokens.md",
+        "_reversa_sdd/design-system/spacing.md",
+        "_reversa_sdd/design-system/design-system.md",
+        "_reversa_sdd/design-system/color-palette.md"
+      ]
     }
   },
-  "redator_progress": "agendamentos/tasks.md",
+  "redator_progress": "completed",
   "engines": [
     "codex",
     "antigravity",
