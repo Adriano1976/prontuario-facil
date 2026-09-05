@@ -1,6 +1,6 @@
 # Perguntas para Validação Humana — prontuario-facil
 
-> Gerado pelo Reversa-Reviewer em 2026-08-28.
+> Gerado pelo Reversa-Reviewer em 2026-09-03.
 > `answer_mode: file` — preencha o campo **Resposta** de cada item e avise com `reversa` quando terminar.
 
 ---

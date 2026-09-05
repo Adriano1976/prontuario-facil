@@ -27,4 +27,4 @@ Formulário dividido em seções para novo prontuário.
 - **Ações:** Botão "Cancelar" e "Salvar Paciente".
 
 ---
-*Gerado pelo Reversa-Visor em 2026-08-27.*
+*Gerado pelo Reversa-Writer em 2026-09-02.*

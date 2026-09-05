@@ -56,4 +56,4 @@ stateDiagram-v2
 | `em_atendimento` | `concluido` | Mudança manual no Select | Nenhuma |
 
 ---
-*Gerado pelo Reversa-Writer em 2026-08-26.*
+*Gerado pelo Reversa-Detective em 2026-08-31.*

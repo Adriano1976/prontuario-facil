@@ -52,4 +52,4 @@ erDiagram
 3. **Template -> Prescription**: Relacionamento fraco (apenas cópia de conteúdo). Mudar um template não afeta prescrições já emitidas.
 
 ---
-*Gerado pelo Reversa-Architect em 2026-08-26.*
+*Gerado pelo Reversa-Architect em 2026-08-31.*

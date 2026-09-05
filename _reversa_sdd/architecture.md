@@ -38,4 +38,4 @@ C4Container
 4. **Finalização**: Médico marca `Consultation` como `concluida` → `Appointment` atualizado para `concluido`.
 
 ---
-*Gerado pelo Reversa-Architect em 2026-08-28.*
+*Gerado pelo Reversa-Architect em 2026-08-31.*

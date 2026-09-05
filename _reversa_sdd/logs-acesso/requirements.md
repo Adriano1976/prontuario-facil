@@ -17,4 +17,4 @@ Baseado em `base44/entities/AccessLog.jsonc`:
 - **Read / Update / Delete**: Restrito exclusivamente a `role == 'admin'`.
 
 ---
-*Gerado pelo Reversa-Writer em 2026-08-26.*
+*Gerado pelo Reversa-Writer em 2026-09-02.*

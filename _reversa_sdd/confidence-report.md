@@ -1,6 +1,6 @@
 # Relatório de Confiança — prontuario-facil
 
-> Regenerado pelo Reversa-Reviewer em 2026-09-02. `doc_level: completo`.
+> Regenerado pelo Reversa-Reviewer em 2026-09-03. `doc_level: completo`.
 
 ## Resumo geral
 

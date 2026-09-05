@@ -21,4 +21,4 @@ Mapeamento global de telas identificadas via screenshots e análise de código.
 | Logs de Acesso | `logs-acesso` | Trilha de auditoria e conformidade LGPD para acesso aos prontuários. | 🟢 Documentado |
 
 ---
-*Gerado pelo Reversa-Visor em 2026-08-27.*
+*Gerado pelo Reversa-Visor em 2026-08-28.*

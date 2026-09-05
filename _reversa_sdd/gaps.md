@@ -1,6 +1,6 @@
 # Gaps de Especificação — prontuario-facil
 
-> Regenerado pelo Reversa-Reviewer em 2026-09-02 após processar Q-01…Q-16.
+> Regenerado pelo Reversa-Reviewer em 2026-09-03 após processar Q-01…Q-16.
 
 ## Lacunas abertas
 

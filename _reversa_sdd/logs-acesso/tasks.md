@@ -13,4 +13,4 @@
   - Confiança: 🔴
 
 ---
-*Gerado pelo Reversa-Writer em 2026-08-31.*
+*Gerado pelo Reversa-Writer em 2026-09-02.*
