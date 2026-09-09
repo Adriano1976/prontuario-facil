@@ -415,9 +415,10 @@ MIT
 ---
 
 <div align="center">
-
-**Prontuário Fácil** · Reverse Engineering · Architecture · Security · AI-assisted Development
-
-[🇧🇷 Português](README.md) · 🇺🇸 English
+  <p><b>Visitor count</b></p>
+  <img src="https://vbr.nathanchung.dev/badge?page_id=Adriano1976/prontuario-facil/" style="height: 30px;" />
+  <br>
+  <img width="100%" src="https://capsule-render.vercel.app/api?type=waving&color=87CEFA&height=120&section=footer"/>
+</div>
 
 </div>
