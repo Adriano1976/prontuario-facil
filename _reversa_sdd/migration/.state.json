@@ -1,0 +1,111 @@
+{
+  "schemaVersion": 2,
+  "startedAt": "2026-09-09T15:05:07-03:00",
+  "lastCheckpoint": {
+    "agent": "inspector",
+    "at": "2026-09-09T15:55:32-03:00",
+    "status": "complete"
+  },
+  "completedAgents": [
+    "paradigm_advisor",
+    "curator",
+    "strategist",
+    "designer",
+    "screen_translator",
+    "inspector"
+  ],
+  "pendingAgents": [],
+  "currentAgent": {
+    "agent": null,
+    "phase": null,
+    "status": "complete",
+    "topologyApproved": true,
+    "screenModeApproved": true
+  },
+  "pendingDecisions": [],
+  "artifacts": {
+    "migration_brief.md": {
+      "hash": "sha256:f42b544795ef5fd7b7b610a5d46d8f3bf5ed16431c748b40ae36f3df43d1669c",
+      "producedBy": "orchestrator"
+    },
+    "paradigm_decision.md": {
+      "hash": "sha256:18f2a258834fcb2ba42bc949189e01aabd45f06b1eaaf2d08e7bd8496c917a0c",
+      "producedBy": "paradigm_advisor"
+    },
+    "target_business_rules.md": {
+      "hash": "sha256:4287b4b6533569599ff6b76ebaeace3365db2dde878144c50cf494ee17fc0fef",
+      "producedBy": "curator"
+    },
+    "discard_log.md": {
+      "hash": "sha256:cf4c74c25da4ab3033bfd8d0bc52a93d8e3d69c20c581a0413bfc50541a5720f",
+      "producedBy": "curator"
+    },
+    "ambiguity_log.md": {
+      "hash": "sha256:49b14a6dba5e2dceaad3d0ca1f943f5d8d1ddf7dd922a70f3a99cab84ea904e0",
+      "producedBy": "orchestrator"
+    },
+    "migration_strategy.md": {
+      "hash": "sha256:22e036f00fbf80627c490500f70c4e7a6b78f3a38f52b15b0f897b8a2349b85c",
+      "producedBy": "strategist"
+    },
+    "risk_register.md": {
+      "hash": "sha256:64d2356ae61761eb36ac25007e4a2c0cfa42bc50063ec2e81b617623dca48422",
+      "producedBy": "strategist"
+    },
+    "cutover_plan.md": {
+      "hash": "sha256:92b272491d5763e6b101fb6d242c6734ae4471cba1be7b74da0392d6f64d32da",
+      "producedBy": "strategist"
+    },
+    "topology_decision.md": {
+      "hash": "sha256:eb5ea9122c9b3b02ebcfd70ea3e0fa7b1c45a172520cb5a4fb015a74c4221d9b",
+      "producedBy": "designer"
+    },
+    "target_architecture.md": {
+      "hash": "sha256:864a339256ad86fbfe53f2645eb5e1d60e38b577aca0140f7436d702f516c829",
+      "producedBy": "designer"
+    },
+    "target_domain_model.md": {
+      "hash": "sha256:0d71f94566d0e0ca8cb0472cfa045e43e68dc482ad466ea7bcaf92f6ee422577",
+      "producedBy": "designer"
+    },
+    "target_data_model.md": {
+      "hash": "sha256:ac738ed15b7c8d931534f01907b736cdda89f9b0f8fae61b5b6984b7ef634d1d",
+      "producedBy": "designer"
+    },
+    "data_migration_plan.md": {
+      "hash": "sha256:a2ed12aa2fc8f9f6dd5b8e82eba0d2299ef1ca9b4a1daf007da7cc94e0ef8a1c",
+      "producedBy": "designer"
+    },
+    "screen_modernization_decision.md": {
+      "hash": "sha256:4c42b75790b8275cce6301ec605f8ed810f3eeca60dcf98be5de7b20fe9c44a0",
+      "producedBy": "screen_translator"
+    },
+    "target_screens.md": {
+      "hash": "sha256:a658ca2b0b05421cab3c992c0568d95d3d5b4207d3f3450880426f9ea8d99c16",
+      "producedBy": "screen_translator"
+    },
+    "screen_deviation_log.md": {
+      "hash": "sha256:f97a137150b798ae79eddbf493c4265e122122e9dce8c61ebb6bac9a97676088",
+      "producedBy": "screen_translator"
+    },
+    "_reversa_sdd/screens/inventory.json": {
+      "producedBy": "screen_translator"
+    },
+    "_reversa_sdd/screens/golden/manifest.yaml": {
+      "producedBy": "screen_translator"
+    },
+    "parity_specs.md": {
+      "hash": "sha256:da97588a115867b8c52ad4b91595108303d670f9ceae439fbcf2ed90682e0c48",
+      "producedBy": "inspector"
+    },
+    "handoff.md": {
+      "hash": "sha256:db6bbc8997d010246f395187ddb4c5ed5a26149931690c47516015a459bb3605",
+      "producedBy": "orchestrator"
+    }
+  },
+  "auto": false,
+  "engine": "dsh-web",
+  "reversaVersion": "1.3.2",
+  "briefPath": "_reversa_sdd/migration/migration_brief.md",
+  "expectedLegacyArtifacts": "references/expected_legacy_artifacts.yaml"
+}
