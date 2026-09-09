@@ -22,6 +22,8 @@ Complete management of patients, consultations, appointments, examinations, and 
   </a>
 </div>
 
+</div>
+
 ---
 
 ## About
