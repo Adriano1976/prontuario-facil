@@ -13,6 +13,8 @@ Gestão completa de pacientes, consultas, agendamentos, exames e prescrições.
 ![LGPD](https://img.shields.io/badge/LGPD-Compliant-22C55E)
 ![Reversa](https://img.shields.io/badge/Reversa-Documentation-8B5CF6)
 
+🌎 **Language:** [🇺🇸 English](README.en.md) | 🇧🇷 Português
+
 </div>
 
 ---
@@ -169,7 +171,10 @@ prontuario-facil/
 
 ## Modelo de Dados
 
+<div align="center">
+
 ```mermaid
+%%{ init: { 'theme': 'neutral', 'themeVariables': { 'fontSize': '16px' } } }%%
 erDiagram
     Patient ||--o{ Appointment : "possui"
     Doctor ||--o{ Appointment : "atende"
@@ -181,6 +186,8 @@ erDiagram
     Patient ||--o{ AccessLog : "auditado"
     User_Account ||--o{ AccessLog : "registra"
 ```
+
+</div>
 
 ---
 
