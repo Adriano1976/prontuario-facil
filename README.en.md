@@ -13,10 +13,7 @@ Complete management of patients, consultations, appointments, examinations, and 
 ![LGPD](https://img.shields.io/badge/LGPD-Compliant-22C55E)
 ![Reversa](https://img.shields.io/badge/Reversa-Documentation-8B5CF6)
 
-<div style="text-align: center; margin-bottom: 20px;">
-  <a href="./README.en.md">
-    <img src="https://img.shields.io/badge/English_🇺🇸-0078D7?style=for-the-badge" alt="English" style="height: 50px; margin-right: 10px;">
-  </a>
+<div style="text-align: center; margin-bottom: 20px;">  
   <a href="./README.md">
     <img src="https://img.shields.io/badge/Português_🇧🇷-009B3A?style=for-the-badge" alt="Português" style="height: 50px;">
   </a>
