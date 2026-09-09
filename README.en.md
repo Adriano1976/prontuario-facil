@@ -17,7 +17,7 @@ Complete management of patients, consultations, appointments, examinations, and 
   <a href="./README.en.md">
     <img src="https://img.shields.io/badge/English_🇺🇸-0078D7?style=for-the-badge" alt="English" style="height: 50px; margin-right: 10px;">
   </a>
-  <a href="./README.pt.md">
+  <a href="./README.md">
     <img src="https://img.shields.io/badge/Português_🇧🇷-009B3A?style=for-the-badge" alt="Português" style="height: 50px;">
   </a>
 </div>

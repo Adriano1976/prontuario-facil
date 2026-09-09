@@ -14,7 +14,7 @@ Gestão completa de pacientes, consultas, agendamentos, exames e prescrições.
 ![Reversa](https://img.shields.io/badge/Reversa-Documentation-8B5CF6)
 
 <div style="text-align: center; margin-bottom: 20px;">
-  <a href="./README.pt.md">
+  <a href="./README.md">
     <img src="https://img.shields.io/badge/Português_🇧🇷-009B3A?style=for-the-badge" alt="Português" style="height: 50px; margin-right: 10px;">
   </a>
   <a href="./README.en.md">
