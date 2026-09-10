@@ -5,7 +5,7 @@ reversa:
   version: "1.3.2"
 kind: migration_strategy
 producedBy: strategist
-hash: "sha256:22e036f00fbf80627c490500f70c4e7a6b78f3a38f52b15b0f897b8a2349b85c"
+hash: "sha256:e10d2717edb48b423dce1a3ea1de2a31c98b59252610206a2b5148cdaf32e284"
 ---
 
 # Migration Strategy
@@ -14,7 +14,7 @@ hash: "sha256:22e036f00fbf80627c490500f70c4e7a6b78f3a38f52b15b0f897b8a2349b85c"
 
 ## Contexto sintetizado
 
-- **Tamanho do legado**: SPA React pequena/média — 13 pages em `src/pages/`, ~60 componentes de UI (shadcn/ui + Radix), 8 entidades via Base44, ~60+ arquivos JS/JSX no total. Sem servidor próprio; frontend puro no navegador.
+- **Tamanho do legado**: SPA React pequena/média — 12 pages em `src/pages/`, 61 componentes (49 deles em `components/ui`, shadcn/ui + Radix), 8 entidades via Base44, **87 arquivos JS/JSX** no total (contagem de 2026-09-10). Sem servidor próprio; frontend puro no navegador.
 - **Integrações externas vivas**: apenas **Base44** (BaaS — auth + CRUD). Stripe, react-leaflet, jsPDF/html2canvas e lodash são **resíduos sem uso** (`dependencies.md`), candidatos a remoção ou `@ts-ignore` pontual.
 - **Apetite derivado** (`paradigm_decision.md`): `balanced`.
 - **Gap de paradigma**: nenhum (mesma stack React funcional; TS é camada de tipos).
@@ -44,7 +44,7 @@ hash: "sha256:22e036f00fbf80627c490500f70c4e7a6b78f3a38f52b15b0f897b8a2349b85c"
 - **Adequação ao apetite derivado** (`balanced`): **baixa** — é a opção mais "transformational"; o apetite `balanced` não pede risco concentrado.
 - **Trade-offs**:
   - Prós: mais rápido em horas brutas; sem fronteira JS/TS temporária; sem custo de convivência.
-  - Contras: PR gigante (60+ arquivos) difícil de revisar pelo PO/Dev único; erro tipográfico/regressão em qualquer módulo só aparece no fim (projeto tem **0 testes**); rollback é tudo-ou-nada; risco alto de "refatoração silenciosa" (risco nº 1 do brief) materializado; contraria o plano de fases do brief (Setup 1–2 d → Migração 3–5 d → Testes 2–3 d).
+  - Contras: PR gigante (87 arquivos) difícil de revisar pelo PO/Dev único; erro tipográfico/regressão em qualquer módulo só aparece no fim (projeto tem **0 testes**); rollback é tudo-ou-nada; risco alto de "refatoração silenciosa" (risco nº 1 do brief) materializado; contraria o plano de fases do brief (Setup 1–2 d → Migração 3–5 d → Testes 2–3 d).
 
 ### Estratégia C: Strangler Fig (dois sistemas coexistindo com roteamento)
 - **Descrição**: Rodar o "sistema novo" (TS) em paralelo ao legado (JS) com proxy/gateway roteando tráfego entre ambos, migrando fatia a fatia.
@@ -75,11 +75,11 @@ hash: "sha256:22e036f00fbf80627c490500f70c4e7a6b78f3a38f52b15b0f897b8a2349b85c"
 ## Sinais de alerta específicos
 - **Sem mudança de paradigma + apetite balanced + sistema pequeno em produção** → o sinal do catálogo ("Parallel Run para validar paridade") **não dispara** porque não há runtime novo; o equivalente é o **gate `tsc --noEmit` + smoke tests** previsto no brief (métrica principal) e na Estratégia A onda 7.
 - **Risco nº 1 do brief (refatoração silenciosa sem testes)** → mitigado por ondas pequenas + revisão por PR + smoke manual por módulo.
-- **Risco nº 6 (dependências não utilizadas: Stripe, react-leaflet)** → na Estratégia A, decidir na onda 1 se removemos (melhor) ou tipamos como resíduo (`@ts-expect-error` justificado) para não travar a migração.
-- Se o usuário escolher B, exigir plano de rollback robusto (git revert do PR único) e smoke manual dos 9 módulos antes do merge.
+- **Risco nº 6 (dependências declaradas e não usadas)** → são 14 deps de runtime sem import em `src/` (grep 2026-09-10; ver `migration_brief.md` risco 6). Na Estratégia A, decidir na onda 1 se removemos (melhor) ou tipamos como resíduo (`@ts-expect-error` justificado) para não travar a migração — **sempre com reconfirmação por grep e aprovação do usuário** (RISK-006). Não introduzir `zod`/`@hookform/resolvers` (estão no `package.json` mas não no legado).
+- Se o usuário escolher B, exigir plano de rollback robusto (git revert do PR único) e smoke manual dos 8 módulos antes do merge.
 
 ## Decisão humana
 - **Estratégia escolhida**: A — Migração incremental por camadas (Branch by Abstraction adaptado)
 - **Quem decidiu**: Product Owner/Developer (stakeholder único)
 - **Quando**: 2026-09-09T15:26:00-03:00
-- **Justificativa do decisor**: aceitou a recomendação do Strategist — ondas incrementais com build verde, PRs pequenos reversíveis e alinhamento ao brief (paridade 100%, rollback < 5 min, fases Setup→Migração→Testes).
+- **Justificativa do decisor**: aceitou a recomendação do Strategist — ondas incrementais com build verde, PRs pequenos reversíveis e alinhamento ao brief (paridade comportamental verificada por smoke; rollback < 5 min; fases Setup→Migração→Testes).

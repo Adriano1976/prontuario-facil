@@ -16,14 +16,14 @@ Funcionalidade: Contrato Base44Client e isolamento por created_by_id/RBAC
     Dado a interface Base44Client com assinaturas tipadas
     Quando uma query de leitura de Patient/Consultation/Appointment é definida
     Então o tipo exige o escopo do usuário atual (created_by_id) OU a condição admin
-    E código que esquece o filtro de ownership não compila (F-03 IDOR detectável em compile-time)
+    E código que esquece o filtro de ownership não compila (F-03: o contrato **exige** o escopo; o compilador não valida autorização)
 
   @paridade @critico
   Cenário: Role de usuário é explícita no tipo
     Dado o tipo User com campo role
     Quando um componente exige operação restrita a admin (CRUD Doctor/Template)
     Então o código precisa tratar explicitamente role === "admin"
-    E a variante offline sem role impede uso cego de permissões (F-01 detectável em compile-time)
+    E a variante offline sem role impede uso cego de permissões (F-01: a ausência de `role` é explícita no tipo e obriga tratamento — não é detecção de RBAC)
 
   @paridade @critico
   Cenário: SDK e mock implementam a mesma interface

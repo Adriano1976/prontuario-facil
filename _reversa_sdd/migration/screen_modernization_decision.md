@@ -10,7 +10,7 @@ decidedAt: 2026-09-09T15:50:00-03:00
 mode: literal
 sourcePlatform: react-hooks
 targetPlatform: web-spa
-hash: "sha256:4c42b75790b8275cce6301ec605f8ed810f3eeca60dcf98be5de7b20fe9c44a0"
+hash: "sha256:84b6d891931d292dd4c27352820d578ac4e448eba83e7f8865de28494fef8aa4"
 ---
 
 # Decisão de Modernização de Telas

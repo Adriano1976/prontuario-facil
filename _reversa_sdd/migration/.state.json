@@ -25,43 +25,43 @@
   "pendingDecisions": [],
   "artifacts": {
     "migration_brief.md": {
-      "hash": "sha256:f42b544795ef5fd7b7b610a5d46d8f3bf5ed16431c748b40ae36f3df43d1669c",
+      "hash": "sha256:a183db6030c37d400863d08325673f6b18cee8d763a6204374f907343123c065",
       "producedBy": "orchestrator"
     },
     "paradigm_decision.md": {
-      "hash": "sha256:18f2a258834fcb2ba42bc949189e01aabd45f06b1eaaf2d08e7bd8496c917a0c",
+      "hash": "sha256:f114b42ffbe9e7b797eafd036d3d7e08510ed85a98dab57cbca2f28a7fecd92e",
       "producedBy": "paradigm_advisor"
     },
     "target_business_rules.md": {
-      "hash": "sha256:4287b4b6533569599ff6b76ebaeace3365db2dde878144c50cf494ee17fc0fef",
+      "hash": "sha256:1a3bc28e66b5769b107bec31585e68556d76121a9e6344afbd3b56e9cfc177b2",
       "producedBy": "curator"
     },
     "discard_log.md": {
-      "hash": "sha256:cf4c74c25da4ab3033bfd8d0bc52a93d8e3d69c20c581a0413bfc50541a5720f",
+      "hash": "sha256:54375a036ffc76c07bb96b151a018156142982dcbe2e55e9ec0b02849fb22bb6",
       "producedBy": "curator"
     },
     "ambiguity_log.md": {
-      "hash": "sha256:49b14a6dba5e2dceaad3d0ca1f943f5d8d1ddf7dd922a70f3a99cab84ea904e0",
+      "hash": "sha256:cbcf4b038896d2a4d4ba3bb85c3293d89e5ddf8a1984b4c2bdb7e148e3088a0a",
       "producedBy": "orchestrator"
     },
     "migration_strategy.md": {
-      "hash": "sha256:22e036f00fbf80627c490500f70c4e7a6b78f3a38f52b15b0f897b8a2349b85c",
+      "hash": "sha256:e10d2717edb48b423dce1a3ea1de2a31c98b59252610206a2b5148cdaf32e284",
       "producedBy": "strategist"
     },
     "risk_register.md": {
-      "hash": "sha256:64d2356ae61761eb36ac25007e4a2c0cfa42bc50063ec2e81b617623dca48422",
+      "hash": "sha256:140578ae762c1d84c20c45ce5a552c2774b02262943abe24f32bad5fc24048a1",
       "producedBy": "strategist"
     },
     "cutover_plan.md": {
-      "hash": "sha256:92b272491d5763e6b101fb6d242c6734ae4471cba1be7b74da0392d6f64d32da",
+      "hash": "sha256:2cc5c3f0fe50a8d71213e58a3705f0c68b37819acb20e7ca257bb297aea0fc6b",
       "producedBy": "strategist"
     },
     "topology_decision.md": {
-      "hash": "sha256:eb5ea9122c9b3b02ebcfd70ea3e0fa7b1c45a172520cb5a4fb015a74c4221d9b",
+      "hash": "sha256:5e448066b935907406929041267307d0c8d95cfe0c4b28e882a799a9ebdc7f9c",
       "producedBy": "designer"
     },
     "target_architecture.md": {
-      "hash": "sha256:864a339256ad86fbfe53f2645eb5e1d60e38b577aca0140f7436d702f516c829",
+      "hash": "sha256:768887c35630e4d5fcf9af8166c0d33c6bd3d565bf6b64974802f277ea3e7db0",
       "producedBy": "designer"
     },
     "target_domain_model.md": {
@@ -77,7 +77,7 @@
       "producedBy": "designer"
     },
     "screen_modernization_decision.md": {
-      "hash": "sha256:4c42b75790b8275cce6301ec605f8ed810f3eeca60dcf98be5de7b20fe9c44a0",
+      "hash": "sha256:84b6d891931d292dd4c27352820d578ac4e448eba83e7f8865de28494fef8aa4",
       "producedBy": "screen_translator"
     },
     "target_screens.md": {
@@ -95,11 +95,11 @@
       "producedBy": "screen_translator"
     },
     "parity_specs.md": {
-      "hash": "sha256:da97588a115867b8c52ad4b91595108303d670f9ceae439fbcf2ed90682e0c48",
+      "hash": "sha256:74a75344c41a5dd285c3c6cd8e0a22966da0578b2bca3204c7c2dde2a2ca6e56",
       "producedBy": "inspector"
     },
     "handoff.md": {
-      "hash": "sha256:db6bbc8997d010246f395187ddb4c5ed5a26149931690c47516015a459bb3605",
+      "hash": "sha256:35e313f4ee397d89bcf0deb7a7467eb1c2fc9df905332450fe34736a19b44b77",
       "producedBy": "orchestrator"
     }
   },

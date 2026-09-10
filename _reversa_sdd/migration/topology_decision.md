@@ -5,7 +5,7 @@ reversa:
   version: "1.3.2"
 kind: topology_decision
 producedBy: designer
-hash: "sha256:eb5ea9122c9b3b02ebcfd70ea3e0fa7b1c45a172520cb5a4fb015a74c4221d9b"
+hash: "sha256:5e448066b935907406929041267307d0c8d95cfe0c4b28e882a799a9ebdc7f9c"
 ---
 
 # Topology Decision
@@ -31,7 +31,7 @@ hash: "sha256:eb5ea9122c9b3b02ebcfd70ea3e0fa7b1c45a172520cb5a4fb015a74c4221d9b"
   │   ├── components/                  ← appointments/, medical/, ui/ (shadcn ~60)
   │   ├── hooks/use-mobile.jsx
   │   ├── lib/                         ← AuthContext, NavigationTracker, query-client, PageNotFound, utils, app-params
-  │   ├── pages/                       ← 13 páginas por domínio
+  │   ├── pages/                       ← 12 páginas por domínio
   │   ├── utils/index.ts               ← createPageUrl
   │   ├── App.jsx, Layout.jsx, pages.config.js, main.jsx, index.css
   ```
@@ -47,10 +47,10 @@ hash: "sha256:eb5ea9122c9b3b02ebcfd70ea3e0fa7b1c45a172520cb5a4fb015a74c4221d9b"
 
 ## Topologia moderna proposta
 - **Padrão**: **feature-sliced / vertical slices por domínio com camada de tipos centralizada** — páginas, componentes, hooks e tipos de um domínio sob uma pasta própria (`src/features/<domínio>/`), com `src/types/` (entidades) e `src/api/` (contrato `Base44Client` tipado) como camadas compartilhadas.
-- **Justificativa**: o objetivo central da migração (type-safety em dados médicos + detectar F-01/F-02/F-03 em compile-time) é maximizado quando cada domínio tem **fronteira clara** (componentes + páginas + tipos co-localizados) e o acesso a dados passa por um **contrato tipado único** (`Base44Client` — BR-MIGRAR-038). Isso elimina a duplicação intra-módulo (ex.: `calculateAge`), dá dono ao contrato de dados (mitiga IDOR/ownership) e mantém a árvore pequena o bastante para não exigir monorepo.
+- **Justificativa**: o objetivo central da migração (type-safety em dados médicos + tornar **exigíveis por tipos** os elementos de F-01/F-02/F-03: `role`, `created_by_id`, params de URL) é maximizado quando cada domínio tem **fronteira clara** (componentes + páginas + tipos co-localizados) e o acesso a dados passa por um **contrato tipado único** (`Base44Client` — BR-MIGRAR-038). Isso elimina a duplicação intra-módulo (ex.: `calculateAge`), dá **dono explícito** ao contrato de dados (o escopo `created_by_id` deixa de ser omitível — sem, contudo, corrigir o IDOR, que depende de RLS/backend) e mantém a árvore pequena o bastante para não exigir monorepo.
 - **Ganhos concretos esperados**:
   - Testabilidade isolada por domínio (uma pasta = um módulo testável).
-  - Detecção em compile-time de acesso fora de escopo (`created_by_id`) via contrato tipado.
+  - **Exigibilidade** em compile-time do escopo (`created_by_id`) no contrato tipado — o compilador exige o parâmetro; **não** valida a autorização.
   - Onboarding mais rápido (mapa mental = árvore de features).
 - **Custo / risco**:
   - Reorganização de pastas (mover components/pages por domínio) — esforço e diff além da conversão de tipos.

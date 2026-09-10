@@ -5,7 +5,7 @@ reversa:
   version: "1.3.2"
 kind: paradigm_decision
 producedBy: paradigm_advisor
-hash: "sha256:18f2a258834fcb2ba42bc949189e01aabd45f06b1eaaf2d08e7bd8496c917a0c"
+hash: "sha256:f114b42ffbe9e7b797eafd036d3d7e08510ed85a98dab57cbca2f28a7fecd92e"
 ---
 
 # Paradigm Decision
@@ -18,7 +18,7 @@ hash: "sha256:18f2a258834fcb2ba42bc949189e01aabd45f06b1eaaf2d08e7bd8496c917a0c"
 - **Confiança**: 🟢 CONFIRMADO
 - **Evidências**:
   - `architecture.md` §1: "SPA (React 18 + Vite)… estado de servidor gerenciado pelo TanStack Query e a UI usa Radix UI (shadcn/ui) + Tailwind CSS" — UI declarativa, sem camada de classes.
-  - `inventory.md` (estrutura de pastas): `src/pages/*.jsx` (13 páginas funcionais), `src/hooks/use-mobile.jsx`, componentes como `PatientSearch.jsx`, `LGPDConsent.jsx` — componentes funcionais, sem classes de domínio.
+  - `inventory.md` (estrutura de pastas): `src/pages/*.jsx` (12 páginas funcionais), `src/hooks/use-mobile.jsx`, componentes como `PatientSearch.jsx`, `LGPDConsent.jsx` — componentes funcionais, sem classes de domínio.
   - `code-analysis.md` §4.1–4.5: lógica expressa como funções puras / helpers dentro de componentes (`calculateAge`, filtro combinado via `filter`, substituição de template por `replace` encadeado) — estilo funcional leve.
   - `consultas/design.md` e `agendamentos/design.md`: pages consomem dados via React Query (`Appointments.jsx` consulta agendamentos/médicos/pacientes via React Query) — dados declarativos, sem Active Record nem controllers próprios.
   - `database/business-rules.md`: "Não foram detectadas Stored Procedures puras… lógicas reativas… são tratadas por hooks do próprio Base44" — backend é BaaS; não há OO de servidor no escopo do frontend.
@@ -40,7 +40,7 @@ hash: "sha256:18f2a258834fcb2ba42bc949189e01aabd45f06b1eaaf2d08e7bd8496c917a0c"
 - **Implicações concretas**: sem implicações de mudança paradigmática. Implicações decorrentes da camada de tipos (não de paradigma) são listadas abaixo e repassadas aos próximos agentes:
   - Regras LGPD/RLS (CPF criptografado, `lgpd_consent*` obrigatórios, filtros `created_by_id`) deixam de ser convenção e viram **tipos obrigatórios** (compile-time).
   - Estados de entidades (ex.: `Appointment`, `Consultation` com máquinas de estado) podem virar **discriminated unions** para eliminar estados inválidos em runtime.
-  - F-01 (RBAC), F-02 (token em URL), F-03 (IDOR) ganham detecção em compile-time via tipos; correção lógica fica em fase posterior (fora do escopo declarado no brief).
+  - F-01 (RBAC), F-02 (token recebido por URL), F-03 (IDOR): os elementos que essas não conformidades exploram (`role`, `created_by_id`, params de URL) passam a ser **exigidos pelos contratos internos**; correção lógica fica em fase posterior (fora do escopo declarado no brief). Tipos restringem **forma** — não detectam autorização nem vazamento.
   - Modo offline (`mockClient.ts`) precisa manter contrato idêntico ao do SDK real sob tipos — sincronia de tipos entre os dois caminhos.
 
 ## Opções apresentadas ao usuário
@@ -64,7 +64,7 @@ hash: "sha256:18f2a258834fcb2ba42bc949189e01aabd45f06b1eaaf2d08e7bd8496c917a0c"
 |---|---|---|
 | Curator | Regras de negócio (LGPD, máquinas de estado, RLS/ownership) devem sobreviver como tipos no alvo | Migrar regras para o alvo preservando semântica; sinalizar o que vira tipo obrigatório |
 | Strategist | Sem mudança de paradigma → estratégia de migração incremental por módulos com paridade por regra | Dimensionar estratégia compatível com apetite `balanced` (tipos primeiro, sem rewrite) |
-| Designer | Topologia e arquitetura do alvo = espelho do legado (mesma stack); tipos de domínio novos (`src/types/*.ts`) | Manter a topologia equivalente; modelar `src/types/` com os 9 módulos e entidades Base44 |
+| Designer | Topologia e arquitetura do alvo = espelho do legado (mesma stack); tipos de domínio novos (`src/types/*.ts`) | Manter a topologia equivalente; modelar `src/types/` com os 8 módulos e as 9 entidades Base44 |
 | Screen Translator | UI mantém modo literal (mesma stack, mesma biblioteca de componentes) | Confirmar que não há mudança de plataforma de UI (shadcn/Radix se mantém) |
 | Inspector | Critério de paridade: comportamento idêntico + `tsc --noEmit` 0 erros + tipos obrigatórios em campos sensíveis | Incluir gate de tipos (compile-time) nos critérios de paridade |
 

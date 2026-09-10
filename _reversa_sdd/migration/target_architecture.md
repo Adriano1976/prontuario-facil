@@ -5,7 +5,7 @@ reversa:
   version: "1.3.2"
 kind: target_architecture
 producedBy: designer
-hash: "sha256:864a339256ad86fbfe53f2645eb5e1d60e38b577aca0140f7436d702f516c829"
+hash: "sha256:768887c35630e4d5fcf9af8166c0d33c6bd3d565bf6b64974802f277ea3e7db0"
 ---
 
 # Target Architecture
@@ -14,7 +14,7 @@ hash: "sha256:864a339256ad86fbfe53f2645eb5e1d60e38b577aca0140f7436d702f516c829"
 
 ## Visão geral
 
-O sistema alvo é a **mesma SPA React 18 + Vite + Base44** do legado, agora **100% em TypeScript strict** com domínio tipado em `src/types/` e um **contrato `Base44Client`** que unifica SDK real e mock offline sob uma interface única. O paradigma permanece **funcional/declarativo** (componentes + hooks + TanStack Query) — a arquitetura não muda de forma; muda de **disciplina**: tipos obrigatórios em dados LGPD (CPF, `lgpd_consent*`), escopo `created_by_id`/`role` exigido por tipos (detecção de F-01/F-03 em compile-time) e acesso a dados por repositório tipado por domínio. Durante a migração (Estratégia A — incremental por camadas), o build convive com JS residual via `allowJs` e é cortado onda a onda até 100% TS.
+O sistema alvo é a **mesma SPA React 18 + Vite + Base44** do legado, agora **100% em TypeScript strict** com domínio tipado em `src/types/` e um **contrato `Base44Client`** que unifica SDK real e mock offline sob uma interface única. O paradigma permanece **funcional/declarativo** (componentes + hooks + TanStack Query) — a arquitetura não muda de forma; muda de **disciplina**: tipos obrigatórios em dados LGPD (CPF, `lgpd_consent*`), escopo `created_by_id`/`role` exigido por tipos nos contratos internos (F-01/F-03 tratadas como **obrigatoriedade de contrato**, não como detecção) e acesso a dados por repositório tipado por domínio. Durante a migração (Estratégia A — incremental por camadas), o build convive com JS residual via `allowJs` e é cortado onda a onda até 100% TS.
 
 ## Diagrama (Mermaid)
 
@@ -43,7 +43,7 @@ flowchart LR
 | Componente | Tipo | Responsabilidade | Origem (legado / novo / fundido) |
 |---|---|---|---|
 | SPA shell (`App.tsx`, `Layout.tsx`, `pages.config.ts`) | UI shell | Providers (Auth, Query, Theme, Router) + rotas tipadas | preservado (`App.jsx`, `Layout.jsx`, `pages.config.js`) |
-| Features/páginas por domínio (`src/pages/*.tsx`) | UI (pages) | 13 páginas dos 9 módulos, agora tipadas | preservado 1:1 (`src/pages/*.jsx`) |
+| Features/páginas por domínio (`src/pages/*.tsx`) | UI (pages) | 12 páginas dos 8 módulos, agora tipadas | preservado 1:1 (`src/pages/*.jsx` — 12 arquivos) |
 | Componentes de UI (`src/components/<domínio>/*.tsx` + `ui/`) | UI (components) | Componentes clínicos e biblioteca shadcn/Radix | preservado (`src/components/*`) |
 | `src/types/*.ts` | Domínio (tipos) | Interfaces das 9 entidades + tipos LGPD + unions de status | **novo** (exigido pelo brief) |
 | `src/api/base44Client.ts` + `client.ts` + `mockClient.ts` + `mockSeed.ts` | API | Contrato `Base44Client` único; SDK real e mock implementam a interface | refatorado/fundido (`base44Client.js`, `mockClient.js`, `mockSeed.js`) |
@@ -119,8 +119,8 @@ flowchart LR
 
 ### AD-03: RBAC/ownership exigidos por tipos (sem `any` em escopo)
 - **Decisão**: assinaturas de query/mutation e componentes que dependem de `user.role`/`created_by_id` usam tipos que **exigem** o escopo; `OFFLINE_USER` é variante discriminada sem `role`/`created_by_id`, forçando tratamento explícito em offline.
-- **Alternativas descartadas**: manter filtros apenas por convenção (não detecta F-01/F-03 em compile-time).
-- **Justificativa**: BR-MIGRAR-034/036/039; decisão do brief (vulnerabilidades detectáveis em compile-time).
+- **Alternativas descartadas**: manter filtros apenas por convenção (o escopo continua string solta e F-01/F-03 não ficam nem explícitas no tipo).
+- **Justificativa**: BR-MIGRAR-034/036/039; decisão do brief (elementos de F-01/F-02/F-03 **exigidos** pelos contratos internos — obrigatoriedade de tipos, não detecção de vulnerabilidade).
 - **Rastreabilidade**: `target_business_rules.md` BR-MIGRAR-034/036/039; `migration_brief.md` (objetivo).
 
 ### AD-04: Paridade comportamental como regra do diff
@@ -148,5 +148,5 @@ flowchart LR
 ## Notas
 
 - Nenhum componente novo de backend, fila ou worker: a arquitetura runtime do alvo é idêntica à do legado; o que muda é a camada de tipos e o contrato de API.
-- `recharts`, `framer-motion`, `react-quill` etc. permanecem; libs mortas (Stripe, react-leaflet, jspdf, html2canvas, lodash) são removidas na onda 1 (RISK-006) se grep confirmar ausência de uso.
+- Libs efetivamente importadas em `src/` **permanecem** (`recharts`, `framer-motion`, `next-themes`, `sonner`, `lucide-react`, Radix etc. — confirmado por grep em 2026-09-10). **Não usadas** (14 deps de runtime sem import em `src/`: `@stripe/*`, `react-leaflet`, `jspdf`, `html2canvas`, `lodash`, `react-quill`, `three`, `react-markdown`, `canvas-confetti`, `@hello-pangea/dnd`, `@radix-ui/react-toast`, `zod`, `@hookform/resolvers`) são removidas na onda 1 (RISK-006) somente se o grep for reconfirmado e o usuário aprovar. ⚠️ `react-quill` **não** é exceção: não há import dela no legado.
 - A árvore final de pastas é a do híbrido (topologia opção 3): `src/pages/`, `src/components/`, `src/hooks/`, `src/lib/`, `src/utils/` preservados + **`src/types/` novo** + `src/api/` com `client.ts`/`sdkClient.ts`/`mockClient.ts`/`mockSeed.ts`.

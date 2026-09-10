@@ -5,7 +5,7 @@ reversa:
   version: "1.3.2"
 kind: risk_register
 producedBy: strategist
-hash: "sha256:64d2356ae61761eb36ac25007e4a2c0cfa42bc50063ec2e81b617623dca48422"
+hash: "sha256:140578ae762c1d84c20c45ce5a552c2774b02262943abe24f32bad5fc24048a1"
 ---
 
 # Risk Register
@@ -15,7 +15,7 @@ hash: "sha256:64d2356ae61761eb36ac25007e4a2c0cfa42bc50063ec2e81b617623dca48422"
 ## Riscos
 
 ### RISK-001 — Refatoração silenciosa: erros tipográficos/regressão sem testes automatizados
-- **Descrição**: 60+ arquivos JS/JSX convertidos à mão podem introduzir erros que passam despercebidos — o projeto tem 0 testes.
+- **Descrição**: 87 arquivos JS/JSX convertidos à mão podem introduzir erros que passam despercebidos — o projeto tem 0 testes.
 - **Categoria**: técnico
 - **Probabilidade**: média
 - **Impacto**: alto
@@ -45,7 +45,7 @@ hash: "sha256:64d2356ae61761eb36ac25007e4a2c0cfa42bc50063ec2e81b617623dca48422"
 - **Impacto**: crítico
 - **Severidade combinada**: alta
 - **Trigger / sinal de alerta**: tipos que deixam `lgpd_consent_date`/`lgpd_consent_ip` opcionais; assinaturas de query sem escopo `created_by_id`; log de auditoria removido na migração de uma page.
-- **Mitigação**: tipos obrigatórios derivados (BR-MIGRAR-004); BR-MIGRAR-034/036 tornam filtros/role **exigidos por tipos** (F-03/F-01 detectáveis em compile-time); manter chamadas de auditoria (BR-MIGRAR-026/032/035); revisão de paridade LGPD por módulo.
+- **Mitigação**: tipos obrigatórios derivados (BR-MIGRAR-004); BR-MIGRAR-034/036 tornam filtros/role **exigidos por tipos** (F-03/F-01 — obrigatoriedade de contrato, não detecção de vulnerabilidade); manter chamadas de auditoria (BR-MIGRAR-026/032/035); revisão de paridade LGPD por módulo.
 - **Plano de contingência**: auditoria específica do diff de tipos dos campos sensíveis antes do merge final (Inspector).
 - **Owner**: Product Owner/Developer
 - **Status**: aberto

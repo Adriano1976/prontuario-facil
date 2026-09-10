@@ -5,7 +5,7 @@ reversa:
   version: "1.3.2"
 kind: ambiguity_log
 producedBy: orchestrator
-hash: "sha256:49b14a6dba5e2dceaad3d0ca1f943f5d8d1ddf7dd922a70f3a99cab84ea904e0"
+hash: "sha256:cbcf4b038896d2a4d4ba3bb85c3293d89e5ddf8a1984b4c2bdb7e148e3088a0a"
 ---
 
 # Ambiguity Log
@@ -87,26 +87,27 @@ hash: "sha256:49b14a6dba5e2dceaad3d0ca1f943f5d8d1ddf7dd922a70f3a99cab84ea904e0"
   - **Quando**: 2026-09-09T15:24:37-03:00
   - **Justificativa**: correções de segurança lógica são fase posterior (brief).
 
-### AMB-007 — Vulnerabilidades F-01 (RBAC), F-02 (token em URL), F-03 (IDOR)
-- **Descrição**: não conformidades conhecidas do legado que motivaram a migração para tipos; correção lógica fica em fase posterior, mas a camada de tipos deve **detectá-las em compile-time**.
+### AMB-007 — Não conformidades F-01 (RBAC), F-02 (token recebido por URL), F-03 (IDOR)
+- **Descrição**: não conformidades Alta conhecidas do legado que motivaram a migração para tipos; a correção lógica fica em fase posterior. A camada de tipos deve **exigir** os campos/parâmetros que elas exploram (`role`, `created_by_id`, `access_token`) — o que **não** equivale a detectar as vulnerabilidades em compile-time.
 - **Detectado por**: orchestrator (consolidação) — origem no `migration_brief.md` (objetivo/restrições) e nas regras BR-MIGRAR-034/036
-- **Origem**: `migration_brief.md` (Objetivo); `target_business_rules.md` BR-MIGRAR-034/036; `target_architecture.md` AD-03; `parity_tests/10-contrato-base44-client.feature`
+- **Origem**: `migration_brief.md` (Objetivo); `docs/security-audit/achados.json` (F-01/F-02/F-03 Alta; F-04/F-05 fora do escopo) e `docs/security-audit/relatorio-auditoria-seguranca.md` (fontes canônicas dos IDs F-*); `target_business_rules.md` BR-MIGRAR-034/036; `target_architecture.md` AD-03; `parity_tests/10-contrato-base44-client.feature`
 - **Status**: REFERIDO À CODIFICAÇÃO
 - **Decisão tomada**:
-  - **Escolha**: o código novo deve tipar RBAC (`role`), parâmetros de URL (token) e escopo de dados (`created_by_id`) de modo que F-01/F-02/F-03 falhem em compile-time onde hoje falham em runtime; a correção lógica fica para fase posterior.
+  - **Escolha**: o código novo deve tornar **obrigatórios por tipo** `role`, o escopo de dados (`created_by_id`) e os params de URL (token) nas APIs internas. O compilador verifica **forma, não autorização**: código que passe `role` errado, ignore o escopo ou leia o token segue compilando. A correção lógica (guardas de rota, remoção de token, RLS) fica para a fase de segurança.
   - **Decisor**: Product Owner/Developer (via brief) + Designer (AD-03)
-  - **Quando**: 2026-09-09T16:00:00-03:00
-  - **Justificativa**: brief define "detecção em compile-time" como entrega desta migração e "correção lógica" como fase posterior.
+  - **Quando**: 2026-09-09T16:00:00-03:00 (reformulado em 2026-09-10, revisão do brief pós-`feedback.md`)
+  - **Justificativa**: o brief define obrigatoriedade de tipos como entrega desta migração e correção lógica como fase posterior; a formulação original ("detecção em compile-time") prometia ao compilador algo que ele não faz.
 
 ## Itens referidos à codificação
 > Lista somente itens com status `REFERIDO À CODIFICAÇÃO`. Aparecem destacados em `handoff.md`.
 
 - AMB-006: interpolação de templates sem escape HTML (XSS) — não corrigir; alerta para o codificador + cenário de paridade PT-06.
-- AMB-007: F-01 RBAC / F-02 token em URL / F-03 IDOR — tipar para detecção em compile-time; correção lógica em fase posterior (PT-10).
+- AMB-007: F-01 RBAC / F-02 token recebido por URL / F-03 IDOR — exigir `role`/`created_by_id`/params tipados nos contratos internos (não é detecção de vulnerabilidade); correção lógica em fase posterior (PT-10).
 
 ## Notas
 
 - **0 itens PENDENTES** ao final do pipeline (conforme esperado).
 - AMB-001…005 resolvidos na pausa humana do Curator (2026-09-09T15:24:37-03:00) pela via da **paridade exata**; uma tentativa de expandir escopo com mudanças comportamentais foi apresentada e **revertida pelo usuário** para paridade.
 - AMB-006/007 são referidos à codificação e estarão destacados no `handoff.md` para o agente de codificação.
+- **Revisão 2026-09-10** (pós-`_reversa_sdd/feedback.md`): AMB-007 reformulado para não prometer "detecção em compile-time"; a fonte canônica dos IDs F-* passou a ser `docs/security-audit/achados.json` (o brief apontava, incorretamente, para `gaps.md`/`code-analysis.md`). Nenhum status mudou: segue 0 PENDENTE, 5 resolvidos com decisão humana, 2 referidos à codificação.
 - Nenhum item `auto-decidido` (modo interativo, sem `--auto`).

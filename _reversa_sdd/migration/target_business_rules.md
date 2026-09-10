@@ -5,7 +5,7 @@ reversa:
   version: "1.3.2"
 kind: target_business_rules
 producedBy: curator
-hash: "sha256:4287b4b6533569599ff6b76ebaeace3365db2dde878144c50cf494ee17fc0fef"
+hash: "sha256:1a3bc28e66b5769b107bec31585e68556d76121a9e6344afbd3b56e9cfc177b2"
 ---
 
 # Target Business Rules
@@ -275,7 +275,7 @@ hash: "sha256:4287b4b6533569599ff6b76ebaeace3365db2dde878144c50cf494ee17fc0fef"
 - **Confiança original**: 🟢
 - **Descrição**: Para Patient, Consultation, Appointment, Exam, Prescription: leitura/edição/exclusão por `created_by_id == user.id` **ou** `role == 'admin'`. No frontend, filtros por `created_by_id` espelham a RLS do BaaS (que não muda).
 - **Justificativa de migração**: Núcleo de isolamento multi-tenant/LGPD — regra de negócio + segurança.
-- **Compatibilidade com paradigma alvo**: **Tornar obrigatório por tipos**: assinaturas de query/mutation exigem `created_by_id`/escopo; a decisão `paradigm_decision.md` e o brief exigem que o TS **force** filtros `created_by_id` (F-03 IDOR detectável em compile-time).
+- **Compatibilidade com paradigma alvo**: **Tornar obrigatório por tipos**: assinaturas de query/mutation exigem `created_by_id`/escopo; a decisão `paradigm_decision.md` e o brief exigem que os tipos **exijam** o filtro de `created_by_id` nas APIs internas (F-03 — obrigatoriedade de contrato; o compilador **não** valida autorização em runtime, e a RLS do BaaS permanece intocada).
 
 #### BR-MIGRAR-035 — Auditoria de acesso a dados sensíveis
 - **Origem**: `_reversa_sdd/domain.md` §2.4 (BR-S01)
@@ -289,7 +289,7 @@ hash: "sha256:4287b4b6533569599ff6b76ebaeace3365db2dde878144c50cf494ee17fc0fef"
 - **Confiança original**: 🟢
 - **Descrição**: Papéis `User` (próprios dados) e `Admin` (tudo + configurações). Criação aberta para autenticados nos CRUDs de negócio; restrição estrita de papel apenas em cadastros administrativos (médicos, templates).
 - **Justificativa de migração**: Modelo de autorização a preservar.
-- **Compatibilidade com paradigma alvo**: Tipo `role` explícito no usuário. **Nota de segurança (F-01)**: o RBAC inadequado do legado (ex.: lógica de role frágil, ausência de checks consistentes) deve ser **tipado de forma que falte** (compile-time) onde hoje falha silenciosamente em runtime — correção lógica em fase posterior, fora do escopo.
+- **Compatibilidade com paradigma alvo**: Tipo `role` explícito no usuário. **Nota de segurança (F-01)**: o RBAC inadequado do legado (ex.: lógica de role frágil, ausência de checks consistentes) deve ser **tipado de forma que a ausência de `role` seja explícita** (a variante offline sem `role` obriga tratamento), não silenciosa — a correção lógica é fase posterior, fora do escopo. O tipo **não** verifica permissão: um `role` errado continua compilando.
 
 ### Modo Offline (transversal)
 
@@ -419,7 +419,7 @@ hash: "sha256:4287b4b6533569599ff6b76ebaeace3365db2dde878144c50cf494ee17fc0fef"
 
 ## Notas
 
-- **Vulnerabilidades F-01 (RBAC), F-02 (token em URL), F-03 (IDOR)**: declaradas no `migration_brief.md` como motivadoras da camada de tipos. Não são "regras de negócio a migrar" — são **não conformidades conhecidas** cuja correção lógica é fase posterior. As regras MIGRAR-034/036 e os tipos de `auth.me()`/parâmetros de URL devem **expor** esses problemas em compile-time (ver também `_reversa_sdd/questions.md` e gaps relacionados no código, citados no brief).
+- **Não conformidades F-01 (RBAC), F-02 (token recebido por URL), F-03 (IDOR)** — **fonte canônica: `docs/security-audit/achados.json`** (IDs F-01…F-05): declaradas no `migration_brief.md` como motivadoras da camada de tipos. Não são "regras de negócio a migrar" — são **não conformidades conhecidas** cuja correção lógica é fase posterior. As regras MIGRAR-034/036 e os tipos de `auth.me()`/parâmetros de URL devem **exigir** esses elementos nos contratos internos (`role`, `created_by_id`, params de URL) — o que **não** equivale a detectar os problemas em compile-time (ver também `_reversa_sdd/questions.md`, `_reversa_sdd/permissions.md` §3/§4 e `gaps.md` G-01/G-02/G-04, que tratam de lacunas distintas).
 - **Interpolação de templates e XSS**: `code-analysis.md` §4.5 registra que a substituição não escapa HTML. Isso permanece no alvo (paridade), mas deve constar no `ambiguity_log.md` como referido à codificação (não silenciar).
 - **CPF sensível**: `cpf` é armazenado criptografado no BaaS; no frontend é tratado como dado sensível (formatação/máscara). Tipos devem marcar campos sensíveis (CPF, dados LGPD) — ver `_reversa_sdd/data-dictionary.md` (coluna de sensibilidade).
 - **Sem testes no legado**: nenhuma regra de teste migra (brief exclui framework de testes nesta migração); paridade será validada por `tsc --noEmit` + revisão (Inspector).
