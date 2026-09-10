@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <script>try{document.documentElement.setAttribute("data-theme",localStorage.getItem("rv-theme")==="light"?"light":"dark");}catch(e){}</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Glossário — Prontuário Fácil</title>
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+  <meta name="reversa-category" content="diagram">
+  <meta name="reversa-producer-agent" content="reversa-docs-storyteller">
+  <meta name="reversa-template" content="glossario">
+  <meta name="reversa-generated-at" content="2026-09-10T13:22:00Z">
+  <link rel="stylesheet" href="assets/css/theme.css">
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/theme.js" defer></script>
+  <style>
+    .gl-search {
+      width: 100%;
+      max-width: 560px;
+      margin: 0 auto 10px;
+      padding: 14px 18px;
+      border-radius: 12px;
+      border: 1px solid var(--rv-border-strong);
+      background: rgba(255,255,255,.04);
+      color: var(--rv-text);
+      font-size: 15px;
+      backdrop-filter: blur(8px);
+    }
+    .gl-search:focus { outline: none; border-color: var(--rv-accent-2); box-shadow: 0 0 0 3px rgba(99,102,241,.25); }
+    .gl-filters { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-bottom: 28px; }
+    .gl-chip { cursor: pointer; }
+    .gl-chip.is-active { background: var(--rv-grad); color: #05070d; border-color: transparent; }
+    .gl-group { margin-bottom: 34px; }
+    .gl-group h3 { font-size: 14px; letter-spacing: .1em; text-transform: uppercase; color: var(--rv-accent-1); margin: 0 0 16px; }
+    .gl-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+    .gl-card {
+      border: 1px solid var(--rv-border);
+      background: var(--rv-panel);
+      border-radius: 12px;
+      padding: 18px;
+      transition: border-color .2s ease, transform .2s ease;
+      scroll-margin-top: 80px;
+    }
+    .gl-card:hover { border-color: var(--rv-border-strong); transform: translateY(-2px); }
+    .gl-card h4 { margin: 0 0 8px; font-size: 15.5px; }
+    .gl-card p { margin: 0; font-size: 13.6px; color: var(--rv-text-dim); }
+    .gl-empty { text-align: center; color: var(--rv-text-faint); padding: 40px 0; display: none; }
+  </style>
+</head>
+<body data-page="glossario">
+  <header class="rv-header">
+    <div class="rv-header__inner">
+      <a class="rv-brand" href="index.html">
+        <span class="seal-mini" data-seal></span>
+        <span class="rv-brand__name">Prontuário Fácil</span>
+      </a>
+      <button class="rv-nav-toggle" aria-label="Abrir menu" aria-expanded="false">☰</button>
+      <nav class="rv-nav" aria-label="Navegação principal">
+        <a href="index.html" data-page-id="index">Visão geral</a>
+        <a href="arquitetura.html" data-page-id="arquitetura">Arquitetura 3D</a>
+        <a href="modulos.html" data-page-id="modulos">Módulos</a>
+        <a href="topologia.html" data-page-id="topologia">Topologia</a>
+        <a href="metricas.html" data-page-id="metricas">Métricas</a>
+        <a href="glossario.html" data-page-id="glossario">Glossário</a>
+        <a href="deck.html" data-page-id="deck">Deck</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="rv-hero" style="padding:56px 24px 30px">
+    <canvas class="rv-hero__canvas"></canvas>
+    <div class="rv-hero__inner">
+      <span class="rv-eyebrow"><span class="dot"></span> Glossário</span>
+      <h1>Conceitos do <span class="grad">Prontuário Fácil</span></h1>
+      <p class="rv-hero__tagline">Termos de domínio, arquitetura, segurança e tecnologia em linguagem clara. Pesquise ou filtre por categoria.</p>
+      <input class="gl-search" id="gl-search" type="search" placeholder="Buscar termo ou definição…" aria-label="Buscar no glossário">
+      <div class="gl-filters" id="gl-filters">
+        <span class="rv-chip gl-chip is-active" data-cat="all">Todas</span>
+        <span class="rv-chip gl-chip" data-cat="Domínio">Domínio</span>
+        <span class="rv-chip gl-chip" data-cat="Arquitetura">Arquitetura</span>
+        <span class="rv-chip gl-chip" data-cat="Segurança">Segurança</span>
+        <span class="rv-chip gl-chip" data-cat="Técnico">Técnico</span>
+      </div>
+    </div>
+  </section>
+
+  <main class="rv-container">
+    <div id="gl-groups"></div>
+    <div class="gl-empty" id="gl-empty">Nenhum conceito encontrado para esta busca.</div>
+  </main>
+
+  <footer class="rv-footer">
+    <div class="rv-container">
+      <div class="rv-footer__grid">
+        <div><h4>Prontuário Fácil</h4><p style="font-size:13.5px;color:var(--rv-text-dim);margin:0">Prontuário eletrônico LGPD. SPA React + Base44.</p></div>
+        <div><h4>Navegação</h4><ul><li><a href="index.html">Visão geral</a></li><li><a href="arquitetura.html">Arquitetura 3D</a></li><li><a href="modulos.html">Módulos</a></li><li><a href="metricas.html">Métricas</a></li></ul></div>
+        <div><h4>Features</h4><ul><li><a href="features/pacientes.html">Pacientes</a></li><li><a href="features/consultas.html">Consultas</a></li><li><a href="features/agendamentos.html">Agendamentos</a></li><li><a href="features/dashboard.html">Dashboard</a></li></ul></div>
+        <div><h4>Sobre</h4><ul><li><a href="deck.html">Deck</a></li></ul></div>
+      </div>
+      <div class="rv-footer__bottom"><span>Gerado por Reversa Docs · seed 89000d65</span><span>LGPD · Base44 · React 18</span></div>
+    </div>
+  </footer>
+
+  <script>
+  (function () {
+    "use strict";
+    var rv = window.RV_DATA || {};
+    var concepts = (rv.glossary && rv.glossary.concepts) || [];
+    var cats = ["Domínio", "Arquitetura", "Segurança", "Técnico"];
+    var activeCat = "all";
+    var query = "";
+
+    function slugify(s) {
+      return s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+    }
+
+    function render() {
+      var groups = document.getElementById("gl-groups");
+      groups.innerHTML = "";
+      var shown = 0;
+      cats.forEach(function (cat) {
+        if (activeCat !== "all" && activeCat !== cat) return;
+        var list = concepts.filter(function (c) {
+          if (c.category !== cat) return false;
+          if (query) {
+            var hay = (c.term + " " + c.definition).toLowerCase();
+            if (hay.indexOf(query.toLowerCase()) < 0) return false;
+          }
+          return true;
+        });
+        if (!list.length) return;
+        shown += list.length;
+        var g = document.createElement("div");
+        g.className = "gl-group";
+        g.innerHTML = "<h3>" + cat + "</h3><div class='gl-cards'>" + list.map(function (c) {
+          return "<div class='gl-card' id='concept-" + slugify(c.term) + "'><h4>" + c.term + "</h4><p>" + c.definition + "</p></div>";
+        }).join("") + "</div>";
+        groups.appendChild(g);
+      });
+      document.getElementById("gl-empty").style.display = shown ? "none" : "block";
+    }
+
+    document.getElementById("gl-search").addEventListener("input", function (e) {
+      query = e.target.value.trim();
+      render();
+    });
+    document.getElementById("gl-filters").addEventListener("click", function (e) {
+      var chip = e.target.closest(".gl-chip");
+      if (!chip) return;
+      document.querySelectorAll(".gl-chip").forEach(function (c) { c.classList.remove("is-active"); });
+      chip.classList.add("is-active");
+      activeCat = chip.getAttribute("data-cat");
+      render();
+    });
+
+    render();
+  })();
+  </script>
+</body>
+</html>

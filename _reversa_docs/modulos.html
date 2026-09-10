@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <script>try{document.documentElement.setAttribute("data-theme",localStorage.getItem("rv-theme")==="light"?"light":"dark");}catch(e){}</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Módulos — Prontuário Fácil</title>
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+  <meta name="reversa-category" content="diagram">
+  <meta name="reversa-producer-agent" content="reversa-docs-mapper">
+  <meta name="reversa-template" content="modulos">
+  <meta name="reversa-generated-at" content="2026-09-10T13:12:15Z">
+  <link rel="stylesheet" href="assets/css/theme.css">
+  <script src="assets/js/data.js"></script>
+  <script src="assets/vendor/d3.v7.min.js"></script>
+  <script src="assets/js/theme.js" defer></script>
+  <style>
+    /* ===== Navigation Pad (controle da câmera) ===== */
+    .navpad {
+      position: absolute;
+      bottom: 24px;
+      left: 24px;
+      z-index: 15;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 9px;
+      border-radius: 18px;
+      background: rgba(9, 13, 22, 0.62);
+      border: 1px solid var(--rv-border);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: var(--rv-shadow);
+    }
+    .navpad__dpad {
+      display: grid;
+      grid-template-columns: repeat(3, 42px);
+      grid-template-rows: repeat(3, 42px);
+      grid-template-areas:
+        ". up ."
+        "left center right"
+        ". down .";
+      gap: 5px;
+    }
+    .navpad__zoom {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .navpad__btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      border: 1px solid var(--rv-border-strong);
+      background: rgba(22, 28, 44, 0.85);
+      color: var(--rv-text);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background .15s ease, border-color .15s ease, transform .08s ease, box-shadow .2s ease;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+    }
+    .navpad__btn svg { width: 20px; height: 20px; display: block; }
+    .navpad__btn:hover {
+      background: rgba(99, 102, 241, 0.22);
+      border-color: var(--rv-accent-2);
+    }
+    .navpad__btn:active { transform: scale(0.9); }
+    .navpad__btn--center {
+      color: var(--rv-accent-1);
+      border-color: var(--rv-accent-1);
+      background: var(--rv-grad-soft);
+    }
+    .navpad__up { grid-area: up; }
+    .navpad__left { grid-area: left; }
+    .navpad__center { grid-area: center; }
+    .navpad__right { grid-area: right; }
+    .navpad__down { grid-area: down; }
+    :root[data-theme="light"] .navpad { background: rgba(255, 255, 255, 0.72); border-color: rgba(15, 23, 42, 0.14); }
+    :root[data-theme="light"] .navpad__btn { background: rgba(255, 255, 255, 0.92); border-color: rgba(15, 23, 42, 0.2); }
+    :root[data-theme="light"] .navpad__btn:hover { background: rgba(79, 70, 229, 0.12); }
+    @media (max-width: 560px) {
+      .navpad__dpad { grid-template-columns: repeat(3, 36px); grid-template-rows: repeat(3, 36px); }
+      .navpad__btn { width: 36px; height: 36px; border-radius: 10px; }
+      .navpad__btn svg { width: 17px; height: 17px; }
+    }
+  </style>
+</head>
+<body data-page="modulos">
+  <header class="rv-header">
+    <div class="rv-header__inner">
+      <a class="rv-brand" href="index.html">
+        <span class="seal-mini" data-seal></span>
+        <span class="rv-brand__name">Prontuário Fácil</span>
+      </a>
+      <button class="rv-nav-toggle" aria-label="Abrir menu" aria-expanded="false">☰</button>
+      <nav class="rv-nav" aria-label="Navegação principal">
+        <a href="index.html" data-page-id="index">Visão geral</a>
+        <a href="arquitetura.html" data-page-id="arquitetura">Arquitetura 3D</a>
+        <a href="modulos.html" data-page-id="modulos">Módulos</a>
+        <a href="topologia.html" data-page-id="topologia">Topologia</a>
+        <a href="metricas.html" data-page-id="metricas">Métricas</a>
+        <a href="glossario.html" data-page-id="glossario">Glossário</a>
+        <a href="deck.html" data-page-id="deck">Deck</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="rv-stage" style="background:radial-gradient(1000px 700px at 50% 40%, rgba(99,102,241,.10), transparent 60%), #070b14">
+      <div id="graph" class="rv-stage__canvas"></div>
+      <div class="rv-stage__hud">
+        <span class="rv-chip" id="hud-stats">Grafo de módulos</span>
+      </div>
+      <button class="rv-sidebar__toggle rv-btn rv-btn--ghost" id="sidebar-toggle" style="position:absolute;top:16px;right:16px;z-index:21">⚙ Controles</button>
+      <aside class="rv-sidebar" id="sidebar">
+        <h3>Controles — Grafo</h3>
+        <label>Repulsão
+          <input type="range" min="-300" max="-40" step="10" value="-140" data-param="repulsion">
+        </label>
+        <label>Distância dos links
+          <input type="range" min="20" max="160" step="5" value="70" data-param="linkDist">
+        </label>
+        <label>Filtrar por linguagem
+          <select data-param="langFilter" id="lang-filter">
+            <option value="all">Todas</option>
+          </select>
+        </label>
+        <label>
+          <input type="checkbox" data-param="showLabels" checked> Rótulos (arquivos grandes)
+        </label>
+        <label>
+          <input type="checkbox" data-param="showEdges" checked> Mostrar arestas
+        </label>
+        <button class="rv-btn rv-btn--ghost" id="btn-reheat">↻ Reaquecer</button>
+        <button class="rv-btn rv-btn--ghost" id="btn-reset">↺ Reset zoom</button>
+        <p style="font-size:11.5px;color:var(--rv-text-faint);margin:8px 0 0">Nó = arquivo (tamanho ∝ LOC). Aresta = importação. Arraste nós, role para zoom, clique para destacar vizinhos.</p>
+      </aside>
+      <div id="tooltip" class="rv-tooltip"></div>
+
+      <div class="navpad" id="navpad" aria-label="Painel de navegação da câmera">
+        <div class="navpad__dpad">
+          <button class="navpad__btn navpad__up" data-nav="up" title="Mover para cima (pan)" aria-label="Pan para cima">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>
+          </button>
+          <button class="navpad__btn navpad__left" data-nav="left" title="Mover para a esquerda (pan)" aria-label="Pan para a esquerda">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+          </button>
+          <button class="navpad__btn navpad__center navpad__btn--center" id="navpad-center" title="Resetar a visão" aria-label="Resetar a visão">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/></svg>
+          </button>
+          <button class="navpad__btn navpad__right" data-nav="right" title="Mover para a direita (pan)" aria-label="Pan para a direita">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+          </button>
+          <button class="navpad__btn navpad__down" data-nav="down" title="Mover para baixo (pan)" aria-label="Pan para baixo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+        </div>
+        <div class="navpad__zoom">
+          <button class="navpad__btn" data-nav="zoom-in" title="Aproximar (zoom)" aria-label="Aproximar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+          </button>
+          <button class="navpad__btn" data-nav="zoom-out" title="Afastar (zoom)" aria-label="Afastar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+  (function () {
+    "use strict";
+    var rv = window.RV_DATA || {};
+    var deps = rv.deps || {};
+    var rawNodes = (deps.nodes || []).slice();
+    var rawEdges = (deps.edges || []).slice();
+    var cycles = deps.cycles || [];
+
+    var cycleMembers = {};
+    cycles.forEach(function (c) { c.forEach(function (id) { cycleMembers[id] = true; }); });
+
+    // ---- paleta por grupo (HSL, consistente com a Code City) ----
+    var groups = [];
+    rawNodes.forEach(function (n) { if (groups.indexOf(n.group) < 0) groups.push(n.group); });
+    groups.sort(function (a, b) {
+      var ta = rawNodes.filter(function (x) { return x.group === b; }).reduce(function (s, x) { return s + x.loc; }, 0);
+      var tb = rawNodes.filter(function (x) { return x.group === a; }).reduce(function (s, x) { return s + x.loc; }, 0);
+      return ta - tb;
+    });
+    var groupHue = {};
+    groups.forEach(function (g, i) { groupHue[g] = (i * 137.5) % 360; });
+
+    function colorFor(n) {
+      if (cycleMembers[n.id]) return "#fb7185";
+      var hue = groupHue[n.group] || 0;
+      return "hsl(" + hue + ", 62%, 56%)";
+    }
+
+    var nodes = rawNodes.map(function (n) {
+      return { id: n.id, name: n.id.split("/").pop(), group: n.group, language: n.language, loc: n.loc };
+    });
+    var idToNode = {};
+    nodes.forEach(function (n) { idToNode[n.id] = n; });
+
+    var edges = rawEdges
+      .filter(function (e) { return idToNode[e.source] && idToNode[e.target]; })
+      .map(function (e) { return { source: e.source, target: e.target }; });
+
+    // ---- linguagens ----
+    var langs = [];
+    nodes.forEach(function (n) { if (langs.indexOf(n.language) < 0) langs.push(n.language); });
+    var langFilter = document.getElementById("lang-filter");
+    langs.forEach(function (l) { var o = document.createElement("option"); o.value = l; o.textContent = l; langFilter.appendChild(o); });
+
+    // ---- SVG ----
+    var container = document.getElementById("graph");
+    var W = container.clientWidth, H = container.clientHeight;
+    var svg = d3.select("#graph").append("svg").attr("width", W).attr("height", H).attr("viewBox", [0, 0, W, H]);
+    var root = svg.append("g");
+
+    // zoom
+    var zoom = d3.zoom().scaleExtent([0.15, 6]).on("zoom", function (ev) { root.attr("transform", ev.transform); });
+    svg.call(zoom);
+
+    var linkG = root.append("g").attr("stroke", "rgba(148,163,184,0.18)").attr("stroke-width", 1);
+    var nodeG = root.append("g");
+    var labelG = root.append("g");
+
+    var params = { repulsion: -140, linkDist: 70, lang: "all", showLabels: true, showEdges: true };
+    var MAX_LOC = d3.max(nodes, function (n) { return n.loc; });
+
+    function rFor(n) { return 3 + Math.sqrt(n.loc / MAX_LOC) * 16; }
+
+    function filteredNodes() { return params.lang === "all" ? nodes : nodes.filter(function (n) { return n.language === params.lang; }); }
+
+    var simulation = d3.forceSimulation()
+      .force("link", d3.forceLink().id(function (d) { return d.id; }).distance(function () { return params.linkDist; }))
+      .force("charge", d3.forceManyBody().strength(function () { return params.repulsion; }))
+      .force("center", d3.forceCenter(W / 2, H / 2))
+      .force("collide", d3.forceCollide().radius(function (d) { return rFor(d) + 2; }));
+
+    var linkEls, nodeEls, labelEls;
+
+    function linkId(v) { return (v && typeof v === "object") ? v.id : v; }
+
+    function rebuild() {
+      var fn = filteredNodes();
+      var fnIds = {};
+      fn.forEach(function (n) { fnIds[n.id] = true; });
+      var fe = edges.filter(function (e) { return fnIds[linkId(e.source)] && fnIds[linkId(e.target)]; });
+
+      simulation.nodes(fn);
+      simulation.force("link").links(fe);
+
+      linkEls = linkG.selectAll("line").data(fe, function (d) { return d.source + "|" + d.target; })
+        .join("line")
+        .style("opacity", params.showEdges ? 1 : 0);
+
+      nodeEls = nodeG.selectAll("g").data(fn, function (d) { return d.id; })
+        .join(
+          function (enter) {
+            var g = enter.append("g").style("cursor", "grab");
+            g.append("circle").attr("r", function (d) { return rFor(d); })
+              .attr("fill", colorFor)
+              .attr("stroke", "rgba(0,0,0,0.4)").attr("stroke-width", 1);
+            g.on("click", highlightNeighbors);
+            g.call(d3.drag()
+              .on("start", function (ev, d) { if (!ev.active) simulation.alphaTarget(0.3).restart(); d.fx = d.x; d.fy = d.y; })
+              .on("drag", function (ev, d) { d.fx = ev.x; d.fy = ev.y; })
+              .on("end", function (ev, d) { if (!ev.active) simulation.alphaTarget(0); d.fx = null; d.fy = null; }));
+            return g;
+          },
+          function (update) {
+            update.select("circle").attr("fill", colorFor).attr("r", function (d) { return rFor(d); });
+            return update;
+          }
+        );
+
+      nodeEls.append("title").text(function (d) { return d.id + " (" + d.loc + " LOC)"; });
+
+      labelEls = labelG.selectAll("text").data(fn.filter(function (d) { return d.loc > MAX_LOC * 0.35; }), function (d) { return d.id; })
+        .join("text")
+        .attr("text-anchor", "middle")
+        .attr("dy", -8)
+        .attr("fill", "#a7b3c8")
+        .attr("font-size", "10px")
+        .attr("font-family", "monospace")
+        .style("pointer-events", "none")
+        .style("opacity", params.showLabels ? 1 : 0)
+        .text(function (d) { return d.name; });
+
+      simulation.alpha(0.9).restart();
+    }
+
+    function highlightNeighbors(ev, d) {
+      var neigh = {};
+      neigh[d.id] = true;
+      edges.forEach(function (e) {
+        var s = linkId(e.source), t = linkId(e.target);
+        if (s === d.id) neigh[t] = true;
+        if (t === d.id) neigh[s] = true;
+      });
+      nodeEls.select("circle").attr("opacity", function (n) { return neigh[n.id] ? 1 : 0.12; });
+      linkEls.style("opacity", function (e) { return (linkId(e.source) === d.id || linkId(e.target) === d.id) ? 0.8 : 0.04; });
+      showTooltip(d);
+      setTimeout(function () {
+        nodeEls.select("circle").attr("opacity", 1);
+        linkEls.style("opacity", params.showEdges ? 1 : 0);
+      }, 2200);
+    }
+
+    var tooltip = document.getElementById("tooltip");
+    function showTooltip(d) {
+      tooltip.innerHTML = "<b>" + d.name + "</b><br>" + d.id + "<br><span style='color:var(--rv-accent-1)'>LOC " + d.loc + "</span> · " + d.group;
+      tooltip.classList.add("is-visible");
+      var x = Math.max(16, Math.min(window.innerWidth - 320, d.x));
+      tooltip.style.left = (x + 16) + "px";
+      tooltip.style.top = (Math.max(80, d.y) - 10) + "px";
+      setTimeout(function () { tooltip.classList.remove("is-visible"); }, 2400);
+    }
+
+    simulation.on("tick", function () {
+      linkEls
+        .attr("x1", function (d) { return d.source.x; })
+        .attr("y1", function (d) { return d.source.y; })
+        .attr("x2", function (d) { return d.target.x; })
+        .attr("y2", function (d) { return d.target.y; });
+      nodeEls.attr("transform", function (d) { return "translate(" + d.x + "," + d.y + ")"; });
+      labelEls.attr("x", function (d) { return d.x; }).attr("y", function (d) { return d.y; });
+    });
+
+    // ---- sidebar ----
+    document.getElementById("sidebar-toggle").addEventListener("click", function () {
+      var s = document.getElementById("sidebar");
+      s.style.display = s.style.display === "none" ? "block" : "none";
+    });
+    document.querySelectorAll("[data-param]").forEach(function (el) {
+      el.addEventListener("input", function () {
+        var p = el.getAttribute("data-param");
+        if (p === "repulsion") { params.repulsion = parseFloat(el.value); simulation.force("charge").strength(params.repulsion); simulation.alpha(0.5).restart(); }
+        else if (p === "linkDist") { params.linkDist = parseFloat(el.value); simulation.force("link").distance(params.linkDist); simulation.alpha(0.5).restart(); }
+        else if (p === "langFilter") { params.lang = el.value; rebuild(); }
+        else if (p === "showLabels") { params.showLabels = el.checked; labelEls.style("opacity", params.showLabels ? 1 : 0); }
+        else if (p === "showEdges") { params.showEdges = el.checked; linkEls.style("opacity", params.showEdges ? 1 : 0); }
+      });
+    });
+    document.getElementById("btn-reheat").addEventListener("click", function () { simulation.alpha(1).restart(); });
+    // Reset zoom: volta a view padrao (100%). Se nenhum no estiver visivel, enquadra o grafo inteiro.
+    function fitTransform() {
+      var xs = [], ys = [];
+      nodes.forEach(function (n) { if (isFinite(n.x) && isFinite(n.y)) { xs.push(n.x); ys.push(n.y); } });
+      if (!xs.length) return d3.zoomIdentity;
+      var pad = 60;
+      var x0 = Math.min.apply(null, xs), x1 = Math.max.apply(null, xs);
+      var y0 = Math.min.apply(null, ys), y1 = Math.max.apply(null, ys);
+      var dx = Math.max(1, x1 - x0), dy = Math.max(1, y1 - y0);
+      var k = Math.min(1, Math.min((W - 2 * pad) / dx, (H - 2 * pad) / dy));
+      k = Math.max(0.15, Math.min(6, k));
+      return d3.zoomIdentity.translate(W / 2 - k * (x0 + x1) / 2, H / 2 - k * (y0 + y1) / 2).scale(k);
+    }
+
+    function resetView(duration) {
+      var dur = (duration == null) ? 400 : duration;
+      var visiveis = nodes.filter(function (n) {
+        return isFinite(n.x) && isFinite(n.y) && n.x >= 0 && n.x <= W && n.y >= 0 && n.y <= H;
+      }).length;
+      var target = visiveis ? d3.zoomIdentity : fitTransform();
+      svg.transition().duration(dur).call(zoom.transform, target);
+      // limpa opacidades residuais deixadas pelo destaque de vizinhos
+      if (nodeEls) nodeEls.select("circle").attr("opacity", 1);
+      if (linkEls) linkEls.style("opacity", params.showEdges ? 1 : 0);
+      if (labelEls) labelEls.style("opacity", params.showLabels ? 1 : 0);
+    }
+    document.getElementById("btn-reset").addEventListener("click", function () { resetView(400); });
+
+    window.addEventListener("resize", function () {
+      W = container.clientWidth; H = container.clientHeight;
+      svg.attr("width", W).attr("height", H).attr("viewBox", [0, 0, W, H]);
+      simulation.force("center", d3.forceCenter(W / 2, H / 2));
+      simulation.alpha(0.3).restart();
+    });
+
+    // ---- Navigation Pad (pan / zoom / reset) ----
+    var NAV_PAN_STEP = 70;      // pixels por passo de pan
+    var NAV_ZOOM_FACTOR = 1.22; // fator multiplicativo por passo de zoom
+
+    function enableHoldRepeat(btn, action) {
+      var delayTimer = null, repeatTimer = null;
+      function stop() {
+        if (delayTimer) { clearTimeout(delayTimer); delayTimer = null; }
+        if (repeatTimer) { clearInterval(repeatTimer); repeatTimer = null; }
+      }
+      btn.addEventListener("pointerdown", function (e) {
+        e.preventDefault();
+        action();
+        stop();
+        delayTimer = setTimeout(function () { repeatTimer = setInterval(action, 80); }, 320);
+      });
+      btn.addEventListener("pointerup", stop);
+      btn.addEventListener("pointerleave", stop);
+      btn.addEventListener("pointercancel", stop);
+    }
+
+    function bindNavPad() {
+      var pad = document.getElementById("navpad");
+      if (!pad) return;
+      // translateBy desloca o CONTEÚDO; invertemos para que a seta indique a direção da visão
+      var actions = {
+        "up": function () { zoom.translateBy(svg, 0, NAV_PAN_STEP); },
+        "down": function () { zoom.translateBy(svg, 0, -NAV_PAN_STEP); },
+        "left": function () { zoom.translateBy(svg, NAV_PAN_STEP, 0); },
+        "right": function () { zoom.translateBy(svg, -NAV_PAN_STEP, 0); },
+        "zoom-in": function () { zoom.scaleBy(svg, NAV_ZOOM_FACTOR); },
+        "zoom-out": function () { zoom.scaleBy(svg, 1 / NAV_ZOOM_FACTOR); }
+      };
+      pad.querySelectorAll("[data-nav]").forEach(function (btn) {
+        var action = actions[btn.getAttribute("data-nav")];
+        if (action) enableHoldRepeat(btn, action);
+      });
+      document.getElementById("navpad-center").addEventListener("click", function () { resetView(400); });
+    }
+
+    // ---- boot ----
+    rebuild();
+    bindNavPad();
+    document.getElementById("hud-stats").textContent = "Grafo de módulos · " + nodes.length + " nós · " + edges.length + " arestas" + (cycles.length ? " · " + cycles.length + " ciclos" : "");
+  })();
+  </script>
+</body>
+</html>

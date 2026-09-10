@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <script>try{document.documentElement.setAttribute("data-theme",localStorage.getItem("rv-theme")==="light"?"light":"dark");}catch(e){}</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Deck — Prontuário Fácil</title>
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+  <meta name="reversa-category" content="diagram">
+  <meta name="reversa-producer-agent" content="reversa-docs-storyteller">
+  <meta name="reversa-template" content="deck">
+  <meta name="reversa-generated-at" content="2026-09-10T13:22:00Z">
+  <link rel="stylesheet" href="assets/css/theme.css">
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/theme.js" defer></script>
+  <style>
+    body { overflow: hidden; }
+    .deck { position: fixed; inset: var(--rv-header-h) 0 0 0; }
+    .deck__track { position: relative; width: 100%; height: 100%; }
+    .slide {
+      position: absolute; inset: 0;
+      padding: 40px clamp(20px, 6vw, 90px);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; transform: translateX(40px); pointer-events: none;
+      transition: opacity .5s ease, transform .5s ease;
+      overflow-y: auto;
+    }
+    .slide.is-active { opacity: 1; transform: none; pointer-events: auto; }
+    .slide__inner { max-width: 1000px; width: 100%; text-align: center; }
+    .deck__nav { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 30; display: flex; align-items: center; gap: 14px; }
+    .deck__btn {
+      width: 46px; height: 46px; border-radius: 50%;
+      border: 1px solid var(--rv-border-strong);
+      background: rgba(9,13,22,.7); color: var(--rv-text);
+      font-size: 20px; cursor: pointer; backdrop-filter: blur(8px);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .deck__btn:hover { background: var(--rv-grad); color: #05070d; border-color: transparent; }
+    .deck__dots { display: flex; gap: 7px; }
+    .deck__dot { width: 9px; height: 9px; border-radius: 50%; background: var(--rv-border-strong); cursor: pointer; transition: all .2s ease; }
+    .deck__dot.is-active { background: var(--rv-accent-2); transform: scale(1.4); }
+    .deck__counter { font-size: 13px; color: var(--rv-text-faint); min-width: 52px; text-align: center; }
+    .deck__hint { position: fixed; top: calc(var(--rv-header-h) + 14px); right: 18px; z-index: 30; font-size: 11.5px; color: var(--rv-text-faint); }
+    .slide h2 { font-size: clamp(1.7rem, 4.5vw, 3rem); font-weight: 800; letter-spacing: -0.02em; margin: 0 0 18px; }
+    .slide p.lead { font-size: clamp(1rem, 2vw, 1.25rem); color: var(--rv-text-dim); max-width: 780px; margin: 0 auto 24px; }
+    .ent-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; max-width: 900px; margin: 0 auto; }
+    .ent-item { border: 1px solid var(--rv-border); background: var(--rv-panel); border-radius: 12px; padding: 16px; }
+    .ent-item b { display: block; margin-bottom: 4px; }
+    .ent-item span { font-size: 12.8px; color: var(--rv-text-dim); }
+    .dec-list { text-align: left; max-width: 860px; margin: 0 auto; display: grid; gap: 12px; }
+    .dec-item { border: 1px solid var(--rv-border); background: var(--rv-panel); border-radius: 12px; padding: 16px 18px; }
+    .dec-item h4 { margin: 0 0 6px; font-size: 15px; }
+    .dec-item p { margin: 0; font-size: 13.5px; color: var(--rv-text-dim); }
+  </style>
+</head>
+<body data-page="deck">
+  <header class="rv-header">
+    <div class="rv-header__inner">
+      <a class="rv-brand" href="index.html">
+        <span class="seal-mini" data-seal></span>
+        <span class="rv-brand__name">Prontuário Fácil</span>
+      </a>
+      <button class="rv-nav-toggle" aria-label="Abrir menu" aria-expanded="false">☰</button>
+      <nav class="rv-nav" aria-label="Navegação principal">
+        <a href="index.html" data-page-id="index">Visão geral</a>
+        <a href="arquitetura.html" data-page-id="arquitetura">Arquitetura 3D</a>
+        <a href="modulos.html" data-page-id="modulos">Módulos</a>
+        <a href="topologia.html" data-page-id="topologia">Topologia</a>
+        <a href="metricas.html" data-page-id="metricas">Métricas</a>
+        <a href="glossario.html" data-page-id="glossario">Glossário</a>
+        <a href="deck.html" data-page-id="deck">Deck</a>
+      </nav>
+    </div>
+  </header>
+
+  <span class="deck__hint">← / → navegar · F tela cheia</span>
+
+  <main class="deck">
+    <div class="deck__track" id="deck-track">
+
+      <section class="slide is-active" data-slide="0">
+        <div class="slide__inner">
+          <div style="width:120px;height:120px;margin:0 auto 26px;border-radius:24px;overflow:hidden" data-seal-hero></div>
+          <h1 style="font-size:clamp(2.2rem,6vw,4rem);margin:0 0 14px">Prontuário <span class="grad">Fácil</span></h1>
+          <p class="lead">Prontuário eletrônico aderente à LGPD para clínicas médicas. Gestão centralizada de pacientes, consultas, agendamentos e exames.</p>
+          <div class="rv-hero__actions">
+            <a class="rv-btn rv-btn--primary" href="index.html">Ver mini-site</a>
+            <span class="rv-btn rv-btn--ghost">→ Use as setas para navegar</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-slide="1">
+        <div class="slide__inner">
+          <span class="rv-eyebrow"><span class="dot"></span> Propósito</span>
+          <h2>Digitalizar o fluxo de atendimento</h2>
+          <p class="lead">Aplicação web (SPA React/Vite) que provê a gestão completa de pacientes, consultas, agendamentos e exames, com segurança e padronização via arquitetura BaaS (Base44 + Supabase).</p>
+          <div class="rv-cards" style="max-width:780px;margin:0 auto">
+            <div class="rv-card"><div class="rv-card__icon">🛡️</div><div class="rv-card__title">Segurança</div><p class="rv-card__desc">LGPD com consentimento e auditoria de acesso.</p></div>
+            <div class="rv-card"><div class="rv-card__icon">⚡</div><div class="rv-card__title">Backend gerenciado</div><p class="rv-card__desc">Base44 (BaaS) com RLS e CRUD.</p></div>
+            <div class="rv-card"><div class="rv-card__icon">📱</div><div class="rv-card__title">SPA moderna</div><p class="rv-card__desc">React 18 + Vite + TanStack Query.</p></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-slide="2">
+        <div class="slide__inner">
+          <span class="rv-eyebrow"><span class="dot"></span> Entidades centrais</span>
+          <h2>Modelo de domínio</h2>
+          <p class="lead">Sete entidades formam o núcleo do prontuário eletrônico.</p>
+          <div class="ent-list">
+            <div class="ent-item"><b>🪪 Paciente</b><span>Paciente da clínica</span></div>
+            <div class="ent-item"><b>👨‍⚕️ Médico</b><span>Profissional de saúde</span></div>
+            <div class="ent-item"><b>📅 Agendamento</b><span>Marcação de horários</span></div>
+            <div class="ent-item"><b>🩺 Consulta</b><span>Dados clínicos do atendimento</span></div>
+            <div class="ent-item"><b>🧪 Exame</b><span>Exames solicitados/resultados</span></div>
+            <div class="ent-item"><b>💊 Prescrição</b><span>Receitas geradas</span></div>
+            <div class="ent-item"><b>📝 Template</b><span>Modelos de documentos</span></div>
+            <div class="ent-item"><b>🔐 AccessLog</b><span>Auditoria de acesso</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-slide="3">
+        <div class="slide__inner">
+          <span class="rv-eyebrow"><span class="dot"></span> Arquitetura</span>
+          <h2>Code City 3D</h2>
+          <p class="lead">Visualize 98 arquivos distribuídos em 11 distritos como uma cidade: altura = linhas de código, cor = pasta.</p>
+          <a class="rv-btn rv-btn--primary" href="arquitetura.html">Abrir Arquitetura 3D</a>
+        </div>
+      </section>
+
+      <section class="slide" data-slide="4">
+        <div class="slide__inner">
+          <span class="rv-eyebrow"><span class="dot"></span> Módulos</span>
+          <h2>Grafo de dependências</h2>
+          <p class="lead">98 nós e 249 importações internas, com física de forças interativa para explorar acoplamentos.</p>
+          <a class="rv-btn rv-btn--primary" href="modulos.html">Abrir Módulos</a>
+        </div>
+      </section>
+
+      <section class="slide" data-slide="5">
+        <div class="slide__inner">
+          <span class="rv-eyebrow"><span class="dot"></span> Métricas</span>
+          <h2>O sistema em números</h2>
+          <div class="rv-stats" style="max-width:760px;margin:0 auto">
+            <div class="rv-stat"><div class="rv-stat__value" data-count="11465">0</div><div class="rv-stat__label">Linhas de código</div></div>
+            <div class="rv-stat"><div class="rv-stat__value" data-count="98">0</div><div class="rv-stat__label">Arquivos</div></div>
+            <div class="rv-stat"><div class="rv-stat__value" data-count="47">0</div><div class="rv-stat__label">Pacotes externos</div></div>
+          </div>
+          <div style="margin-top:22px"><a class="rv-btn rv-btn--ghost" href="metricas.html">Ver dashboard completo</a></div>
+        </div>
+      </section>
+
+      <section class="slide" data-slide="6">
+        <div class="slide__inner">
+          <span class="rv-eyebrow"><span class="dot"></span> Decisões fundadoras</span>
+          <h2>Quatro escolhas estruturais</h2>
+          <div class="dec-list">
+            <div class="dec-item"><h4>D1 · Adoção da Base44 (BaaS) com Supabase</h4><p>Backend 100% gerenciado: banco, autorizações (RLS) e APIs CRUD fora do código da aplicação.</p></div>
+            <div class="dec-item"><h4>D2 · Arquitetura Frontend SPA (React + Vite)</h4><p>Roteamento e estado vivem no cliente; chamadas assíncronas via TanStack Query; sem SSR.</p></div>
+            <div class="dec-item"><h4>D3 · UI com Tailwind CSS e Radix UI (shadcn)</h4><p>Estilização por classes utilitárias e primitivas acessíveis; sem CSS puro por componente.</p></div>
+            <div class="dec-item"><h4>D4 · Estrutura híbrida de módulos (Domain / Pages)</h4><p>Rotas em config central; lógica separada por domínio (components/appointments, components/medical).</p></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-slide="7">
+        <div class="slide__inner">
+          <span class="rv-eyebrow"><span class="dot"></span> Features</span>
+          <h2>Oito módulos documentados</h2>
+          <div class="ent-list">
+            <a class="ent-item" href="features/pacientes.html"><b>🪪 Pacientes</b><span>Cadastro e LGPD</span></a>
+            <a class="ent-item" href="features/consultas.html"><b>🩺 Consultas</b><span>Atendimento clínico</span></a>
+            <a class="ent-item" href="features/agendamentos.html"><b>📅 Agendamentos</b><span>Agenda da clínica</span></a>
+            <a class="ent-item" href="features/medicos.html"><b>👨‍⚕️ Médicos</b><span>Jornada de trabalho</span></a>
+            <a class="ent-item" href="features/templates.html"><b>📝 Templates</b><span>Modelos de documentos</span></a>
+            <a class="ent-item" href="features/logs-acesso.html"><b>🔐 Logs</b><span>Auditoria LGPD</span></a>
+            <a class="ent-item" href="features/dashboard.html"><b>📊 Dashboard</b><span>KPIs e atalhos</span></a>
+            <a class="ent-item" href="features/modo-offline.html"><b>🔌 Offline</b><span>Mock + localStorage</span></a>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-slide="8">
+        <div class="slide__inner">
+          <span class="rv-eyebrow"><span class="dot"></span> Próximos passos</span>
+          <h2>Explore o <span class="grad">mini-site</span></h2>
+          <p class="lead">Comece pela visão geral, mergulhe na arquitetura 3D ou leia as specs por feature.</p>
+          <div class="rv-hero__actions">
+            <a class="rv-btn rv-btn--primary" href="index.html">Visão geral</a>
+            <a class="rv-btn rv-btn--ghost" href="glossario.html">Glossário</a>
+            <a class="rv-btn rv-btn--ghost" href="metricas.html">Métricas</a>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <nav class="deck__nav" aria-label="Navegação do deck">
+    <button class="deck__btn" id="deck-prev" aria-label="Slide anterior">←</button>
+    <span class="deck__counter" id="deck-counter">1 / 9</span>
+    <div class="deck__dots" id="deck-dots"></div>
+    <button class="deck__btn" id="deck-next" aria-label="Próximo slide">→</button>
+  </nav>
+
+  <script>
+  (function () {
+    "use strict";
+    var slides = Array.prototype.slice.call(document.querySelectorAll(".slide"));
+    var dots = document.getElementById("deck-dots");
+    var counter = document.getElementById("deck-counter");
+    var cur = 0;
+
+    slides.forEach(function (_, i) {
+      var d = document.createElement("span");
+      d.className = "deck__dot" + (i === 0 ? " is-active" : "");
+      d.addEventListener("click", function () { go(i); });
+      dots.appendChild(d);
+    });
+
+    function go(i) {
+      cur = (i + slides.length) % slides.length;
+      slides.forEach(function (s, j) { s.classList.toggle("is-active", j === cur); });
+      var ds = dots.querySelectorAll(".deck__dot");
+      ds.forEach(function (d, j) { d.classList.toggle("is-active", j === cur); });
+      counter.textContent = (cur + 1) + " / " + slides.length;
+    }
+    document.getElementById("deck-next").addEventListener("click", function () { go(cur + 1); });
+    document.getElementById("deck-prev").addEventListener("click", function () { go(cur - 1); });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowRight") go(cur + 1);
+      else if (e.key === "ArrowLeft") go(cur - 1);
+      else if (e.key === "f" || e.key === "F") {
+        if (document.fullscreenElement) document.exitFullscreen();
+        else document.documentElement.requestFullscreen();
+      }
+    });
+    // reinicia contadores animados quando o slide 5 fica ativo
+    var io = new MutationObserver(function () {
+      if (cur === 5) document.querySelectorAll("[data-count]").forEach(function (el) { el.__done = false; });
+    });
+    io.observe(document.getElementById("deck-track"), { attributes: false, subtree: true, childList: true });
+  })();
+  </script>
+</body>
+</html>

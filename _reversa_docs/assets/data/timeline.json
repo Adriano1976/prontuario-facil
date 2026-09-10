@@ -1,0 +1,111 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-09-10T16:52:49.881165+00:00",
+  "events": [
+    {
+      "date": "2026-08-17",
+      "title": "2026-08-17 — Início do projeto (Initial commit)",
+      "raw": "- 2026-08-17 — Início do projeto (Initial commit)"
+    },
+    {
+      "date": "2026-08-18",
+      "title": "2026-08-18 — Estrutura completa do prontuário eletrônico: React + Vite + Base44",
+      "raw": "- 2026-08-18 — Estrutura completa do prontuário eletrônico: React + Vite + Base44"
+    },
+    {
+      "date": "2026-08-19",
+      "title": "2026-08-19 — Navegação mobile e exclusão de conta; dependências atualizadas",
+      "raw": "- 2026-08-19 — Navegação mobile e exclusão de conta; dependências atualizadas"
+    },
+    {
+      "date": "2026-08-20",
+      "title": "2026-08-20 — Reversa Scout: inventário, dependências e surface.json extraídos",
+      "raw": "- 2026-08-20 — Reversa Scout: inventário, dependências e surface.json extraídos"
+    },
+    {
+      "date": "2026-08-22",
+      "title": "2026-08-22 — Ajustes de documentação e configuração inicial do projeto",
+      "raw": "- 2026-08-22 — Ajustes de documentação e configuração inicial do projeto"
+    },
+    {
+      "date": "2026-08-26",
+      "title": "2026-08-26 — Reversa Archaeologist: análise módulo a módulo e fluxogramas",
+      "raw": "- 2026-08-26 — Reversa Archaeologist: análise módulo a módulo e fluxogramas"
+    },
+    {
+      "date": "2026-08-27",
+      "title": "2026-08-27 — Data Master (ERD e modelo de dados) + Design System (tokens e tipografia)",
+      "raw": "- 2026-08-27 — Data Master (ERD e modelo de dados) + Design System (tokens e tipografia)"
+    },
+    {
+      "date": "2026-08-27",
+      "title": "2026-08-27 — Extração da alma do sistema (soul.md) e guardrails de configuração",
+      "raw": "- 2026-08-27 — Extração da alma do sistema (soul.md) e guardrails de configuração"
+    },
+    {
+      "date": "2026-08-28",
+      "title": "2026-08-28 — Visor: inventário e fluxo de UI; documentação das telas por domínio",
+      "raw": "- 2026-08-28 — Visor: inventário e fluxo de UI; documentação das telas por domínio"
+    },
+    {
+      "date": "2026-08-28",
+      "title": "2026-08-28 — Trilha de auditoria LGPD documentada (logs de acesso)",
+      "raw": "- 2026-08-28 — Trilha de auditoria LGPD documentada (logs de acesso)"
+    },
+    {
+      "date": "2026-08-29",
+      "title": "2026-08-29 — Suporte ao modo offline (mock client + localStorage)",
+      "raw": "- 2026-08-29 — Suporte ao modo offline (mock client + localStorage)"
+    },
+    {
+      "date": "2026-08-31",
+      "title": "2026-08-31 — Detective: domínio, máquinas de estado e estratégia RBAC",
+      "raw": "- 2026-08-31 — Detective: domínio, máquinas de estado e estratégia RBAC"
+    },
+    {
+      "date": "2026-08-31",
+      "title": "2026-08-31 — Architect: C4 (contexto, containers, componentes), ERD completo e impact matrix",
+      "raw": "- 2026-08-31 — Architect: C4 (contexto, containers, componentes), ERD completo e impact matrix"
+    },
+    {
+      "date": "2026-09-02",
+      "title": "2026-09-02 — Geração das specs SDD por unit (requirements, design, screens, tasks)",
+      "raw": "- 2026-09-02 — Geração das specs SDD por unit (requirements, design, screens, tasks)"
+    },
+    {
+      "date": "2026-09-03",
+      "title": "2026-09-03 — Revisão: review-report, gaps, questions e confidence-report",
+      "raw": "- 2026-09-03 — Revisão: review-report, gaps, questions e confidence-report"
+    },
+    {
+      "date": "2026-09-04",
+      "title": "2026-09-04 — Skill security-code-audit e relatório de segurança",
+      "raw": "- 2026-09-04 — Skill security-code-audit e relatório de segurança"
+    },
+    {
+      "date": "2026-09-05",
+      "title": "2026-09-05 — Artefatos canônicos C4/ERD/Spec Impact Matrix e consolidação de espelhos",
+      "raw": "- 2026-09-05 — Artefatos canônicos C4/ERD/Spec Impact Matrix e consolidação de espelhos"
+    },
+    {
+      "date": "2026-09-09",
+      "title": "2026-09-09 — Migração (/reversa-migrate): 6 agentes, 26 testes de paridade e handoff",
+      "raw": "- 2026-09-09 — Migração (/reversa-migrate): 6 agentes, 26 testes de paridade e handoff"
+    },
+    {
+      "date": "2026-09-09",
+      "title": "2026-09-09 — README bilíngue (pt-BR e en)",
+      "raw": "- 2026-09-09 — README bilíngue (pt-BR e en)"
+    },
+    {
+      "date": "2026-09-10",
+      "title": "2026-09-10 — Mini-site Reversa Docs publicado (15 páginas)",
+      "raw": "- 2026-09-10 — Mini-site Reversa Docs publicado (15 páginas)"
+    },
+    {
+      "date": "2026-09-10",
+      "title": "2026-09-10 — Tema claro/escuro, Navigation Pad 3D e logo de prontuário médico",
+      "raw": "- 2026-09-10 — Tema claro/escuro, Navigation Pad 3D e logo de prontuário médico"
+    }
+  ]
+}

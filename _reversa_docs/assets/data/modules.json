@@ -1,0 +1,911 @@
+{
+  "schemaVersion": 1,
+  "nodes": [
+    {
+      "id": "src/components/ui/sidebar.jsx",
+      "name": "sidebar.jsx",
+      "path": "src/components/ui/sidebar.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 594,
+      "type": "file"
+    },
+    {
+      "id": "src/pages/PatientForm.jsx",
+      "name": "PatientForm.jsx",
+      "path": "src/pages/PatientForm.jsx",
+      "group": "pages",
+      "language": "jsx",
+      "loc": 495,
+      "type": "file"
+    },
+    {
+      "id": "src/pages/PatientDetail.jsx",
+      "name": "PatientDetail.jsx",
+      "path": "src/pages/PatientDetail.jsx",
+      "group": "pages",
+      "language": "jsx",
+      "loc": 431,
+      "type": "file"
+    },
+    {
+      "id": "src/pages/Consultation.jsx",
+      "name": "Consultation.jsx",
+      "path": "src/pages/Consultation.jsx",
+      "group": "pages",
+      "language": "jsx",
+      "loc": 421,
+      "type": "file"
+    },
+    {
+      "id": "src/pages/NewConsultation.jsx",
+      "name": "NewConsultation.jsx",
+      "path": "src/pages/NewConsultation.jsx",
+      "group": "pages",
+      "language": "jsx",
+      "loc": 399,
+      "type": "file"
+    },
+    {
+      "id": "src/pages/Templates.jsx",
+      "name": "Templates.jsx",
+      "path": "src/pages/Templates.jsx",
+      "group": "pages",
+      "language": "jsx",
+      "loc": 399,
+      "type": "file"
+    },
+    {
+      "id": "src/components/medical/PrescriptionEditor.jsx",
+      "name": "PrescriptionEditor.jsx",
+      "path": "src/components/medical/PrescriptionEditor.jsx",
+      "group": "components/medical",
+      "language": "jsx",
+      "loc": 316,
+      "type": "file"
+    },
+    {
+      "id": "src/pages/Dashboard.jsx",
+      "name": "Dashboard.jsx",
+      "path": "src/pages/Dashboard.jsx",
+      "group": "pages",
+      "language": "jsx",
+      "loc": 314,
+      "type": "file"
+    },
+    {
+      "id": "src/pages/Doctors.jsx",
+      "name": "Doctors.jsx",
+      "path": "src/pages/Doctors.jsx",
+      "group": "pages",
+      "language": "jsx",
+      "loc": 312,
+      "type": "file"
+    },
+    {
+      "id": "src/components/ui/chart.jsx",
+      "name": "chart.jsx",
+      "path": "src/components/ui/chart.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 306,
+      "type": "file"
+    },
+    {
+      "id": "src/pages/AccessLogs.jsx",
+      "name": "AccessLogs.jsx",
+      "path": "src/pages/AccessLogs.jsx",
+      "group": "pages",
+      "language": "jsx",
+      "loc": 265,
+      "type": "file"
+    },
+    {
+      "id": "src/components/ui/menubar.jsx",
+      "name": "menubar.jsx",
+      "path": "src/components/ui/menubar.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 256,
+      "type": "file"
+    },
+    {
+      "id": "src/pages/NewAppointment.jsx",
+      "name": "NewAppointment.jsx",
+      "path": "src/pages/NewAppointment.jsx",
+      "group": "pages",
+      "language": "jsx",
+      "loc": 255,
+      "type": "file"
+    },
+    {
+      "id": "src/components/medical/ExamUploader.jsx",
+      "name": "ExamUploader.jsx",
+      "path": "src/components/medical/ExamUploader.jsx",
+      "group": "components/medical",
+      "language": "jsx",
+      "loc": 252,
+      "type": "file"
+    },
+    {
+      "id": "src/Layout.jsx",
+      "name": "Layout.jsx",
+      "path": "src/Layout.jsx",
+      "group": "root",
+      "language": "jsx",
+      "loc": 250,
+      "type": "file"
+    },
+    {
+      "id": "src/pages/Consultations.jsx",
+      "name": "Consultations.jsx",
+      "path": "src/pages/Consultations.jsx",
+      "group": "pages",
+      "language": "jsx",
+      "loc": 247,
+      "type": "file"
+    },
+    {
+      "id": "src/lib/AuthContext.jsx",
+      "name": "AuthContext.jsx",
+      "path": "src/lib/AuthContext.jsx",
+      "group": "lib",
+      "language": "jsx",
+      "loc": 224,
+      "type": "file"
+    },
+    {
+      "id": "src/pages/Appointments.jsx",
+      "name": "Appointments.jsx",
+      "path": "src/pages/Appointments.jsx",
+      "group": "pages",
+      "language": "jsx",
+      "loc": 224,
+      "type": "file"
+    },
+    {
+      "id": "src/components/ui/use-toast.jsx",
+      "name": "use-toast.jsx",
+      "path": "src/components/ui/use-toast.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 217,
+      "type": "file"
+    },
+    {
+      "id": "src/pages/Patients.jsx",
+      "name": "Patients.jsx",
+      "path": "src/pages/Patients.jsx",
+      "group": "pages",
+      "language": "jsx",
+      "loc": 217,
+      "type": "file"
+    },
+    {
+      "id": "src/components/medical/ConsultationTimeline.jsx",
+      "name": "ConsultationTimeline.jsx",
+      "path": "src/components/medical/ConsultationTimeline.jsx",
+      "group": "components/medical",
+      "language": "jsx",
+      "loc": 199,
+      "type": "file"
+    },
+    {
+      "id": "src/components/medical/ReportsView.jsx",
+      "name": "ReportsView.jsx",
+      "path": "src/components/medical/ReportsView.jsx",
+      "group": "components/medical",
+      "language": "jsx",
+      "loc": 194,
+      "type": "file"
+    },
+    {
+      "id": "src/components/ui/carousel.jsx",
+      "name": "carousel.jsx",
+      "path": "src/components/ui/carousel.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 183,
+      "type": "file"
+    },
+    {
+      "id": "base44/entities/Patient.jsonc",
+      "name": "Patient.jsonc",
+      "path": "base44/entities/Patient.jsonc",
+      "group": "base44",
+      "language": "jsonc",
+      "loc": 159,
+      "type": "entity"
+    },
+    {
+      "id": "src/components/ui/context-menu.jsx",
+      "name": "context-menu.jsx",
+      "path": "src/components/ui/context-menu.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 139,
+      "type": "file"
+    },
+    {
+      "id": "src/components/ui/dropdown-menu.jsx",
+      "name": "dropdown-menu.jsx",
+      "path": "src/components/ui/dropdown-menu.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 139,
+      "type": "file"
+    },
+    {
+      "id": "src/components/appointments/AppointmentCalendar.jsx",
+      "name": "AppointmentCalendar.jsx",
+      "path": "src/components/appointments/AppointmentCalendar.jsx",
+      "group": "components/appointments",
+      "language": "jsx",
+      "loc": 137,
+      "type": "file"
+    },
+    {
+      "id": "src/components/medical/LGPDConsent.jsx",
+      "name": "LGPDConsent.jsx",
+      "path": "src/components/medical/LGPDConsent.jsx",
+      "group": "components/medical",
+      "language": "jsx",
+      "loc": 135,
+      "type": "file"
+    },
+    {
+      "id": "src/api/mockClient.js",
+      "name": "mockClient.js",
+      "path": "src/api/mockClient.js",
+      "group": "api",
+      "language": "js",
+      "loc": 128,
+      "type": "file"
+    },
+    {
+      "id": "base44/entities/Consultation.jsonc",
+      "name": "Consultation.jsonc",
+      "path": "base44/entities/Consultation.jsonc",
+      "group": "base44",
+      "language": "jsonc",
+      "loc": 128,
+      "type": "entity"
+    },
+    {
+      "id": "src/components/ui/form.jsx",
+      "name": "form.jsx",
+      "path": "src/components/ui/form.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 112,
+      "type": "file"
+    },
+    {
+      "id": "base44/entities/Prescription.jsonc",
+      "name": "Prescription.jsonc",
+      "path": "base44/entities/Prescription.jsonc",
+      "group": "base44",
+      "language": "jsonc",
+      "loc": 110,
+      "type": "entity"
+    },
+    {
+      "id": "src/components/ui/select.jsx",
+      "name": "select.jsx",
+      "path": "src/components/ui/select.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 108,
+      "type": "file"
+    },
+    {
+      "id": "base44/entities/Appointment.jsonc",
+      "name": "Appointment.jsonc",
+      "path": "base44/entities/Appointment.jsonc",
+      "group": "base44",
+      "language": "jsonc",
+      "loc": 108,
+      "type": "entity"
+    },
+    {
+      "id": "src/components/medical/PatientSearch.jsx",
+      "name": "PatientSearch.jsx",
+      "path": "src/components/medical/PatientSearch.jsx",
+      "group": "components/medical",
+      "language": "jsx",
+      "loc": 101,
+      "type": "file"
+    },
+    {
+      "id": "base44/entities/Exam.jsonc",
+      "name": "Exam.jsonc",
+      "path": "base44/entities/Exam.jsonc",
+      "group": "base44",
+      "language": "jsonc",
+      "loc": 101,
+      "type": "entity"
+    },
+    {
+      "id": "src/components/ui/command.jsx",
+      "name": "command.jsx",
+      "path": "src/components/ui/command.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 100,
+      "type": "file"
+    },
+    {
+      "id": "src/components/ui/sheet.jsx",
+      "name": "sheet.jsx",
+      "path": "src/components/ui/sheet.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 96,
+      "type": "file"
+    },
+    {
+      "id": "src/components/ui/toast.jsx",
+      "name": "toast.jsx",
+      "path": "src/components/ui/toast.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 95,
+      "type": "file"
+    },
+    {
+      "id": "src/components/appointments/TimeSlotPicker.jsx",
+      "name": "TimeSlotPicker.jsx",
+      "path": "src/components/appointments/TimeSlotPicker.jsx",
+      "group": "components/appointments",
+      "language": "jsx",
+      "loc": 94,
+      "type": "file"
+    },
+    {
+      "id": "src/index.css",
+      "name": "index.css",
+      "path": "src/index.css",
+      "group": "root",
+      "language": "css",
+      "loc": 94,
+      "type": "file"
+    },
+    {
+      "id": "src/components/ui/navigation-menu.jsx",
+      "name": "navigation-menu.jsx",
+      "path": "src/components/ui/navigation-menu.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 93,
+      "type": "file"
+    },
+    {
+      "id": "src/components/ui/pagination.jsx",
+      "name": "pagination.jsx",
+      "path": "src/components/ui/pagination.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 91,
+      "type": "file"
+    },
+    {
+      "id": "src/lib/app-params.js",
+      "name": "app-params.js",
+      "path": "src/lib/app-params.js",
+      "group": "lib",
+      "language": "js",
+      "loc": 89,
+      "type": "file"
+    },
+    {
+      "id": "base44/entities/Doctor.jsonc",
+      "name": "Doctor.jsonc",
+      "path": "base44/entities/Doctor.jsonc",
+      "group": "base44",
+      "language": "jsonc",
+      "loc": 88,
+      "type": "entity"
+    },
+    {
+      "id": "src/App.jsx",
+      "name": "App.jsx",
+      "path": "src/App.jsx",
+      "group": "root",
+      "language": "jsx",
+      "loc": 86,
+      "type": "file"
+    },
+    {
+      "id": "src/components/ui/alert-dialog.jsx",
+      "name": "alert-dialog.jsx",
+      "path": "src/components/ui/alert-dialog.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 84,
+      "type": "file"
+    },
+    {
+      "id": "src/components/ui/dialog.jsx",
+      "name": "dialog.jsx",
+      "path": "src/components/ui/dialog.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 83,
+      "type": "file"
+    },
+    {
+      "id": "src/components/ui/breadcrumb.jsx",
+      "name": "breadcrumb.jsx",
+      "path": "src/components/ui/breadcrumb.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 82,
+      "type": "file"
+    },
+    {
+      "id": "base44/entities/Template.jsonc",
+      "name": "Template.jsonc",
+      "path": "base44/entities/Template.jsonc",
+      "group": "base44",
+      "language": "jsonc",
+      "loc": 80,
+      "type": "entity"
+    },
+    {
+      "id": "src/components/ui/drawer.jsx",
+      "name": "drawer.jsx",
+      "path": "src/components/ui/drawer.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 79,
+      "type": "file"
+    },
+    {
+      "id": "src/lib/PageNotFound.jsx",
+      "name": "PageNotFound.jsx",
+      "path": "src/lib/PageNotFound.jsx",
+      "group": "lib",
+      "language": "jsx",
+      "loc": 79,
+      "type": "file"
+    },
+    {
+      "id": "src/components/ui/table.jsx",
+      "name": "table.jsx",
+      "path": "src/components/ui/table.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 76,
+      "type": "file"
+    },
+    {
+      "id": "base44/entities/AccessLog.jsonc",
+      "name": "AccessLog.jsonc",
+      "path": "base44/entities/AccessLog.jsonc",
+      "group": "base44",
+      "language": "jsonc",
+      "loc": 74,
+      "type": "entity"
+    },
+    {
+      "id": "src/components/ui/calendar.jsx",
+      "name": "calendar.jsx",
+      "path": "src/components/ui/calendar.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 68,
+      "type": "file"
+    },
+    {
+      "id": "src/components/medical/VitalSignsForm.jsx",
+      "name": "VitalSignsForm.jsx",
+      "path": "src/components/medical/VitalSignsForm.jsx",
+      "group": "components/medical",
+      "language": "jsx",
+      "loc": 60,
+      "type": "file"
+    },
+    {
+      "id": "src/components/medical/StatsCard.jsx",
+      "name": "StatsCard.jsx",
+      "path": "src/components/medical/StatsCard.jsx",
+      "group": "components/medical",
+      "language": "jsx",
+      "loc": 59,
+      "type": "file"
+    },
+    {
+      "id": "src/components/medical/AccessLogger.jsx",
+      "name": "AccessLogger.jsx",
+      "path": "src/components/medical/AccessLogger.jsx",
+      "group": "components/medical",
+      "language": "jsx",
+      "loc": 53,
+      "type": "file"
+    },
+    {
+      "id": "src/components/ui/toaster.jsx",
+      "name": "toaster.jsx",
+      "path": "src/components/ui/toaster.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 48,
+      "type": "file"
+    },
+    {
+      "id": "src/lib/NavigationTracker.jsx",
+      "name": "NavigationTracker.jsx",
+      "path": "src/lib/NavigationTracker.jsx",
+      "group": "lib",
+      "language": "jsx",
+      "loc": 47,
+      "type": "file"
+    },
+    {
+      "id": "src/components/ui/input-otp.jsx",
+      "name": "input-otp.jsx",
+      "path": "src/components/ui/input-otp.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 46,
+      "type": "file"
+    },
+    {
+      "id": "src/pages.config.js",
+      "name": "pages.config.js",
+      "path": "src/pages.config.js",
+      "group": "root",
+      "language": "js",
+      "loc": 46,
+      "type": "file"
+    },
+    {
+      "id": "src/components/ui/badge.jsx",
+      "name": "badge.jsx",
+      "path": "src/components/ui/badge.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 45,
+      "type": "file"
+    },
+    {
+      "id": "src/components/ui/button.jsx",
+      "name": "button.jsx",
+      "path": "src/components/ui/button.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 44,
+      "type": "file"
+    },
+    {
+      "id": "src/components/ui/card.jsx",
+      "name": "card.jsx",
+      "path": "src/components/ui/card.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 42,
+      "type": "file"
+    },
+    {
+      "id": "src/api/mockSeed.js",
+      "name": "mockSeed.js",
+      "path": "src/api/mockSeed.js",
+      "group": "api",
+      "language": "js",
+      "loc": 41,
+      "type": "file"
+    },
+    {
+      "id": "src/components/ui/alert.jsx",
+      "name": "alert.jsx",
+      "path": "src/components/ui/alert.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 41,
+      "type": "file"
+    },
+    {
+      "id": "src/components/UserNotRegisteredError.jsx",
+      "name": "UserNotRegisteredError.jsx",
+      "path": "src/components/UserNotRegisteredError.jsx",
+      "group": "components",
+      "language": "jsx",
+      "loc": 41,
+      "type": "file"
+    },
+    {
+      "id": "src/components/ui/resizable.jsx",
+      "name": "resizable.jsx",
+      "path": "src/components/ui/resizable.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 36,
+      "type": "file"
+    },
+    {
+      "id": "src/components/ui/toggle-group.jsx",
+      "name": "toggle-group.jsx",
+      "path": "src/components/ui/toggle-group.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 36,
+      "type": "file"
+    },
+    {
+      "id": "src/components/ui/accordion.jsx",
+      "name": "accordion.jsx",
+      "path": "src/components/ui/accordion.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 35,
+      "type": "file"
+    },
+    {
+      "id": "src/components/ui/tabs.jsx",
+      "name": "tabs.jsx",
+      "path": "src/components/ui/tabs.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 35,
+      "type": "file"
+    },
+    {
+      "id": "src/components/ui/scroll-area.jsx",
+      "name": "scroll-area.jsx",
+      "path": "src/components/ui/scroll-area.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 34,
+      "type": "file"
+    },
+    {
+      "id": "src/components/ui/toggle.jsx",
+      "name": "toggle.jsx",
+      "path": "src/components/ui/toggle.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 33,
+      "type": "file"
+    },
+    {
+      "id": "src/lib/utils.js",
+      "name": "utils.js",
+      "path": "src/lib/utils.js",
+      "group": "lib",
+      "language": "js",
+      "loc": 30,
+      "type": "file"
+    },
+    {
+      "id": "src/components/ui/avatar.jsx",
+      "name": "avatar.jsx",
+      "path": "src/components/ui/avatar.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 29,
+      "type": "file"
+    },
+    {
+      "id": "src/hooks/use-mobile.jsx",
+      "name": "use-mobile.jsx",
+      "path": "src/hooks/use-mobile.jsx",
+      "group": "hooks",
+      "language": "jsx",
+      "loc": 28,
+      "type": "file"
+    },
+    {
+      "id": "src/components/ui/skeleton.jsx",
+      "name": "skeleton.jsx",
+      "path": "src/components/ui/skeleton.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 27,
+      "type": "file"
+    },
+    {
+      "id": "src/components/ui/sonner.jsx",
+      "name": "sonner.jsx",
+      "path": "src/components/ui/sonner.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 26,
+      "type": "file"
+    },
+    {
+      "id": "src/api/base44Client.js",
+      "name": "base44Client.js",
+      "path": "src/api/base44Client.js",
+      "group": "api",
+      "language": "js",
+      "loc": 25,
+      "type": "file"
+    },
+    {
+      "id": "src/components/ui/radio-group.jsx",
+      "name": "radio-group.jsx",
+      "path": "src/components/ui/radio-group.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 25,
+      "type": "file"
+    },
+    {
+      "id": "src/components/ui/popover.jsx",
+      "name": "popover.jsx",
+      "path": "src/components/ui/popover.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 21,
+      "type": "file"
+    },
+    {
+      "id": "src/components/ui/tooltip.jsx",
+      "name": "tooltip.jsx",
+      "path": "src/components/ui/tooltip.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 21,
+      "type": "file"
+    },
+    {
+      "id": "src/components/ui/separator.jsx",
+      "name": "separator.jsx",
+      "path": "src/components/ui/separator.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 20,
+      "type": "file"
+    },
+    {
+      "id": "src/lib/query-client.js",
+      "name": "query-client.js",
+      "path": "src/lib/query-client.js",
+      "group": "lib",
+      "language": "js",
+      "loc": 20,
+      "type": "file"
+    },
+    {
+      "id": "src/components/ui/checkbox.jsx",
+      "name": "checkbox.jsx",
+      "path": "src/components/ui/checkbox.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 19,
+      "type": "file"
+    },
+    {
+      "id": "src/components/ui/hover-card.jsx",
+      "name": "hover-card.jsx",
+      "path": "src/components/ui/hover-card.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 19,
+      "type": "file"
+    },
+    {
+      "id": "src/components/ui/progress.jsx",
+      "name": "progress.jsx",
+      "path": "src/components/ui/progress.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 19,
+      "type": "file"
+    },
+    {
+      "id": "src/components/ui/switch.jsx",
+      "name": "switch.jsx",
+      "path": "src/components/ui/switch.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 19,
+      "type": "file"
+    },
+    {
+      "id": "src/components/ui/slider.jsx",
+      "name": "slider.jsx",
+      "path": "src/components/ui/slider.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 18,
+      "type": "file"
+    },
+    {
+      "id": "src/components/ui/input.jsx",
+      "name": "input.jsx",
+      "path": "src/components/ui/input.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 16,
+      "type": "file"
+    },
+    {
+      "id": "src/components/ui/textarea.jsx",
+      "name": "textarea.jsx",
+      "path": "src/components/ui/textarea.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 15,
+      "type": "file"
+    },
+    {
+      "id": "src/components/ui/label.jsx",
+      "name": "label.jsx",
+      "path": "src/components/ui/label.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 12,
+      "type": "file"
+    },
+    {
+      "id": "base44/config.jsonc",
+      "name": "config.jsonc",
+      "path": "base44/config.jsonc",
+      "group": "base44",
+      "language": "jsonc",
+      "loc": 9,
+      "type": "entity"
+    },
+    {
+      "id": "src/main.jsx",
+      "name": "main.jsx",
+      "path": "src/main.jsx",
+      "group": "root",
+      "language": "jsx",
+      "loc": 7,
+      "type": "file"
+    },
+    {
+      "id": "src/components/ui/collapsible.jsx",
+      "name": "collapsible.jsx",
+      "path": "src/components/ui/collapsible.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 6,
+      "type": "file"
+    },
+    {
+      "id": "src/components/ui/aspect-ratio.jsx",
+      "name": "aspect-ratio.jsx",
+      "path": "src/components/ui/aspect-ratio.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 3,
+      "type": "file"
+    },
+    {
+      "id": "src/utils/index.ts",
+      "name": "index.ts",
+      "path": "src/utils/index.ts",
+      "group": "utils",
+      "language": "ts",
+      "loc": 3,
+      "type": "file"
+    }
+  ],
+  "summary": {
+    "totalFiles": 98,
+    "totalLoc": 11465,
+    "languages": {
+      "jsx": 80,
+      "jsonc": 9,
+      "js": 7,
+      "css": 1,
+      "ts": 1
+    },
+    "groups": {
+      "components/ui": 49,
+      "pages": 12,
+      "components/medical": 9,
+      "root": 5,
+      "lib": 6,
+      "base44": 9,
+      "components/appointments": 2,
+      "api": 3,
+      "components": 1,
+      "hooks": 1,
+      "utils": 1
+    }
+  }
+}

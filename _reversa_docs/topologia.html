@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <script>try{document.documentElement.setAttribute("data-theme",localStorage.getItem("rv-theme")==="light"?"light":"dark");}catch(e){}</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Topologia — Prontuário Fácil</title>
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+  <meta name="reversa-category" content="diagram">
+  <meta name="reversa-producer-agent" content="reversa-docs-mapper">
+  <meta name="reversa-template" content="topologia">
+  <meta name="reversa-generated-at" content="2026-09-10T13:12:15Z">
+  <link rel="stylesheet" href="assets/css/theme.css">
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/theme.js" defer></script>
+  <style>
+    .topo-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .topo-stack { display: flex; flex-direction: column; gap: 10px; }
+    .topo-layer {
+      border: 1px solid var(--rv-border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      background: var(--rv-panel);
+      display: flex; align-items: center; gap: 12px;
+    }
+    .topo-layer__tag {
+      flex: 0 0 auto;
+      font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+      padding: 4px 9px; border-radius: 7px;
+    }
+    .topo-layer__body { font-size: 13.5px; color: var(--rv-text-dim); }
+    .topo-layer__body b { color: var(--rv-text); }
+    .topo-arrow { text-align: center; color: var(--rv-text-faint); font-size: 18px; line-height: 1; }
+    @media (max-width: 760px) { .topo-cols { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body data-page="topologia">
+  <header class="rv-header">
+    <div class="rv-header__inner">
+      <a class="rv-brand" href="index.html">
+        <span class="seal-mini" data-seal></span>
+        <span class="rv-brand__name">Prontuário Fácil</span>
+      </a>
+      <button class="rv-nav-toggle" aria-label="Abrir menu" aria-expanded="false">☰</button>
+      <nav class="rv-nav" aria-label="Navegação principal">
+        <a href="index.html" data-page-id="index">Visão geral</a>
+        <a href="arquitetura.html" data-page-id="arquitetura">Arquitetura 3D</a>
+        <a href="modulos.html" data-page-id="modulos">Módulos</a>
+        <a href="topologia.html" data-page-id="topologia">Topologia</a>
+        <a href="metricas.html" data-page-id="metricas">Métricas</a>
+        <a href="glossario.html" data-page-id="glossario">Glossário</a>
+        <a href="deck.html" data-page-id="deck">Deck</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="rv-hero" style="padding:56px 24px 40px">
+    <canvas class="rv-hero__canvas"></canvas>
+    <div class="rv-hero__inner">
+      <span class="rv-eyebrow"><span class="dot"></span> Topologia detectada</span>
+      <h1>Arquitetura <span class="grad">híbrida</span><br>moderno + BaaS + offline</h1>
+      <p class="rv-hero__tagline">A mesma SPA React roda em dois modos de deployment sem mudar a interface: produção (Base44/Supabase) e offline (mock + localStorage).</p>
+      <div class="rv-hero__actions">
+        <a class="rv-btn rv-btn--primary" href="arquitetura.html">Ver Code City 3D</a>
+        <a class="rv-btn rv-btn--ghost" href="modulos.html">Ver grafo de módulos</a>
+      </div>
+    </div>
+  </section>
+
+  <main class="rv-container">
+    <section class="rv-section">
+      <div class="rv-section__head rv-reveal">
+        <div class="rv-section__eyebrow">Deployment</div>
+        <h2 class="rv-section__title">Duas variantes, um único container</h2>
+        <p class="rv-section__desc">A decisão fundadora D2 (SPA) + D1 (BaaS) produz uma topologia híbrida: frontend 100% cliente com o repositório de dados intercambiável via variável <span class="rv-mono">VITE_OFFLINE</span>.</p>
+      </div>
+
+      <div class="topo-cols">
+        <div class="rv-card rv-reveal">
+          <div class="rv-card__icon">☁️</div>
+          <div class="rv-card__title">Modo Online (produção)</div>
+          <p class="rv-card__desc">SPA consome o SDK <b>@base44/sdk</b>, que gerencia autenticação, CRUD e RLS no Supabase. Nenhum backend customizado existe.</p>
+          <div class="topo-stack" style="margin-top:18px">
+            <div class="topo-layer"><span class="topo-layer__tag" style="background:rgba(34,211,238,.14);color:#22d3ee">UI</span><span class="topo-layer__body"><b>React 18 + Vite</b> · Tailwind · Radix (shadcn)</span></div>
+            <div class="topo-arrow">↓</div>
+            <div class="topo-layer"><span class="topo-layer__tag" style="background:rgba(99,102,241,.14);color:#99a0ff">Estado</span><span class="topo-layer__body"><b>TanStack Query</b> · estado de servidor</span></div>
+            <div class="topo-arrow">↓</div>
+            <div class="topo-layer"><span class="topo-layer__tag" style="background:rgba(168,85,247,.14);color:#c084fc">Acesso</span><span class="topo-layer__body"><b>@base44/sdk</b> (base44Client.js)</span></div>
+            <div class="topo-arrow">↓</div>
+            <div class="topo-layer"><span class="topo-layer__tag" style="background:rgba(52,211,153,.14);color:#34d399">BaaS</span><span class="topo-layer__body"><b>Base44 + Supabase</b> · Auth · RLS · CRUD</span></div>
+          </div>
+        </div>
+
+        <div class="rv-card rv-reveal" data-delay="1">
+          <div class="rv-card__icon">🔌</div>
+          <div class="rv-card__title">Modo Offline (demo / dev)</div>
+          <p class="rv-card__desc">Com <span class="rv-mono">VITE_OFFLINE=true</span>, o SDK é trocado por um mock client que persiste no <b>localStorage</b> do navegador. Mesma UI, mesmos contratos, repositório diferente.</p>
+          <div class="topo-stack" style="margin-top:18px">
+            <div class="topo-layer"><span class="topo-layer__tag" style="background:rgba(34,211,238,.14);color:#22d3ee">UI</span><span class="topo-layer__body"><b>React 18 + Vite</b> · inalterada</span></div>
+            <div class="topo-arrow">↓</div>
+            <div class="topo-layer"><span class="topo-layer__tag" style="background:rgba(99,102,241,.14);color:#99a0ff">Estado</span><span class="topo-layer__body"><b>TanStack Query</b> · inalterado</span></div>
+            <div class="topo-arrow">↓</div>
+            <div class="topo-layer"><span class="topo-layer__tag" style="background:rgba(251,191,36,.16);color:#fbbf24">Acesso</span><span class="topo-layer__body"><b>mockClient.js</b> · mesmo contrato do SDK</span></div>
+            <div class="topo-arrow">↓</div>
+            <div class="topo-layer"><span class="topo-layer__tag" style="background:rgba(251,113,133,.14);color:#fb7185">Store</span><span class="topo-layer__body"><b>localStorage</b> · seed via mockSeed.js</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="rv-section">
+      <div class="rv-section__head rv-reveal">
+        <div class="rv-section__eyebrow">Comparativo</div>
+        <h2 class="rv-section__title">Online vs Offline</h2>
+      </div>
+      <div class="rv-table-wrap rv-reveal">
+        <table class="rv-table">
+          <thead><tr><th>Dimensão</th><th>Modo Online</th><th>Modo Offline</th></tr></thead>
+          <tbody>
+            <tr><td>Repositório de dados</td><td>Supabase (PostgreSQL)</td><td>localStorage do navegador</td></tr>
+            <tr><td>Autenticação</td><td>Supabase Auth</td><td>Mock (usuário simulado)</td></tr>
+            <tr><td>Autorização (RLS)</td><td>Políticas RLS no banco</td><td>Não aplicável (local)</td></tr>
+            <tr><td>Contratos das pages</td><td colspan="2">Idênticos (não muda UI nem lógica)</td></tr>
+            <tr><td>Cliente de dados</td><td>base44Client.js</td><td>mockClient.js</td></tr>
+            <tr><td>Dados de seed</td><td>Banco provisionado</td><td>mockSeed.js</td></tr>
+            <tr><td>Uso típico</td><td>Clínica em produção</td><td>Demo, dev, apresentação</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="rv-section">
+      <div class="rv-section__head rv-reveal">
+        <div class="rv-section__eyebrow">Organização</div>
+        <h2 class="rv-section__title">Domínios vs páginas</h2>
+        <p class="rv-section__desc">A estrutura híbrida (decisão D4) separa rotas em um config central e lógica de negócio por domínio.</p>
+      </div>
+      <div class="rv-cards">
+        <a class="rv-card rv-reveal" href="features/pacientes.html"><div class="rv-card__icon">🪪</div><div class="rv-card__title">Pacientes</div><p class="rv-card__desc">Cadastro, busca e prontuário do paciente.</p></a>
+        <a class="rv-card rv-reveal" href="features/consultas.html"><div class="rv-card__icon">🩺</div><div class="rv-card__title">Consultas</div><p class="rv-card__desc">Sinais vitais, diagnóstico e plano de tratamento.</p></a>
+        <a class="rv-card rv-reveal" href="features/agendamentos.html"><div class="rv-card__icon">📅</div><div class="rv-card__title">Agendamentos</div><p class="rv-card__desc">Calendário e slots de horário.</p></a>
+        <a class="rv-card rv-reveal" href="features/medicos.html"><div class="rv-card__icon">👨‍⚕️</div><div class="rv-card__title">Médicos</div><p class="rv-card__desc">Cadastro de profissionais.</p></a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="rv-footer">
+    <div class="rv-container">
+      <div class="rv-footer__grid">
+        <div>
+          <h4>Prontuário Fácil</h4>
+          <p style="font-size:13.5px;color:var(--rv-text-dim);margin:0">Prontuário eletrônico LGPD para clínicas médicas. SPA React + Base44.</p>
+        </div>
+        <div>
+          <h4>Navegação</h4>
+          <ul>
+            <li><a href="index.html">Visão geral</a></li>
+            <li><a href="arquitetura.html">Arquitetura 3D</a></li>
+            <li><a href="modulos.html">Módulos</a></li>
+            <li><a href="metricas.html">Métricas</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Features</h4>
+          <ul>
+            <li><a href="features/pacientes.html">Pacientes</a></li>
+            <li><a href="features/consultas.html">Consultas</a></li>
+            <li><a href="features/agendamentos.html">Agendamentos</a></li>
+            <li><a href="features/dashboard.html">Dashboard</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Sobre</h4>
+          <ul>
+            <li><a href="glossario.html">Glossário</a></li>
+            <li><a href="deck.html">Deck</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="rv-footer__bottom">
+        <span>Gerado por Reversa Docs · seed 89000d65</span>
+        <span>LGPD · Base44 · React 18</span>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

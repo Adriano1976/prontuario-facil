@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <script>try{document.documentElement.setAttribute("data-theme",localStorage.getItem("rv-theme")==="light"?"light":"dark");}catch(e){}</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modo Offline — Prontuário Fácil</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg">
+  <meta name="reversa-category" content="diagram">
+  <meta name="reversa-producer-agent" content="reversa-docs-storyteller">
+  <meta name="reversa-template" content="feature">
+  <meta name="reversa-generated-at" content="2026-09-10T13:22:00Z">
+  <link rel="stylesheet" href="../assets/css/theme.css">
+  <script src="../assets/js/data.js"></script>
+  <script src="../assets/js/theme.js" defer></script>
+  <style>
+    .feat-hero .rv-hero__inner { text-align: left; }
+    .breadcrumb { font-size: 13px; color: var(--rv-text-faint); margin-bottom: 18px; }
+    .breadcrumb a:hover { color: #fff; }
+    .br-list { display: grid; gap: 12px; }
+    .br-item { display: flex; gap: 14px; border: 1px solid var(--rv-border); background: var(--rv-panel); border-radius: 12px; padding: 15px 18px; }
+    .br-item__code { flex: 0 0 auto; font-family: var(--rv-mono); font-size: 12px; font-weight: 700; color: var(--rv-accent-1); padding-top: 1px; }
+    .br-item__text { font-size: 14px; color: var(--rv-text-dim); }
+    .br-item__text b { color: var(--rv-text); }
+    .feat-pager { display: flex; justify-content: space-between; gap: 16px; margin-top: 8px; }
+    .feat-pager a { flex: 1; }
+    .feat-pager .next { text-align: right; }
+  </style>
+</head>
+<body data-page="feature-modo-offline">
+  <header class="rv-header">
+    <div class="rv-header__inner">
+      <a class="rv-brand" href="../index.html">
+        <span class="seal-mini" data-seal></span>
+        <span class="rv-brand__name">Prontuário Fácil</span>
+      </a>
+      <button class="rv-nav-toggle" aria-label="Abrir menu" aria-expanded="false">☰</button>
+      <nav class="rv-nav" aria-label="Navegação principal">
+        <a href="../index.html" data-page-id="index">Visão geral</a>
+        <a href="../arquitetura.html" data-page-id="arquitetura">Arquitetura 3D</a>
+        <a href="../modulos.html" data-page-id="modulos">Módulos</a>
+        <a href="../topologia.html" data-page-id="topologia">Topologia</a>
+        <a href="../metricas.html" data-page-id="metricas">Métricas</a>
+        <a href="../glossario.html" data-page-id="glossario">Glossário</a>
+        <a href="../deck.html" data-page-id="deck">Deck</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="rv-hero feat-hero" style="padding:48px 24px 36px">
+    <canvas class="rv-hero__canvas"></canvas>
+    <div class="rv-hero__inner">
+      <div class="breadcrumb"><a href="../index.html">Início</a> / <a href="../index.html#features">Features</a> / Modo Offline</div>
+      <h1 style="font-size:clamp(2rem,5vw,3.2rem)">🔌 Modo Offline</h1>
+      <p class="rv-hero__tagline" style="margin-left:0">Unit transversal: runtime alternativo com mock client e localStorage, ativado por VITE_OFFLINE=true.</p>
+      <div class="rv-hero__actions" style="justify-content:flex-start">
+        <span class="rv-chip">Unit transversal</span>
+        <span class="rv-chip rv-chip--warn">Sem RLS</span>
+        <span class="rv-chip">localStorage</span>
+      </div>
+    </div>
+  </section>
+
+  <main class="rv-container">
+    <section class="rv-section">
+      <div class="rv-section__head rv-reveal">
+        <div class="rv-section__eyebrow">Visão geral</div>
+        <h2 class="rv-section__title">Rodar a SPA sem backend</h2>
+        <p class="rv-section__desc">O modo offline permite rodar a SPA sem o backend Base44, com todos os dados no <b>localStorage</b> do navegador. A UI é equivalente ao modo online: as pages continuam chamando <span class="rv-mono">base44.entities.&lt;X&gt;.&lt;op&gt;()</span> sem saber se falam com o SDK real ou com o mock.</p>
+      </div>
+
+      <div class="rv-section__head rv-reveal" style="margin-top:26px"><div class="rv-section__eyebrow">Regras de negócio</div></div>
+      <div class="br-list rv-reveal">
+        <div class="br-item"><span class="br-item__code">BR-OFF01</span><span class="br-item__text">Ativado exclusivamente por <b>VITE_OFFLINE=true</b> em tempo de <b>build</b> (import.meta.env). Sem toggle em runtime.</span></div>
+        <div class="br-item"><span class="br-item__code">BR-OFF02</span><span class="br-item__text">Quando ativo, <b>base44Client.js</b> exporta o retorno de <b>createMockClient()</b> em vez do <b>createClient()</b> do SDK.</span></div>
+        <div class="br-item"><span class="br-item__code">BR-OFF03</span><span class="br-item__text">O <b>AuthContext</b> autentica imediatamente como <b>OFFLINE_USER</b> (<span class="rv-mono">demo-user-001</span>, Dra. Demo).</span></div>
+        <div class="br-item"><span class="br-item__code">BR-OFF04</span><span class="br-item__text">Cada entidade persiste em <span class="rv-mono">mock_db_&lt;EntityName&gt;</span>; na primeira leitura, se ausente/corrompida, é semeada de <b>mockSeed</b>.</span></div>
+        <div class="br-item"><span class="br-item__code">BR-OFF05</span><span class="br-item__text">Operações expostas: <span class="rv-mono">list</span>, <span class="rv-mono">filter</span>, <span class="rv-mono">create</span>, <span class="rv-mono">update</span>, <span class="rv-mono">delete</span>, <span class="rv-mono">UploadFile</span>, <span class="rv-mono">auth.me/logout/redirectToLogin</span>, <span class="rv-mono">appLogs.logUserInApp</span>.</span></div>
+        <div class="br-item"><span class="br-item__code">BR-OFF08</span><span class="br-item__text"><b>filter(conds)</b> usa comparação estrita (<b>===</b>); sem suporte a <b>in</b>, <b>contains</b>, <b>gte</b>, <b>lte</b>, <b>ne</b>.</span></div>
+        <div class="br-item"><span class="br-item__code">BR-OFF09</span><span class="br-item__text"><b>sort</b> aceita string única (<b>field</b> asc ou <b>-field</b> desc), 1 campo, sem tie-breaker determinístico.</span></div>
+        <div class="br-item"><span class="br-item__code">BR-OFF10</span><span class="br-item__text">O modo offline <b>não aplica RLS</b>: todos os registros são visíveis e editáveis. 🟡</span></div>
+      </div>
+    </section>
+
+    <section class="rv-section">
+      <div class="rv-section__head rv-reveal"><div class="rv-section__eyebrow">Persistência</div><h2 class="rv-section__title">Como os dados são guardados</h2></div>
+      <div class="rv-table-wrap rv-reveal">
+        <table class="rv-table">
+          <thead><tr><th>Aspecto</th><th>Valor</th></tr></thead>
+          <tbody>
+            <tr><td>Storage</td><td class="rv-mono">window.localStorage</td></tr>
+            <tr><td>Prefixo de chave</td><td class="rv-mono">mock_db_</td></tr>
+            <tr><td>Encoding</td><td>JSON</td></tr>
+            <tr><td>Tamanho máximo</td><td>5–10 MB por origem</td></tr>
+            <tr><td>Limpeza</td><td>Manual via DevTools ou localStorage.clear()</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="rv-section">
+      <div class="rv-section__head rv-reveal"><div class="rv-section__eyebrow">Seed de demonstração</div><h2 class="rv-section__title">Entidades semeadas (mockSeed)</h2></div>
+      <div class="rv-table-wrap rv-reveal">
+        <table class="rv-table">
+          <thead><tr><th>Entidade</th><th>Registros</th></tr></thead>
+          <tbody>
+            <tr><td>Doctor</td><td>3</td></tr>
+            <tr><td>Patient</td><td>5</td></tr>
+            <tr><td>Appointment</td><td>4</td></tr>
+            <tr><td>Consultation</td><td>2</td></tr>
+            <tr><td>Prescription</td><td>2</td></tr>
+            <tr><td>Exam</td><td>1</td></tr>
+            <tr><td>Template</td><td>2</td></tr>
+            <tr><td>AccessLog</td><td>1</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="rv-section">
+      <div class="feat-pager">
+        <a class="rv-card" href="dashboard.html"><div class="rv-card__meta">← Anterior</div><div class="rv-card__title">Dashboard</div></a>
+        <a class="rv-card next" href="../index.html#features"><div class="rv-card__meta">Próxima →</div><div class="rv-card__title">Todas as features</div></a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="rv-footer"><div class="rv-container"><div class="rv-footer__bottom"><span>Gerado por Reversa Docs · seed 89000d65</span><span>LGPD · Base44 · React 18</span></div></div></footer>
+</body>
+</html>

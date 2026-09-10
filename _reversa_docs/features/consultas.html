@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <script>try{document.documentElement.setAttribute("data-theme",localStorage.getItem("rv-theme")==="light"?"light":"dark");}catch(e){}</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Consultas — Prontuário Fácil</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg">
+  <meta name="reversa-category" content="diagram">
+  <meta name="reversa-producer-agent" content="reversa-docs-storyteller">
+  <meta name="reversa-template" content="feature">
+  <meta name="reversa-generated-at" content="2026-09-10T13:22:00Z">
+  <link rel="stylesheet" href="../assets/css/theme.css">
+  <script src="../assets/js/data.js"></script>
+  <script src="../assets/js/theme.js" defer></script>
+  <style>
+    .feat-hero .rv-hero__inner { text-align: left; }
+    .breadcrumb { font-size: 13px; color: var(--rv-text-faint); margin-bottom: 18px; }
+    .breadcrumb a:hover { color: #fff; }
+    .br-list { display: grid; gap: 12px; }
+    .br-item { display: flex; gap: 14px; border: 1px solid var(--rv-border); background: var(--rv-panel); border-radius: 12px; padding: 15px 18px; }
+    .br-item__code { flex: 0 0 auto; font-family: var(--rv-mono); font-size: 12px; font-weight: 700; color: var(--rv-accent-1); padding-top: 1px; }
+    .br-item__text { font-size: 14px; color: var(--rv-text-dim); }
+    .br-item__text b { color: var(--rv-text); }
+    .feat-pager { display: flex; justify-content: space-between; gap: 16px; margin-top: 8px; }
+    .feat-pager a { flex: 1; }
+    .feat-pager .next { text-align: right; }
+  </style>
+</head>
+<body data-page="feature-consultas">
+  <header class="rv-header">
+    <div class="rv-header__inner">
+      <a class="rv-brand" href="../index.html">
+        <span class="seal-mini" data-seal></span>
+        <span class="rv-brand__name">Prontuário Fácil</span>
+      </a>
+      <button class="rv-nav-toggle" aria-label="Abrir menu" aria-expanded="false">☰</button>
+      <nav class="rv-nav" aria-label="Navegação principal">
+        <a href="../index.html" data-page-id="index">Visão geral</a>
+        <a href="../arquitetura.html" data-page-id="arquitetura">Arquitetura 3D</a>
+        <a href="../modulos.html" data-page-id="modulos">Módulos</a>
+        <a href="../topologia.html" data-page-id="topologia">Topologia</a>
+        <a href="../metricas.html" data-page-id="metricas">Métricas</a>
+        <a href="../glossario.html" data-page-id="glossario">Glossário</a>
+        <a href="../deck.html" data-page-id="deck">Deck</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="rv-hero feat-hero" style="padding:48px 24px 36px">
+    <canvas class="rv-hero__canvas"></canvas>
+    <div class="rv-hero__inner">
+      <div class="breadcrumb"><a href="../index.html">Início</a> / <a href="../index.html#features">Features</a> / Consultas</div>
+      <h1 style="font-size:clamp(2rem,5vw,3.2rem)">🩺 Consultas</h1>
+      <p class="rv-hero__tagline" style="margin-left:0">Registro clínico do atendimento: anamnese, sinais vitais, hipótese diagnóstica (CID-10), plano e documentos.</p>
+      <div class="rv-hero__actions" style="justify-content:flex-start">
+        <span class="rv-chip">Entidade: Consultation</span>
+        <span class="rv-chip rv-chip--good">RLS aplicada</span>
+        <span class="rv-chip">CID-10</span>
+      </div>
+    </div>
+  </section>
+
+  <main class="rv-container">
+    <section class="rv-section">
+      <div class="rv-section__head rv-reveal">
+        <div class="rv-section__eyebrow">Visão geral</div>
+        <h2 class="rv-section__title">O registro clínico do atendimento</h2>
+        <p class="rv-section__desc">O módulo de Consultas gerencia o registro clínico do atendimento médico, englobando anamnese, sinais vitais, hipótese diagnóstica (CID-10), plano de tratamento e emissão de prescrições e exames.</p>
+      </div>
+
+      <div class="rv-section__head rv-reveal" style="margin-top:26px"><div class="rv-section__eyebrow">Regras de negócio</div></div>
+      <div class="br-list rv-reveal">
+        <div class="br-item"><span class="br-item__code">BR-C01</span><span class="br-item__text">Toda consulta deve estar obrigatoriamente vinculada a um <b>patient_id</b> válido.</span></div>
+        <div class="br-item"><span class="br-item__code">BR-C02</span><span class="br-item__text">O status segue o ciclo: <b>agendada → em_andamento → concluida</b> (ou <b>cancelada</b>).</span></div>
+        <div class="br-item"><span class="br-item__code">BR-C03</span><span class="br-item__text">Em prescrições vinculadas, <b>medications</b> só é preenchido para tipo receita. Cada item contém nome, dosagem, frequência, duração e instruções. Para outros tipos, a seção fica oculta.</span></div>
+      </div>
+    </section>
+
+    <section class="rv-section">
+      <div class="rv-section__head rv-reveal"><div class="rv-section__eyebrow">Estrutura de dados</div><h2 class="rv-section__title">Schema (Consultation.jsonc)</h2></div>
+      <div class="rv-table-wrap rv-reveal">
+        <table class="rv-table">
+          <thead><tr><th>Grupo</th><th>Campos</th></tr></thead>
+          <tbody>
+            <tr><td><b>Vínculo</b></td><td class="rv-mono">patient_id (required)</td></tr>
+            <tr><td><b>Datas</b></td><td class="rv-mono">date, follow_up_date</td></tr>
+            <tr><td><b>Clínico</b></td><td class="rv-mono">chief_complaint, history_present_illness</td></tr>
+            <tr><td><b>Sinais vitais</b></td><td class="rv-mono">blood_pressure, heart_rate, temperature, respiratory_rate, oxygen_saturation, weight, height</td></tr>
+            <tr><td><b>Conduta</b></td><td class="rv-mono">physical_exam, diagnosis, icd_code, treatment_plan, notes</td></tr>
+            <tr><td><b>Status</b></td><td class="rv-mono">agendada | em_andamento | concluida | cancelada</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="rv-section">
+      <div class="rv-section__head rv-reveal"><div class="rv-section__eyebrow">Permissões e segurança</div><h2 class="rv-section__title">RLS</h2></div>
+      <div class="rv-table-wrap rv-reveal">
+        <table class="rv-table">
+          <thead><tr><th>Operação</th><th>Política</th></tr></thead>
+          <tbody>
+            <tr><td>Create</td><td>Aberto para autenticados</td></tr>
+            <tr><td>Read / Update / Delete</td><td>Criador (<span class="rv-mono">created_by_id == user.id</span>) ou papel <b>admin</b></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="rv-section">
+      <div class="feat-pager">
+        <a class="rv-card" href="pacientes.html"><div class="rv-card__meta">← Anterior</div><div class="rv-card__title">Pacientes</div></a>
+        <a class="rv-card next" href="agendamentos.html"><div class="rv-card__meta">Próxima →</div><div class="rv-card__title">Agendamentos</div></a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="rv-footer"><div class="rv-container"><div class="rv-footer__bottom"><span>Gerado por Reversa Docs · seed 89000d65</span><span>LGPD · Base44 · React 18</span></div></div></footer>
+</body>
+</html>

@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <script>try{document.documentElement.setAttribute("data-theme",localStorage.getItem("rv-theme")==="light"?"light":"dark");}catch(e){}</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arquitetura 3D — Prontuário Fácil</title>
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+  <meta name="reversa-category" content="diagram">
+  <meta name="reversa-producer-agent" content="reversa-docs-mapper">
+  <meta name="reversa-template" content="arquitetura">
+  <meta name="reversa-generated-at" content="2026-09-10T13:12:15Z">
+  <link rel="stylesheet" href="assets/css/theme.css">
+  <script src="assets/js/data.js"></script>
+  <script src="assets/vendor/three.min.js"></script>
+  <script src="assets/vendor/OrbitControls.js"></script>
+  <script src="assets/js/theme.js" defer></script>
+  <style>
+    /* ===== Navigation Pad (controle da câmera) ===== */
+    .navpad {
+      position: absolute;
+      bottom: 24px;
+      left: 24px;
+      z-index: 15;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 9px;
+      border-radius: 18px;
+      background: rgba(9, 13, 22, 0.62);
+      border: 1px solid var(--rv-border);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: var(--rv-shadow);
+    }
+    .navpad__dpad {
+      display: grid;
+      grid-template-columns: repeat(3, 42px);
+      grid-template-rows: repeat(3, 42px);
+      grid-template-areas:
+        ". up ."
+        "left center right"
+        ". down .";
+      gap: 5px;
+    }
+    .navpad__zoom {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .navpad__btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      border: 1px solid var(--rv-border-strong);
+      background: rgba(22, 28, 44, 0.85);
+      color: var(--rv-text);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background .15s ease, border-color .15s ease, transform .08s ease, box-shadow .2s ease;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+    }
+    .navpad__btn svg { width: 20px; height: 20px; display: block; }
+    .navpad__btn:hover {
+      background: rgba(99, 102, 241, 0.22);
+      border-color: var(--rv-accent-2);
+    }
+    .navpad__btn:active { transform: scale(0.9); }
+    .navpad__btn--center {
+      color: var(--rv-accent-1);
+      border-color: var(--rv-accent-1);
+      background: var(--rv-grad-soft);
+    }
+    .navpad__btn--center.is-active { box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.2); }
+    .navpad__btn--center.is-active svg { animation: navpad-spin 1.5s linear infinite; }
+    @keyframes navpad-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    .navpad__up { grid-area: up; }
+    .navpad__left { grid-area: left; }
+    .navpad__center { grid-area: center; }
+    .navpad__right { grid-area: right; }
+    .navpad__down { grid-area: down; }
+    :root[data-theme="light"] .navpad { background: rgba(255, 255, 255, 0.72); border-color: rgba(15, 23, 42, 0.14); }
+    :root[data-theme="light"] .navpad__btn { background: rgba(255, 255, 255, 0.92); border-color: rgba(15, 23, 42, 0.2); }
+    :root[data-theme="light"] .navpad__btn:hover { background: rgba(79, 70, 229, 0.12); }
+    @media (max-width: 560px) {
+      .navpad__dpad { grid-template-columns: repeat(3, 36px); grid-template-rows: repeat(3, 36px); }
+      .navpad__btn { width: 36px; height: 36px; border-radius: 10px; }
+      .navpad__btn svg { width: 17px; height: 17px; }
+    }
+  </style>
+</head>
+<body data-page="arquitetura">
+  <header class="rv-header">
+    <div class="rv-header__inner">
+      <a class="rv-brand" href="index.html">
+        <span class="seal-mini" data-seal></span>
+        <span class="rv-brand__name">Prontuário Fácil</span>
+      </a>
+      <button class="rv-nav-toggle" aria-label="Abrir menu" aria-expanded="false">☰</button>
+      <nav class="rv-nav" aria-label="Navegação principal">
+        <a href="index.html" data-page-id="index">Visão geral</a>
+        <a href="arquitetura.html" data-page-id="arquitetura">Arquitetura 3D</a>
+        <a href="modulos.html" data-page-id="modulos">Módulos</a>
+        <a href="topologia.html" data-page-id="topologia">Topologia</a>
+        <a href="metricas.html" data-page-id="metricas">Métricas</a>
+        <a href="glossario.html" data-page-id="glossario">Glossário</a>
+        <a href="deck.html" data-page-id="deck">Deck</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="rv-stage">
+      <div id="scene-container" class="rv-stage__canvas"></div>
+      <div class="rv-stage__hud">
+        <span class="rv-chip" id="hud-stats">Code City</span>
+      </div>
+      <button class="rv-sidebar__toggle rv-btn rv-btn--ghost" id="sidebar-toggle" style="position:absolute;top:16px;right:16px;z-index:21">⚙ Controles</button>
+      <aside class="rv-sidebar" id="sidebar">
+        <h3>Controles — Code City</h3>
+        <label>Altura (LOC)
+          <input type="range" min="0.2" max="2.4" step="0.1" value="1.0" data-param="locScale">
+        </label>
+        <label>Base (área)
+          <input type="range" min="0.3" max="2.0" step="0.1" value="1.0" data-param="baseScale">
+        </label>
+        <label>Espaçamento (distância)
+          <input type="range" min="0.4" max="2.5" step="0.05" value="1.0" data-param="spacing">
+        </label>
+        <label>Tamanho dos objetos
+          <input type="range" min="0.3" max="3.0" step="0.05" value="1.0" data-param="objectScale">
+        </label>
+        <label>
+          <input type="checkbox" data-param="showDistricts" checked> Mostrar distritos
+        </label>
+        <label>
+          <input type="checkbox" data-param="showLabels" checked> Rótulos de distrito
+        </label>
+        <label>Filtrar distrito
+          <select data-param="folderFilter" id="folder-filter">
+            <option value="all">Todos</option>
+          </select>
+        </label>
+        <button class="rv-btn rv-btn--ghost" id="btn-reset">↺ Reset câmera</button>
+        <button class="rv-btn rv-btn--primary" id="btn-export">⤓ Exportar PNG</button>
+        <p style="font-size:11.5px;color:var(--rv-text-faint);margin:8px 0 0">Altura do prédio = linhas de código. Cor = distrito (pasta). Vermelho = arquivo mais dependido (hot path). Espaçamento e tamanho ajustam a cidade em tempo real.</p>
+      </aside>
+      <div id="tooltip" class="rv-tooltip"></div>
+
+      <div class="navpad" id="navpad" aria-label="Painel de navegação da câmera">
+        <div class="navpad__dpad">
+          <button class="navpad__btn navpad__up" data-nav="up" title="Mover para cima (pan)" aria-label="Pan para cima">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>
+          </button>
+          <button class="navpad__btn navpad__left" data-nav="left" title="Mover para a esquerda (pan)" aria-label="Pan para a esquerda">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+          </button>
+          <button class="navpad__btn navpad__center navpad__btn--center" id="navpad-center" title="Resetar câmera (clique) · Auto-rotate (duplo clique)" aria-label="Resetar câmera ou alternar rotação automática">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M3 21v-5h5"/></svg>
+          </button>
+          <button class="navpad__btn navpad__right" data-nav="right" title="Mover para a direita (pan)" aria-label="Pan para a direita">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+          </button>
+          <button class="navpad__btn navpad__down" data-nav="down" title="Mover para baixo (pan)" aria-label="Pan para baixo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+        </div>
+        <div class="navpad__zoom">
+          <button class="navpad__btn" data-nav="zoom-in" title="Aproximar (zoom)" aria-label="Aproximar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+          </button>
+          <button class="navpad__btn" data-nav="zoom-out" title="Afastar (zoom)" aria-label="Afastar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.5" y2="16.5"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+  (function () {
+    "use strict";
+    var rv = window.RV_DATA || {};
+    var nodes = (rv.modules && rv.modules.nodes) || [];
+    var deps = (rv.deps && rv.deps.edges) || [];
+
+    // ---- disponibilidade de WebGL / Three ----
+    function webglSupported() {
+      try {
+        var c = document.createElement("canvas");
+        return !!(window.WebGLRenderingContext && (c.getContext("webgl") || c.getContext("experimental-webgl")));
+      } catch (e) { return false; }
+    }
+    if (typeof THREE === "undefined" || !webglSupported()) {
+      var sc = document.getElementById("scene-container");
+      sc.innerHTML = '<div style="height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px;padding:24px;text-align:center"><div style="font-size:44px">🧱</div><h3 style="margin:0">Visualização 3D indisponível</h3><p style="color:var(--rv-text-dim);max-width:440px;margin:0">Esta visualização requer WebGL e a biblioteca Three.js local. Recarregue a página ou abra em um navegador com WebGL habilitado.</p></div>';
+      return;
+    }
+
+    // ---- in-degree (hot path) ----
+    var inDegree = {};
+    deps.forEach(function (e) { inDegree[e.target] = (inDegree[e.target] || 0) + 1; });
+    var degVals = nodes.map(function (n) { return inDegree[n.id] || 0; }).sort(function (a, b) { return a - b; });
+    var hotThreshold = degVals[Math.floor(degVals.length * 0.9)] || 1;
+
+    // ---- agrupamento por distrito (pasta) ----
+    var districts = {};
+    nodes.forEach(function (n) {
+      var g = n.group || "root";
+      (districts[g] = districts[g] || []).push(n);
+    });
+    var districtNames = Object.keys(districts).sort(function (a, b) {
+      var ta = districts[b].reduce(function (s, n) { return s + n.loc; }, 0);
+      var tb = districts[a].reduce(function (s, n) { return s + n.loc; }, 0);
+      return ta - tb;
+    });
+
+    var DISTRICT_HUE = {};
+    districtNames.forEach(function (d, i) { DISTRICT_HUE[d] = (i * 137.5) % 360; });
+
+    // ---- constantes de layout ----
+    var CELL = 3.0;
+    var GAP = 5.0;
+    var GRID_COLS = Math.ceil(Math.sqrt(districtNames.length));
+
+    // ---- parâmetros ajustáveis ----
+    var params = { locScale: 1.0, baseScale: 1.0, spacing: 1.0, objectScale: 1.0, showDistricts: true, showLabels: true, filter: "all" };
+    var MAX_LOC = Math.max.apply(null, nodes.map(function (n) { return n.loc; }));
+
+    // ---- cena ----
+    var container = document.getElementById("scene-container");
+    var scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x070b14);
+    scene.fog = new THREE.FogExp2(0x070b14, 0.0022);
+
+    var camera = new THREE.PerspectiveCamera(50, container.clientWidth / container.clientHeight, 0.1, 4000);
+    var renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    container.appendChild(renderer.domElement);
+
+    var controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.08;
+    controls.minDistance = 12;
+    controls.maxDistance = 900;
+    controls.maxPolarAngle = Math.PI * 0.52;
+
+    // ---- iluminação ----
+    scene.add(new THREE.AmbientLight(0x8899bb, 0.5));
+    var hemi = new THREE.HemisphereLight(0xbfd8ff, 0x14141f, 0.55);
+    scene.add(hemi);
+    var dir = new THREE.DirectionalLight(0xffffff, 0.9);
+    dir.position.set(80, 180, 120);
+    dir.castShadow = true;
+    dir.shadow.mapSize.set(2048, 2048);
+    dir.shadow.camera.left = -500; dir.shadow.camera.right = 500;
+    dir.shadow.camera.top = 500; dir.shadow.camera.bottom = -500;
+    dir.shadow.camera.far = 1200;
+    scene.add(dir);
+
+    // ---- layout da cidade (recalculável conforme o espaçamento) ----
+    var districtPos = {};
+    function layoutCity() {
+      districtPos = {};
+      var maxW = 0, maxD = 0;
+      var c = cellSize(), g = gapSize();
+      districtNames.forEach(function (d, i) {
+        var mods = districts[d];
+        var cols = Math.ceil(Math.sqrt(mods.length));
+        var rows = Math.ceil(mods.length / cols);
+        var w = cols * c + g;
+        var de = rows * c + g;
+        var cx = (i % GRID_COLS);
+        var cy = Math.floor(i / GRID_COLS);
+        districtPos[d] = { x: cx * (maxW + g), z: cy * (maxD + g), cols: cols, rows: rows, w: w, d: de, mods: mods };
+        maxW = Math.max(maxW, w); maxD = Math.max(maxD, de);
+      });
+      var totalW = GRID_COLS * (maxW + g) - g;
+      var totalD = Math.ceil(districtNames.length / GRID_COLS) * (maxD + g) - g;
+      districtNames.forEach(function (d) {
+        districtPos[d].x -= totalW / 2;
+        districtPos[d].z -= totalD / 2;
+      });
+      nodes.forEach(function (n) {
+        var d = districtPos[n.group || "root"];
+        var i = d.mods.indexOf(n);
+        var col = i % d.cols;
+        var row = Math.floor(i / d.cols);
+        n._x = d.x + col * c + c / 2;
+        n._z = d.z + row * c + c / 2;
+        n._district = d;
+      });
+    }
+
+    // ---- dimensões derivadas de LOC ----
+    function cellSize() { return CELL * params.spacing; }
+    function gapSize() { return GAP * params.spacing; }
+
+    function colorFor(n) {
+      var deg = inDegree[n.id] || 0;
+      if (deg >= hotThreshold && deg > 0) return new THREE.Color(0xff5a4f);
+      var hue = DISTRICT_HUE[n.group || "root"];
+      var c = new THREE.Color().setHSL(hue / 360, 0.62, 0.55);
+      return c;
+    }
+
+    function heightFor(n) { return Math.max(0.6, (n.loc / MAX_LOC) * 26 * params.locScale * params.objectScale); }
+    function baseFor(n) { return (1.3 + Math.sqrt(n.loc) * 0.16) * params.baseScale * params.objectScale; }
+
+    // ---- chão ----
+    var groundGeo = new THREE.PlaneGeometry(4000, 4000);
+    var groundMat = new THREE.MeshStandardMaterial({ color: 0x0b0e17, roughness: 1 });
+    var ground = new THREE.Mesh(groundGeo, groundMat);
+    ground.rotation.x = -Math.PI / 2;
+    ground.position.y = -0.02;
+    ground.receiveShadow = true;
+    scene.add(ground);
+
+    // ---- prédios (InstancedMesh) ----
+    var boxGeo = new THREE.BoxGeometry(1, 1, 1);
+    boxGeo.translate(0, 0.5, 0);
+    var buildingGroup = new THREE.Group();
+    scene.add(buildingGroup);
+
+    var districtPlanes = [];
+    var labelSprites = [];
+    var buildings = null;
+    var activeNodes = [];
+
+    function makeLabelTexture(text) {
+      var c = document.createElement("canvas");
+      c.width = 512; c.height = 128;
+      var ctx = c.getContext("2d");
+      ctx.font = "700 44px 'Segoe UI', system-ui, sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.shadowColor = "rgba(0,0,0,0.8)"; ctx.shadowBlur = 12;
+      ctx.fillStyle = "#e8eefb";
+      ctx.fillText(text, 256, 64);
+      return new THREE.CanvasTexture(c);
+    }
+
+    function buildDistrictOverlays() {
+      districtPlanes.forEach(function (p) { scene.remove(p); });
+      labelSprites.forEach(function (s) { scene.remove(s); });
+      districtPlanes = []; labelSprites = [];
+      districtNames.forEach(function (d) {
+        var dp = districtPos[d];
+        var hue = DISTRICT_HUE[d];
+        if (params.showDistricts) {
+          var plane = new THREE.Mesh(
+            new THREE.PlaneGeometry(dp.w, dp.d),
+            new THREE.MeshBasicMaterial({ color: new THREE.Color().setHSL(hue / 360, 0.7, 0.5), transparent: true, opacity: 0.10, depthWrite: false })
+          );
+          plane.rotation.x = -Math.PI / 2;
+          plane.position.set(dp.x, 0.01, dp.z);
+          scene.add(plane);
+          districtPlanes.push(plane);
+        }
+        if (params.showLabels) {
+          var spr = new THREE.Sprite(new THREE.SpriteMaterial({ map: makeLabelTexture(d), transparent: true, opacity: 0.85, depthWrite: false }));
+          spr.scale.set(dp.w * 0.9, dp.w * 0.9 * 0.25, 1);
+          spr.position.set(dp.x, 0.6, dp.z - dp.d / 2 - 0.6);
+          scene.add(spr);
+          labelSprites.push(spr);
+        }
+      });
+    }
+
+    function rebuildBuildings() {
+      if (buildings) { buildingGroup.remove(buildings); buildings.geometry.dispose(); buildings.material.dispose(); }
+      activeNodes = nodes.filter(function (n) { return params.filter === "all" || (n.group || "root") === params.filter; });
+      buildings = new THREE.InstancedMesh(boxGeo, new THREE.MeshStandardMaterial({ roughness: 0.62, metalness: 0.12 }), activeNodes.length);
+      buildings.castShadow = true;
+      buildings.receiveShadow = true;
+      var dummy = new THREE.Object3D();
+      var col = new THREE.Color();
+      activeNodes.forEach(function (n, i) {
+        dummy.position.set(n._x, 0, n._z);
+        dummy.scale.set(baseFor(n), heightFor(n), baseFor(n));
+        dummy.updateMatrix();
+        buildings.setMatrixAt(i, dummy.matrix);
+        col.copy(colorFor(n));
+        buildings.setColorAt(i, col);
+      });
+      buildings.instanceMatrix.needsUpdate = true;
+      if (buildings.instanceColor) buildings.instanceColor.needsUpdate = true;
+      buildingGroup.add(buildings);
+      document.getElementById("hud-stats").textContent = "Code City · " + activeNodes.length + " arquivos · " + districtNames.length + " distritos";
+    }
+
+    function applyScale() {
+      var dummy = new THREE.Object3D();
+      activeNodes.forEach(function (n, i) {
+        buildings.getMatrixAt(i, dummy.matrix);
+        dummy.position.set(n._x, 0, n._z);
+        dummy.scale.set(baseFor(n), heightFor(n), baseFor(n));
+        dummy.updateMatrix();
+        buildings.setMatrixAt(i, dummy.matrix);
+      });
+      buildings.instanceMatrix.needsUpdate = true;
+    }
+
+    // ---- rótulos de distrito (filtro) ----
+    var folderFilter = document.getElementById("folder-filter");
+    districtNames.forEach(function (d) {
+      var o = document.createElement("option");
+      o.value = d; o.textContent = d;
+      folderFilter.appendChild(o);
+    });
+
+    // ---- raycaster / tooltip ----
+    var tooltip = document.getElementById("tooltip");
+    var raycaster = new THREE.Raycaster();
+    var pointer = new THREE.Vector2();
+    var hovered = -1;
+
+    renderer.domElement.addEventListener("pointermove", function (e) {
+      var rect = renderer.domElement.getBoundingClientRect();
+      pointer.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+      pointer.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+    });
+
+    renderer.domElement.addEventListener("click", function (e) {
+      if (hovered < 0) return;
+      var n = activeNodes[hovered];
+      focusTarget.set(n._x, heightFor(n) / 2, n._z);
+      focusAnim = 1;
+    });
+
+    var focusTarget = new THREE.Vector3();
+    var focusAnim = 0;
+    var startTarget = new THREE.Vector3();
+    var startCam = new THREE.Vector3();
+
+    function centerScene() {
+      var b = new THREE.Box3().setFromObject(buildingGroup);
+      var c = b.getCenter(new THREE.Vector3());
+      var size = b.getSize(new THREE.Vector3());
+      var maxDim = Math.max(size.x, size.z, size.y);
+      var dist = maxDim * 1.5 + 20;
+      camera.position.set(c.x + dist * 0.6, dist * 0.7, c.z + dist * 0.8);
+      controls.target.copy(c);
+      controls.update();
+    }
+
+    function resetCamera() {
+      focusAnim = 0;
+      centerScene();
+    }
+
+    // ---- loop ----
+    var clock = new THREE.Clock();
+    var growth = 0;
+
+    function tick() {
+      requestAnimationFrame(tick);
+      var dt = Math.min(clock.getDelta(), 0.05);
+
+      if (growth < 1) {
+        growth = Math.min(1, growth + dt * 0.9);
+        var dummy = new THREE.Object3D();
+        activeNodes.forEach(function (n, i) {
+          var h = heightFor(n) * (1 - Math.pow(1 - growth, 3));
+          dummy.position.set(n._x, 0, n._z);
+          dummy.scale.set(baseFor(n), Math.max(0.05, h), baseFor(n));
+          dummy.updateMatrix();
+          buildings.setMatrixAt(i, dummy.matrix);
+        });
+        buildings.instanceMatrix.needsUpdate = true;
+      }
+
+      if (focusAnim > 0) {
+        focusAnim = Math.max(0, focusAnim - dt * 1.6);
+        var k = 1 - Math.pow(focusAnim, 2);
+        controls.target.lerpVectors(startTarget, focusTarget, k);
+      }
+
+      // hover
+      raycaster.setFromCamera(pointer, camera);
+      var hits = raycaster.intersectObject(buildings, false);
+      var newHover = hits.length > 0 ? hits[0].instanceId : -1;
+      if (newHover !== hovered) {
+        hovered = newHover;
+        if (hovered >= 0) {
+          var n = activeNodes[hovered];
+          tooltip.innerHTML = "<b>" + n.name + "</b><br>" + n.path + "<br><span style='color:var(--rv-accent-1)'>LOC " + n.loc + "</span> · distrito " + (n.group || "root") + (inDegree[n.id] ? " · <span style='color:var(--rv-bad)'>" + inDegree[n.id] + " dependentes</span>" : "");
+          tooltip.classList.add("is-visible");
+        } else {
+          tooltip.classList.remove("is-visible");
+        }
+      }
+      if (hovered >= 0) {
+        var n = activeNodes[hovered];
+        var v = new THREE.Vector3(n._x, heightFor(n), n._z).project(camera);
+        var x = (v.x * 0.5 + 0.5) * window.innerWidth;
+        var y = (-v.y * 0.5 + 0.5) * window.innerHeight;
+        tooltip.style.left = (x + 16) + "px";
+        tooltip.style.top = (y - 10) + "px";
+      }
+
+      controls.update();
+      renderer.render(scene, camera);
+    }
+
+    // ---- sidebar ----
+    document.getElementById("sidebar-toggle").addEventListener("click", function () {
+      var s = document.getElementById("sidebar");
+      s.style.display = s.style.display === "none" ? "block" : "none";
+    });
+
+    document.querySelectorAll("[data-param]").forEach(function (el) {
+      el.addEventListener("input", function () {
+        var p = el.getAttribute("data-param");
+        if (p === "locScale") { params.locScale = parseFloat(el.value); applyScale(); }
+        else if (p === "baseScale") { params.baseScale = parseFloat(el.value); applyScale(); }
+        else if (p === "spacing") { params.spacing = parseFloat(el.value); layoutCity(); rebuildBuildings(); buildDistrictOverlays(); }
+        else if (p === "objectScale") { params.objectScale = parseFloat(el.value); applyScale(); }
+        else if (p === "showDistricts") { params.showDistricts = el.checked; buildDistrictOverlays(); }
+        else if (p === "showLabels") { params.showLabels = el.checked; buildDistrictOverlays(); }
+        else if (p === "folderFilter") { params.filter = el.value; rebuildBuildings(); buildDistrictOverlays(); }
+      });
+    });
+    document.getElementById("btn-reset").addEventListener("click", resetCamera);
+    document.getElementById("btn-export").addEventListener("click", function () {
+      renderer.render(scene, camera);
+      renderer.domElement.toBlob(function (blob) {
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement("a");
+        a.href = url; a.download = "arquitetura-3d.png"; a.click();
+        URL.revokeObjectURL(url);
+      });
+    });
+
+    window.addEventListener("resize", function () {
+      camera.aspect = container.clientWidth / container.clientHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(container.clientWidth, container.clientHeight);
+    });
+
+    // ---- Navigation Pad (pan / zoom / reset / auto-rotate) ----
+    var NAV_PAN_SPEED = 0.12;   // fração da distância câmera→alvo por passo
+    var NAV_ZOOM_FACTOR = 1.22; // fator multiplicativo por passo de zoom
+
+    // PAN: move o alvo da órbita nos eixos X/Y da câmera (mover câmera sem rotacionar)
+    function panCamera(dx, dy) {
+      camera.updateMatrixWorld();
+      var right = new THREE.Vector3().setFromMatrixColumn(camera.matrixWorld, 0);
+      var up = new THREE.Vector3().setFromMatrixColumn(camera.matrixWorld, 1);
+      var step = controls.target.distanceTo(camera.position) * NAV_PAN_SPEED;
+      controls.target.addScaledVector(right, dx * step);
+      controls.target.addScaledVector(up, dy * step);
+      controls.update();
+    }
+
+    // ZOOM: aproxima/afasta a câmera ao longo do eixo câmera→alvo (respeita min/max)
+    function zoomCamera(factor) {
+      var dir = new THREE.Vector3().subVectors(camera.position, controls.target);
+      var newLen = Math.max(controls.minDistance, Math.min(controls.maxDistance, dir.length() * factor));
+      dir.normalize().multiplyScalar(newLen);
+      camera.position.copy(controls.target).add(dir);
+      controls.update();
+    }
+
+    // Ação imediata no toque/clique + repetição contínua ao segurar (hold-to-repeat)
+    function enableHoldRepeat(btn, action) {
+      var delayTimer = null, repeatTimer = null;
+      function stop() {
+        if (delayTimer) { clearTimeout(delayTimer); delayTimer = null; }
+        if (repeatTimer) { clearInterval(repeatTimer); repeatTimer = null; }
+      }
+      btn.addEventListener("pointerdown", function (e) {
+        e.preventDefault();
+        action();
+        stop();
+        delayTimer = setTimeout(function () { repeatTimer = setInterval(action, 80); }, 320);
+      });
+      btn.addEventListener("pointerup", stop);
+      btn.addEventListener("pointerleave", stop);
+      btn.addEventListener("pointercancel", stop);
+    }
+
+    function bindNavPad() {
+      var pad = document.getElementById("navpad");
+      if (!pad) return;
+      var actions = {
+        "up": function () { panCamera(0, 1); },
+        "down": function () { panCamera(0, -1); },
+        "left": function () { panCamera(-1, 0); },
+        "right": function () { panCamera(1, 0); },
+        "zoom-in": function () { zoomCamera(1 / NAV_ZOOM_FACTOR); },
+        "zoom-out": function () { zoomCamera(NAV_ZOOM_FACTOR); }
+      };
+      pad.querySelectorAll("[data-nav]").forEach(function (btn) {
+        var action = actions[btn.getAttribute("data-nav")];
+        if (action) enableHoldRepeat(btn, action);
+      });
+
+      // Botão central: clique = reset · duplo clique = alterna rotação automática
+      var center = document.getElementById("navpad-center");
+      var clickTimer = null;
+      center.addEventListener("click", function () {
+        if (clickTimer) { clearTimeout(clickTimer); clickTimer = null; return; }
+        clickTimer = setTimeout(function () { clickTimer = null; resetCamera(); }, 240);
+      });
+      center.addEventListener("dblclick", function () {
+        if (clickTimer) { clearTimeout(clickTimer); clickTimer = null; }
+        controls.autoRotate = !controls.autoRotate;
+        controls.autoRotateSpeed = 1.4;
+        center.classList.toggle("is-active", controls.autoRotate);
+        center.title = controls.autoRotate
+          ? "Rotação automática ativa (duplo clique para pausar)"
+          : "Resetar câmera (clique) · Auto-rotate (duplo clique)";
+      });
+    }
+
+    // ---- boot ----
+    layoutCity();
+    buildDistrictOverlays();
+    rebuildBuildings();
+    centerScene();
+    bindNavPad();
+    tick();
+  })();
+  </script>
+</body>
+</html>
