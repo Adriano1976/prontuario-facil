@@ -97,8 +97,8 @@
 
 | ID | Descrição | Dependências | Paralelismo | Arquivo alvo | Confidência | Status |
 |----|-----------|--------------|-------------|--------------|-------------|--------|
-| T042 | Ligar a verificação sobre os arquivos convertidos e reduzir os erros de tipo a zero | T021, T022, T030, T039, T040, T041 | - | `tsconfig.json` | 🟢 | `[ ]` |
-| T043 | Executar a verificação completa e confirmar que ela cobre todo o código-fonte convertido | T042 | - | `tsconfig.json` | 🟢 | `[ ]` |
+| T042 | Ligar a verificação sobre os arquivos convertidos e reduzir os erros de tipo a zero | T021, T022, T030, T039, T040, T041 | - | `tsconfig.json` | 🟢 | `[X]` |
+| T043 | Executar a verificação completa e confirmar que ela cobre todo o código-fonte convertido | T042 | - | `tsconfig.json` | 🟢 | `[X]` |
 | T044 | Executar o roteiro de fumaça de paridade e registrar o resultado por módulo | T030, T040 | - | `_reversa_forward/001-migracao-typescript/onboarding.md` | 🟢 | `[ ]` |
 
 ## Notas de execução

@@ -93,6 +93,39 @@ Pontos de atenção por ordem de risco:
 | Trilha de auditoria | Acesso a dado sensível gera registro | Requisito regulatório |
 | Modo offline | Mesmas telas funcionam com os dados de exemplo | Evita divergência entre os dois modos |
 
+### 4.1 Mapa módulo → cenários (preenchido pelo responsável)
+
+Estado da ação T044: **roteiro preparado, execução pendente** — a execução é manual
+por decisão registrada (`requirements.md` §6.1) e este ambiente de desenvolvimento
+não sobe o servidor (`esbuild: spawn EPERM`, seção 7).
+
+Registre cada módulo como **conforme** ou **divergente** na última coluna. Nenhuma
+divergência pode ficar sem tratamento antes de fechar a feature. Sugestão de ordem:
+primeiro o modo online (módulos na ordem abaixo) e depois o modo offline completo.
+
+| Módulo | Cenários de paridade | Resultado |
+|--------|----------------------|-----------|
+| Dashboard | `08-kpis-dashboard`, `V01-dashboard-principal` | ⬜ pendente |
+| Pacientes — listagem | `V02-pacientes-listagem`, `01-cadastro-paciente-lgpd` | ⬜ pendente |
+| Pacientes — novo/editar | `01-cadastro-paciente-lgpd`, `V03-pacientes-novo` | ⬜ pendente |
+| Pacientes — detalhe | `V14-paciente-detalhe`, `01-cadastro-paciente-lgpd` | ⬜ pendente |
+| Agendamentos — calendário/lista | `03-agendamento-jornada-medico`, `04-ciclo-status-agendamento`, `V04-agendamentos-calendario` | ⬜ pendente |
+| Agendamentos — novo | `03-agendamento-jornada-medico`, `V05-agendamentos-novo` | ⬜ pendente |
+| Consultas — listagem | `05-maquina-estados-consulta`, `V06-consultas-listagem` | ⬜ pendente |
+| Consultas — novo/editar | `05-maquina-estados-consulta`, `V07-consultas-novo` | ⬜ pendente |
+| Consultas — visualização | `05-maquina-estados-consulta`, `V08-consultas-visualizacao` | ⬜ pendente |
+| Modal novo documento | `06-emissao-documento-template`, `V09-modal-novo-documento` | ⬜ pendente |
+| Modal upload de exame | `V10-modal-upload-exame` | ⬜ pendente |
+| Médicos — listagem/novo | `V11-medicos-listagem`, `V15-medicos-novo` | ⬜ pendente |
+| Templates — central/modal | `06-emissao-documento-template`, `V12-templates-central`, `V16-templates-modal` | ⬜ pendente |
+| Logs de acesso | `07-auditoria-acesso`, `V13-logs-acesso` | ⬜ pendente |
+| Modo offline (todos os módulos) | `09-modo-offline` + `10-contrato-base44-client` (verificação por tipo, já executada em T039) | ⬜ pendente |
+
+> ⚠️ **Mudança visível esperada no modo offline:** os dados de exemplo foram
+> alinhados ao contrato (T040) — as prescrições do seed agora exibem os
+> medicamentos na tela de documento, onde antes não apareciam. Isso é correção de
+> dado de exemplo, não divergência (ver `data-delta.md` §4).
+
 ## 5. O que **não** deve acontecer
 
 Esta feature converte linguagem, não corrige comportamento. Se você observar qualquer
