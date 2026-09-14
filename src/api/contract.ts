@@ -72,11 +72,19 @@ export interface EntityRepository<T, TInput> {
 /**
  * Forma crua de acesso às entidades: repositórios indexados por nome.
  *
- * Existe apenas para que os adaptadores possam ser implementados antes de serem
- * ligados ao registry tipado. NÃO consuma esta forma no código de aplicação —
- * use `AppDataClient`, obtido via `createAppDataClient` (`src/api/registry.ts`).
+ * ⚠️ POR QUE `never` E NÃO `unknown`: `unknown` seria o tipo "mais amplo" em
+ * posição de valor, mas em posição de **parâmetro** ele é o mais restritivo — uma
+ * implementação que aceite algo específico não é atribuível a uma que promete
+ * aceitar `unknown`. Usar `unknown` aqui faria o tipo rejeitar qualquer
+ * implementação concreta, o que anularia a verificação das duas implementações.
+ * `EntityRepository<never, never>` inverte isso: aceita qualquer implementação cujos
+ * parâmetros sejam compatíveis, que é exatamente o que se quer checar.
+ *
+ * Existe apenas para ligar os adaptadores ao registry tipado. NÃO consuma esta forma
+ * no código de aplicação — use `AppDataClient`, obtido via `createAppDataClient`
+ * (`src/api/registry.ts`).
  */
-export type RawEntities = Record<string, EntityRepository<unknown, unknown>>;
+export type RawEntities = Record<string, EntityRepository<never, never>>;
 
 /** Autenticação — subconjunto usado pelo legado. */
 export interface AuthGateway {
