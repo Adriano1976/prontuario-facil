@@ -87,8 +87,8 @@
 
 | ID | Descrição | Dependências | Paralelismo | Arquivo alvo | Confidência | Status |
 |----|-----------|--------------|-------------|--------------|-------------|--------|
-| T037 | Converter o cliente online para a linguagem tipada, satisfazendo o contrato | T020 | - | `src/api/base44Client.js` | 🟢 | `[ ]` |
-| T038 | Converter o cliente offline para a linguagem tipada, satisfazendo o mesmo contrato | T020 | - | `src/api/mockClient.js` | 🟢 | `[ ]` |
+| T037 | Converter o cliente online para a linguagem tipada, satisfazendo o contrato | T020 | - | `src/api/base44Client.ts` | 🟢 | `[X]` |
+| T038 | Converter o cliente offline para a linguagem tipada, satisfazendo o mesmo contrato | T020 | - | `src/api/mockClient.ts` | 🟢 | `[X]` |
 | T039 | Verificar por caso negativo que as duas implementações de acesso a dados divergentes do contrato não compilam | T037, T038 | - | verificação negativa do contrato de dados | 🟢 | `[ ]` |
 | T040 | Alinhar os dados de exemplo do modo offline ao contrato das entidades | T038, T017 | - | `src/api/mockSeed.js` | 🟢 | `[ ]` |
 | T041 | Converter os arquivos auxiliares restantes para a linguagem tipada, preservando o comportamento | T020, T037 | - | `src/App.jsx`, `src/Layout.jsx`, `src/lib/*`, `src/hooks/*` | 🟢 | `[ ]` |

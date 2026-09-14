@@ -1,0 +1,2 @@
+{"ts": "2026-09-14T13:52:58-03:00", "action": "T037", "status": "done", "files": ["src/api/base44Client.ts", "src/vite-env.d.ts"], "obs": "Adaptador do SDK real ligado ao contrato; gate de tipos em 0 erros"}
+{"ts": "2026-09-14T13:52:58-03:00", "action": "T038", "status": "done", "files": ["src/api/mockClient.ts", "src/api/entities.ts", "src/api/contract.ts"], "obs": "Adaptador offline ligado ao mesmo contrato; gate de tipos em 0 erros"}
