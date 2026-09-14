@@ -9,12 +9,11 @@ import { pagesConfig } from '@/pages.config';
  * Grava quais páginas os usuários acessam para fins de auditoria e análise.
  * Funciona em background sem afetar a UI.
  *
- * @component
- * @returns {null} - Este componente não renderiza nenhuma UI.
+ * PARIDADE: conversão de linguagem; o cálculo do nome da página (raiz, primeiro
+ * segmento com busca case-insensitive no registro de páginas), a condição de
+ * registro e a falha silenciosa continuam iguais ao anterior.
  *
- * @example
- * // Adicione na raiz da app para rastrear toda navegação
- * <NavigationTracker />
+ * @returns {null} - Este componente não renderiza nenhuma UI.
  */
 export default function NavigationTracker() {
     const location = useLocation();
@@ -26,7 +25,7 @@ export default function NavigationTracker() {
     useEffect(() => {
         // Extract page name from pathname
         const pathname = location.pathname;
-        let pageName;
+        let pageName: string | null;
 
         if (pathname === '/' || pathname === '') {
             pageName = mainPageKey;

@@ -1,38 +1,52 @@
+/**
+ * Parâmetros de inicialização da aplicação, lidos de query string, armazenamento
+ * local ou variáveis de ambiente.
+ *
+ * PARIDADE: conversão de linguagem; a ordem de precedência (URL → padrão →
+ * armazenado), a geração das chaves, a limpeza de token via parâmetro e a remoção
+ * de parâmetro da URL continuam exatamente como no legado.
+ */
+
+/** Forma mínima de armazenamento usada — cobre `localStorage` e o `Map` do ambiente Node. */
+interface StorageLike {
+  getItem(key: string): string | null;
+  setItem(key: string, value: string): void;
+  removeItem(key: string): void;
+}
+
 const isNode = typeof window === 'undefined';
-const windowObj = isNode ? { localStorage: new Map() } : window;
-const storage = windowObj.localStorage;
+// No ambiente Node não há window; o Map mantém o comportamento do legado, que
+// declarava `{ localStorage: new Map() }` sem usá-lo no caminho de browser.
+const storage: StorageLike = isNode
+  ? (new Map<string, string>() as unknown as StorageLike)
+  : window.localStorage;
 
 /**
  * Converte strings em camelCase para formato snake_case.
  * Usado na geração de chaves de armazenamento para manter consistência.
- *
- * @param {string} str - String a converter.
- * @returns {string} - String em formato snake_case.
- *
- * @example
- * toSnakeCase('appId') // Retorna 'app_id'
  */
-const toSnakeCase = (str) => {
+const toSnakeCase = (str: string): string => {
 	return str.replace(/([A-Z])/g, '_$1').toLowerCase();
+}
+
+interface GetAppParamOptions {
+  /** Valor padrão se o parâmetro não for encontrado. */
+  defaultValue?: string;
+  /** Se deve remover o parâmetro da URL após leitura. */
+  removeFromUrl?: boolean;
 }
 
 /**
  * Recupera valor de parâmetro da aplicação a partir de query string, localStorage ou padrão.
  * Prioriza parâmetros de URL, armazena-os em localStorage e volta a padrões se necessário.
  * Pode opcionalmente remover o parâmetro da URL.
- *
- * @param {string} paramName - Nome do parâmetro a recuperar.
- * @param {Object} [options] - Objeto com opções.
- * @param {*} [options.defaultValue] - Valor padrão se parâmetro não for encontrado.
- * @param {boolean} [options.removeFromUrl=false] - Se deve remover parâmetro da URL após leitura.
- * @returns {string|null} - Valor do parâmetro ou null se não encontrado.
- *
- * @example
- * const appId = getAppParamValue('app_id', { defaultValue: 'default-app' });
  */
-const getAppParamValue = (paramName, { defaultValue = undefined, removeFromUrl = false } = {}) => {
+const getAppParamValue = (
+  paramName: string,
+  { defaultValue = undefined, removeFromUrl = false }: GetAppParamOptions = {},
+): string | null => {
 	if (isNode) {
-		return defaultValue;
+		return defaultValue ?? null;
 	}
 	const storageKey = `base44_${toSnakeCase(paramName)}`;
 	const urlParams = new URLSearchParams(window.location.search);
@@ -58,23 +72,21 @@ const getAppParamValue = (paramName, { defaultValue = undefined, removeFromUrl =
 	return null;
 }
 
+/** Configuração da aplicação, montada a partir das fontes acima. */
+export interface AppParams {
+  appId: string | null;
+  token: string | null;
+  fromUrl: string | null;
+  functionsVersion: string | null;
+  appBaseUrl: string | null;
+}
+
 /**
  * Recupera todos os parâmetros da aplicação necessários para inicialização.
  * Monta ID da aplicação, token de autenticação e configuração do servidor.
  * Trata limpeza de token se solicitado via parâmetro de URL.
- *
- * @returns {Object} - Objeto com configuração da aplicação.
- * @returns {string} returns.appId - ID da aplicação a partir de ambiente ou URL.
- * @returns {string} returns.token - Token de autenticação do localStorage ou URL.
- * @returns {string} returns.fromUrl - URL original para redirects.
- * @returns {string} returns.functionsVersion - Versão das funções da API.
- * @returns {string} returns.appBaseUrl - URL base do servidor backend.
- *
- * @example
- * const config = getAppParams();
- * // { appId: '...', token: '...', functionsVersion: '1.0', ... }
  */
-const getAppParams = () => {
+const getAppParams = (): AppParams => {
 	if (getAppParamValue("clear_access_token") === 'true') {
 		storage.removeItem('base44_access_token');
 		storage.removeItem('token');
@@ -87,7 +99,6 @@ const getAppParams = () => {
 		appBaseUrl: getAppParamValue("app_base_url", { defaultValue: import.meta.env.VITE_BASE44_APP_BASE_URL }),
 	}
 }
-
 
 export const appParams = {
 	...getAppParams()

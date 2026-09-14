@@ -1,4 +1,4 @@
-import * as React from "react"
+import { useEffect, useState } from "react"
 
 const MOBILE_BREAKPOINT = 768
 
@@ -7,18 +7,14 @@ const MOBILE_BREAKPOINT = 768
  * Usa listener de media query para rastrear responsivamente mudanças de tamanho da tela.
  * O breakpoint de celular está definido em 768px (limite típico tablet/desktop).
  *
- * @returns {boolean} - True se largura do viewport é menor que 768px, false caso contrário.
+ * PARIDADE: conversão de linguagem; comportamento idêntico ao anterior.
  *
- * @example
- * const isMobile = useIsMobile();
- * if (isMobile) {
- *   return <LayoutMobile />;
- * }
+ * @returns True se largura do viewport é menor que 768px, false caso contrário.
  */
 export function useIsMobile() {
-  const [isMobile, setIsMobile] = React.useState(undefined)
+  const [isMobile, setIsMobile] = useState<boolean | undefined>(undefined)
 
-  React.useEffect(() => {
+  useEffect(() => {
     const mql = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`)
     const onChange = () => {
       setIsMobile(window.innerWidth < MOBILE_BREAKPOINT)

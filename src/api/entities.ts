@@ -1,6 +1,7 @@
 import type {
   AccessLog,
   Appointment,
+  AppUser,
   Consultation,
   Doctor,
   Exam,
@@ -109,6 +110,7 @@ export function buildRegistry(raw: Record<string, unknown>): TypedRegistry {
     Doctor: createEntityRepository<Doctor, WriteInput<Doctor>>(repo('Doctor')),
     Template: createEntityRepository<Template, WriteInput<Template>>(repo('Template')),
     AccessLog: createEntityRepository<AccessLog, WriteInput<AccessLog>>(repo('AccessLog')),
+    User: createEntityRepository<AppUser, WriteInput<AppUser>>(repo('User')),
   };
 }
 

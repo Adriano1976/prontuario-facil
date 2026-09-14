@@ -1,28 +1,35 @@
 import { useLocation } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
+import { toSessionUser } from '@/lib/session';
 import { useQuery } from '@tanstack/react-query';
+import type { AuthenticatedUser } from '@/types';
 
+/** Estado de autenticação consultado pela página de erro. */
+interface AuthStatus {
+  user: AuthenticatedUser | null;
+  isAuthenticated: boolean;
+}
 
 /**
  * Página de erro exibida quando uma rota/página solicitada não é encontrada.
  * Mostra uma mensagem de erro 404 amigável com sugestões.
  * Verifica o status de autenticação do usuário antes de renderizar.
  *
- * @component
- * @returns {JSX.Element} - Página de erro 404 com opções de navegação.
+ * PARIDADE: conversão de linguagem; comportamento idêntico ao anterior. A nota de
+ * administrador continua decidida pelo papel devolvido pela sessão, agora lido
+ * pelo ponto único de conversão da camada de sessão.
  *
- * @example
- * <Route path="*" element={<PageNotFound />} />\
+ * @returns Página de erro 404 com opções de navegação.
  */
-export default function PageNotFound({}) {
+export default function PageNotFound() {
     const location = useLocation();
     const pageName = location.pathname.substring(1);
 
     const { data: authData, isFetched } = useQuery({
         queryKey: ['user'],
-        queryFn: async () => {
+        queryFn: async (): Promise<AuthStatus> => {
             try {
-                const user = await base44.auth.me();
+                const user = toSessionUser(await base44.auth.me());
                 return { user, isAuthenticated: true };
             } catch (error) {
                 return { user: null, isAuthenticated: false };
@@ -51,7 +58,7 @@ export default function PageNotFound({}) {
                     </div>
                     
                     {/* Admin Note */}
-                    {isFetched && authData.isAuthenticated && authData.user?.role === 'admin' && (
+                    {isFetched && authData?.isAuthenticated && authData.user?.role === 'admin' && (
                         <div className="mt-8 p-4 bg-slate-100 rounded-lg border border-slate-200">
                             <div className="flex items-start space-x-3">
                                 <div className="flex-shrink-0 w-5 h-5 rounded-full bg-orange-100 flex items-center justify-center mt-0.5">

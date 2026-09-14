@@ -44,7 +44,7 @@ function load(entity: string): StoredRecord[] {
       // Conteúdo corrompido é ignorado em silêncio — comportamento do legado.
     }
   }
-  const seeded = ((mockSeed as Record<string, StoredRecord[]>)[entity] ?? []);
+  const seeded = ((mockSeed as unknown as Record<string, StoredRecord[]>)[entity] ?? []);
   localStorage.setItem(key, JSON.stringify(seeded));
   return seeded;
 }

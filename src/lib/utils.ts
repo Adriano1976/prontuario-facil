@@ -1,4 +1,4 @@
-﻿import { clsx } from "clsx"
+import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 
 /**
@@ -6,14 +6,12 @@ import { twMerge } from "tailwind-merge"
  * Mescla classes de Tailwind CSS de forma inteligente, tratando conflitos
  * e garantindo que apenas a classe final tenha precedência.
  *
- * @param {...*} inputs - Quantidade variável de nomes de classe, objetos ou arrays.
- * @returns {string} - String de classe mesclada.
+ * PARIDADE: conversão de linguagem; comportamento idêntico ao anterior.
  *
- * @example
- * cn('px-2', 'px-4') // Retorna 'px-4' (último valor vence)
- * cn('text-white', { 'text-red-500': isErro }) // Aplica classes condicionalmente
+ * @param inputs - Quantidade variável de nomes de classe, objetos ou arrays.
+ * @returns String de classe mesclada.
  */
-export function cn(...inputs) {
+export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
@@ -21,12 +19,5 @@ export function cn(...inputs) {
  * Checks if the application is running inside an iframe.
  * Useful for detecting if the app is embedded in another website.
  * Returns false if the app is at the top level, true if nested in an iframe.
- *
- * @type {boolean}
- *
- * @example
- * if (isIframe) {
- *   // App is embedded, adjust UI accordingly
- * }
  */
 export const isIframe = window.self !== window.top;

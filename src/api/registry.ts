@@ -1,6 +1,7 @@
-﻿import type {
+import type {
   AccessLog,
   Appointment,
+  AppUser,
   Consultation,
   Doctor,
   Exam,
@@ -87,6 +88,8 @@ export interface AdminEntities {
   Doctor: EntityRead<Doctor>;
   Template: EntityRead<Template>;
   AccessLog: EntityRead<AccessLog>;
+  /** Entidade embutida do BaaS, usada apenas pela exclusÃ£o de conta (Layout). */
+  User: EntityRead<AppUser>;
 }
 
 /**
@@ -102,6 +105,11 @@ export interface AppEntities {
   Doctor: OpenReadEntity<Doctor>;
   Template: OpenReadEntity<Template>;
   AccessLog: OpenReadEntity<AccessLog>;
+  /**
+   * Entidade embutida do BaaS. Leitura crua, sem escopo de dono: nÃ£o hÃ¡ RLS de
+   * entidade clÃ­nica aqui â€” o SDK aplica as regras prÃ³prias da entidade User.
+   */
+  User: EntityRead<AppUser>;
 }
 
 /** Contrato completo de acesso a dados, jÃ¡ com o registry fechado. */
@@ -141,6 +149,7 @@ export function createAppDataClient(
       Doctor: withAccess(raw.Doctor as EntityRead<Doctor>),
       Template: withAccess(raw.Template as EntityRead<Template>),
       AccessLog: withAccess(raw.AccessLog as EntityRead<AccessLog>),
+      User: raw.User as EntityRead<AppUser>,
     },
   };
 }
