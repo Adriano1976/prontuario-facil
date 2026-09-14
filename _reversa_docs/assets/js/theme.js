@@ -3,15 +3,30 @@
   "use strict";
 
   /* ---------- Tema (escuro/claro) ---------- */
+  /**
+   * Obtém o tema visual atualmente ativo na aplicação.
+   * @returns {string} O tema atual ("light" ou "dark").
+   */
   function currentTheme() {
     return document.documentElement.getAttribute("data-theme") === "light" ? "light" : "dark";
   }
+
+  /**
+   * Define e aplica o tema visual na página e no armazenamento local.
+   * @param {string} theme - O nome do tema a ser aplicado ("light" ou "dark").
+   * @returns {void}
+   */
   function setTheme(theme) {
     var next = theme === "light" ? "light" : "dark";
     document.documentElement.setAttribute("data-theme", next);
     try { localStorage.setItem("rv-theme", next); } catch (e) { /* storage indisponível */ }
     initAllParticles(); // partículas dependem do tema
   }
+
+  /**
+   * Inicializa o tema visual da página a partir do valor armazenado no localStorage.
+   * @returns {void}
+   */
   function initTheme() {
     var saved = null;
     try { saved = localStorage.getItem("rv-theme"); } catch (e) { /* storage indisponível */ }
@@ -21,6 +36,10 @@
   /* ---------- Partículas de fundo (canvas) ---------- */
   var particleDisposers = [];
 
+  /**
+   * Retorna a paleta de cores das partículas para o tema ativo.
+   * @returns {{dots: Array<string>, lines: string}} Objeto contendo os arrays de cores dos pontos e das linhas de conexão.
+   */
   function particlePalette() {
     var light = currentTheme() === "light";
     return {
@@ -29,6 +48,11 @@
     };
   }
 
+  /**
+   * Inicializa a animação de partículas de fundo em um elemento canvas.
+   * @param {HTMLCanvasElement} canvas - O elemento canvas onde as partículas serão renderizadas.
+   * @returns {function(): void|undefined} Função de descarte (dispose) para cancelar a animação.
+   */
   function initParticles(canvas) {
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
@@ -38,6 +62,10 @@
     const palette = particlePalette();
     const COLORS = palette.dots;
 
+    /**
+     * Redimensiona o canvas para ajustar-se ao container pai com suporte a DPR.
+     * @returns {void}
+     */
     function resize() {
       const rect = canvas.parentElement.getBoundingClientRect();
       w = rect.width; h = rect.height;
@@ -59,6 +87,11 @@
       });
     }
 
+    /**
+     * Atualiza o estado das partículas e redesenha o quadro da animação.
+     * @param {number} t - O carimbo de data/hora atual fornecido pelo requestAnimationFrame.
+     * @returns {void}
+     */
     function step(t) {
       ctx.clearRect(0, 0, w, h);
       for (const p of pts) {
@@ -98,9 +131,17 @@
     window.addEventListener("resize", resize);
     raf = requestAnimationFrame(step);
 
+    /**
+     * Cancela o loop de animação das partículas.
+     * @returns {void}
+     */
     return function dispose() { cancelAnimationFrame(raf); };
   }
 
+  /**
+   * Reinicializa os efeitos de partículas de fundo em todos os canvases da página.
+   * @returns {void}
+   */
   function initAllParticles() {
     particleDisposers.forEach(function (d) { if (d) d(); });
     particleDisposers = [];
@@ -110,6 +151,10 @@
   }
 
   /* ---------- Botão de troca de tema (injetado no header) ---------- */
+  /**
+   * Injeta o botão de alternância de tema no cabeçalho da página.
+   * @returns {void}
+   */
   function injectThemeToggle() {
     document.querySelectorAll(".rv-header__inner").forEach(function (inner) {
       if (inner.querySelector(".rv-theme-toggle")) return;
@@ -149,6 +194,10 @@
   }
 
   /* ---------- Boot de nav + selos (a partir de window.RV_DATA) ---------- */
+  /**
+   * Determina o prefixo de caminho relativo até a raiz do site a partir da tag script de data.js.
+   * @returns {string} O prefixo de caminho relativo ("" ou "../").
+   */
   function navPrefix() {
     // Prefixo relativo até a raiz do site, derivado do <script src="...data.js">.
     // Página na raiz: "assets/js/data.js" -> "". Subpasta (features/): "../assets/js/data.js" -> "../".
@@ -158,6 +207,10 @@
     return m ? m[0] : "";
   }
 
+  /**
+   * Inicializa o menu de navegação e insere os elementos dinâmicos com base em window.RV_DATA.
+   * @returns {void}
+   */
   function bootNav() {
     var rv = window.RV_DATA;
     var prefix = navPrefix();
@@ -194,6 +247,10 @@
   }
 
   /* ---------- Contadores animados ---------- */
+  /**
+   * Anima a contagem de elementos numéricos com o atributo data-count.
+   * @returns {void}
+   */
   function animateCounters() {
     document.querySelectorAll("[data-count]").forEach((el) => {
       if (el.__done) return;
@@ -202,6 +259,11 @@
       const dec = (el.getAttribute("data-dec") || "0") === "0" ? 0 : 1;
       const dur = 1400;
       const start = performance.now();
+      /**
+       * Executa cada passo da animação do contador.
+       * @param {number} now - O carimbo de data/hora atual.
+       * @returns {void}
+       */
       function tick(now) {
         const p = Math.min(1, (now - start) / dur);
         const eased = 1 - Math.pow(1 - p, 3);
@@ -221,6 +283,11 @@
   }
 
   /* ---------- Boot de dados (fallback inline -> window.RV_DATA) ---------- */
+  /**
+   * Carrega os dados de fallback inline caso window.RV_DATA ainda não esteja populado.
+   * @param {Array<string>} [keys] - Lista opcional de chaves a serem extraídas do elemento de dados inline.
+   * @returns {void}
+   */
   window.RV_BOOT = function (keys) {
     window.RV_DATA = window.RV_DATA || {};
     const inline = document.getElementById("rv-inline-data");
