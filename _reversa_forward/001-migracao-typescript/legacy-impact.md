@@ -18,6 +18,7 @@
 | `src/api/registry.ts` + `src/types/User.ts` | Registro fechado de entidades | `delta-de-contrato-externo` | LOW | Entidade embutida `User` do BaaS acrescentada ao registro (o legado a usava na exclusão de conta) |
 | `src/components/medical/*` (9) e `src/components/appointments/*` (2) | Componentes clínicos e de agendamento | `componente-novo` | LOW | Versões `.tsx`/`.ts` criadas; os `.jsx` gêmeos permanecem até as telas consumidoras converterem |
 | `src/pages/Patients.tsx`, `PatientForm.tsx`, `PatientDetail.tsx` | Telas de paciente | `componente-novo` | LOW | Conversão com leituras escopadas; `.jsx` removidos após conferência de versionamento |
+| `src/pages/Consultations.tsx`, `Consultation.tsx`, `NewConsultation.tsx` | Telas de consulta | `componente-novo` | LOW | Conversão com leituras escopadas; `.jsx` removidos após conferência de versionamento |
 | `src/pages/Patients.tsx`, `PatientForm.tsx` | Leitura de pacientes | `regra-alterada` | LOW | Escopo de leitura passa a ser resolvido pelo papel da sessão (`resolveScope`) — espelha a RLS do servidor |
 | `src/api/mockSeed.ts` | Dados de exemplo do modo offline | `delta-de-dados` | MEDIUM | Conteúdo dos dados de demonstração alinhado ao contrato; medicamentos passam a aparecer na tela de documento offline (mudança visível esperada, registrada em `data-delta.md` §4) |
 | `src/App.tsx`, `src/Layout.tsx`, `src/lib/*`, `src/hooks/*`, `src/pages.config.js` | Estrutura e auxiliares | `componente-novo` | LOW | Conversão preservando comportamento; import do Layout corrigido |
@@ -45,6 +46,11 @@ administrador lê sem filtro de dono e usuário comum recebe o filtro imposto �
 mesma condição que a RLS do servidor já aplicava. A primeira versão de
 `Patients`/`PatientForm` usava `asUserScope`, que restringiria administradores ao
 próprio dado; a correção restaura a paridade com o legado.
+
+**Telas de consulta.** As três telas (lista, detalhe e formulário) seguem o mesmo
+padrão de escopo. A legenda de situação preserva a ausência quando o registro não
+tem `status` — o seed offline de consultas não o grava, e a renderização continua a
+mesma do legado (badge sem rótulo), em vez de assumir um valor padrão.
 
 **Dados de exemplo offline.** O seed foi tipado contra as entidades e alinhado:
 gênero nas formas do enum, `lgpd_consent` explícito, `anamnese` →

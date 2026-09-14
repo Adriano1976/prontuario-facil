@@ -41,3 +41,7 @@ registrados para contexto:
 - **AMB-006 (XSS em templates)** — preservado e documentado, não corrigido.
 - **`AppUser` (entidade `User` do BaaS)** — adição por paridade; a re-extração pode
   confirmar os campos efetivamente usados pelo SDK nessa entidade.
+- **Legenda de status nas telas de consulta (T025)** — preservada a ausência de
+  legenda quando o registro não tem `status` (o seed offline de consultas não o
+  grava). Se uma futura alteração usar `?? 'agendada'` nessas telas, a badge muda
+  visualmente no modo offline — verificar paridade antes de aceitar.
