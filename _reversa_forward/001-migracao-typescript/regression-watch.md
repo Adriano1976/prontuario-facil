@@ -47,3 +47,7 @@ registrados para contexto:
   legenda quando o registro não tem `status` (o seed offline de consultas não o
   grava). Se uma futura alteração usar `?? 'agendada'` nessas telas, a badge muda
   visualmente no modo offline — verificar paridade antes de aceitar.
+- **Trilha de auditoria (T029)** — a leitura continua sem escopo declarado no
+  cliente; a restrição real (apenas admin lê, BR-MIGRAR-024) vive na regra de
+  acesso do servidor. Se a leitura passar a declarar `asAdmin`/`asUser`, conferir
+  que o resultado para cada papel continua idêntico ao do legado.
