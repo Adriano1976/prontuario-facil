@@ -112,6 +112,15 @@ export interface AuthGateway {
    * contrato, em vez de ser decidido internamente pelo adaptador.
    */
   redirectToLogin(nextUrl: string): void;
+  /**
+   * Lê as configurações públicas da aplicação.
+   *
+   * É o que informa se a aplicação exige autenticação e se o usuário está registrado.
+   * Existe no contrato para que a camada de sessão não precise alcançar um caminho
+   * interno do SDK — o que acoplaria o projeto a um detalhe de implementação de
+   * terceiro.
+   */
+  getPublicSettings(): Promise<unknown>;
 }
 
 /** Logs de uso do app — sem efeito no legado e no mock (BR-MIGRAR-045). */

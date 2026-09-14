@@ -20,12 +20,15 @@ import { createMockClient } from './mockClient';
 
 const OFFLINE = import.meta.env.VITE_OFFLINE === 'true';
 
+/** Endereço público das configurações da aplicação no BaaS. */
+const PUBLIC_SETTINGS_PATH = '/api/apps/public';
+
 /**
  * Parâmetros de inicialização.
  *
  * A anotação existe porque `appParams` vem de um módulo em JavaScript: sem ela, os
- * valores seriam inferidos como possivelmente nulos e a criação do cliente não
- * compilaria. O comportamento é o mesmo.
+ * valores seriam inferidos como objeto vazio e a criação do cliente não compilaria. O
+ * comportamento é o mesmo.
  */
 const { appId, token, functionsVersion, appBaseUrl } = appParams as {
   appId: string;
@@ -33,6 +36,38 @@ const { appId, token, functionsVersion, appBaseUrl } = appParams as {
   functionsVersion: string | null;
   appBaseUrl: string | null;
 };
+
+/**
+ * Indica se há token de sessão.
+ *
+ * A verificação da sessão só é feita quando existe token — é a condição do legado, e a
+ * camada de sessão precisa dela. Fica aqui para que a leitura dos parâmetros de
+ * inicialização continue num lugar só.
+ */
+export const hasSessionToken = Boolean(token);
+
+/**
+ * Lê as configurações públicas da aplicação.
+ *
+ * POR QUE AQUI: o consumidor legado (`AuthContext.jsx`) criava o cliente de requisição
+ * diretamente, importando um caminho INTERNO do SDK. Isso acopla o projeto a um
+ * detalhe de implementação de terceiro, que pode mudar sem aviso. Trazendo para cá, o
+ * resto do projeto fala apenas com o contrato.
+ *
+ * A importação é sob demanda para que o módulo do SDK só seja carregado quando esta
+ * função for realmente usada — mesmo comportamento do arquivo original, que a
+ * importava no topo mas só a executava dentro da verificação de sessão.
+ */
+export async function fetchPublicSettings(): Promise<unknown> {
+  const { createAxiosClient } = await import('@base44/sdk/dist/utils/axios-client');
+  const client = createAxiosClient({
+    baseURL: PUBLIC_SETTINGS_PATH,
+    headers: { 'X-App-Id': appId },
+    token: token ?? undefined,
+    interceptResponses: true,
+  });
+  return client.get(`/prod/public-settings/by-id/${appId}`);
+}
 
 /**
  * Adaptador do SDK real.
@@ -68,6 +103,7 @@ function createSdkAdapter(): AdapterGateways & { entities: Record<string, unknow
       redirectToLogin: (nextUrl: string) => {
         sdk.auth.redirectToLogin(nextUrl);
       },
+      getPublicSettings: () => fetchPublicSettings(),
     },
     integrations: {
       Core: {

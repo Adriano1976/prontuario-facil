@@ -75,6 +75,7 @@ export interface AdapterGateways {
     me(): Promise<unknown>;
     logout(redirectUrl?: string): Promise<void>;
     redirectToLogin(nextUrl: string): void;
+    getPublicSettings(): Promise<unknown>;
   };
   integrations: { Core: { UploadFile(params: { file: File }): Promise<UploadFileResult> } };
   appLogs: { logUserInApp(pageName: string): Promise<void> };

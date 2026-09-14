@@ -158,8 +158,15 @@ const integrations = {
 
 const auth = {
   me: () => Promise.resolve(OFFLINE_USER),
-  logout: () => Promise.resolve(),
-  redirectToLogin: () => {},
+  logout: (_redirectUrl?: string) => Promise.resolve(),
+  redirectToLogin: (_nextUrl: string) => {},
+  /**
+   * No modo offline não há servidor para consultar. O modo é decidido na construção
+   * (variável de ambiente), então a verificação de sessão nem chega a usá-la — mas o
+   * contrato a exige, e devolver vazio é a resposta correta: não há configuração
+   * pública remota.
+   */
+  getPublicSettings: () => Promise.resolve({}),
 };
 
 const appLogs = {
