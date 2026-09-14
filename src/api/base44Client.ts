@@ -1,6 +1,6 @@
 import { createClient } from '@base44/sdk';
 import { appParams } from '@/lib/app-params';
-import type { UploadFileResult } from './contract';
+import type { SendEmailParams, UploadFileResult } from './contract';
 import { bindAdapter, type AdapterGateways } from './entities';
 import type { AppDataClient } from './registry';
 import { createMockClient } from './mockClient';
@@ -109,6 +109,7 @@ function createSdkAdapter(): AdapterGateways & { entities: Record<string, unknow
       Core: {
         UploadFile: ({ file }) =>
           sdk.integrations.Core.UploadFile({ file }) as Promise<UploadFileResult>,
+        SendEmail: (params: SendEmailParams) => sdk.integrations.Core.SendEmail(params),
       },
     },
     appLogs: {

@@ -19,8 +19,14 @@ import type { Appointment, Doctor } from '@/types';
 interface TimeSlotPickerProps {
   /** Médico com janela de atendimento e duração padrão. */
   doctor?: Doctor | null;
-  /** Data selecionada, em string ISO. */
-  selectedDate?: string | null;
+  /**
+   * Data selecionada.
+   *
+   * Aceita `Date` porque o consumidor legado (`NewAppointment`) entrega o objeto
+   * devolvido pelo calendário; aceita string ISO por compatibilidade. O cálculo
+   * interno passa por `new Date(selectedDate)`, idêntico para as duas formas.
+   */
+  selectedDate?: Date | string | null;
   /** Agendamentos existentes, usados para desmarcar horários ocupados. */
   appointments?: Appointment[];
   /** Chamado com o horário escolhido, em string ISO. */

@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { base44 } from '@/api/base44Client';
+import { resolveScope } from '@/api/sessionScope';
+import { toSessionUser } from '@/lib/session';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
@@ -23,6 +25,7 @@ import { motion } from 'framer-motion';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import TimeSlotPicker from '@/components/appointments/TimeSlotPicker';
+import type { AppointmentType, AppointmentStatus } from '@/types';
 
 /**
  * Página de criação de novo agendamento.
@@ -30,20 +33,36 @@ import TimeSlotPicker from '@/components/appointments/TimeSlotPicker';
  * Fornece seleção de data com disponibilidade de horário baseada no cronograma do médico.
  * Suporta edição de agendamentos existentes.
  *
- * @component
- * @returns {JSX.Element} - Formulário com seleção de paciente, seleção de médico, seletor de data/hora e envio.
+ * PARIDADE: comportamento, textos e validação idênticos ao anterior. Continuam
+ * iguais: a pré-seleção de paciente pela URL, os pacientes ativos e médicos ativos,
+ * a disponibilidade de horário por médico e data, o email de confirmação quando o
+ * paciente tem endereço, e o redirecionamento após gravar.
  *
- * @example
- * <NewAppointment /> // Novo agendamento
- * <NewAppointment /> // URL pode incluir ?patient_id=paciente-123 para pré-seleção
+ * PARIDADE DE LEITURA: pacientes e agendamentos passam a declarar escopo pela
+ * decisão de escopo da feature (opção C). Médicos seguem com leitura livre para
+ * autenticados (BR-MIGRAR-017), como antes.
  */
+
+/** Estado do formulário. */
+interface AppointmentFormState {
+  patient_id: string;
+  doctor_id: string;
+  date: string;
+  type: AppointmentType;
+  notes: string;
+  status: AppointmentStatus;
+}
+
+/** Dados enviados na gravação: o formulário mais a duração resolvida do médico. */
+type AppointmentPayload = AppointmentFormState & { duration: number };
+
 export default function NewAppointment() {
     const navigate = useNavigate();
     const queryClient = useQueryClient();
     const urlParams = new URLSearchParams(window.location.search);
     const preselectedPatientId = urlParams.get('patient_id');
 
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState<AppointmentFormState>({
         patient_id: preselectedPatientId || '',
         doctor_id: '',
         date: '',
@@ -52,11 +71,18 @@ export default function NewAppointment() {
         status: 'agendado'
     });
 
-    const [selectedDate, setSelectedDate] = useState(null);
+    const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
 
     const { data: patients } = useQuery({
         queryKey: ['patients'],
-        queryFn: () => base44.entities.Patient.filter({ status: 'ativo' }),
+        queryFn: async () => {
+            const user = toSessionUser(await base44.auth.me());
+            const scope = resolveScope(user);
+            if (scope.kind === 'admin') {
+                return base44.entities.Patient.filterAsAdmin(scope, { status: 'ativo' });
+            }
+            return base44.entities.Patient.filterOwned(scope, { status: 'ativo' });
+        },
     });
 
     const { data: doctors } = useQuery({
@@ -66,12 +92,19 @@ export default function NewAppointment() {
 
     const { data: appointments } = useQuery({
         queryKey: ['appointments', formData.doctor_id, selectedDate],
-        queryFn: () => base44.entities.Appointment.filter({ doctor_id: formData.doctor_id }),
+        queryFn: async () => {
+            const user = toSessionUser(await base44.auth.me());
+            const scope = resolveScope(user);
+            if (scope.kind === 'admin') {
+                return base44.entities.Appointment.filterAsAdmin(scope, { doctor_id: formData.doctor_id });
+            }
+            return base44.entities.Appointment.filterOwned(scope, { doctor_id: formData.doctor_id });
+        },
         enabled: !!formData.doctor_id && !!selectedDate,
     });
 
     const saveMutation = useMutation({
-        mutationFn: async (data) => {
+        mutationFn: async (data: AppointmentPayload) => {
             const appointment = await base44.entities.Appointment.create(data);
             
             // Send confirmation email
@@ -93,7 +126,7 @@ export default function NewAppointment() {
 
     const selectedDoctor = doctors?.find(d => d.id === formData.doctor_id);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         saveMutation.mutate({
             ...formData,
@@ -137,7 +170,7 @@ export default function NewAppointment() {
                             <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div className="space-y-2">
                                     <Label>Paciente *</Label>
-                                    <Select value={formData.patient_id} onValueChange={(v) => setFormData({ ...formData, patient_id: v })} required>
+                                    <Select value={formData.patient_id} onValueChange={(v) => setFormData({ ...formData, patient_id: v })}>
                                         <SelectTrigger>
                                             <SelectValue placeholder="Selecione o paciente" />
                                         </SelectTrigger>
@@ -150,7 +183,7 @@ export default function NewAppointment() {
                                 </div>
                                 <div className="space-y-2">
                                     <Label>Médico *</Label>
-                                    <Select value={formData.doctor_id} onValueChange={(v) => setFormData({ ...formData, doctor_id: v })} required>
+                                    <Select value={formData.doctor_id} onValueChange={(v) => setFormData({ ...formData, doctor_id: v })}>
                                         <SelectTrigger>
                                             <SelectValue placeholder="Selecione o médico" />
                                         </SelectTrigger>
@@ -184,7 +217,7 @@ export default function NewAppointment() {
                                             selected={selectedDate}
                                             onSelect={setSelectedDate}
                                             className="rounded-xl border"
-                                            disabled={(date) => date < new Date()}
+                                            disabled={(date: Date) => date < new Date()}
                                         />
                                     </div>
                                     <div>
@@ -215,7 +248,7 @@ export default function NewAppointment() {
                             <CardContent className="space-y-4">
                                 <div className="space-y-2">
                                     <Label>Tipo de Consulta</Label>
-                                    <Select value={formData.type} onValueChange={(v) => setFormData({ ...formData, type: v })}>
+                                    <Select value={formData.type} onValueChange={(v) => setFormData({ ...formData, type: v as AppointmentType })}>
                                         <SelectTrigger>
                                             <SelectValue />
                                         </SelectTrigger>

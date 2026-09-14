@@ -1,4 +1,4 @@
-import type { UploadFileResult } from './contract';
+import type { SendEmailParams, UploadFileResult } from './contract';
 import { mockSeed } from './mockSeed';
 
 /**
@@ -153,6 +153,15 @@ const integrations = {
         reader.onerror = () => reject(reader.error);
         reader.readAsDataURL(file);
       }),
+    /**
+     * Envio de email indisponível no modo offline.
+     *
+     * PARIDADE: o mock legado não implementava esta função, e a chamada falhava em
+     * runtime. A rejeição explícita preserva o mesmo desfecho observável (a mutação
+     * do agendamento falha após a gravação, sem navegação).
+     */
+    SendEmail: (_params: SendEmailParams) =>
+      Promise.reject(new Error('SendEmail indisponível no modo offline')),
   },
 };
 

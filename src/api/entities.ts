@@ -9,7 +9,7 @@ import type {
   Prescription,
   Template,
 } from '@/types';
-import type { EntityRepository, UploadFileResult } from './contract';
+import type { EntityRepository, SendEmailParams, UploadFileResult } from './contract';
 import type { AppDataClient, AdminEntities, WriteInput } from './registry';
 import { createAppDataClient } from './registry';
 
@@ -78,7 +78,12 @@ export interface AdapterGateways {
     redirectToLogin(nextUrl: string): void;
     getPublicSettings(): Promise<unknown>;
   };
-  integrations: { Core: { UploadFile(params: { file: File }): Promise<UploadFileResult> } };
+  integrations: {
+    Core: {
+      UploadFile(params: { file: File }): Promise<UploadFileResult>;
+      SendEmail(params: SendEmailParams): Promise<unknown>;
+    };
+  };
   appLogs: { logUserInApp(pageName: string): Promise<void> };
 }
 

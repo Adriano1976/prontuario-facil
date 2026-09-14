@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { base44 } from '@/api/base44Client';
+import { resolveScope } from '@/api/sessionScope';
+import { toSessionUser } from '@/lib/session';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
@@ -22,8 +24,12 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { format, parseISO } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import type { Appointment, AppointmentStatus } from '@/types';
 
-const STATUS_CONFIG = {
+const STATUS_CONFIG: Record<
+  AppointmentStatus,
+  { label: string; color: string }
+> = {
     agendado: { label: 'Agendado', color: 'bg-amber-100 text-amber-700' },
     confirmado: { label: 'Confirmado', color: 'bg-sky-100 text-sky-700' },
     em_atendimento: { label: 'Em Atendimento', color: 'bg-violet-100 text-violet-700' },
@@ -38,20 +44,26 @@ const STATUS_CONFIG = {
  * Permite visualizar, atualizar e gerenciar status de agendamento.
  * Fornece navegação rápida para criação de novo agendamento.
  *
- * @component
- * @returns {JSX.Element} - Página com vista de calendário, lista de agendamentos e opções de atualização de status.
+ * PARIDADE: comportamento e aparência idênticos ao anterior. Continuam iguais: as
+ * vistas de calendário e lista, a contagem de agendamentos próximos, a atualização
+ * manual de status (confirmar/cancelar pelo diálogo, sem transição automática) e a
+ * legenda de situação.
  *
- * @example
- * <Appointments />
+ * PARIDADE DE LEITURA: agendamentos e pacientes passam a declarar escopo pela
+ * decisão de escopo da feature (opção C). Médicos seguem com leitura livre para
+ * autenticados (BR-MIGRAR-017), como antes.
  */
 export default function Appointments() {
     const queryClient = useQueryClient();
-    const [selectedAppointment, setSelectedAppointment] = useState(null);
+    const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
     const [showDetails, setShowDetails] = useState(false);
 
     const { data: appointments } = useQuery({
         queryKey: ['appointments'],
-        queryFn: () => base44.entities.Appointment.list('-date'),
+        queryFn: async () => {
+            const user = toSessionUser(await base44.auth.me());
+            return base44.entities.Appointment.listOwned(resolveScope(user), '-date');
+        },
     });
 
     const { data: doctors } = useQuery({
@@ -61,28 +73,36 @@ export default function Appointments() {
 
     const { data: patients } = useQuery({
         queryKey: ['patients'],
-        queryFn: () => base44.entities.Patient.list(),
+        queryFn: async () => {
+            const user = toSessionUser(await base44.auth.me());
+            return base44.entities.Patient.listOwned(resolveScope(user));
+        },
     });
 
     const updateStatusMutation = useMutation({
-        mutationFn: ({ id, status }) => base44.entities.Appointment.update(id, { status }),
+        mutationFn: ({ id, status }: { id: string; status: AppointmentStatus }) =>
+            base44.entities.Appointment.update(id, { status }),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['appointments'] });
             setShowDetails(false);
         }
     });
 
-    const handleAppointmentClick = (apt) => {
+    const handleAppointmentClick = (apt: Appointment) => {
         setSelectedAppointment(apt);
         setShowDetails(true);
     };
 
-    const getDoctor = (doctorId) => doctors?.find(d => d.id === doctorId);
-    const getPatient = (patientId) => patients?.find(p => p.id === patientId);
+    const getDoctor = (doctorId: string) => doctors?.find(d => d.id === doctorId);
+    const getPatient = (patientId: string) => patients?.find(p => p.id === patientId);
 
     const upcomingAppointments = appointments?.filter(a => 
         new Date(a.date) > new Date() && a.status !== 'cancelado'
     ) || [];
+
+    /** Legenda de situação, preservando a ausência quando o registro não tem status. */
+    const statusInfo = (apt: Appointment) =>
+        apt.status ? STATUS_CONFIG[apt.status] : null;
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-sky-50">
@@ -141,6 +161,7 @@ export default function Appointments() {
                                 {upcomingAppointments.map(apt => {
                                     const doctor = getDoctor(apt.doctor_id);
                                     const patient = getPatient(apt.patient_id);
+                                    const status = statusInfo(apt);
                                     return (
                                         <motion.button
                                             key={apt.id}
@@ -161,8 +182,8 @@ export default function Appointments() {
                                                         </p>
                                                     </div>
                                                 </div>
-                                                <Badge className={STATUS_CONFIG[apt.status]?.color}>
-                                                    {STATUS_CONFIG[apt.status]?.label}
+                                                <Badge className={status?.color}>
+                                                    {status?.label}
                                                 </Badge>
                                             </div>
                                         </motion.button>
@@ -198,8 +219,8 @@ export default function Appointments() {
                             <div>
                                 <p className="text-sm text-slate-500 mb-2">Status</p>
                                 <Select 
-                                    value={selectedAppointment.status} 
-                                    onValueChange={(status) => updateStatusMutation.mutate({ id: selectedAppointment.id, status })}
+                                    value={selectedAppointment.status ?? ''} 
+                                    onValueChange={(status) => updateStatusMutation.mutate({ id: selectedAppointment.id, status: status as AppointmentStatus })}
                                 >
                                     <SelectTrigger>
                                         <SelectValue />

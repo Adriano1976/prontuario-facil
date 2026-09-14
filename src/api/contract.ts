@@ -10,9 +10,15 @@ import type { FilterConditions, SortField, UUID } from '@/types';
  * é importado como `SdkBase44Client` no adapter.
  *
  * ESCOPO (BR-MIGRAR-041 / BR-OFF05): apenas o subconjunto realmente usado pelo
- * legado — CRUD por entidade, `auth` e `integrations.Core.UploadFile`. Ficam FORA:
- * `entities.<X>.get(id)`, `bulkCreate`/`bulkUpdate`, `count`, `SendEmail`,
- * `InvokeLLM`, realtime e filtros avançados (BR-MIGRAR-043).
+ * legado — CRUD por entidade, `auth`, `integrations.Core.UploadFile` e
+ * `integrations.Core.SendEmail`. Ficam FORA: `entities.<X>.get(id)`,
+ * `bulkCreate`/`bulkUpdate`, `count`, `InvokeLLM`, realtime e filtros avançados
+ * (BR-MIGRAR-043).
+ *
+ * CORREÇÃO (rodada T026): `SendEmail` estava listado como fora do escopo, mas o
+ * legado o usa em `NewAppointment` (email de confirmação de agendamento). O
+ * princípio que rege o contrato é o uso real do legado — por isso ele foi
+ * incorporado, junto com a entidade embutida `User` (ver `registry.ts`).
  *
  * ⚠️ PARIDADE: descreve o comportamento existente. NÃO altera runtime — é uma
  * camada de verificação em compile-time (regra de ouro do diff: só tipos).
@@ -35,6 +41,18 @@ export interface UploadFileResult {
 /** Parâmetros aceitos por `integrations.Core.UploadFile`. */
 export interface UploadFileParams {
   file: File;
+}
+
+/** Parâmetros aceitos por `integrations.Core.SendEmail` (espelho do SDK). */
+export interface SendEmailParams {
+  /** Endereço do destinatário. */
+  to: string;
+  /** Assunto da mensagem. */
+  subject: string;
+  /** Corpo da mensagem em texto puro. */
+  body: string;
+  /** Nome do remetente; quando omitido, o nome da aplicação é usado. */
+  from_name?: string;
 }
 
 /**
@@ -138,6 +156,13 @@ export interface AppLogsGateway {
 export interface IntegrationsGateway {
   Core: {
     UploadFile(params: UploadFileParams): Promise<UploadFileResult>;
+    /**
+     * Envio de email (confirmação de agendamento).
+     *
+     * O adaptador offline rejeita a chamada — é o mesmo desfecho observável do
+     * legado, em que o mock não implementava a função e a chamada falhava.
+     */
+    SendEmail(params: SendEmailParams): Promise<unknown>;
   };
 }
 
