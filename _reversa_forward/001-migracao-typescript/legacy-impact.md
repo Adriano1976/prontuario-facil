@@ -21,6 +21,7 @@
 | `src/pages/Consultations.tsx`, `Consultation.tsx`, `NewConsultation.tsx` | Telas de consulta | `componente-novo` | LOW | Conversão com leituras escopadas; `.jsx` removidos após conferência de versionamento |
 | `src/pages/Appointments.tsx`, `NewAppointment.tsx` | Telas de agendamento | `componente-novo` | LOW | Conversão com leituras escopadas; `.jsx` removidos após conferência de versionamento |
 | `src/pages/Doctors.tsx` | Tela de médicos | `componente-novo` | LOW | Conversão com leitura livre (BR-MIGRAR-017); `.jsx` removido após conferência de versionamento |
+| `src/pages/Templates.tsx` | Tela de templates | `componente-novo` | LOW | Conversão com leitura livre (BR-MIGRAR-020); `.jsx` removido após conferência de versionamento |
 | `src/api/contract.ts`, `entities.ts`, `base44Client.ts`, `mockClient.ts` | Contrato de integrações | `delta-de-contrato-externo` | LOW | `SendEmail` incorporado ao contrato (o legado o usava no agendamento; estava fora do escopo original e regrediu em T037) |
 | `src/pages/Patients.tsx`, `PatientForm.tsx` | Leitura de pacientes | `regra-alterada` | LOW | Escopo de leitura passa a ser resolvido pelo papel da sessão (`resolveScope`) — espelha a RLS do servidor |
 | `src/api/mockSeed.ts` | Dados de exemplo do modo offline | `delta-de-dados` | MEDIUM | Conteúdo dos dados de demonstração alinhado ao contrato; medicamentos passam a aparecer na tela de documento offline (mudança visível esperada, registrada em `data-delta.md` §4) |
