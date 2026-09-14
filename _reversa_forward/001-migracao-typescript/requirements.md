@@ -95,17 +95,17 @@ extração original: o projeto não possui nenhum teste automatizado.
 | RF-06 | O nome de entidade é verificado; entidade inexistente não compila | Must | Referenciar entidade com nome incorreto **não compila** | 🟢 |
 | RF-07 | O usuário da sessão em modo offline é uma variante que não carrega papel | Must | Trecho de código que exige papel não compila contra a variante offline | 🟢 |
 | RF-08 | A verificação de tipos é executável de forma isolada e não emite arquivos | Must | Comando único de verificação existe, retorna situação e não escreve artefatos | 🟢 |
-| RF-09 | O código-fonte é integralmente verificado em modo estrito | Must | Verificação estrita sobre todo o código-fonte termina sem erro | 🟢 |
+| RF-09 | O código-fonte é integralmente verificado em modo estrito, exceto a pasta de componentes de interface herdados de biblioteca, cuja exclusão é explícita e justificada no arquivo de configuração | Must | Verificação estrita termina sem erro sobre todo o código-fonte, e a única exclusão é a pasta de componentes herdados, registrada por escrito | 🟢 |
 | RF-10 | Os componentes de interface são verificados quanto a contrato de propriedades | Should | Componentes de interface compilam sob verificação estrita | 🟡 |
 | RF-11 | As telas são convertidas por módulo, preservando comportamento | Should | Cada módulo converte sem alteração observável; verificação por módulo | 🟢 |
 | RF-12 | O modo offline possui dados iniciais alinhados ao contrato das entidades | Should | Dados iniciais do modo offline validam contra os contratos | 🟢 |
-| RF-13 | Dependências declaradas e não utilizadas são removidas | Could | Lista reconfirmada e removida com aprovação registrada | 🟡 |
+| RF-13 | ~~Dependências declaradas e não utilizadas são removidas~~ **Retirado do escopo** na sessão de esclarecimentos: a remoção não integra esta feature e fica registrada como pendência separada | — | n/a | 🟢 |
 
 ## 6. Requisitos Não Funcionais
 
 | Tipo | Requisito | Evidência ou justificativa | Confidência |
 |------|-----------|----------------------------|-------------|
-| Paridade | Nenhuma alteração de comportamento observável é introduzida | Regra de ouro do plano de migração; projeto sem testes automatizados | 🟢 |
+| Paridade | Nenhuma alteração de comportamento observável é introduzida, e a paridade é comprovada por verificação de tipos somada a roteiro manual de fumaça derivado dos 26 cenários já existentes em `_reversa_sdd/migration/parity_tests/` | Regra de ouro do plano; projeto sem testes automatizados e sem dependência nova autorizada | 🟢 |
 | Segurança | A verificação de tipos confere forma, nunca autorização; o isolamento real permanece no servidor | `_reversa_sdd/permissions.md`; achados de auditoria F-01/F-02/F-03 referidos à codificação | 🟢 |
 | Segurança | O contrato de campo sensível não substitui a proteção do dado, que permanece no servidor | `_reversa_sdd/inventory.md#Visão geral` | 🟢 |
 | Privacidade | Campos sensíveis e de consentimento são marcados no contrato | Requisito regulatório LGPD | 🟢 |
@@ -125,14 +125,16 @@ extração original: o projeto não possui nenhum teste automatizado.
   mock do painel, divergência de critérios entre contadores, transição manual de
   status, ausência de paginação na trilha de auditoria e ausência de aviso visual
   no modo offline. 🟢
-- Não são introduzidos componentes, produtos ou serviços novos. 🟢
+- Não são introduzidos componentes, produtos ou serviços novos; em particular, **nenhum arcabouço de teste automatizado é adicionado** nesta feature. 🟢
+- A paridade de comportamento é atestada por roteiro manual de fumaça derivado dos 26 cenários de paridade já existentes, **não** por execução automatizada. A expressão "paridade comprovada" não deve ser usada: a evidência é verificável, mas manual. 🟢
 
 ## 7. Critérios de Aceitação
 
 ```gherkin
 Cenário: Verificação integral sem erros
   Dado o código-fonte integralmente convertido
-  Quando a verificação estrita de tipos é executada sobre todo o código-fonte
+  Quando a verificação estrita de tipos é executada sobre todo o código-fonte,
+  exceto a pasta de componentes de interface herdados de biblioteca
   Então ela termina sem nenhum erro
 
 Cenário: Campo com nome incorreto é recusado
@@ -184,6 +186,12 @@ Cenário: Comportamento preservado após a conversão
   Dado o sistema convertido
   Quando a verificação por módulo é executada
   Então nenhuma diferença observável de comportamento é introduzida
+
+Cenário: Paridade atestada por roteiro manual
+  Dado o sistema convertido e o roteiro de fumaça derivado dos cenários de paridade
+  Quando o responsável executa o roteiro no módulo convertido
+  Então cada cenário do roteiro é registrado como conforme ou divergente
+  E nenhuma divergência permanece sem tratamento antes de avançar de módulo
 ```
 
 ## 8. Prioridade MoSCoW
@@ -198,32 +206,30 @@ Cenário: Comportamento preservado após a conversão
 | RF-06 | Must | Elimina a classe de erro mais comum: nome de campo e de entidade |
 | RF-07 | Must | Torna explícita a ausência de papel no modo offline |
 | RF-08 | Must | Sem gate executável o processo não tem barreira objetiva |
-| RF-09 | Must | É o critério final de conclusão |
+| RF-09 | Must | É o critério final de conclusão, ressalvada a exclusão registrada da pasta de componentes herdados |
 | RF-10 | Should | Amplia a cobertura do gate para a camada de interface |
 | RF-11 | Should | Converte o restante do sistema por módulo, com verificação parcial |
 | RF-12 | Should | Alinha os dados do modo offline ao contrato |
-| RF-13 | Could | Não bloqueia a conclusão; exige confirmação de escopo |
+| RF-13 | Won't | Retirado do escopo por decisão humana: a remoção das dependências não utilizadas não pertence a esta feature |
 
 ## 9. Esclarecimentos
 
-> Nenhuma sessão de dúvidas registrada ainda. Rode `/reversa-clarify` quando houver `[DÚVIDA]` pendente.
+### Sessão 2026-09-14
+
+- **Q:** As 14 dependências declaradas e não utilizadas entram no escopo desta feature?
+  **R:** Não. Ficam fora do escopo; a remoção é registrada como pendência separada. Consequência: RF-13 retirado, prioridade passa a `Won't`.
+- **Q:** Com o que a paridade de comportamento será comprovada?
+  **R:** Verificação de tipos somada a roteiro manual de fumaça derivado dos 26 cenários Gherkin já existentes em `_reversa_sdd/migration/parity_tests/`. Nenhuma dependência nova é introduzida e nenhum arcabouço de teste é adicionado.
+- **Q:** O modo estrito se aplica aos componentes de interface herdados de biblioteca?
+  **R:** Estrito em todo o código-fonte, **exceto** a pasta de componentes de interface herdados, cuja exclusão é registrada e justificada por escrito no próprio arquivo de configuração da verificação.
 
 ## 10. Lacunas
 
-- 🔴 [DÚVIDA] **Escopo da remoção de dependências declaradas e não utilizadas.**
-  Foram identificadas 14 dependências de execução sem nenhum uso no código-fonte.
-  Removê-las é seguro em tese, mas exige sua aprovação explícita e reconfirmação.
-  Entra nesta feature (RF-13) ou fica fora do escopo?
-- 🔴 [DÚVIDA] **Verificação de comportamento após a conversão.** O projeto não
-  possui nenhum teste automatizado, e a paridade de comportamento é requisito
-  (regra de ouro). Com o que a paridade deve ser comprovada: apenas verificação de
-  tipos somada a roteiro manual de fumaça, ou introduzimos algum teste automatizado
-  nesta feature — o que acrescenta uma dependência nova, hoje proibida pelo plano?
-- 🔴 [DÚVIDA] **Alcance do modo estrito na camada de interface.** A verificação
-  estrita sobre os componentes de interface herdados de biblioteca pode exigir
-  muitos ajustes de baixo valor. Aplicamos modo estrito a todo o código-fonte
-  (RF-09) ou excluímos explicitamente a biblioteca de interface, registrando a
-  exclusão?
+Nenhuma lacuna em aberto. As três dúvidas do documento inicial foram resolvidas na sessão de esclarecimentos acima.
+
+### Pendência transferida para fora desta feature
+
+- 🟡 **Remoção das 14 dependências declaradas e não utilizadas** (`@stripe/react-stripe-js`, `@stripe/stripe-js`, `react-leaflet`, `jspdf`, `html2canvas`, `lodash`, `react-quill`, `three`, `react-markdown`, `canvas-confetti`, `@hello-pangea/dnd`, `@radix-ui/react-toast`, `zod`, `@hookform/resolvers`). Não pertence a esta feature. Exige reconfirmação por busca no código-fonte e aprovação explícita antes de qualquer remoção (plano original, RISK-006).
 
 ## 11. Histórico de alterações
 
@@ -231,3 +237,4 @@ Cenário: Comportamento preservado após a conversão
 |------|-----------|-------|
 | 2026-09-14 | Versão inicial gerada por `/reversa-requirements` | reversa |
 | 2026-09-14 | Registrado o ponto de partida correto (1.324 erros) e os limites explícitos de alcance da verificação de tipos | reversa |
+| 2026-09-14 | Sessão de esclarecimentos: 3 dúvidas resolvidas. RF-13 retirado do escopo; paridade passa a ser atestada por roteiro manual; exclusão da biblioteca de interface registrada | reversa-clarify |
