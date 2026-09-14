@@ -61,7 +61,7 @@
 | T021 | Converter os componentes clínicos para a linguagem tipada (9 componentes) | T020 | - | `src/components/medical/` | 🟢 | `[X]` |
 | T022 | Converter os componentes de agendamento para a linguagem tipada (2 componentes) | T020 | `[//]` | `src/components/appointments/` | 🟢 | `[X]` |
 | T023 | Converter a tela de pacientes e migrar suas leituras para a camada com escopo | T021, T020 | - | `src/pages/Patients.tsx`, `src/pages/PatientForm.tsx` | 🟢 | `[X]` |
-| T024 | Converter a tela de detalhe do paciente e migrar suas leituras | T023 | - | `src/pages/PatientDetail.jsx` | 🟢 | `[ ]` |
+| T024 | Converter a tela de detalhe do paciente e migrar suas leituras | T023 | - | `src/pages/PatientDetail.tsx` | 🟢 | `[X]` |
 | T025 | Converter as telas de consulta e migrar suas leituras | T024, T021 | - | `src/pages/Consultations.jsx`, `src/pages/Consultation.jsx`, `src/pages/NewConsultation.jsx` | 🟢 | `[ ]` |
 | T026 | Converter as telas de agendamento e migrar suas leituras | T025, T022 | - | `src/pages/Appointments.jsx`, `src/pages/NewAppointment.jsx` | 🟢 | `[ ]` |
 | T027 | Converter a tela de médicos | T026 | - | `src/pages/Doctors.jsx` | 🟢 | `[ ]` |
@@ -89,9 +89,9 @@
 |----|-----------|--------------|-------------|--------------|-------------|--------|
 | T037 | Converter o cliente online para a linguagem tipada, satisfazendo o contrato | T020 | - | `src/api/base44Client.ts` | 🟢 | `[X]` |
 | T038 | Converter o cliente offline para a linguagem tipada, satisfazendo o mesmo contrato | T020 | - | `src/api/mockClient.ts` | 🟢 | `[X]` |
-| T039 | Verificar por caso negativo que as duas implementações de acesso a dados divergentes do contrato não compilam | T037, T038 | - | verificação negativa do contrato de dados | 🟢 | `[ ]` |
-| T040 | Alinhar os dados de exemplo do modo offline ao contrato das entidades | T038, T017 | - | `src/api/mockSeed.js` | 🟢 | `[ ]` |
-| T041 | Converter os arquivos auxiliares restantes para a linguagem tipada, preservando o comportamento | T020, T037 | - | `src/App.jsx`, `src/Layout.jsx`, `src/lib/*`, `src/hooks/*` | 🟢 | `[ ]` |
+| T039 | Verificar por caso negativo que as duas implementações de acesso a dados divergentes do contrato não compilam | T037, T038 | - | verificação negativa do contrato de dados | 🟢 | `[X]` |
+| T040 | Alinhar os dados de exemplo do modo offline ao contrato das entidades | T038, T017 | - | `src/api/mockSeed.ts` | 🟢 | `[X]` |
+| T041 | Converter os arquivos auxiliares restantes para a linguagem tipada, preservando o comportamento | T020, T037 | - | `src/App.tsx`, `src/Layout.tsx`, `src/lib/*`, `src/hooks/*` | 🟢 | `[X]` |
 
 ## Fase 5, Polimento
 
