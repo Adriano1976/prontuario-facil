@@ -75,6 +75,13 @@ const LIBS = [
   }
 ];
 
+/**
+ * Realiza uma requisição HTTP/HTTPS com suporte a redirecionamentos para baixar o conteúdo de um recurso.
+ * @param {string} url - A URL do recurso a ser baixado.
+ * @param {number} [redirects=0] - Contagem atual de redirecionamentos encadeados.
+ * @returns {Promise<Buffer>} Promessa contendo o buffer do arquivo baixado.
+ * @throws {Error} Se o status for diferente de 200, ultrapassar limite de redirecionamento ou ocorrer timeout.
+ */
 function get(url, redirects) {
   redirects = redirects || 0;
   return new Promise((resolve, reject) => {

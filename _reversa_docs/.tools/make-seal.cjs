@@ -3,6 +3,10 @@ const path = require('path');
 
 // Logo flat "registro médico" (prancheta + coração + pulso), cores da referência:
 //   teal claro #b0e0e6 · ardósia #3e6482 · azul vivo #26adef · coral #fd5574
+/**
+ * Constrói a estrutura SVG do selo visual e marca d'água do Prontuário Fácil.
+ * @returns {string} String contendo a marcação SVG completa do selo.
+ */
 function buildSeal() {
   const parts = [];
   parts.push('<rect x="38" y="8" width="24" height="17" rx="5" fill="#26adef"/>');                       // prendedor

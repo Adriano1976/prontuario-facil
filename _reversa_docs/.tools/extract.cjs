@@ -8,6 +8,12 @@ const BASE44 = path.join(ROOT, 'base44');
 const CODE_EXT = new Set(['.js', '.jsx', '.ts', '.tsx', '.mjs', '.cjs']);
 const LANG = { '.js': 'js', '.jsx': 'jsx', '.ts': 'ts', '.tsx': 'tsx', '.css': 'css', '.jsonc': 'jsonc', '.json': 'json' };
 
+/**
+ * Percorre recursivamente um diretório e adiciona os caminhos dos arquivos encontrados a um array.
+ * @param {string} dir - O caminho do diretório a ser percorrido.
+ * @param {Array<string>} out - Array onde os caminhos completos dos arquivos serão acumulados.
+ * @returns {void}
+ */
 function walk(dir, out) {
   if (!fs.existsSync(dir)) return;
   for (const ent of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -21,6 +27,11 @@ function walk(dir, out) {
   }
 }
 
+/**
+ * Calcula a quantidade de linhas de código (LOC) não vazias em um arquivo.
+ * @param {string} file - O caminho do arquivo a ser analisado.
+ * @returns {number} O total de linhas não vazias no arquivo.
+ */
 function locOf(file) {
   const txt = fs.readFileSync(file, 'utf8');
   const lines = txt.split(/\r?\n/);
@@ -29,10 +40,20 @@ function locOf(file) {
   return n;
 }
 
+/**
+ * Converte um caminho de arquivo em um caminho relativo a partir da raiz do projeto, utilizando barras.
+ * @param {string} p - O caminho do arquivo.
+ * @returns {string} O caminho relativo padronizado.
+ */
 function relFromRoot(p) {
   return path.relative(ROOT, p).split(path.sep).join('/');
 }
 
+/**
+ * Determina o grupo/categoria de um módulo com base em seu caminho relativo.
+ * @param {string} rel - O caminho relativo do arquivo.
+ * @returns {string} O nome do grupo correspondente.
+ */
 function groupFor(rel) {
   // rel like "src/components/appointments/Foo.jsx"
   const parts = rel.split('/');
@@ -49,6 +70,11 @@ function groupFor(rel) {
   return parts[0]; // base44
 }
 
+/**
+ * Extrai todos os especificadores de importação e requisição de um arquivo de código.
+ * @param {string} file - O caminho do arquivo a ser analisado.
+ * @returns {Array<string>} Lista de especificadores importados ou requeridos.
+ */
 function extractImports(file) {
   const txt = fs.readFileSync(file, 'utf8');
   const rels = [];
@@ -65,6 +91,12 @@ function extractImports(file) {
   return rels;
 }
 
+/**
+ * Resolve o especificador de importação relativo ou alias para o caminho de arquivo real correspondente.
+ * @param {string} fromFile - O arquivo onde a importação foi declarada.
+ * @param {string} spec - O especificador de importação.
+ * @returns {string|null} O caminho relativo do arquivo de destino resolvido, ou null se não for encontrado.
+ */
 function resolveSpec(fromFile, spec) {
   let base;
   if (spec.startsWith('@/')) {
@@ -162,6 +194,11 @@ function resolveSpec(fromFile, spec) {
   let index = 0;
   const stack = [], onStack = new Set(), idx = new Map(), low = new Map();
   const cycles = [];
+  /**
+   * Executa a busca em profundidade do algoritmo de Tarjan para encontrar componentes fortemente conectados.
+   * @param {string} v - O identificador do nó sendo visitado.
+   * @returns {void}
+   */
   function strongconnect(v) {
     idx.set(v, index); low.set(v, index); index++;
     stack.push(v); onStack.add(v);

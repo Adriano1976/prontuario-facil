@@ -4,6 +4,12 @@ const path = require('path');
 const ROOT = path.resolve('_reversa_docs');
 const EXCLUDE_DIRS = new Set(['assets', '.tools', '.backup', '.logs']);
 
+/**
+ * Percorre recursivamente o diretório em busca de arquivos HTML para validação de links.
+ * @param {string} dir - O caminho do diretório a ser percorrido.
+ * @param {Array<string>} out - Array onde os caminhos dos arquivos HTML serão acumulados.
+ * @returns {void}
+ */
 function walk(dir, out) {
   for (const ent of fs.readdirSync(dir, { withFileTypes: true })) {
     if (ent.name.startsWith('.')) continue;

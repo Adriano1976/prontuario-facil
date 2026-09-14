@@ -5,6 +5,11 @@ const ROOT = path.resolve('.');
 const DOCS = path.join(ROOT, '_reversa_docs');
 const DATA = path.join(DOCS, 'assets', 'data');
 
+/**
+ * Lê e analisa um arquivo JSON localizado no diretório de dados.
+ * @param {string} rel - O caminho relativo do arquivo JSON a ser lido.
+ * @returns {object|null} O objeto obtido da análise do JSON ou null se falhar/não existir.
+ */
 function readJSON(rel) {
   const p = path.join(DATA, rel);
   if (fs.existsSync(p)) {
@@ -22,7 +27,11 @@ const featuresIndex = readJSON('features-index.json') || {};
 
 const seedShort = '89000d65'; // primeiros 8 chars do seed.hash
 
-// Selo generativo (crystal-lattice, derivado do seed). Lê dos arquivos gerados pelo make-seal.cjs.
+/**
+ * Lê o conteúdo em texto puro de um arquivo relativo ao diretório da documentação.
+ * @param {string} rel - O caminho relativo do arquivo a ser lido.
+ * @returns {string} O conteúdo do arquivo ou string vazia se o arquivo não existir.
+ */
 function readText(rel) {
   const p = path.join(DOCS, rel);
   return fs.existsSync(p) ? fs.readFileSync(p, 'utf8') : '';

@@ -4,6 +4,12 @@ const path = require('path');
 const ROOT = path.resolve('_reversa_docs');
 const EXCLUDE = new Set(['assets', '.tools', '.backup', '.logs']);
 
+/**
+ * Percorre recursivamente o diretório buscando arquivos HTML.
+ * @param {string} dir - O diretório a ser analisado.
+ * @param {Array<string>} out - Array acumulador com os caminhos dos arquivos HTML encontrados.
+ * @returns {void}
+ */
 function walk(dir, out) {
   for (const ent of fs.readdirSync(dir, { withFileTypes: true })) {
     if (ent.name.startsWith('.')) continue;
@@ -16,6 +22,11 @@ function walk(dir, out) {
 const pages = [];
 walk(ROOT, pages);
 
+/**
+ * Gera a tag de elemento link para inserção do favicon.
+ * @param {string} rel - O caminho relativo até a raiz dos assets.
+ * @returns {string} Tag HTML link formatada.
+ */
 const LINK = (rel) => '<link rel="icon" type="image/svg+xml" href="' + rel + 'assets/img/favicon.svg">';
 
 let changed = 0, skipped = 0;
