@@ -96,7 +96,14 @@ export interface AuthGateway {
    * acontece na camada de sessão, onde o modo é conhecido.
    */
   me(): Promise<unknown>;
-  logout(): Promise<void>;
+  /**
+   * Encerra a sessão.
+   *
+   * O parâmetro é o endereço para onde ir depois de sair. O consumidor legado
+   * (`AuthContext.jsx`) o usa no caminho com redirecionamento e o omite no caminho
+   * sem — por isso é opcional no contrato.
+   */
+  logout(redirectUrl?: string): Promise<void>;
   /**
    * Redireciona para a autenticação.
    *

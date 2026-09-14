@@ -71,7 +71,11 @@ export function createEntityRepository<T extends { id: string }, TInput>(
 
 /** Gateways que todo adaptador precisa oferecer, além das entidades. */
 export interface AdapterGateways {
-  auth: { me(): Promise<unknown>; logout(): Promise<void>; redirectToLogin(nextUrl: string): void };
+  auth: {
+    me(): Promise<unknown>;
+    logout(redirectUrl?: string): Promise<void>;
+    redirectToLogin(nextUrl: string): void;
+  };
   integrations: { Core: { UploadFile(params: { file: File }): Promise<UploadFileResult> } };
   appLogs: { logUserInApp(pageName: string): Promise<void> };
 }
