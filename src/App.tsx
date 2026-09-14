@@ -13,7 +13,7 @@ import type { ComponentType, ReactNode } from 'react';
 const Pages = pagesConfig.Pages as Record<string, ComponentType>;
 const LayoutComp = pagesConfig.Layout as ComponentType<{
   currentPageName?: string;
-  children?: ReactNode;
+  children: ReactNode;
 }> | null;
 const mainPageKey: string = pagesConfig.mainPage ?? Object.keys(Pages)[0];
 const MainPage: ComponentType = mainPageKey ? Pages[mainPageKey] : (() => <></>);

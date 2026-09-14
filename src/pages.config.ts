@@ -1,3 +1,4 @@
+import type { ComponentType, ReactNode } from 'react';
 import AccessLogs from './pages/AccessLogs';
 import Consultation from './pages/Consultation';
 import Consultations from './pages/Consultations';
@@ -12,13 +13,15 @@ import NewAppointment from './pages/NewAppointment';
 import Doctors from './pages/Doctors';
 import __Layout from './Layout';
 
-
 /**
  * Mapeamento de páginas da aplicação.
  * Mapeia nomes de páginas para seus componentes importados correspondentes.
  * Usado pelo roteador para navegar entre diferentes seções da app.
+ *
+ * PARIDADE: conversão de linguagem; o mapeamento e a página inicial continuam os
+ * mesmos do anterior.
  */
-export const PAGES = {
+export const PAGES: Record<string, ComponentType> = {
     "AccessLogs": AccessLogs,
     "Consultation": Consultation,
     "Consultations": Consultations,
@@ -36,13 +39,12 @@ export const PAGES = {
 /**
  * Objeto de configuração principal da aplicação.
  * Contém mapeamento de páginas, componente de layout e página inicial a carregar.
- *
- * @typedef {Object} PagesConfig
- * @property {string} mainPage - A página inicial a carregar quando app inicia.
- * @property {Object} Pages - Mapeamento de nomes de páginas para componentes.
- * @property {React.ComponentType} Layout - Componente wrapper de layout principal.
  */
-export const pagesConfig = {
+export const pagesConfig: {
+  mainPage: string;
+  Pages: Record<string, ComponentType>;
+  Layout: ComponentType<{ currentPageName?: string; children: ReactNode }>;
+} = {
     mainPage: "Dashboard",
     Pages: PAGES,
     Layout: __Layout,

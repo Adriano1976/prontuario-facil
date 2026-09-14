@@ -1,5 +1,7 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
+import { resolveScope } from '@/api/sessionScope';
+import { toSessionUser } from '@/lib/session';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
@@ -27,39 +29,57 @@ import PatientSearch from '@/components/medical/PatientSearch';
 import { logAccess, ACCESS_ACTIONS } from '@/components/medical/AccessLogger';
 import ReportsView from '@/components/medical/ReportsView';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import type { ConsultationStatus } from '@/types';
 
 /**
  * Página do dashboard mostrando métricas-chave de saúde e atividade recente.
  * Exibe estatísticas de pacientes, consultas, prescrições e agendamentos.
  * Inclui ações rápidas e funcionalidade de busca de paciente.
  *
- * @component
- * @returns {JSX.Element} - Dashboard com cartões de estatísticas, eventos recentes e ações rápidas.
+ * PARIDADE: comportamento e aparência idênticos ao anterior. Continuam iguais: as
+ * quatro consultas com seus limites e ordenações, os filtros de "hoje" e
+ * "próximos", o indicador de taxa de atendimento congelado em "94%" (valor de mock,
+ * decisão humana preservada), o registro de acesso ao entrar no painel e as ações
+ * rápidas.
  *
- * @example
- * <Dashboard />
+ * PARIDADE DE LEITURA: as quatro leituras passam a declarar o escopo pela decisão
+ * de escopo da feature (opção C) — a mesma condição que a RLS do servidor já aplicava.
  */
 export default function Dashboard() {
     const { data: patients, isLoading: loadingPatients } = useQuery({
         queryKey: ['patients'],
-        queryFn: () => base44.entities.Patient.list('-created_date', 100),
+        queryFn: async () => {
+            const user = toSessionUser(await base44.auth.me());
+            return base44.entities.Patient.listOwned(resolveScope(user), '-created_date', 100);
+        },
     });
 
     const { data: consultations, isLoading: loadingConsultations } = useQuery({
         queryKey: ['consultations'],
-        queryFn: () => base44.entities.Consultation.list('-date', 50),
+        queryFn: async () => {
+            const user = toSessionUser(await base44.auth.me());
+            return base44.entities.Consultation.listOwned(resolveScope(user), '-date', 50);
+        },
     });
 
     const { data: prescriptions } = useQuery({
         queryKey: ['prescriptions-count'],
-        queryFn: () => base44.entities.Prescription.list('-created_date', 100),
+        queryFn: async () => {
+            const user = toSessionUser(await base44.auth.me());
+            return base44.entities.Prescription.listOwned(resolveScope(user), '-created_date', 100);
+        },
     });
 
     const { data: appointments } = useQuery({
         queryKey: ['appointments'],
-        queryFn: () => base44.entities.Appointment.list('-date', 100),
+        queryFn: async () => {
+            const user = toSessionUser(await base44.auth.me());
+            return base44.entities.Appointment.listOwned(resolveScope(user), '-date', 100);
+        },
     });
 
+    // Cálculos do legado preservados como estavam — mesmo que a renderização atual
+    // não consuma todos, a conversão não remove lógica existente.
     const todayConsultations = consultations?.filter(c => {
         const today = new Date().toDateString();
         return new Date(c.date).toDateString() === today;
@@ -90,7 +110,7 @@ export default function Dashboard() {
         logAccess(ACCESS_ACTIONS.LOGIN, null, null, null, 'Acesso ao dashboard');
     }, []);
 
-    const statusColors = {
+    const statusColors: Record<ConsultationStatus, string> = {
         agendada: 'bg-amber-100 text-amber-700',
         em_andamento: 'bg-sky-100 text-sky-700',
         concluida: 'bg-emerald-100 text-emerald-700',
