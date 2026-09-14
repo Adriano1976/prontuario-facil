@@ -46,6 +46,17 @@ export function resolveScope(user: User | null | undefined): AccessScope {
 }
 
 /**
+ * Escopo do próprio usuário, sempre.
+ *
+ * Diferente de `resolveScope`, esta forma **nunca** devolve escopo administrativo —
+ * serve para operações em que o papel não importa, como gravar na trilha de auditoria,
+ * cuja inserção é feita por qualquer usuário autenticado (BR-MIGRAR-024).
+ */
+export function asUserScope(user: User | null | undefined): UserScope {
+  return { kind: 'user', user_id: user ? user.id : '' };
+}
+
+/**
  * Indica se o escopo é administrativo.
  *
  * Útil para telas que precisam decidir se mostram algo além do próprio dado — por
