@@ -60,7 +60,7 @@
 | T020 | Declarar o registro fechado das 8 entidades, com verificação das implementações em tempo de compilação | T018, T019, T017 | - | `src/api/registry.ts` | 🟢 | `[X]` |
 | T021 | Converter os componentes clínicos para a linguagem tipada (9 componentes) | T020 | - | `src/components/medical/` | 🟢 | `[X]` |
 | T022 | Converter os componentes de agendamento para a linguagem tipada (2 componentes) | T020 | `[//]` | `src/components/appointments/` | 🟢 | `[X]` |
-| T023 | Converter a tela de pacientes e migrar suas leituras para a camada com escopo | T021, T020 | - | `src/pages/Patients.jsx`, `src/pages/PatientForm.jsx` | 🟢 | `[ ]` |
+| T023 | Converter a tela de pacientes e migrar suas leituras para a camada com escopo | T021, T020 | - | `src/pages/Patients.tsx`, `src/pages/PatientForm.tsx` | 🟢 | `[X]` |
 | T024 | Converter a tela de detalhe do paciente e migrar suas leituras | T023 | - | `src/pages/PatientDetail.jsx` | 🟢 | `[ ]` |
 | T025 | Converter as telas de consulta e migrar suas leituras | T024, T021 | - | `src/pages/Consultations.jsx`, `src/pages/Consultation.jsx`, `src/pages/NewConsultation.jsx` | 🟢 | `[ ]` |
 | T026 | Converter as telas de agendamento e migrar suas leituras | T025, T022 | - | `src/pages/Appointments.jsx`, `src/pages/NewAppointment.jsx` | 🟢 | `[ ]` |
