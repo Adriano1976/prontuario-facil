@@ -1,3 +1,4 @@
+import type { BaseEntity } from './base';
 import type { UUID } from './common';
 
 /**
@@ -56,6 +57,20 @@ export interface OfflineUser {
 
 /** União do usuário da sessão: online autenticado ou a variante offline. */
 export type User = AuthenticatedUser | OfflineUser;
+
+/**
+ * Registro persistido do usuário da aplicação — a entidade embutida `User` do BaaS.
+ *
+ * Não é uma das 8 entidades clínicas do domínio, mas o legado a usa em um ponto:
+ * a exclusão de conta no `Layout` (`entities.User.delete`). O SDK documenta a
+ * entidade embutida `User` com regras de acesso próprias e imutáveis; este tipo é o
+ * espelho mínimo dos campos que a aplicação consome.
+ */
+export interface AppUser extends BaseEntity {
+  email: string;
+  full_name?: string;
+  role?: UserRole;
+}
 
 /**
  * Usuário fixo do modo offline (BR-MIGRAR-039).

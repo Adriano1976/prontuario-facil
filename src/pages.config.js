@@ -10,7 +10,7 @@ import Templates from './pages/Templates';
 import Appointments from './pages/Appointments';
 import NewAppointment from './pages/NewAppointment';
 import Doctors from './pages/Doctors';
-import __Layout from './Layout.jsx';
+import __Layout from './Layout';
 
 
 /**

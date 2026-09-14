@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
+import { resolveScope } from '@/api/sessionScope';
+import { toSessionUser } from '@/lib/session';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Link, useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
@@ -20,7 +22,6 @@ import {
     Stethoscope,
     FileText,
     Upload,
-    Plus,
     Trash2,
     Clock,
     User
@@ -29,8 +30,8 @@ import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import { motion } from 'framer-motion';
 import ConsultationTimeline from '@/components/medical/ConsultationTimeline';
-import ExamUploader from '@/components/medical/ExamUploader';
-import PrescriptionEditor from '@/components/medical/PrescriptionEditor';
+import ExamUploader, { type ExamPayload } from '@/components/medical/ExamUploader';
+import PrescriptionEditor, { type PrescriptionPayload } from '@/components/medical/PrescriptionEditor';
 import { logAccess, ACCESS_ACTIONS } from '@/components/medical/AccessLogger';
 import {
     AlertDialog,
@@ -42,6 +43,10 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import type { Appointment, Consultation, Exam, Patient, Prescription } from '@/types';
+import type { FilterConditions, SortField } from '@/types';
+import type { WriteInput } from '@/api/registry';
+import type { OwnedEntity } from '@/api/scopedRead';
 
 /**
  * Página de detalhe do paciente mostrando perfil completo e histórico médico.
@@ -49,12 +54,63 @@ import {
  * Fornece opções para editar dados do paciente e gerenciar registros médicos.
  * Suporta adicionando novos exames e prescrições.
  *
- * @component
- * @returns {JSX.Element} - Página com perfil de paciente, abas para diferentes dados médicos e botões de ação.
+ * PARIDADE: comportamento e aparência idênticos ao anterior. Continuam iguais: as
+ * cinco consultas (paciente, consultas, prescrições, exames e agendamentos), a
+ * ordenação de cada uma, o registro de acesso na visualização e na exclusão, o
+ * cálculo de idade, o estado de carregamento e o estado "não encontrado".
  *
- * @example
- * <PatientDetail /> // URL deve conter ?id=paciente-123
+ * PARIDADE DE LEITURA: as leituras passam a declarar o escopo de acesso pela decisão
+ * de escopo da feature (opção C): o escopo é resolvido pelo papel da sessão —
+ * administrador lê sem filtro de dono, e usuário comum lê apenas o próprio dado.
+ * É a mesma condição que a regra de acesso do servidor já aplicava.
+ *
+ * Nota: o componente `ConsultationTimeline` convertido não recebe mais a prop
+ * `patientId` — no legado ela era destruturada e nunca usada no corpo; removê-la
+ * não muda nada em runtime.
  */
+
+/**
+ * Lê uma entidade sob RLS aplicando o escopo da sessão (decisão de escopo, opção C).
+ *
+ * O escopo vem de `resolveScope`, que decide pelo papel da sessão: admin lê sem
+ * filtro de dono (mesmo resultado do legado) e usuário comum recebe o filtro de
+ * dono imposto — a condição que a RLS do servidor já aplicava.
+ */
+async function readOwned<T extends { created_by_id?: string }>(
+  entity: OwnedEntity<T>,
+  conditions: FilterConditions<Omit<T, 'created_by_id'>>,
+  sort?: SortField<T>,
+): Promise<T[]> {
+  const user = toSessionUser(await base44.auth.me());
+  const scope = resolveScope(user);
+  if (scope.kind === 'admin') {
+    // A condição vem sem `created_by_id` (Omit); para a leitura administrativa a
+    // forma parcial completa é aceita — o campo omitido é o único que difere.
+    return entity.filterAsAdmin(scope, conditions as Partial<T>, sort);
+  }
+  return entity.filterOwned(scope, conditions, sort);
+}
+
+/**
+ * Calcula a idade em anos completos.
+ *
+ * ⚠️ Esta função também existe em `Patients.tsx` — duplicação registrada no plano de
+ * migração como sintoma de ausência de fronteira de domínio. A extração para um
+ * módulo compartilhado é uma mudança de ESTRUTURA, fora do escopo "só tipos" desta
+ * migração; por isso a cópia é preservada aqui.
+ */
+const calculateAge = (birthDate: string | undefined): number | null => {
+    if (!birthDate) return null;
+    const today = new Date();
+    const birth = new Date(birthDate);
+    let age = today.getFullYear() - birth.getFullYear();
+    const m = today.getMonth() - birth.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
+        age--;
+    }
+    return age;
+};
+
 export default function PatientDetail() {
     const navigate = useNavigate();
     const queryClient = useQueryClient();
@@ -67,7 +123,7 @@ export default function PatientDetail() {
 
     const { data: patientData, isLoading } = useQuery({
         queryKey: ['patient', patientId],
-        queryFn: () => base44.entities.Patient.filter({ id: patientId }),
+        queryFn: () => readOwned(base44.entities.Patient, { id: patientId ?? '' }),
         enabled: !!patientId,
     });
 
@@ -75,25 +131,25 @@ export default function PatientDetail() {
 
     const { data: consultations } = useQuery({
         queryKey: ['consultations', patientId],
-        queryFn: () => base44.entities.Consultation.filter({ patient_id: patientId }, '-date'),
+        queryFn: () => readOwned(base44.entities.Consultation, { patient_id: patientId ?? '' }, '-date'),
         enabled: !!patientId,
     });
 
     const { data: prescriptions } = useQuery({
         queryKey: ['prescriptions', patientId],
-        queryFn: () => base44.entities.Prescription.filter({ patient_id: patientId }, '-created_date'),
+        queryFn: () => readOwned(base44.entities.Prescription, { patient_id: patientId ?? '' }, '-created_date'),
         enabled: !!patientId,
     });
 
     const { data: exams } = useQuery({
         queryKey: ['exams', patientId],
-        queryFn: () => base44.entities.Exam.filter({ patient_id: patientId }, '-date'),
+        queryFn: () => readOwned(base44.entities.Exam, { patient_id: patientId ?? '' }, '-date'),
         enabled: !!patientId,
     });
 
     const { data: appointments } = useQuery({
         queryKey: ['appointments', patientId],
-        queryFn: () => base44.entities.Appointment.filter({ patient_id: patientId }, '-date'),
+        queryFn: () => readOwned(base44.entities.Appointment, { patient_id: patientId ?? '' }, '-date'),
         enabled: !!patientId,
     });
 
@@ -104,34 +160,24 @@ export default function PatientDetail() {
     }, [patient, patientId]);
 
     const createExamMutation = useMutation({
-        mutationFn: (data) => base44.entities.Exam.create(data),
+        mutationFn: (data: ExamPayload) =>
+            base44.entities.Exam.create(data as unknown as WriteInput<Exam>),
         onSuccess: () => queryClient.invalidateQueries({ queryKey: ['exams', patientId] }),
     });
 
     const createPrescriptionMutation = useMutation({
-        mutationFn: (data) => base44.entities.Prescription.create(data),
+        mutationFn: (data: PrescriptionPayload) =>
+            base44.entities.Prescription.create(data as unknown as WriteInput<Prescription>),
         onSuccess: () => queryClient.invalidateQueries({ queryKey: ['prescriptions', patientId] }),
     });
 
     const deleteMutation = useMutation({
-        mutationFn: () => base44.entities.Patient.delete(patientId),
+        mutationFn: () => base44.entities.Patient.delete(patientId ?? ''),
         onSuccess: () => {
-            logAccess(ACCESS_ACTIONS.DELETE_RECORD, 'Patient', patientId, patient?.full_name);
+            logAccess(ACCESS_ACTIONS.DELETE_RECORD, 'Patient', patientId, patient?.full_name ?? null);
             navigate(createPageUrl('Patients'));
         },
     });
-
-    const calculateAge = (birthDate) => {
-        if (!birthDate) return null;
-        const today = new Date();
-        const birth = new Date(birthDate);
-        let age = today.getFullYear() - birth.getFullYear();
-        const m = today.getMonth() - birth.getMonth();
-        if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
-            age--;
-        }
-        return age;
-    };
 
     if (isLoading) {
         return (
@@ -375,7 +421,6 @@ export default function PatientDetail() {
                                             prescriptions={prescriptions}
                                             exams={exams}
                                             appointments={appointments}
-                                            patientId={patientId}
                                         />
                                     </TabsContent>
 
@@ -385,7 +430,6 @@ export default function PatientDetail() {
                                             prescriptions={[]}
                                             exams={[]}
                                             appointments={appointments}
-                                            patientId={patientId}
                                         />
                                     </TabsContent>
 
@@ -394,7 +438,6 @@ export default function PatientDetail() {
                                             consultations={consultations}
                                             prescriptions={[]}
                                             exams={[]}
-                                            patientId={patientId}
                                         />
                                     </TabsContent>
 
@@ -403,7 +446,6 @@ export default function PatientDetail() {
                                             consultations={[]}
                                             prescriptions={prescriptions}
                                             exams={[]}
-                                            patientId={patientId}
                                         />
                                     </TabsContent>
 
@@ -412,7 +454,6 @@ export default function PatientDetail() {
                                             consultations={[]}
                                             prescriptions={[]}
                                             exams={exams}
-                                            patientId={patientId}
                                         />
                                     </TabsContent>
                                 </Tabs>

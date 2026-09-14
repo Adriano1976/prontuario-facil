@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
-import { asUserScope } from '@/api/sessionScope';
+import { resolveScope } from '@/api/sessionScope';
 import { toSessionUser } from '@/lib/session';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
@@ -159,7 +159,11 @@ export default function PatientForm() {
     queryKey: ['patient', patientId],
     queryFn: async () => {
       const user = toSessionUser(await base44.auth.me());
-      return base44.entities.Patient.filterOwned(asUserScope(user), { id: patientId ?? '' });
+      const scope = resolveScope(user);
+      if (scope.kind === 'admin') {
+        return base44.entities.Patient.filterAsAdmin(scope, { id: patientId ?? '' });
+      }
+      return base44.entities.Patient.filterOwned(scope, { id: patientId ?? '' });
     },
     enabled: !!patientId,
   });

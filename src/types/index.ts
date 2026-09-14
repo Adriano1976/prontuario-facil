@@ -38,5 +38,5 @@ export type { LGPDConsent, Patient } from './Patient';
 export type { Medication, Prescription, PrescriptionType } from './Prescription';
 export type { Template, TemplateType } from './Template';
 
-export type { AuthenticatedUser, OfflineUser, User, UserRole } from './User';
+export type { AppUser, AuthenticatedUser, OfflineUser, User, UserRole } from './User';
 export { OFFLINE_USER } from './User';

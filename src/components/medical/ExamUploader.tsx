@@ -40,7 +40,7 @@ const EXAM_TYPES: readonly { value: ExamType; label: string }[] = [
 ];
 
 /** Dados que o exame precisa receber; o identificador é preenchido pelo servidor. */
-interface ExamPayload {
+export interface ExamPayload {
   patient_id: string | undefined;
   consultation_id: string | null;
   name: string;

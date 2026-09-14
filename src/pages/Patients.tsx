@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { base44 } from '@/api/base44Client';
-import { asUserScope } from '@/api/sessionScope';
+import { resolveScope } from '@/api/sessionScope';
 import { toSessionUser } from '@/lib/session';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
@@ -74,7 +74,10 @@ export default function Patients() {
     queryKey: ['patients'],
     queryFn: async () => {
       const user = toSessionUser(await base44.auth.me());
-      return base44.entities.Patient.listOwned(asUserScope(user), '-created_date');
+      // Escopo resolvido pelo papel da sessão (decisão de escopo, opção C):
+      // admin lista sem filtro de dono, usuário comum lista apenas o próprio dado —
+      // a mesma condição que a RLS do servidor já aplicava.
+      return base44.entities.Patient.listOwned(resolveScope(user), '-created_date');
     },
   });
 
