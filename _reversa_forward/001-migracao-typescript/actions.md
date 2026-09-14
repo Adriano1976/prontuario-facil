@@ -37,7 +37,7 @@
 | T002 | Corrigir o comando de verificação do manifesto, que apontava para a configuração legada e emitia arquivos | T001 | - | `package.json` | 🟢 | `[X]` |
 | T003 | Corrigir o erro de sintaxe que fazia a verificação abortar a análise de todo o projeto | T001 | `[//]` | `src/components/ui/chart.jsx` | 🟢 | `[X]` |
 | T004 | Confirmar que a verificação cobre o número esperado de arquivos do código-fonte | T001 | - | `tsconfig.json` | 🟢 | `[X]` |
-| T005 | Registrar no arquivo de configuração a exclusão da pasta de componentes de interface herdados, com justificativa por escrito | T001 | - | `tsconfig.json` | 🟢 | `[ ]` |
+| T005 | Registrar no arquivo de configuração a exclusão da pasta de componentes de interface herdados, com justificativa por escrito | T001 | - | `tsconfig.json` | 🟢 | `[X]` |
 
 ## Fase 2, Núcleo
 
