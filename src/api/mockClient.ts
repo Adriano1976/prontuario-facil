@@ -1,4 +1,4 @@
-import type { DataClientBase, UploadFileResult } from './contract';
+import type { UploadFileResult } from './contract';
 import { mockSeed } from './mockSeed';
 
 /**
@@ -16,9 +16,14 @@ import { mockSeed } from './mockSeed';
  * `_reversa_sdd/migration/interfaces/mock-local-storage.md`.
  */
 
-/** Usuário fixo do modo offline (BR-MIGRAR-039) — sem `role` e sem `created_by_id`. */
+/**
+ * Usuário fixo do modo offline (BR-MIGRAR-039).
+ *
+ * O valor é exatamente o do legado — `id`, `email` e `full_name`, sem papel e sem
+ * dono. O campo discriminante `kind` pertence ao TIPO (`OfflineUser`), não ao dado
+ * armazenado, por isso não aparece aqui.
+ */
 export const OFFLINE_USER = {
-  kind: 'offline' as const,
   id: 'demo-user-001',
   email: 'demo@medrecord.local',
   full_name: 'Dra. Demo',
@@ -158,19 +163,18 @@ const auth = {
 };
 
 const appLogs = {
-  logUserInApp: () => Promise.resolve(),
+  /** Sem efeito no modo offline, como no legado (BR-MIGRAR-045). */
+  logUserInApp: (_pageName: string) => Promise.resolve(),
 };
 
 /**
  * Cria o cliente do modo offline.
  *
  * O retorno é a forma crua (repositórios indexados + gateways). A ligação ao
- * contrato tipado acontece em `base44Client`, por `createAppDataClient`, que é o que
- * verifica em tempo de compilação que esta implementação honra o contrato.
+ * contrato tipado acontece em `base44Client`, por `bindAdapter`, que é o que verifica
+ * em tempo de compilação que esta implementação honra o contrato.
  */
-export function createMockClient(): DataClientBase & {
-  entities: Record<string, ReturnType<typeof makeRepo>>;
-} {
+export function createMockClient() {
   return { entities, integrations, auth, appLogs };
 }
 

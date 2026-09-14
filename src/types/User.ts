@@ -29,22 +29,26 @@ export interface AuthenticatedUser {
 }
 
 /**
- * Usuário do modo offline — variante discriminada SEM `role` e SEM `created_by_id`
+ * Usuário do modo offline — variante SEM `role` e SEM `created_by_id`
  * (BR-MIGRAR-039 / AD-03).
  *
- * A ausência é estrutural: `never` impede que a variante carregue papel algum, de
- * modo que componentes que dependem de `role` tratem o caso offline explicitamente
- * em vez de compilar cego (achado F-01).
+ * O DISCRIMINANTE é a presença de `role`, e ele é o campo que importa:
+ * `role?: never` torna a ausência ESTRUTURAL, de modo que trecho de código que exija
+ * papel não compila contra esta variante — é o que obriga o tratamento explícito do
+ * caso offline em vez de compilar cego (achado F-01).
+ *
+ * O valor real é exatamente o do legado: `id`, `email` e `full_name`. Não há campo
+ * `kind` no dado, e por isso o tipo também não o exige. A distinção entre as duas
+ * variantes é feita por `role`: presente como `UserRole` no autenticado, `never`
+ * aqui — o que permite estreitar com `if (user.role)`.
  *
  * O tipo garante a FORMA, não a autorização.
  */
 export interface OfflineUser {
-  /** Discriminante da variante offline. */
-  kind: 'offline';
   id: UUID;
   email: string;
   full_name: string;
-  /** Estruturalmente ausente. */
+  /** Estruturalmente ausente — é este o discriminante da variante. */
   role?: never;
   /** Estruturalmente ausente. */
   created_by_id?: never;
@@ -56,11 +60,10 @@ export type User = AuthenticatedUser | OfflineUser;
 /**
  * Usuário fixo do modo offline (BR-MIGRAR-039).
  *
- * Espelha `src/api/mockClient.js`:
+ * Espelha exatamente `src/api/mockClient.js`:
  * `{ id: 'demo-user-001', email: 'demo@medrecord.local', full_name: 'Dra. Demo' }`.
  */
 export const OFFLINE_USER: OfflineUser = {
-  kind: 'offline',
   id: 'demo-user-001',
   email: 'demo@medrecord.local',
   full_name: 'Dra. Demo',

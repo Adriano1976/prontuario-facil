@@ -97,12 +97,25 @@ export interface AuthGateway {
    */
   me(): Promise<unknown>;
   logout(): Promise<void>;
-  redirectToLogin(): void;
+  /**
+   * Redireciona para a autenticação.
+   *
+   * O parâmetro é o endereço de retorno após autenticar. O consumidor legado passa o
+   * endereço atual (`AuthContext.jsx`), e o SDK o exige — por isso ele é parte do
+   * contrato, em vez de ser decidido internamente pelo adaptador.
+   */
+  redirectToLogin(nextUrl: string): void;
 }
 
-/** Logs de uso do app — no-op no legado e no mock (BR-MIGRAR-045). */
+/** Logs de uso do app — sem efeito no legado e no mock (BR-MIGRAR-045). */
 export interface AppLogsGateway {
-  logUserInApp(): Promise<void>;
+  /**
+   * Registra o uso de uma página.
+   *
+   * O parâmetro é o nome da página visitada — o consumidor legado
+   * (`NavigationTracker.jsx`) o informa, e o SDK o exige.
+   */
+  logUserInApp(pageName: string): Promise<void>;
 }
 
 /** Integrações do SDK usadas pela aplicação. */
