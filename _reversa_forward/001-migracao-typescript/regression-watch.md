@@ -15,6 +15,7 @@
 | W004 | `src/api/mockSeed.ts` | Prescrições do seed têm `medications` (lista) com `type` e `content` | `presença` | Documentos offline voltam a não exibir medicamentos (regressão para texto único) |
 | W005 | `src/pages/Patients.tsx`, `PatientForm.tsx`, `PatientDetail.tsx` | Leitura escopada resolve o escopo pelo papel da sessão (`resolveScope`): admin lê sem filtro de dono | `presença` | Administrador deixa de ver todos os registros (uso de `asUserScope` em listagem) |
 | W006 | `base44/entities/*.jsonc` | Schemas do BaaS permanecem intocados (regra de ouro do diff) | `ausência` | Qualquer diff em `base44/entities/` |
+| W007 | `src/api/contract.ts` | `integrations.Core.SendEmail` faz parte do contrato; o adaptador online liga ao SDK | `presença` | Email de confirmação de agendamento volta a falhar no modo online |
 
 ## Histórico de re-extrações
 

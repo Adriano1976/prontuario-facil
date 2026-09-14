@@ -63,7 +63,7 @@
 | T023 | Converter a tela de pacientes e migrar suas leituras para a camada com escopo | T021, T020 | - | `src/pages/Patients.tsx`, `src/pages/PatientForm.tsx` | 🟢 | `[X]` |
 | T024 | Converter a tela de detalhe do paciente e migrar suas leituras | T023 | - | `src/pages/PatientDetail.tsx` | 🟢 | `[X]` |
 | T025 | Converter as telas de consulta e migrar suas leituras | T024, T021 | - | `src/pages/Consultations.tsx`, `src/pages/Consultation.tsx`, `src/pages/NewConsultation.tsx` | 🟢 | `[X]` |
-| T026 | Converter as telas de agendamento e migrar suas leituras | T025, T022 | - | `src/pages/Appointments.jsx`, `src/pages/NewAppointment.jsx` | 🟢 | `[ ]` |
+| T026 | Converter as telas de agendamento e migrar suas leituras | T025, T022 | - | `src/pages/Appointments.tsx`, `src/pages/NewAppointment.tsx` | 🟢 | `[X]` |
 | T027 | Converter a tela de médicos | T026 | - | `src/pages/Doctors.jsx` | 🟢 | `[ ]` |
 | T028 | Converter a tela de modelos de documento | T027 | - | `src/pages/Templates.jsx` | 🟢 | `[ ]` |
 | T029 | Converter a tela de registros de acesso | T028 | - | `src/pages/AccessLogs.jsx` | 🟢 | `[ ]` |

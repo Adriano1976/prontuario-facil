@@ -19,6 +19,8 @@
 | `src/components/medical/*` (9) e `src/components/appointments/*` (2) | Componentes clínicos e de agendamento | `componente-novo` | LOW | Versões `.tsx`/`.ts` criadas; os `.jsx` gêmeos permanecem até as telas consumidoras converterem |
 | `src/pages/Patients.tsx`, `PatientForm.tsx`, `PatientDetail.tsx` | Telas de paciente | `componente-novo` | LOW | Conversão com leituras escopadas; `.jsx` removidos após conferência de versionamento |
 | `src/pages/Consultations.tsx`, `Consultation.tsx`, `NewConsultation.tsx` | Telas de consulta | `componente-novo` | LOW | Conversão com leituras escopadas; `.jsx` removidos após conferência de versionamento |
+| `src/pages/Appointments.tsx`, `NewAppointment.tsx` | Telas de agendamento | `componente-novo` | LOW | Conversão com leituras escopadas; `.jsx` removidos após conferência de versionamento |
+| `src/api/contract.ts`, `entities.ts`, `base44Client.ts`, `mockClient.ts` | Contrato de integrações | `delta-de-contrato-externo` | LOW | `SendEmail` incorporado ao contrato (o legado o usava no agendamento; estava fora do escopo original e regrediu em T037) |
 | `src/pages/Patients.tsx`, `PatientForm.tsx` | Leitura de pacientes | `regra-alterada` | LOW | Escopo de leitura passa a ser resolvido pelo papel da sessão (`resolveScope`) — espelha a RLS do servidor |
 | `src/api/mockSeed.ts` | Dados de exemplo do modo offline | `delta-de-dados` | MEDIUM | Conteúdo dos dados de demonstração alinhado ao contrato; medicamentos passam a aparecer na tela de documento offline (mudança visível esperada, registrada em `data-delta.md` §4) |
 | `src/App.tsx`, `src/Layout.tsx`, `src/lib/*`, `src/hooks/*`, `src/pages.config.js` | Estrutura e auxiliares | `componente-novo` | LOW | Conversão preservando comportamento; import do Layout corrigido |
@@ -51,6 +53,19 @@ próprio dado; a correção restaura a paridade com o legado.
 padrão de escopo. A legenda de situação preserva a ausência quando o registro não
 tem `status` — o seed offline de consultas não o grava, e a renderização continua a
 mesma do legado (badge sem rótulo), em vez de assumir um valor padrão.
+
+**Telas de agendamento.** As duas telas seguem o mesmo padrão de escopo; médicos
+continuam com leitura livre para autenticados (BR-MIGRAR-017). Dois ajustes de
+paridade: (1) a prop `selectedDate` do `TimeSlotPicker` voltou a aceitar `Date`,
+que é o que o consumidor legado entrega; (2) a prop `required` dos Selects de
+paciente/médico foi removida — o componente de interface nunca a renderizou, então
+nada muda em runtime.
+
+**Contrato de integrações (SendEmail).** A decisão original de escopo listava
+`SendEmail` como fora do contrato, mas o legado o usa no agendamento (email de
+confirmação). A função foi incorporada com a assinatura do SDK: o adaptador online
+liga ao SDK real e o adaptador offline rejeita a chamada — o mesmo desfecho
+observável do legado offline, que não a implementava e falhava em runtime.
 
 **Dados de exemplo offline.** O seed foi tipado contra as entidades e alinhado:
 gênero nas formas do enum, `lgpd_consent` explícito, `anamnese` →
