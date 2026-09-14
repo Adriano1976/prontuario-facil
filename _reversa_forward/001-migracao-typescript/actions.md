@@ -64,7 +64,7 @@
 | T024 | Converter a tela de detalhe do paciente e migrar suas leituras | T023 | - | `src/pages/PatientDetail.tsx` | 🟢 | `[X]` |
 | T025 | Converter as telas de consulta e migrar suas leituras | T024, T021 | - | `src/pages/Consultations.tsx`, `src/pages/Consultation.tsx`, `src/pages/NewConsultation.tsx` | 🟢 | `[X]` |
 | T026 | Converter as telas de agendamento e migrar suas leituras | T025, T022 | - | `src/pages/Appointments.tsx`, `src/pages/NewAppointment.tsx` | 🟢 | `[X]` |
-| T027 | Converter a tela de médicos | T026 | - | `src/pages/Doctors.jsx` | 🟢 | `[ ]` |
+| T027 | Converter a tela de médicos | T026 | - | `src/pages/Doctors.tsx` | 🟢 | `[X]` |
 | T028 | Converter a tela de modelos de documento | T027 | - | `src/pages/Templates.jsx` | 🟢 | `[ ]` |
 | T029 | Converter a tela de registros de acesso | T028 | - | `src/pages/AccessLogs.jsx` | 🟢 | `[ ]` |
 | T030 | Converter a tela do painel e seus componentes de indicadores | T029 | - | `src/pages/Dashboard.jsx`, `src/components/medical/StatsCard.jsx`, `src/components/medical/ReportsView.jsx` | 🟢 | `[ ]` |

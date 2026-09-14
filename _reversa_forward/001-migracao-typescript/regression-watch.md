@@ -16,6 +16,7 @@
 | W005 | `src/pages/Patients.tsx`, `PatientForm.tsx`, `PatientDetail.tsx` | Leitura escopada resolve o escopo pelo papel da sessão (`resolveScope`): admin lê sem filtro de dono | `presença` | Administrador deixa de ver todos os registros (uso de `asUserScope` em listagem) |
 | W006 | `base44/entities/*.jsonc` | Schemas do BaaS permanecem intocados (regra de ouro do diff) | `ausência` | Qualquer diff em `base44/entities/` |
 | W007 | `src/api/contract.ts` | `integrations.Core.SendEmail` faz parte do contrato; o adaptador online liga ao SDK | `presença` | Email de confirmação de agendamento volta a falhar no modo online |
+| W008 | `src/pages/Doctors.tsx` (e Templates) | Médicos e templates mantêm leitura livre para autenticados, sem escopo de dono (BR-MIGRAR-017/020) | `presença` | Usuário comum deixa de ver as listas de médicos/templates que o legado mostrava |
 
 ## Histórico de re-extrações
 
