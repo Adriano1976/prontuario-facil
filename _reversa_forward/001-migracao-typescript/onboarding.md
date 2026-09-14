@@ -62,6 +62,10 @@ O modo offline é ativado na construção, não por botão na tela:
 VITE_OFFLINE=true npm run dev
 ```
 
+> ⚠️ **Sintaxe por shell:** a forma acima (`VAR=valor comando`) é de shell Unix
+> (Linux/macOS). **Não funciona no PowerShell** — lá a variável é definida com
+> `$env:`:
+
 No Windows, em PowerShell:
 
 ```
