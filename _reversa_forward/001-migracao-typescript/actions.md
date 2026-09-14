@@ -67,7 +67,7 @@
 | T027 | Converter a tela de médicos | T026 | - | `src/pages/Doctors.tsx` | 🟢 | `[X]` |
 | T028 | Converter a tela de modelos de documento | T027 | - | `src/pages/Templates.tsx` | 🟢 | `[X]` |
 | T029 | Converter a tela de registros de acesso | T028 | - | `src/pages/AccessLogs.tsx` | 🟢 | `[X]` |
-| T030 | Converter a tela do painel e seus componentes de indicadores | T029 | - | `src/pages/Dashboard.jsx`, `src/components/medical/StatsCard.jsx`, `src/components/medical/ReportsView.jsx` | 🟢 | `[ ]` |
+| T030 | Converter a tela do painel e seus componentes de indicadores | T029 | - | `src/pages/Dashboard.tsx`, `src/components/medical/StatsCard.tsx`, `src/components/medical/ReportsView.tsx` | 🟢 | `[X]` |
 
 ## Fase 3, Testes
 

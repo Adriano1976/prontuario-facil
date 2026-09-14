@@ -51,3 +51,14 @@ registrados para contexto:
   cliente; a restrição real (apenas admin lê, BR-MIGRAR-024) vive na regra de
   acesso do servidor. Se a leitura passar a declarar `asAdmin`/`asUser`, conferir
   que o resultado para cada papel continua idêntico ao do legado.
+- **Resolução dos `.jsx` gêmeos (T030)** — a observação anterior sobre os
+  componentes sombreados foi RESOLVIDA: com a última tela convertida, os 11
+  `.jsx` de componentes e o `AuthContext.jsx` ficaram órfãos e foram removidos; as
+  versões tipadas passaram a ser as resolvidas em runtime. Verificar no fumaça
+  (T044) que nenhum componente voltou a renderizar a versão legada.
+- **`src/main.jsx` (T030)** — permanece em JS por ser o ponto de entrada referido
+  pelo empacotador; é o único arquivo de aplicação fora de `ui/` não verificado.
+  Se o ponto de entrada mudar de nome/extensão, ajustar aqui e no empacotador.
+- **`UserNotRegisteredError` e `pages.config` (T030)** — convertidos para `.tsx`/
+  `.ts`; o código-fonte passou a ser integralmente verificado, exceto a pasta
+  `ui/` (exclusão registrada em `tsconfig.json`).
