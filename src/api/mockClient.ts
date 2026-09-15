@@ -108,7 +108,17 @@ function makeRepo(entity: string) {
     create: (data: Record<string, unknown>): Promise<StoredRecord> => {
       const arr = load(entity);
       const now = new Date().toISOString();
-      const record = { id: uid(), created_date: now, ...data } as StoredRecord;
+      // PARIDADE COM O SERVIDOR: o BaaS preenche `created_by_id` a partir da sessão
+      // (é campo de servidor, por isso fora de `WriteInput`). O mock precisa fazer o
+      // mesmo — sem isso, o registro criado no modo offline nasce SEM dono e as
+      // leituras com escopo (que filtram por `created_by_id`, BR-MIGRAR-034) não o
+      // encontram: o registro é salvo, mas desaparece da lista.
+      const record = {
+        id: uid(),
+        created_date: now,
+        ...data,
+        created_by_id: OFFLINE_USER.id,
+      } as StoredRecord;
       if (!record.date) record.date = now;
       arr.push(record);
       save(entity, arr);
