@@ -81,10 +81,20 @@ site no navegador.
 
 ## 4. Roteiro de fumaça de paridade
 
-Fonte: os 26 cenários já existentes em `_reversa_sdd/migration/parity_tests/`
-(10 de fluxo e 16 de tela). Execute-os no módulo que acabou de ser convertido e
-registre cada um como **conforme** ou **divergente**. Nenhuma divergência pode
-permanecer sem tratamento antes de avançar de módulo.
+Fonte: `_reversa_sdd/migration/parity_tests/` — **26 arquivos** de cenários em
+Gherkin (`Dado/Quando/Então`) que somam **55 cenários**: 39 em 10 arquivos de
+**fluxo** (`01`–`10`) e 16 em 16 arquivos de **tela** (`V01`–`V16`).
+
+> ⚠️ **Não são testes automatizados.** O projeto não possui arcabouço de teste (não
+> há script `test` nem dependência de `cucumber`/`gherkin`/`jest`/`vitest`), o que é
+> decisão registrada da feature (`requirements.md` §6.1). Esses arquivos são a
+> **especificação do que precisa continuar verdadeiro** e servem de roteiro: percorra
+> cada cenário no módulo convertido e registre **conforme** ou **divergente**.
+> Nenhuma divergência pode permanecer sem tratamento antes de avançar de módulo.
+>
+> Exceção verificável por máquina: `10-contrato-base44-client.feature` trata do
+> contrato de tipos e foi validado na ação T039 (6 de 6 violações propositais
+> recusadas pelo compilador).
 
 Pontos de atenção por ordem de risco:
 
@@ -99,9 +109,10 @@ Pontos de atenção por ordem de risco:
 
 ### 4.1 Mapa módulo → cenários (preenchido pelo responsável)
 
-Estado da ação T044: **roteiro preparado, execução pendente** — a execução é manual
-por decisão registrada (`requirements.md` §6.1) e este ambiente de desenvolvimento
-não sobe o servidor (`esbuild: spawn EPERM`, seção 7).
+Estado da ação T044: **CONCLUÍDA em 15/09/2026** — verificação estática (seção 4.2) e
+passeio interativo executados. O questionário respondido está em `questions.md`, com a
+análise de cada divergência. `npm run build` e `npm run typecheck` passaram na máquina
+do responsável (fecha a lacuna da seção 7).
 
 Registre cada módulo como **conforme** ou **divergente** na última coluna. Nenhuma
 divergência pode ficar sem tratamento antes de fechar a feature. Sugestão de ordem:
@@ -109,26 +120,53 @@ primeiro o modo online (módulos na ordem abaixo) e depois o modo offline comple
 
 | Módulo | Cenários de paridade | Resultado |
 |--------|----------------------|-----------|
-| Dashboard | `08-kpis-dashboard`, `V01-dashboard-principal` | ⬜ pendente |
-| Pacientes — listagem | `V02-pacientes-listagem`, `01-cadastro-paciente-lgpd` | ⬜ pendente |
-| Pacientes — novo/editar | `01-cadastro-paciente-lgpd`, `V03-pacientes-novo` | ⬜ pendente |
-| Pacientes — detalhe | `V14-paciente-detalhe`, `01-cadastro-paciente-lgpd` | ⬜ pendente |
-| Agendamentos — calendário/lista | `03-agendamento-jornada-medico`, `04-ciclo-status-agendamento`, `V04-agendamentos-calendario` | ⬜ pendente |
-| Agendamentos — novo | `03-agendamento-jornada-medico`, `V05-agendamentos-novo` | ⬜ pendente |
-| Consultas — listagem | `05-maquina-estados-consulta`, `V06-consultas-listagem` | ⬜ pendente |
-| Consultas — novo/editar | `05-maquina-estados-consulta`, `V07-consultas-novo` | ⬜ pendente |
-| Consultas — visualização | `05-maquina-estados-consulta`, `V08-consultas-visualizacao` | ⬜ pendente |
-| Modal novo documento | `06-emissao-documento-template`, `V09-modal-novo-documento` | ⬜ pendente |
-| Modal upload de exame | `V10-modal-upload-exame` | ⬜ pendente |
-| Médicos — listagem/novo | `V11-medicos-listagem`, `V15-medicos-novo` | ⬜ pendente |
-| Templates — central/modal | `06-emissao-documento-template`, `V12-templates-central`, `V16-templates-modal` | ⬜ pendente |
-| Logs de acesso | `07-auditoria-acesso`, `V13-logs-acesso` | ⬜ pendente |
-| Modo offline (todos os módulos) | `09-modo-offline` + `10-contrato-base44-client` (verificação por tipo, já executada em T039) | ⬜ pendente |
+| Dashboard | `08-kpis-dashboard`, `V01-dashboard-principal` | ✅ conforme |
+| Pacientes — listagem | `V02-pacientes-listagem`, `01-cadastro-paciente-lgpd` | ✅ conforme |
+| Pacientes — novo/editar | `01-cadastro-paciente-lgpd`, `V03-pacientes-novo` | ✅ conforme — após corrigir o defeito **DIV-01** |
+| Pacientes — detalhe | `V14-paciente-detalhe`, `01-cadastro-paciente-lgpd` | ✅ conforme (inclui o item ⭐ 4.5) |
+| Agendamentos — calendário/lista | `03-agendamento-jornada-medico`, `04-ciclo-status-agendamento`, `V04-agendamentos-calendario` | ✅ conforme |
+| Agendamentos — novo | `03-agendamento-jornada-medico`, `V05-agendamentos-novo` | ✅ conforme |
+| Consultas — listagem | `05-maquina-estados-consulta`, `V06-consultas-listagem` | ✅ conforme |
+| Consultas — novo/editar | `05-maquina-estados-consulta`, `V07-consultas-novo` | ✅ conforme |
+| Consultas — visualização | `05-maquina-estados-consulta`, `V08-consultas-visualizacao` | ✅ conforme (item 9.6 reclassificado — **DIV-02**) |
+| Modal novo documento | `06-emissao-documento-template`, `V09-modal-novo-documento` | ✅ conforme (item 10.4 reclassificado — **DIV-03**) |
+| Modal upload de exame | `V10-modal-upload-exame` | ✅ conforme |
+| Médicos — listagem/novo | `V11-medicos-listagem`, `V15-medicos-novo` | ✅ conforme |
+| Templates — central/modal | `06-emissao-documento-template`, `V12-templates-central`, `V16-templates-modal` | ✅ conforme (item 13.1 reclassificado — **DIV-04**) |
+| Logs de acesso | `07-auditoria-acesso`, `V13-logs-acesso` | ✅ conforme |
+| Modo offline (todos os módulos) | `09-modo-offline` + `10-contrato-base44-client` (verificação por tipo, já executada em T039) | ✅ conforme — após corrigir a **DIV-01** |
+
+> **Resultado geral do passeio:** com divergências — **1 defeito real** encontrado e
+> corrigido (DIV-01), **3 relatos reclassificados** como conforme após conferência
+> contra o legado (DIV-02/03/04) e **1 lacuna pré-existente** registrada (DIV-05,
+> `{DIAS_AFASTAMENTO}` oferecida e nunca interpolada). Detalhes em `questions.md`.
 
 > ⚠️ **Mudança visível esperada no modo offline:** os dados de exemplo foram
 > alinhados ao contrato (T040) — as prescrições do seed agora exibem os
 > medicamentos na tela de documento, onde antes não apareciam. Isso é correção de
 > dado de exemplo, não divergência (ver `data-delta.md` §4).
+
+### 4.2 Verificação estática já executada (evidência de máquina)
+
+Executada em 14/09/2026 comparando o legado (recuperado do histórico do Git) com as
+versões convertidas, antes do passeio interativo:
+
+| Verificação | Escopo | Resultado |
+|-------------|--------|-----------|
+| Textos de interface preservados | 12 páginas — 428 cadeias | **0 perdidas** |
+| Textos de interface preservados | 16 arquivos (componentes + casca) — 237 cadeias | 0 relevantes (2 são exemplo de JSDoc) |
+| Superfície de entidades (quais entidades cada arquivo acessa) | 20 arquivos | **0 divergências** |
+| Gate de tipos integral | 58 arquivos de `src/` | **0 erros** |
+| `.jsx` de aplicação remanescentes | — | nenhum (só `main.jsx`, ponto de entrada, e `ui/`, exclusão registrada) |
+
+Método: comparação insensível a acento entre as cadeias de texto do arquivo legado e
+do convertido, e comparação do conjunto de entidades acessadas (`entities.<Nome>`)
+entre as duas versões.
+
+Isso cobre **por máquina** o item congelado "textos da interface mudaram" (seção 5) e
+a suspeita de leitura esquecida. O que **não** é coberto por máquina — e por isso
+continua no passeio interativo — é o comportamento em execução: estado de tela,
+respostas do servidor/mock e o efeito visível das leituras com escopo.
 
 ## 5. O que **não** deve acontecer
 
@@ -154,13 +192,16 @@ deles deve mudar nesta feature.
 | `typecheck` aponta erro | A mensagem indica arquivo e linha; corrija o contrato, não o consumo |
 | `typecheck` passa mas o sistema quebra ao abrir uma tela | Provável divergência entre o contrato e os dados reais; compare com `base44/entities/*.jsonc` |
 | Tela mostra lista vazia onde antes mostrava dados | Verifique o filtro de dono introduzido pela leitura com escopo |
-| Modo offline mostra dados diferentes do online | Verifique `mockSeed.js` contra o contrato (`data-delta.md`, seção 3) |
+| Modo offline mostra dados diferentes do online | Verifique `mockSeed.ts` contra o contrato (`data-delta.md`, seção 3) |
 | Build falha sem erro de tipo | Verifique se o erro é de sintaxe, não de tipo |
 
 ## 7. Limites conhecidos deste ambiente
 
-O build de produção **não** foi executado com sucesso no ambiente onde esta feature
-está sendo conduzida: o processo de empacotamento falha ao criar subprocesso, por
-restrição do ambiente, não por defeito do código. A verificação de tipos funciona
-normalmente. Ao executar `npm run build` em uma máquina sem essa restrição, o
-resultado deve ser comparado com o artefato anterior.
+O build de produção **não** roda no ambiente do agente de IA: o processo de
+empacotamento falha ao criar subprocesso, por restrição do ambiente, não por defeito
+do código. A verificação de tipos funciona normalmente.
+
+> ✅ **Validado em 15/09/2026:** `npm run build` e `npm run typecheck` foram
+> executados **com sucesso na máquina do responsável** (Opera / Windows 11), durante o
+> passeio da T044 — a lacuna registrada anteriormente está **fechada**. Antes do
+> cutover, compare o artefato gerado com o anterior (`dist/`).

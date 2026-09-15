@@ -17,6 +17,7 @@
 | W006 | `base44/entities/*.jsonc` | Schemas do BaaS permanecem intocados (regra de ouro do diff) | `ausência` | Qualquer diff em `base44/entities/` |
 | W007 | `src/api/contract.ts` | `integrations.Core.SendEmail` faz parte do contrato; o adaptador online liga ao SDK | `presença` | Email de confirmação de agendamento volta a falhar no modo online |
 | W008 | `src/pages/Doctors.tsx` (e Templates) | Médicos e templates mantêm leitura livre para autenticados, sem escopo de dono (BR-MIGRAR-017/020) | `presença` | Usuário comum deixa de ver as listas de médicos/templates que o legado mostrava |
+| W009 | `src/api/mockClient.ts` | O adaptador offline preenche `created_by_id` (usuário demo) em todo `create`, espelhando o servidor | `presença` | Registro criado no modo offline não aparece nas listas — as leituras escopadas filtram por dono (foi o defeito DIV-01, achado no fumaça da T044) |
 
 ## Histórico de re-extrações
 
@@ -62,3 +63,15 @@ registrados para contexto:
 - **`UserNotRegisteredError` e `pages.config` (T030)** — convertidos para `.tsx`/
   `.ts`; o código-fonte passou a ser integralmente verificado, exceto a pasta
   `ui/` (exclusão registrada em `tsconfig.json`).
+- **Resultado do fumaça (T044, 15/09/2026)** — 14 telas verificadas nos dois modos;
+  **1 defeito real** encontrado e corrigido (DIV-01, virou o watch W009); **3 relatos
+  reclassificados** como conforme após conferência contra o legado (DIV-02/03/04);
+  `npm run build` e `npm run typecheck` passaram na máquina do responsável. Detalhes
+  em `questions.md`.
+- **Lacuna PRÉ-EXISTENTE — DIV-05 (T044)** — a variável `{DIAS_AFASTAMENTO}` é
+  **oferecida** na lista "Variáveis disponíveis" (tela de Templates e editor de
+  documento) mas **nunca é interpolada**: o editor substitui apenas
+  `{PACIENTE_NOME}`, `{PACIENTE_CPF}`, `{DATA}` e `{DATA_EXTENSO}`. É defeito
+  **anterior à migração**, preservado de propósito (a feature converte linguagem, não
+  corrige comportamento). Fica como pendência para uma alteração própria — corrigir
+  muda comportamento e sai do escopo desta feature.

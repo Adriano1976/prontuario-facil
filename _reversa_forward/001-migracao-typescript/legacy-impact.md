@@ -29,6 +29,7 @@
 | `src/pages/Patients.tsx`, `PatientForm.tsx` | Leitura de pacientes | `regra-alterada` | LOW | Escopo de leitura passa a ser resolvido pelo papel da sessão (`resolveScope`) — espelha a RLS do servidor |
 | `src/api/mockSeed.ts` | Dados de exemplo do modo offline | `delta-de-dados` | MEDIUM | Conteúdo dos dados de demonstração alinhado ao contrato; medicamentos passam a aparecer na tela de documento offline (mudança visível esperada, registrada em `data-delta.md` §4) |
 | `src/App.tsx`, `src/Layout.tsx`, `src/lib/*`, `src/hooks/*`, `src/pages.config.js` | Estrutura e auxiliares | `componente-novo` | LOW | Conversão preservando comportamento; import do Layout corrigido |
+| `src/api/mockClient.ts` | Adaptador offline | `regra-alterada` | LOW | `create` passa a preencher `created_by_id` (usuário da sessão offline), espelhando o servidor. Sem isso, todo registro criado no modo offline ficava **invisível** para as leituras com escopo — defeito DIV-01, encontrado no fumaça da T044. Não afeta o modo online |
 
 ## 2. Diff conceitual por componente
 
