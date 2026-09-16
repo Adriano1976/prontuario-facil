@@ -208,7 +208,7 @@ prontuario-facil/
 <div align="center" style="margin-right: 80px;">
 
 ```mermaid
-%%{ init: { 'theme': 'neutral', 'themeVariables': { 'fontSize': '16px' } } }%%
+%%{ init: { 'theme': 'black', 'themeVariables': { 'fontSize': '16px' } } }%%
 erDiagram
     Patient ||--o{ Appointment : "possui"
     Doctor ||--o{ Appointment : "atende"
