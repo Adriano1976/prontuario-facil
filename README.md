@@ -205,7 +205,7 @@ prontuario-facil/
 
 ## Modelo de Dados
 
-<div align="center" style="margin-right: 80px;">
+<div align="center" style="margin-right: 80px; min-height: 500px;">
 
 ```mermaid
 %%{ init: { 'theme': 'black', 'themeVariables': { 'fontSize': '16px' } } }%%
