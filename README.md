@@ -12,6 +12,7 @@ Gestão completa de pacientes, consultas, agendamentos, exames e prescrições.
 ![Base44](https://img.shields.io/badge/Base44-BaaS-FF6B35)
 ![LGPD](https://img.shields.io/badge/LGPD-Compliant-22C55E)
 ![Reversa](https://img.shields.io/badge/Reversa-Documentation-8B5CF6)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178C6?logo=typescript&logoColor=white)
 
 <div style="text-align: center; margin-bottom: 20px;">
   <a href="./README.en.md">
@@ -36,6 +37,7 @@ O **Prontuário Fácil** é uma aplicação web Single Page Application constru�
 | Camada | Tecnologia | Versão |
 |--------|-----------|--------|
 | **Frontend** | React | 18.2 |
+| **Linguagem** | TypeScript | 5.8 |
 | **Build** | Vite | 6.1 |
 | **Estilo** | Tailwind CSS | 3.4 |
 | **Componentes** | Radix UI (shadcn/ui) | — |
@@ -103,7 +105,7 @@ flowchart TD
     LOGIC -->|"Offline:\nVITE_OFFLINE=true"| MOCK
 ```
 
-> **Modo Offline:** Quando `VITE_OFFLINE=true`, a aplicação substitui o SDK Base44 por um mock client (`src/api/mockClient.js`) que persiste dados no `localStorage` do navegador. Mesma UI, mesma arquitetura, repositório de dados diferente.
+> **Modo Offline:** Quando `VITE_OFFLINE=true`, a aplicação substitui o SDK Base44 por um mock client (`src/api/mockClient.ts`) que persiste dados no `localStorage` do navegador. Mesma UI, mesma arquitetura, repositório de dados diferente.
 
 ---
 
@@ -139,33 +141,61 @@ prontuario-facil/
 │       ├── Template.jsonc
 │       └── AccessLog.jsonc
 ├── src/
-│   ├── api/
-│   │   ├── base44Client.js    # Cliente SDK Base44
-│   │   ├── mockClient.js      # Mock local (modo offline)
-│   │   └── mockSeed.js        # Dados de demonstração
+│   ├── api/                   # Camada de acesso a dados (tipada)
+│   │   ├── base44Client.ts    # Cliente SDK Base44 (online)
+│   │   ├── mockClient.ts      # Mock local (offline)
+│   │   ├── mockSeed.ts        # Dados de demonstração
+│   │   ├── contract.ts        # Contrato tipado de acesso a dados
+│   │   ├── registry.ts        # Registro de entidades (entry point)
+│   │   ├── scopedRead.ts      # Leitura com escopo por owner
+│   │   ├── sessionScope.ts    # Resolução de sessão
+│   │   └── entities.ts        # Binding de entidades
+│   ├── types/                 # Definições de tipos TypeScript
+│   │   ├── base.ts            # BaseEntity
+│   │   ├── common.ts          # Tipos compartilhados
+│   │   ├── Patient.ts
+│   │   ├── Appointment.ts
+│   │   ├── Consultation.ts
+│   │   ├── Doctor.ts
+│   │   ├── Prescription.ts
+│   │   ├── Exam.ts
+│   │   ├── Template.ts
+│   │   ├── AccessLog.ts
+│   │   └── User.ts
 │   ├── components/
-│   │   ├── appointments/      # Calendário, seleção de horários
-│   │   ├── medical/           # Componentes clínicos
-│   │   └── ui/                # shadcn/ui (~60 componentes)
+│   │   ├── appointments/      # .tsx — Calendário, seleção de horários
+│   │   ├── medical/           # .ts/.tsx — Componentes clínicos
+│   │   └── ui/                # shadcn/ui (~60 componentes, excluído do typecheck)
 │   ├── lib/
-│   │   ├── AuthContext.jsx    # Contexto de autenticação
-│   │   └── utils.js          # Utilitários (cn())
-│   ├── pages/                 # Telas da aplicação
-│   ├── App.jsx                # Raiz com providers e rotas
-│   ├── Layout.jsx             # Layout com navegação
-│   └── pages.config.js       # Mapa central de páginas/rotas
+│   │   ├── AuthContext.tsx    # Contexto de autenticação
+│   │   ├── session.ts         # Conversão de sessão
+│   │   └── utils.ts           # Utilitários (cn())
+│   ├── pages/                 # .tsx — Telas da aplicação
+│   ├── App.tsx                # Raiz com providers e rotas
+│   ├── Layout.tsx             # Layout com navegação
+│   └── pages.config.ts        # Mapa central de páginas/rotas
 ├── _reversa_sdd/              # Documentação completa (Reversa v1.3.2)
 │   ├── c4-context.md          # C4 Nível 1 — Contexto
 │   ├── c4-containers.md       # C4 Nível 2 — Containers
 │   ├── c4-components.md       # C4 Nível 3 — Componentes
 │   ├── erd-complete.md        # ERD completo (9 entidades)
+│   ├── migration/             # Documentação da migração TS
+│   ├── screens/               # Inventário de telas
 │   └── traceability/          # Rastreabilidade specs↔código
+├── _reversa_forward/          # Rastreamento de implementação
+│   └── 001-migracao-typescript/
+├── _reversa_docs/             # Mini-site visual (GitHub Pages)
 ├── docs/
-│   └── security-audit/        # Auditoria de segurança
-│       ├── relatorio-auditoria-seguranca.md
-│       └── relatorio-auditoria-seguranca.pdf
+│   └── security-audit/        # Auditorias de segurança
+│       ├── 001-record/        # Pré-migração (JS)
+│       └── 002-record/        # Pós-migração (TypeScript)
+├── guardrails/                # Proteção contra prompt injection
 ├── .agents/skills/            # Skills do framework Reversa
-├── .github/skills/            # Skills de auditoria e convenções
+├── .github/
+│   ├── skills/                # Skills de auditoria e convenções
+│   └── workflows/
+│       └── deploy-pages.yml   # Deploy do mini-site
+├── tsconfig.json              # Configuração TypeScript (strict: true)
 ├── package.json
 ├── tailwind.config.js
 └── vite.config.js
@@ -270,11 +300,24 @@ Cada módulo possui specs completas em `_reversa_sdd/[modulo]/`:
 - `tasks.md` — Plano de implementação
 - `screens.md` — Especificação de telas
 
+### Migração JS→TypeScript
+
+| Artefato | Descrição |
+|----------|-----------|
+| `migration/paradigm_decision.md` | Decisão de paradigma (JS→TS, sem rewrite) |
+| `migration/migration_strategy.md` | Estratégia de migração |
+| `migration/risk_register.md` | Registro de riscos |
+| `migration/parity_specs.md` | Especificações de paridade |
+| `addenda/001-migracao-typescript.md` | Adendo formal da migração |
+| `_reversa_forward/001-migracao-typescript/` | 44 ações concluídas, 55 cenários de teste |
+
 ---
 
 ## Segurança
 
-O projeto passou por auditoria de segurança automatizada (04/09/2026). Relatório completo em `docs/security-audit/`.
+O projeto passou por **duas** auditorias de segurança automatizada:
+- **001-record** (04/09/2026) — pré-migração JavaScript
+- **002-record** (16/09/2026) — pós-migração TypeScript
 
 ### Resumo dos Achados
 
@@ -300,9 +343,14 @@ O projeto passou por auditoria de segurança automatizada (04/09/2026). Relatór
 - ✅ Auditoria LGPD com registro de eventos de acesso (`AccessLog`)
 - ✅ Comunicação segura via SDK oficial `@base44/sdk`
 - ✅ Modo offline encapsulado para desenvolvimento/testes
+- ✅ Isolamento de posse tipado via `OwnedEntity` / `resolveScope`
+- ✅ Logging de auditoria LGPD estruturado (`AccessLogger.ts`)
+- ✅ Sanitização de sessão com validação de role (`session.ts`)
+- ✅ Componente explícito de consentimento LGPD (`LGPDConsent.tsx`)
 
-> **Relatório completo:** `docs/security-audit/relatorio-auditoria-seguranca.md`
-> **Dados estruturados:** `docs/security-audit/achados.json`
+> **Relatórios completos:**
+> - `docs/security-audit/001-record/relatorio-auditoria-seguranca.md` (pré-migração)
+> - `docs/security-audit/002-record/relatorio-auditoria-seguranca.md` (pós-migração)
 
 ---
 
@@ -319,7 +367,8 @@ O projeto passou por auditoria de segurança automatizada (04/09/2026). Relatór
 - **Commits:** Siga as convenções do projeto (ver `.github/skills/`)
 - **Código:** Utilize componentes shadcn/ui sempre que possível
 - **Estilo:** Prefira classes Tailwind utilitárias over CSS customizado
-- **Testes:** Adicione testes quando aplicável (framework ainda não configurado)
+- **Tipos:** Projeto utiliza `strict: true` — todo código novo deve ser TypeScript
+- **Testes:** 26 cenários Gherkin de paridade em `_reversa_sdd/migration/parity_tests/`
 
 ### Antes de Submeter
 
@@ -333,8 +382,9 @@ O projeto passou por auditoria de segurança automatizada (04/09/2026). Relatór
 
 | Item | Status | Descrição |
 |------|--------|-----------|
-| **CI/CD** | ❌ Não configurado | Nenhum pipeline de integração contínua (sem `.github/workflows/`) |
-| **Testes automatizados** | ❌ Não configurado | Nenhum framework de teste instalado (`test_file_count: 0`) |
+| **CI/CD** | ✅ GitHub Actions | Deploy do mini-site (`_reversa_docs/`) para GitHub Pages |
+| **TypeScript** | ✅ Ativo | `strict: true` — 0 erros de tipo, gate `tsc --noEmit` |
+| **Testes automatizados** | ⚠️ Parcial | 26 cenários Gherkin de paridade (sem framework de execução) |
 | **RBAC frontend** | ⚠️ Parcial | Rotas admin expostas sem verificação de role (ver F-01) |
 | **Dependências não usadas** | ⚠️ Presentes | Stripe, react-leaflet incluídas no `package.json` mas não utilizadas no `src/` |
 

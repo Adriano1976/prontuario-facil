@@ -1,0 +1,206 @@
+{
+  "projeto": {
+    "nome": "Prontuário Fácil",
+    "data": "16/09/2026",
+    "escopo": "Código-fonte completo pós-migração TypeScript (frontend React/Vite, camada de domínio tipada com ScopedReader/sessionScope, SDK Base44, configs de ambiente e layout)",
+    "stack_detectada": {
+      "linguagem": "TypeScript 5.8 / JavaScript (ES6+) / React 18 / Node 22",
+      "framework": "Vite 6 + React Router DOM v7 + TanStack React Query v5",
+      "orm": "Base44 SDK (@base44/sdk) com camada de repositório tipada (ScopedReader / OwnedEntity)",
+      "autenticacao": "Base44 Auth SDK (base44.auth.me / access_token via URL & LocalStorage)",
+      "frontend": "React 18 + TailwindCSS 3.4 + Radix UI + Lucide React + Framer Motion",
+      "arquivos_deploy": [
+        "vite.config.js",
+        ".env.local",
+        "tsconfig.json"
+      ]
+    },
+    "nota_metodologica": "A auditoria analisou o projeto Prontuário Fácil adaptando as 5 categorias à arquitetura pós-migração TypeScript com camada de escopo de domínio (scopedRead.ts e sessionScope.ts): (1) Banco sem tranca / Isolamento Tenant/RLS: checada a eficácia da camada OwnedEntity nas listagens clínicas (Patient, Consultation, Prescription, Appointment, Exam) e a exposição de entidades com leitura aberta como AccessLog.list(...) e dados do modo offline; (2) Permissão no Navegador: verificado se as views/ações de admin (AccessLogs.tsx, Doctors.tsx, Templates.tsx) possuem guards de rota ou de renderização de botões (role === 'admin') ou se continuam acessíveis a qualquer usuário autenticado; (3) IDOR: auditadas buscas e mutações por ID (Patient.delete, Appointment.update, Patient.update, etc.) e verificado onde o escopo de ownership no cliente foi introduzido e onde mutações ainda dependem exclusivamente de RLS no backend; (4) Chaves Expostas: auditados .env.local, cliente SDK e passagem de credenciais/tokens de acesso sensíveis via parâmetros de URL/LocalStorage em app-params.ts; (5) XSS: auditados sinks HTML (dangerouslySetInnerHTML em src/components/ui/chart.jsx) e tratamento de templates dinâmicos."
+  },
+  "achados": [
+    {
+      "id": "F-01",
+      "categoria": "permissao_navegador",
+      "severidade": "alta",
+      "arquivo": "src/Layout.tsx",
+      "linhas": "41-49",
+      "trecho_codigo": "const NAV_ITEMS = [\n    { name: 'Dashboard', icon: LayoutDashboard, page: 'Dashboard' },\n    { name: 'Pacientes', icon: Users, page: 'Patients' },\n    { name: 'Agendamentos', icon: Calendar, page: 'Appointments' },\n    { name: 'Consultas', icon: Stethoscope, page: 'Consultations' },\n    { name: 'Médicos', icon: UserCog, page: 'Doctors' },\n    { name: 'Templates', icon: FileText, page: 'Templates' },\n    { name: 'Logs de Acesso', icon: Shield, page: 'AccessLogs' },\n];",
+      "descricao": "Menu de navegação e rotas administrativas ('Logs de Acesso', 'Médicos' e 'Templates') expostas a todos os usuários sem verificação de privilégio ou papel de administrador (role === 'admin') no frontend.",
+      "por_que_exploravel": "Qualquer usuário comum autenticado possui links diretos no menu para visualização de logs de auditoria LGPD (AccessLogs.tsx), gerenciamento de médicos (Doctors.tsx) e modelos de documentos (Templates.tsx). Além disso, não há proteção de rota no App.tsx nem ocultação de botões de exclusão e edição nas respectivas telas, permitindo que usuários não autorizados tentem manipular cadastros médicos ou visualizem acessos de dados sensíveis.",
+      "condicoes_exploracao": "Estar autenticado no sistema como qualquer usuário válido.",
+      "recomendacao": "Filtrar a exibição dos itens de navegação no Layout.tsx verificando se o usuário possui papel 'admin' (user?.role === 'admin') e criar componente de guarda de rota (ProtectedRoute/RoleGuard) no App.tsx."
+    },
+    {
+      "id": "F-02",
+      "categoria": "chaves_expostas",
+      "severidade": "alta",
+      "arquivo": "src/lib/app-params.ts",
+      "linhas": "52-63",
+      "trecho_codigo": "const urlParams = new URLSearchParams(window.location.search);\nconst searchParam = urlParams.get(paramName);\nif (removeFromUrl) {\n    urlParams.delete(paramName);\n    const newUrl = `${window.location.pathname}${urlParams.toString() ? `?${urlParams.toString()}` : \"\"\n    }${window.location.hash}`;\n    window.history.replaceState({}, document.title, newUrl);\n}\nif (searchParam) {\n    storage.setItem(storageKey, searchParam);\n    return searchParam;\n}",
+      "descricao": "Recepção de token de acesso sensível via parâmetro de consulta de URL ('access_token') e persistência do token em LocalStorage.",
+      "por_que_exploravel": "Tokens trafegados na Query String da URL vazam para o histórico do navegador, logs de servidores/proxies e cabeçalhos Referer antes do replaceState ser acionado. Adicionalmente, armazenar o Bearer Token no LocalStorage deixa a credencial totalmente acessível para leitura por qualquer script executado no contexto da página (vulnerabilidade XSS).",
+      "condicoes_exploracao": "Acesso à aplicação através de URLs compartilhadas contendo ?access_token=... ou leitura do LocalStorage por script no cliente.",
+      "recomendacao": "Eliminar o tráfego de access_token em parâmetros de URL. Utilizar fluxo OAuth PKCE e armazenar credenciais em cookies HttpOnly com atributos Secure e SameSite=Strict."
+    },
+    {
+      "id": "F-03",
+      "categoria": "idor",
+      "severidade": "alta",
+      "arquivo": "src/pages/PatientDetail.tsx",
+      "linhas": "174-176",
+      "trecho_codigo": "const deleteMutation = useMutation({\n    mutationFn: () => base44.entities.Patient.delete(patientId ?? ''),\n    onSuccess: () => {\n        queryClient.invalidateQueries({ queryKey: ['patients'] });\n        navigate(createPageUrl('Patients'));\n    }\n});",
+      "descricao": "Mutações de exclusão e alteração de entidades clínicas (Patient, Appointment, PatientForm) invocadas diretamente por ID sem validação de escopo de posse no cliente.",
+      "por_que_exploravel": "A migração TypeScript introduziu a camada ScopedReader para leituras (listOwned e filterOwned), protegendo com sucesso a visualização de registros. Porém, mutações de escrita e exclusão (Patient.delete em PatientDetail.tsx, Appointment.update em Appointments.tsx e Patient.update em PatientForm.tsx) continuam operando por ID direto. Se as regras de RLS do backend Base44 estiverem permissivas, qualquer usuário pode excluir ou atualizar registros de outros médicos apenas fornecendo o UUID.",
+      "condicoes_exploracao": "Backend Base44 com políticas de RLS incompletas ou permissivas para comandos de UPDATE e DELETE.",
+      "recomendacao": "Garantir que as regras de segurança e triggers no backend BaaS barrem mutações de registros pertencentes a outro médico ou clínica, e estender a validação de posse no cliente antes de submeter exclusões."
+    },
+    {
+      "id": "F-04",
+      "categoria": "banco_sem_tranca",
+      "severidade": "media",
+      "arquivo": "src/pages/AccessLogs.tsx",
+      "linhas": "75-78",
+      "trecho_codigo": "const { data: logs, isLoading } = useQuery({\n    queryKey: ['access-logs'],\n    queryFn: () => base44.entities.AccessLog.list('-created_date', 500),\n});",
+      "descricao": "Consulta aberta de listagem ampla em trilha de auditoria LGPD (AccessLog) sem filtro de tenant ou escopo de usuário no frontend.",
+      "por_que_exploravel": "A entidade AccessLog é configurada no registry de entidades como OpenReadEntity, expondo o método list('-created_date', 500) direto no cliente. A consulta busca até 500 registros contendo nomes de pacientes, emails de usuários, endereços IP e ações clínicas executadas. Caso o backend não aplique RLS rigoroso por organização/tenant para logs de auditoria, dados sensíveis de auditoria de todas as clínicas serão expostos.",
+      "condicoes_exploracao": "Ausência ou brecha no isolamento multi-tenant da tabela de logs de acesso no backend BaaS.",
+      "recomendacao": "Restringir a consulta da entidade AccessLog apenas para administradores validados no servidor e aplicar filtro de tenant/organização obrigatório tanto no SDK cliente quanto na RLS do backend."
+    },
+    {
+      "id": "F-05",
+      "categoria": "inputs_sem_tratamento",
+      "severidade": "baixa",
+      "arquivo": "src/components/ui/chart.jsx",
+      "linhas": "73-89",
+      "trecho_codigo": "<style\n  dangerouslySetInnerHTML={{\n    __html: Object.entries(THEMES)\n      .map(([theme, prefix]) => `\n${prefix} [data-chart=${id}] {\n${colorConfig\n.map(([key, itemConfig]) => {\nconst color =\n  itemConfig.theme?.[theme] ||\n  itemConfig.color\nreturn color ? `  --color-${key}: ${color};` : null\n})\n.join(\"\\n\")}\n}\n`)\n      .join(\"\\n\"),\n  }} />",
+      "descricao": "Injeção dinâmica de folhas de estilo em tempo de execução através do sink perigoso 'dangerouslySetInnerHTML'.",
+      "por_que_exploravel": "Embora a configuração atual de temas utilize chaves controladas internamente, o uso direto de dangerouslySetInnerHTML para injetar CSS no DOM sem sanitização representa uma violação do princípio de defesa em profundidade. Se dados dinâmicos controlados por entradas externas forem incluídos na configuração do gráfico, estilos maliciosos ou vetores de injeção poderão ser introduzidos.",
+      "condicoes_exploracao": "Injeção de propriedades controladas por dados externos na configuração do gráfico.",
+      "recomendacao": "Substituir o uso de dangerouslySetInnerHTML por CSS Variables nativas aplicadas diretamente via propriedade style ou classes utilitárias seguras do TailwindCSS."
+    }
+  ],
+  "pontos_fortes": [
+    {
+      "categoria": "Isolamento Tipado de Ownership",
+      "arquivo": "src/api/scopedRead.ts",
+      "descricao": "Introdução do padrão `OwnedEntity` e `resolveScope(user)`, garantindo em tempo de compilação que leituras de `Patient`, `Consultation`, `Appointment`, `Prescription` e `Exam` apliquem o filtro `created_by_id: user.id` para usuários comuns."
+    },
+    {
+      "categoria": "Auditoria LGPD Estruturada",
+      "arquivo": "src/components/medical/AccessLogger.ts",
+      "descricao": "Registro sistemático de eventos de acesso (visualização de paciente, criação de consulta, upload de exame, exclusão) para conformidade com a LGPD com isolamento de falha (erros de log não travam a UI)."
+    },
+    {
+      "categoria": "Sanitização de Sessão e Papéis",
+      "arquivo": "src/lib/session.ts",
+      "descricao": "Conversão segura do usuário de sessão com validação estrita de papéis permitidos (`['admin', 'user']`), rejeitando papéis desconhecidos de forma conservadora."
+    },
+    {
+      "categoria": "Consentimento de Privacidade",
+      "arquivo": "src/components/medical/LGPDConsent.tsx",
+      "descricao": "Componente explícito de coleta e confirmação de termo de consentimento LGPD antes do cadastro do paciente."
+    }
+  ],
+  "categorias_nao_aplicaveis": [],
+  "pontos_fracos_resumo": [
+    "Menu de navegação e rotas administrativas (Logs de Acesso, Médicos, Templates) expostas a todos os usuários sem verificação de privilégio de administrador no frontend.",
+    "Tráfego de token de acesso sensível na Query String da URL (?access_token=...) e armazenamento em LocalStorage vulnerável a XSS.",
+    "Mutações de alteração e exclusão (Patient.delete, Appointment.update, Patient.update) executadas por ID direto sem validação de posse no cliente.",
+    "Consulta ampla de até 500 registros da trilha de auditoria LGPD sem filtro de escopo ou restrição de role no cliente.",
+    "Uso de dangerouslySetInnerHTML para injeção de CSS em tempo de execução no componente de gráficos."
+  ],
+  "recomendacoes_priorizadas": [
+    {
+      "prioridade": "P1",
+      "titulo": "Implementar controle de acesso baseado em papéis (RBAC) no Layout e nas rotas sensíveis",
+      "descricao": "Ocultar os itens 'Logs de Acesso', 'Médicos' e 'Templates' no Layout.tsx para usuários não-admin e adicionar uma guarda de rota protegida (ProtectedRoute/RoleGuard) no App.tsx."
+    },
+    {
+      "prioridade": "P1",
+      "titulo": "Eliminar o envio de access_token via parâmetros de URL e armazenamento em LocalStorage",
+      "descricao": "Modificar a estratégia de autenticação para utilizar cookies seguros SameSite HttpOnly ou fluxo OAuth com PKCE mantendo tokens apenas em memória."
+    },
+    {
+      "prioridade": "P2",
+      "titulo": "Reforçar validação de escopo em mutações e blindar regras de RLS no backend",
+      "descricao": "Estender a camada de domínio para validação prévia de posse em operações de exclusão/atualização e auditar políticas de Entity RLS no Base44 contra mutações cross-tenant."
+    },
+    {
+      "prioridade": "P2",
+      "titulo": "Restringir acesso e aplicar filtro de tenant na trilha de auditoria LGPD",
+      "descricao": "Configurar a leitura da entidade AccessLog para exigir explicitamente permissão de administrador no cliente e na RLS do backend."
+    },
+    {
+      "prioridade": "P3",
+      "titulo": "Sanitizar injeção de estilos no componente de gráficos",
+      "descricao": "Substituir o uso de dangerouslySetInnerHTML em src/components/ui/chart.jsx por CSS Custom Properties nativas aplicadas diretamente no elemento."
+    }
+  ],
+  "issues_github": [
+    {
+      "titulo": "[Segurança] Exposição de rotas e menus administrativos para usuários não-admin",
+      "labels": ["security", "alta", "rbac"],
+      "achados_relacionados": ["F-01"],
+      "descricao": "Qualquer usuário autenticado tem acesso aos links e às páginas de 'Logs de Acesso', 'Médicos' e 'Templates', permitindo visualização de histórico de auditoria LGPD e manipulação de cadastros sem papel de administrador.",
+      "evidencia": "`src/Layout.tsx:41-49`\n```typescript\nconst NAV_ITEMS = [\n    { name: 'Dashboard', icon: LayoutDashboard, page: 'Dashboard' },\n    { name: 'Pacientes', icon: Users, page: 'Patients' },\n    { name: 'Agendamentos', icon: Calendar, page: 'Appointments' },\n    { name: 'Consultas', icon: Stethoscope, page: 'Consultations' },\n    { name: 'Médicos', icon: UserCog, page: 'Doctors' },\n    { name: 'Templates', icon: FileText, page: 'Templates' },\n    { name: 'Logs de Acesso', icon: Shield, page: 'AccessLogs' },\n];\n```",
+      "impacto": "Usuários sem privilégios administrativos podem acessar áreas sensíveis do sistema, visualizar dados de conformidade e auditoria de outros profissionais e acionar interfaces de edição/exclusão.",
+      "sugestao_correcao": "Condicionar a renderização dos itens administrativos em `NAV_ITEMS` à verificação de `user?.role === 'admin'` e implementar um wrapper `ProtectedRoute` nas rotas correspondentes em `App.tsx`.",
+      "criterios_aceite": [
+        "Itens 'Médicos', 'Templates' e 'Logs de Acesso' visíveis no menu apenas para usuários com role 'admin'",
+        "Tentativa de acesso direto via URL às rotas /AccessLogs, /Doctors e /Templates por usuário comum redireciona para o Dashboard com aviso de permissão negada"
+      ]
+    },
+    {
+      "titulo": "[Segurança] Token de acesso sensível recebido via Query String da URL e armazenado em LocalStorage",
+      "labels": ["security", "alta", "auth"],
+      "achados_relacionados": ["F-02"],
+      "descricao": "A aplicação captura tokens de autenticação passados como parâmetro na URL ('?access_token=...') e os persiste no LocalStorage, possibilitando vazamento via histórico, logs intermediários e cabeçalho Referer.",
+      "evidencia": "`src/lib/app-params.ts:52-63`\n```typescript\nconst urlParams = new URLSearchParams(window.location.search);\nconst searchParam = urlParams.get(paramName);\nif (removeFromUrl) {\n    urlParams.delete(paramName);\n    const newUrl = `${window.location.pathname}${urlParams.toString() ? `?${urlParams.toString()}` : \"\"\n    }${window.location.hash}`;\n    window.history.replaceState({}, document.title, newUrl);\n}\nif (searchParam) {\n    storage.setItem(storageKey, searchParam);\n    return searchParam;\n}\n```",
+      "impacto": "Comprometimento de credenciais de acesso caso o link seja compartilhado, gravado em logs de proxies ou acessado em computadores compartilhados. Além disso, tokens em LocalStorage são vulneráveis a roubo via ataques XSS.",
+      "sugestao_correcao": "Migrar o fluxo de autenticação para o padrão OAuth PKCE com cookies seguros HttpOnly SameSite ou manter o token exclusivamente na memória de execução.",
+      "criterios_aceite": [
+        "A aplicação não aceita nem processa access_token a partir de parâmetros de URL",
+        "Tokens de acesso não são persistidos em LocalStorage em texto puro"
+      ]
+    },
+    {
+      "titulo": "[Segurança] Risco de IDOR em operações de mutação (exclusão e atualização) de entidades clínicas",
+      "labels": ["security", "alta", "idor"],
+      "achados_relacionados": ["F-03"],
+      "descricao": "As mutações de exclusão (delete) e atualização (update) de entidades como Patient e Appointment operam diretamente por ID sem validação de posse no cliente, dependendo exclusivamente de regras de backend.",
+      "evidencia": "`src/pages/PatientDetail.tsx:174-176`\n```typescript\nconst deleteMutation = useMutation({\n    mutationFn: () => base44.entities.Patient.delete(patientId ?? ''),\n});\n```\n`src/pages/Appointments.tsx:83-84`\n```typescript\nconst updateStatusMutation = useMutation({\n    mutationFn: ({ id, status }: { id: string; status: AppointmentStatus }) =>\n        base44.entities.Appointment.update(id, { status }),\n});\n```",
+      "impacto": "Caso as políticas de RLS do backend Base44 contenham brechas ou estejam permissivas, um atacante autenticado pode alterar ou deletar pacientes e consultas de outros médicos manipulando o ID.",
+      "sugestao_correcao": "Verificar se as regras de Row-Level Security no backend BaaS restringem operações de escrita e exclusão por created_by_id, e tratar exceções de permissão negada no frontend de forma amigável.",
+      "criterios_aceite": [
+        "Tentativas de atualizar ou excluir registros com ID pertencente a outro médico/tenant são rejeitadas pelo backend",
+        "O frontend trata o erro de permissão e informa ao usuário que a ação não é autorizada"
+      ]
+    },
+    {
+      "titulo": "[Segurança] Listagem ampla e irrestrita de registros da trilha de auditoria LGPD (AccessLogs)",
+      "labels": ["security", "media", "lgpd"],
+      "achados_relacionados": ["F-04"],
+      "descricao": "A página de logs de acesso executa AccessLog.list('-created_date', 500) sem qualquer filtro de organização ou tenant no cliente, trazendo histórico detalhado de ações de usuários.",
+      "evidencia": "`src/pages/AccessLogs.tsx:75-78`\n```typescript\nconst { data: logs, isLoading } = useQuery({\n    queryKey: ['access-logs'],\n    queryFn: () => base44.entities.AccessLog.list('-created_date', 500),\n});\n```",
+      "impacto": "Exposição de histórico de visualizações de prontuários, nomes de pacientes, emails de médicos e endereços IP de múltiplos usuários se o backend não aplicar filtro rígido por tenant.",
+      "sugestao_correcao": "Exigir escopo administrativo explícito para a leitura de AccessLog e assegurar que a query passe parâmetros de tenant/organização.",
+      "criterios_aceite": [
+        "A consulta de logs de acesso exige papel 'admin'",
+        "Apenas logs pertencentes à organização do usuário autenticado são retornados"
+      ]
+    },
+    {
+      "titulo": "[Segurança] Injeção dinâmica de CSS com dangerouslySetInnerHTML no componente Chart",
+      "labels": ["security", "baixa", "xss"],
+      "achados_relacionados": ["F-05"],
+      "descricao": "O componente de gráficos utiliza dangerouslySetInnerHTML para renderizar dinamicamente regras CSS dentro de tags <style> no DOM.",
+      "evidencia": "`src/components/ui/chart.jsx:73-89`\n```javascript\n<style\n  dangerouslySetInnerHTML={{\n    __html: Object.entries(THEMES)\n      .map(([theme, prefix]) => `\n${prefix} [data-chart=${id}] {\n${colorConfig\n.map(([key, itemConfig]) => {\nconst color =\n  itemConfig.theme?.[theme] ||\n  itemConfig.color\nreturn color ? `  --color-${key}: ${color};` : null\n})\n.join(\"\\n\")}\n}\n`)\n      .join(\"\\n\"),\n  }} />\n```",
+      "impacto": "Risco residual de injeção de CSS caso propriedades de configuração do gráfico recebam futuramente valores não sanitizados controlados pelo usuário.",
+      "sugestao_correcao": "Substituir a injeção via tag <style> por CSS Variables aplicadas diretamente no elemento do gráfico via atributo style inline.",
+      "criterios_aceite": [
+        "Remoção de dangerouslySetInnerHTML do componente src/components/ui/chart.jsx",
+        "Gráficos continuam renderizando suas cores e temas normalmente"
+      ]
+    }
+  ]
+}
