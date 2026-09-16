@@ -205,10 +205,10 @@ prontuario-facil/
 
 ## Modelo de Dados
 
-<div align="center" style="margin-right: 80px; min-height: 700px;">
+<div align="center" style="margin-right: 80px; min-height: 1000px;">
 
 ```mermaid
-%%{ init: { 'theme': 'black', 'themeVariables': { 'fontSize': '16px' } } }%%
+%%{ init: { 'theme': 'black', 'themeVariables': { 'fontSize': '16px', 'ER': { 'fontSize': '14px' } }, 'flowchart': { 'nodeSpacing': 50, 'rankSpacing': 80 } } }%%
 erDiagram
     Patient ||--o{ Appointment : "possui"
     Doctor ||--o{ Appointment : "atende"
