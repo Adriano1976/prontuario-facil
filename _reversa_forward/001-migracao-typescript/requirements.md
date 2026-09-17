@@ -95,7 +95,7 @@ extração original: o projeto não possui nenhum teste automatizado.
 | RF-06 | O nome de entidade é verificado; entidade inexistente não compila | Must | Referenciar entidade com nome incorreto **não compila** | 🟢 |
 | RF-07 | O usuário da sessão em modo offline é uma variante que não carrega papel | Must | Trecho de código que exige papel não compila contra a variante offline | 🟢 |
 | RF-08 | A verificação de tipos é executável de forma isolada e não emite arquivos | Must | Comando único de verificação existe, retorna situação e não escreve artefatos | 🟢 |
-| RF-09 | O código-fonte é integralmente verificado em modo estrito, exceto a pasta de componentes de interface herdados de biblioteca, cuja exclusão é explícita e justificada no arquivo de configuração | Must | Verificação estrita termina sem erro sobre todo o código-fonte, e a única exclusão é a pasta de componentes herdados, registrada por escrito | 🟢 |
+| RF-09 | O código-fonte é integralmente verificado em modo estrito, exceto o corpo dos arquivos .jsx da pasta de componentes de interface herdados de biblioteca, cuja exclusão é explícita no arquivo de configuração e justificada por escrito no roadmap (D-01), já que o verificador não aceita comentários | Must | Verificação estrita termina sem erro sobre os 77 arquivos do programa (58 de aplicação + 19 declarações de tipo dos componentes herdados); a única exclusão é o corpo .jsx da pasta de componentes herdados, registrada por escrito | 🟢 |
 | RF-10 | Os componentes de interface são verificados quanto a contrato de propriedades | Should | Componentes de interface compilam sob verificação estrita | 🟡 |
 | RF-11 | As telas são convertidas por módulo, preservando comportamento | Should | Cada módulo converte sem alteração observável; verificação por módulo | 🟢 |
 | RF-12 | O modo offline possui dados iniciais alinhados ao contrato das entidades | Should | Dados iniciais do modo offline validam contra os contratos | 🟢 |
@@ -221,7 +221,7 @@ Cenário: Paridade atestada por roteiro manual
 - **Q:** Com o que a paridade de comportamento será comprovada?
   **R:** Verificação de tipos somada a roteiro manual de fumaça derivado dos 26 cenários Gherkin já existentes em `_reversa_sdd/migration/parity_tests/`. Nenhuma dependência nova é introduzida e nenhum arcabouço de teste é adicionado.
 - **Q:** O modo estrito se aplica aos componentes de interface herdados de biblioteca?
-  **R:** Estrito em todo o código-fonte, **exceto** a pasta de componentes de interface herdados, cuja exclusão é registrada e justificada por escrito no próprio arquivo de configuração da verificação.
+  **R:** Estrito em todo o código-fonte, **exceto** a pasta de componentes de interface herdados, cuja exclusão é registrada no próprio arquivo de configuração da verificação — a justificativa por escrito vive no roadmap (D-01), porque o verificador não aceita comentários nesse arquivo.
 
 ## 10. Lacunas
 

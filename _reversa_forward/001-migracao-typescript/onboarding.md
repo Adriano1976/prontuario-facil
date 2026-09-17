@@ -156,7 +156,7 @@ versões convertidas, antes do passeio interativo:
 | Textos de interface preservados | 12 páginas — 428 cadeias | **0 perdidas** |
 | Textos de interface preservados | 16 arquivos (componentes + casca) — 237 cadeias | 0 relevantes (2 são exemplo de JSDoc) |
 | Superfície de entidades (quais entidades cada arquivo acessa) | 20 arquivos | **0 divergências** |
-| Gate de tipos integral | 58 arquivos de `src/` | **0 erros** |
+| Gate de tipos integral | 77 arquivos de `src/` (58 de aplicação + 19 declarações *.d.ts de ui/) | **0 erros** |
 | `.jsx` de aplicação remanescentes | — | nenhum (só `main.jsx`, ponto de entrada, e `ui/`, exclusão registrada) |
 
 Método: comparação insensível a acento entre as cadeias de texto do arquivo legado e
