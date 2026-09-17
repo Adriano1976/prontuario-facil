@@ -5,6 +5,7 @@
     "src/**",
     "package.json",
     "tsconfig.json",
-    "docs/**"
+    "docs/**",
+    "index.html"
   ]
 }

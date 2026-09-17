@@ -57,9 +57,11 @@ registrados para contexto:
   `.jsx` de componentes e o `AuthContext.jsx` ficaram órfãos e foram removidos; as
   versões tipadas passaram a ser as resolvidas em runtime. Verificar no fumaça
   (T044) que nenhum componente voltou a renderizar a versão legada.
-- **`src/main.jsx` (T030)** — permanece em JS por ser o ponto de entrada referido
-  pelo empacotador; é o único arquivo de aplicação fora de `ui/` não verificado.
-  Se o ponto de entrada mudar de nome/extensão, ajustar aqui e no empacotador.
+- **Ponto de entrada (T030 → A009, 17/09/2026)** — `src/main.jsx` foi convertido para
+  `src/main.tsx` (decisão 3A1) e passou a ser verificado pelo gate; o `src` do script em
+  `index.html` acompanha o novo nome. Não há mais arquivo de aplicação fora de `ui/` sem
+  verificação. Se o ponto de entrada mudar de nome ou extensão, ajustar **os dois** —
+  `index.html` é quem o refere.
 - **`UserNotRegisteredError` e `pages.config` (T030)** — convertidos para `.tsx`/
   `.ts`; o código-fonte passou a ser integralmente verificado, exceto a pasta
   `ui/` (exclusão registrada em `tsconfig.json`).

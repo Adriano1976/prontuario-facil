@@ -157,7 +157,7 @@ versões convertidas, antes do passeio interativo:
 | Textos de interface preservados | 16 arquivos (componentes + casca) — 237 cadeias | 0 relevantes (2 são exemplo de JSDoc) |
 | Superfície de entidades (quais entidades cada arquivo acessa) | 20 arquivos | **0 divergências** |
 | Gate de tipos integral | 77 arquivos de `src/` (58 de aplicação + 19 declarações *.d.ts de ui/) | **0 erros** |
-| `.jsx` de aplicação remanescentes | — | nenhum (só `main.jsx`, ponto de entrada, e `ui/`, exclusão registrada) |
+| `.jsx` de aplicação remanescentes | — | nenhum (`ui/` por exclusão registrada; o ponto de entrada virou `src/main.tsx`, verificado, em 17/09/2026) |
 
 Método: comparação insensível a acento entre as cadeias de texto do arquivo legado e
 do convertido, e comparação do conjunto de entidades acessadas (`entities.<Nome>`)
@@ -205,3 +205,9 @@ do código. A verificação de tipos funciona normalmente.
 > executados **com sucesso na máquina do responsável** (Opera / Windows 11), durante o
 > passeio da T044 — a lacuna registrada anteriormente está **fechada**. Antes do
 > cutover, compare o artefato gerado com o anterior (`dist/`).
+>
+> ✅ **Revalidado em 17/09/2026, depois da conversão do ponto de entrada:** `npm run
+> typecheck` (0 erros) e `npm run build` (código 0, `dist/` regerado) passaram também no
+> ambiente do agente — mas o build só roda com **acesso ampliado**; no modo confinado o
+> subprocesso do empacotador segue falhando com `spawn EPERM`. A verificação de tipos
+> funciona nos dois modos.
