@@ -79,7 +79,7 @@ medido errado.
 
 | Alternativa | Veredito | Motivo |
 |-------------|----------|--------|
-| Verificação de tipos + roteiro manual derivado dos 26 cenários existentes | **adotada** (D-07) | Decisão humana; não introduz dependência nova |
+| Verificação de tipos + roteiro manual derivado dos 26 arquivos / 55 cenários existentes | **adotada** (D-07) | Decisão humana; não introduz dependência nova |
 | Introduzir arcabouço de teste automatizado agora | descartada | Contraria a restrição de não introduzir dependência nova nesta feature |
 | Apenas verificação de tipos | descartada | Verificação de tipos não detecta mudança de comportamento |
 

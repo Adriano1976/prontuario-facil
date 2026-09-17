@@ -8,15 +8,16 @@
 
 | Métrica | Valor |
 |---------|-------|
-| Total de ações | 44 |
-| Paralelizáveis (`[//]`) | 16 |
+| Total de ações | 46 |
+| Paralelizáveis (`[//]`) | 17 |
 | Maior cadeia de dependência | 15 elos |
 
-> **Estado inicial:** as ações `T001` a `T020` (preparação, núcleo e contrato de acesso a
-> dados) e `T031` a `T036` (verificação negativa) já foram executadas e verificadas antes
-> da abertura desta feature. Entram com status `[X]` porque o trabalho existe no código —
-> marcá-las como pendentes faria o `/reversa-coding` refazer o que já passou por
-> verificação.
+> **Estado das ações:** todas as 44 ações originais estão concluídas (`[X]`); as ações
+> `T001`-`T020` e `T031`-`T036` foram executadas antes da abertura formal da feature e
+> tiveram rastro retroativo em `progress.jsonl`.
+>
+> `T045`/`T046` foram acrescentadas pela auditoria cruzada (`audit/cross-check.md`,
+> A012/A013) e estão pendentes.
 >
 > **Ordem dos IDs:** a numeração segue a **ordem de execução**, não a ordem das seções do
 > template. O núcleo vem antes dos testes porque uma verificação negativa só faz sentido
@@ -58,7 +59,7 @@
 | T018 | Declarar o contrato de acesso a dados: repositório de entidade, escopos, gateways e forma crua | - | `[//]` | `src/api/contract.ts` | 🟢 | `[X]` |
 | T019 | Implementar a leitura com escopo: leitura do dono, filtro do dono e leitura administrativa | T018 | - | `src/api/scopedRead.ts` | 🟢 | `[X]` |
 | T020 | Declarar o registro fechado das 8 entidades, com verificação das implementações em tempo de compilação | T018, T019, T017 | - | `src/api/registry.ts` | 🟢 | `[X]` |
-| T021 | Converter os componentes clínicos para a linguagem tipada (9 componentes) | T020 | - | `src/components/medical/` | 🟢 | `[X]` |
+| T021 | Converter os componentes clínicos para a linguagem tipada (9 componentes) | T020 | - | `src/components/medical/`, `src/api/sessionScope.ts`, `src/lib/session.ts`, `src/api/registry.ts`, `src/components/ui/*.d.ts` | 🟢 | `[X]` |
 | T022 | Converter os componentes de agendamento para a linguagem tipada (2 componentes) | T020 | `[//]` | `src/components/appointments/` | 🟢 | `[X]` |
 | T023 | Converter a tela de pacientes e migrar suas leituras para a camada com escopo | T021, T020 | - | `src/pages/Patients.tsx`, `src/pages/PatientForm.tsx` | 🟢 | `[X]` |
 | T024 | Converter a tela de detalhe do paciente e migrar suas leituras | T023 | - | `src/pages/PatientDetail.tsx` | 🟢 | `[X]` |
@@ -82,6 +83,8 @@
 | T034 | Verificar por caso negativo que informar o dono manualmente num filtro já escopado não compila | T019 | - | verificação negativa do filtro escopado | 🟢 | `[X]` |
 | T035 | Confirmar por uso correto que a leitura com escopo compila e aplica o filtro de dono | T019 | - | verificação de uso correto | 🟢 | `[X]` |
 | T036 | Verificar por caso negativo que nome de entidade inexistente não compila | T020 | `[//]` | verificação negativa do registro de entidades | 🟢 | `[X]` |
+| T045 | Verificar por caso negativo que nome de campo inexistente no contrato não compila | T008 | `[//]` | verificação negativa do nome de campo | 🟢 | `[ ]` |
+| T046 | Verificar que a mensagem de erro de entidade inexistente indica o nome correto | T020 | - | verificação negativa do registro de entidades | 🟡 | `[ ]` |
 
 ## Fase 4, Integração
 
@@ -91,7 +94,7 @@
 | T038 | Converter o cliente offline para a linguagem tipada, satisfazendo o mesmo contrato | T020 | - | `src/api/mockClient.ts` | 🟢 | `[X]` |
 | T039 | Verificar por caso negativo que as duas implementações de acesso a dados divergentes do contrato não compilam | T037, T038 | - | verificação negativa do contrato de dados | 🟢 | `[X]` |
 | T040 | Alinhar os dados de exemplo do modo offline ao contrato das entidades | T038, T017 | - | `src/api/mockSeed.ts` | 🟢 | `[X]` |
-| T041 | Converter os arquivos auxiliares restantes para a linguagem tipada, preservando o comportamento | T020, T037 | - | `src/App.tsx`, `src/Layout.tsx`, `src/lib/*`, `src/hooks/*` | 🟢 | `[X]` |
+| T041 | Converter os arquivos auxiliares restantes para a linguagem tipada, preservando o comportamento | T020, T023, T037 | - | `src/App.tsx`, `src/Layout.tsx`, `src/lib/*`, `src/hooks/*`, `src/pages/Patients.tsx`, `src/pages/PatientForm.tsx`, `src/api/entities.ts`, `src/types/User.ts`, `src/pages.config.ts` | 🟢 | `[X]` |
 
 ## Fase 5, Polimento
 
@@ -115,3 +118,4 @@
 | Data | Alteração | Autor |
 |------|-----------|-------|
 | `2026-09-14` | Versão inicial gerada por `/reversa-to-do` | reversa |
+| `2026-09-15` | Feature concluída: 44 de 44 ações; T045/T046 acrescentadas pela auditoria cruzada | reversa |

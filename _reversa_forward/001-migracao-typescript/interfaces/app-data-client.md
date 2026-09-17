@@ -40,8 +40,8 @@ implementações suportam de fato: um campo de ordenação e comparação por ig
 ### 2.2 Entidades conhecidas
 
 O registro é **fechado** (decisão D-02): paciente, consulta, agendamento, prescrição,
-exame, médico, modelo de documento e registro de acesso. Referenciar qualquer outro
-nome não compila.
+exame, médico, modelo de documento, registro de acesso e a entidade embutida User do
+BaaS (usada na exclusão de conta). Referenciar qualquer outro nome não compila.
 
 ### 2.3 Leitura com escopo
 
@@ -56,6 +56,11 @@ expõem leitura sem escopo**. A leitura acontece por uma destas formas:
 
 As três entidades restantes (médico, modelo e registro de acesso) têm leitura livre
 para usuário autenticado, conforme a regra de acesso do domínio.
+
+### 2.4 Integrações
+
+Envio de e-mail transacional (`integrations.Core.SendEmail`), usado na confirmação de
+agendamento; o adaptador offline rejeita explicitamente.
 
 ## 3. Erros
 

@@ -7,9 +7,10 @@
 
 ## 1. Situação
 
-O formato de armazenamento **não muda**: mesmas chaves, mesma serialização, mesmo
-mecanismo de carga. O que muda é apenas o **conteúdo dos dados de exemplo**, alinhado
-ao contrato das entidades (decisão D-08).
+O formato de armazenamento **não muda**: mesmas chaves, mesma serialização. O que muda
+são dois pontos de conteúdo, não de formato: o **conteúdo dos dados de exemplo**,
+alinhado ao contrato das entidades (decisão D-08), e o preenchimento de `created_by_id`
+pelo `create` do adaptador, que passa a espelhar o servidor (detalhe em §5 e §6).
 
 ## 2. Estrutura
 
@@ -28,7 +29,7 @@ ao contrato das entidades (decisão D-08).
 |----------|--------------------------|
 | Listar | Lê a chave da entidade; se ausente, grava os dados de exemplo e devolve |
 | Filtrar | Igual a listar, com filtro aplicado em memória |
-| Criar | Acrescenta registro com identificador novo e data de criação atual |
+| Criar | Acrescenta registro com identificador novo, data de criação atual e `created_by_id` do usuário da sessão |
 | Atualizar | Substitui o registro, preservando o identificador |
 | Excluir | Remove o registro e regrava a coleção |
 
@@ -45,13 +46,14 @@ feature.
 
 | Aspecto | Modo online | Modo offline |
 |---------|-------------|--------------|
-| Isolamento por dono | Aplicado pelo servidor | **Não aplicado** — o armazenamento local não tem regra de acesso |
+| Isolamento por dono | Aplicado pelo servidor | Aplicado pelo adaptador: o `create` preenche `created_by_id` e a leitura escopada filtra por dono (o armazenamento em si não impõe regra de acesso) |
 | Usuário da sessão | Autenticado, com papel | Usuário de demonstração, **sem papel** |
 | Persistência | No servidor | Somente no navegador do usuário |
 | Dados de exemplo | Não existem | Gravados na primeira leitura |
 
-O isolamento não aplicado no modo offline é comportamento **intencional e
-documentado**, não defeito. O que a feature faz é tornar a ausência de papel
+O armazenamento local não impõe regra de acesso; o filtro por dono é aplicado pela
+camada de leitura escopada, e o adaptador preenche `created_by_id`, espelhando o
+servidor. O que a feature faz é tornar a ausência de papel
 **explícita** no contrato, para que trecho dependente de papel não compile cego.
 
 ## 6. Impacto da feature neste contrato
@@ -60,6 +62,6 @@ documentado**, não defeito. O que a feature faz é tornar a ausência de papel
 |------|-------|
 | Chaves de armazenamento | não |
 | Formato de serialização | não |
-| Mecanismo de carga e gravação | não |
+| Mecanismo de carga e gravação | **sim, em um ponto**: o `create` do adaptador passou a preencher `created_by_id`, espelhando o servidor |
 | Conteúdo dos dados de exemplo | **sim** — alinhado ao contrato das entidades (etapa 6) |
 | Necessidade de limpar o armazenamento após a mudança | sim, no ambiente de demonstração, para os exemplos serem regravados |
