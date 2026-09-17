@@ -12,12 +12,13 @@
 | Paralelizáveis (`[//]`) | 17 |
 | Maior cadeia de dependência | 15 elos |
 
-> **Estado das ações:** todas as 44 ações originais estão concluídas (`[X]`); as ações
+> **Estado das ações:** todas as 46 ações estão concluídas (`[X]`); as ações
 > `T001`-`T020` e `T031`-`T036` foram executadas antes da abertura formal da feature e
 > tiveram rastro retroativo em `progress.jsonl`.
 >
 > `T045`/`T046` foram acrescentadas pela auditoria cruzada (`audit/cross-check.md`,
-> A012/A013) e estão pendentes.
+> A012/A013) e executadas em `2026-09-17` por arquivo temporário de verificação
+> negativa, removido em seguida (rastro em `progress.jsonl`).
 >
 > **Ordem dos IDs:** a numeração segue a **ordem de execução**, não a ordem das seções do
 > template. O núcleo vem antes dos testes porque uma verificação negativa só faz sentido
@@ -83,8 +84,8 @@
 | T034 | Verificar por caso negativo que informar o dono manualmente num filtro já escopado não compila | T019 | - | verificação negativa do filtro escopado | 🟢 | `[X]` |
 | T035 | Confirmar por uso correto que a leitura com escopo compila e aplica o filtro de dono | T019 | - | verificação de uso correto | 🟢 | `[X]` |
 | T036 | Verificar por caso negativo que nome de entidade inexistente não compila | T020 | `[//]` | verificação negativa do registro de entidades | 🟢 | `[X]` |
-| T045 | Verificar por caso negativo que nome de campo inexistente no contrato não compila | T008 | `[//]` | verificação negativa do nome de campo | 🟢 | `[ ]` |
-| T046 | Verificar que a mensagem de erro de entidade inexistente indica o nome correto | T020 | - | verificação negativa do registro de entidades | 🟡 | `[ ]` |
+| T045 | Verificar por caso negativo que nome de campo inexistente no contrato não compila | T008 | `[//]` | verificação negativa do nome de campo | 🟢 | `[X]` |
+| T046 | Verificar que a mensagem de erro de entidade inexistente indica o nome correto | T020 | - | verificação negativa do registro de entidades | 🟡 | `[X]` |
 
 ## Fase 4, Integração
 
@@ -119,3 +120,4 @@
 |------|-----------|-------|
 | `2026-09-14` | Versão inicial gerada por `/reversa-to-do` | reversa |
 | `2026-09-15` | Feature concluída: 44 de 44 ações; T045/T046 acrescentadas pela auditoria cruzada | reversa |
+| `2026-09-17` | T045/T046 executadas (nome de campo inexistente recusado; mensagem de entidade inexistente sugere o nome correto): as 46 ações ficam concluídas, com o gate de tipos de volta a 0 erros | revisão manual pós-auditoria |
