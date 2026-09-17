@@ -96,7 +96,7 @@ extração original: o projeto não possui nenhum teste automatizado.
 | RF-06 | O nome de entidade é verificado; entidade inexistente não compila | Must | Referenciar entidade com nome incorreto **não compila** | 🟢 |
 | RF-07 | O usuário da sessão em modo offline é uma variante que não carrega papel | Must | Trecho de código que exige papel não compila contra a variante offline | 🟢 |
 | RF-08 | A verificação de tipos é executável de forma isolada e não emite arquivos | Must | Comando único de verificação existe, retorna situação e não escreve artefatos | 🟢 |
-| RF-09 | O código-fonte é integralmente verificado em modo estrito, exceto o corpo dos arquivos .jsx da pasta de componentes de interface herdados de biblioteca, cuja exclusão é explícita no arquivo de configuração e justificada por escrito no roadmap (D-01), já que o verificador não aceita comentários | Must | Verificação estrita termina sem erro sobre os 77 arquivos do programa (58 de aplicação + 19 declarações de tipo dos componentes herdados); a única exclusão é o corpo .jsx da pasta de componentes herdados, registrada por escrito | 🟢 |
+| RF-09 | O código-fonte é integralmente verificado em modo estrito, exceto o corpo dos arquivos .jsx da pasta de componentes de interface herdados de biblioteca, cuja exclusão é explícita no arquivo de configuração e justificada por escrito no roadmap (D-01), já que o verificador não aceita comentários; nenhum arquivo .js/.jsx entra no programa, porque a admissão de JavaScript está desligada (D-13) | Must | Verificação estrita termina sem erro sobre os 77 arquivos do programa (58 de aplicação + 19 declarações de tipo dos componentes herdados); a única exclusão é o corpo .jsx da pasta de componentes herdados, registrada por escrito | 🟢 |
 | RF-10 | Os componentes de interface da aplicação (`src/components/medical`, `src/components/appointments`) são verificados quanto a contrato de propriedades; os herdados de biblioteca são verificados por declaração de tipo | Should | Os componentes de interface da aplicação compilam sob verificação estrita; as declarações dos herdados são verificadas pelo mesmo gate | 🟡 |
 | RF-11 | As telas são convertidas por módulo, preservando comportamento | Should | Cada módulo converte sem alteração observável; verificação por módulo | 🟢 |
 | RF-12 | O modo offline possui dados iniciais alinhados ao contrato das entidades | Should | Dados iniciais do modo offline validam contra os contratos | 🟢 |
@@ -228,10 +228,15 @@ Cenário: Paridade atestada por roteiro manual
 
 Sessão dedicada a destravar os achados de `audit/cross-check.md` que pertencem a este
 documento (A005, A006, A007, A011 e A019). Resposta do responsável, dada de uma vez: **aplicar
-o Apêndice A.1 do relatório de auditoria como texto final**, sem variantes — as variantes já
-haviam sido decididas em 2026-09-17 (decisões 1A, 2A e 3A1, seção 6.1 do relatório). O Apêndice
-A.1 também previa os achados A002 e A003, já aplicados no commit `c7661a5`; nesta sessão nada
-além dos cinco achados acima foi tocado.
+o Apêndice A.1 do relatório de auditoria como texto final**, sem variantes. As decisões humanas
+que sustentam esses textos, aqui declaradas sem depender de identificadores internos do
+relatório de auditoria, são três: manter a configuração de exclusão e descrever a realidade,
+movendo a exigência de justificativa para o roadmap (D-01); estreitar RF-10 aos componentes da
+aplicação e criar a decisão de congelamento (D-12) no roadmap; e converter `src/main.jsx` em
+`src/main.tsx` ajustando o `index.html` — esta última **aplicada depois desta sessão**, junto
+com o desligamento da admissão de JavaScript (D-13). O Apêndice A.1 também previa os achados
+A002 e A003, aplicados no commit `c7661a5`; nesta sessão nada além dos cinco achados acima foi
+tocado.
 
 - **Q:** RF-10 continua exigindo verificação estrita da camada de interface, mesmo com RF-09/D-01 excluindo a pasta de componentes herdados de biblioteca? (achado A005)
   **R:** Não. RF-10 passa a designar os componentes de interface **da aplicação** (`src/components/medical`, `src/components/appointments`), verificados sob modo estrito; os herdados de biblioteca são verificados por declaração de tipo. A justificativa de RF-10 em §8 acompanha a mesma distinção. Fica pendente, do lado do `/reversa-plan`, o mapeamento requisito↔decisão (§3.1) e o registro de que os herdados entram no gate por declaração.
@@ -261,3 +266,4 @@ As três dúvidas do documento inicial foram resolvidas na sessão de esclarecim
 | 2026-09-14 | Registrado o ponto de partida correto (1.324 erros) e os limites explícitos de alcance da verificação de tipos | reversa |
 | 2026-09-14 | Sessão de esclarecimentos: 3 dúvidas resolvidas. RF-13 retirado do escopo; paridade passa a ser atestada por roteiro manual; exclusão da biblioteca de interface registrada | reversa-clarify |
 | 2026-09-17 | Aplicado o Apêndice A.1 do `audit/cross-check.md`: RF-10 e §8 estreitados aos componentes da aplicação (A005), RN-03 com o congelamento declarado (A006), §10 com a pendência de `{DIAS_AFASTAMENTO}` (A007), contagem de cenários corrigida para 26 arquivos/55 cenários (A011) e razão da permanência de RF-13 (A019) | reversa-clarify |
+| 2026-09-17 | Resolvido A020 da revisão 5: RF-09 passa a declarar que nenhum arquivo `.js`/`.jsx` entra no programa (D-13, admissão de JavaScript desligada); a sessão de esclarecimentos deixa de citar identificadores internos do relatório de auditoria | revisão manual pós-auditoria |

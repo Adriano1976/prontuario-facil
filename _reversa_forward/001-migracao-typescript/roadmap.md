@@ -44,6 +44,7 @@ correspondente). Não há princípio a respeitar nem conflito a registrar. 🟢
 | D-10 | As não conformidades de segurança já auditadas permanecem **apenas documentadas**, sem correção | Regra de ouro da migração: só tipos, nenhuma correção de comportamento. A verificação confere forma, nunca autorização | Corrigir junto; deixar sem menção | 🟢 |
 | D-11 | O modo offline do usuário de sessão é uma variante discriminada que não carrega papel nem dono | BR-MIGRAR-039: a ausência precisa ser explícita para que trecho dependente de papel não compile cego | Papel opcional; papel com valor sentinela | 🟢 |
 | D-12 | Congelar os comportamentos que o legado sinaliza como divergência ou ausência: indicador de mock do painel, critério divergente entre contadores, transição manual de status do agendamento, ausência de paginação na trilha e ausência de aviso visual no offline | Decisão humana (requirements §6.1): a feature converte linguagem, não corrige comportamento. BR-A02 é 🟡 inferida e afirma o contrário — a divergência é deliberada | Corrigir junto com a conversão; manter só em §6.1, sem decisão rastreável | 🟢 |
+| D-13 | Nenhum `.js`/`.jsx` entra no programa de verificação: `allowJs` desligado e `checkJs` removido, com os arquivos de `src/components/ui/` preservados e seus contratos vindo das declarações `*.d.ts` | Achado A020 da auditoria cruzada (revisão 5): com o ponto de entrada convertido (A009), `allowJs`/`checkJs` ficaram inertes — nenhum dos 77 arquivos do programa era `.js`/`.jsx` — mas continuariam admitindo um `.js` novo **sem verificação**, esvaziando a exclusão única prometida por RF-09. Medido: com `allowJs: false` o programa segue com 77 arquivos e 0 erros, e um `src/**/*.js` criado por sonda não entra no programa | Manter `allowJs`/`checkJs` e registrar a exceção; manter `allowJs` até o fim da migração e remover no endurecimento final (previsto no handoff, Onda 7) | 🟢 |
 
 ### 3.1 Mapeamento requisito ↔ decisão
 
@@ -80,7 +81,7 @@ do documento inicial foram resolvidas na sessão de esclarecimentos de `2026-09-
 | `src/api/mockSeed.ts` | `_reversa_sdd/code-analysis.md` | regra-alterada | Dados de exemplo alinhados ao contrato (D-08) — única mudança de dados desta feature |
 | Arquivos de configuração de verificação | — | componente-novo | Configuração do verificador e comando de gate |
 | Script de verificação no manifesto do projeto | — | contrato-alterado | O comando atual mira a configuração legada e não verifica de fato |
-| Demais `src/` (~87 arquivos) | `_reversa_sdd/inventory.md#Estrutura de pastas` | regra-alterada | Conversão de linguagem sem mudança de comportamento |
+| Demais `src/` — 38 arquivos legados de aplicação convertidos (o brief listava 87 alvos porque incluía os 49 `.jsx` de `ui/`, preservados por D-01) | `_reversa_sdd/inventory.md#Estrutura de pastas` | regra-alterada | Conversão de linguagem sem mudança de comportamento; hoje o programa verificado tem 77 arquivos (58 de aplicação + 19 declarações) e nenhum `.jsx` de aplicação resta |
 | `src/api/sessionScope.ts` | `_reversa_sdd/code-analysis.md` | componente-novo | Resolução do escopo de leitura pelo papel da sessão (`resolveScope`), preservando o comportamento nos dois modos |
 | `src/api/entities.ts` | `_reversa_sdd/code-analysis.md` | componente-novo | Ligação ao SDK com o registro fechado de entidades |
 | `src/lib/session.ts` | `_reversa_sdd/code-analysis.md` | componente-novo | Ponto único de conversão da identidade da sessão para o tipo de domínio |
@@ -124,6 +125,11 @@ Estado em 2026-09-15: 44 de 44 ações [X]; `npm run typecheck` e `npm run build
 máquina do responsável (T044, questions.md). A verificação `tsc --listFiles` cobre 77 arquivos
 sob `src/` (58 de aplicação + 19 declarações).
 
+Estado em 2026-09-17: **46 de 46 ações `[X]`** (T045/T046 acrescentadas pela auditoria
+cruzada e executadas); o ponto de entrada passou a ser verificado (`src/main.tsx`) e a
+admissão de `.js` foi desligada (D-13), de modo que nenhum arquivo entra no programa sem
+verificação.
+
 A ordem de 4 para 5 é obrigatória nesta direção porque as telas consomem os
 componentes; converter na ordem inversa deixaria a fronteira sem tipo no meio do
 caminho.
@@ -162,3 +168,4 @@ caminho.
 |------|-----------|-------|
 | `2026-09-14` | Versão inicial gerada por `/reversa-plan` | reversa |
 | `2026-09-17` | Aplicado o Apêndice A.2 do `audit/cross-check.md`: §8 e §10 sincronizados com a entrega (A001); delta arquitetural com os quatro artefatos novos e os nomes `.ts` (A004, A015); D-02 alinhado ao registro real de entidades (A010); D-12 de congelamento (A006, A016) e §3.1 de rastreabilidade requisito↔decisão (A005) criados; §7 com o envio de e-mail transacional (A015) | revisão manual pós-auditoria |
+| `2026-09-17` | Resolvidos A020–A022 da auditoria cruzada (revisão 5): D-13 registra o desligamento de `allowJs`/`checkJs`; §8 passa a registrar o estado de 17/09 (46 de 46); §5 corrige a contagem do delta (38 arquivos legados convertidos, não ~87) | revisão manual pós-auditoria |
