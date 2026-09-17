@@ -57,8 +57,9 @@ extração original: o projeto não possui nenhum teste automatizado.
    - Tipo: nova (formaliza comportamento existente)
 3. **RN-03:** Status de Agendamento pertence ao conjunto fechado `agendado`,
    `confirmado`, `em_atendimento`, `concluido`, `cancelado`, `faltou`, e a transição
-   permanece **manual**. 🟢
-   - Origem no legado: `_reversa_sdd/domain.md#2.2` (BR-A01, BR-A02) e
+   permanece **manual** (congelamento deliberado, registrado no roadmap como D-12). 🟢
+   - Origem no legado: `_reversa_sdd/domain.md#2.2` (BR-A01, BR-A02 🟡 — a regra inferida
+     afirma o contrário e a divergência é deliberada) e
      `_reversa_sdd/domain.md#3` (ausência de gatilho automático)
    - Tipo: nova (a ausência de automação é deliberada e não deve ser "corrigida")
 4. **RN-04:** Tipo sanguíneo pertence ao conjunto fechado ABO/Rh mais
@@ -96,16 +97,16 @@ extração original: o projeto não possui nenhum teste automatizado.
 | RF-07 | O usuário da sessão em modo offline é uma variante que não carrega papel | Must | Trecho de código que exige papel não compila contra a variante offline | 🟢 |
 | RF-08 | A verificação de tipos é executável de forma isolada e não emite arquivos | Must | Comando único de verificação existe, retorna situação e não escreve artefatos | 🟢 |
 | RF-09 | O código-fonte é integralmente verificado em modo estrito, exceto o corpo dos arquivos .jsx da pasta de componentes de interface herdados de biblioteca, cuja exclusão é explícita no arquivo de configuração e justificada por escrito no roadmap (D-01), já que o verificador não aceita comentários | Must | Verificação estrita termina sem erro sobre os 77 arquivos do programa (58 de aplicação + 19 declarações de tipo dos componentes herdados); a única exclusão é o corpo .jsx da pasta de componentes herdados, registrada por escrito | 🟢 |
-| RF-10 | Os componentes de interface são verificados quanto a contrato de propriedades | Should | Componentes de interface compilam sob verificação estrita | 🟡 |
+| RF-10 | Os componentes de interface da aplicação (`src/components/medical`, `src/components/appointments`) são verificados quanto a contrato de propriedades; os herdados de biblioteca são verificados por declaração de tipo | Should | Os componentes de interface da aplicação compilam sob verificação estrita; as declarações dos herdados são verificadas pelo mesmo gate | 🟡 |
 | RF-11 | As telas são convertidas por módulo, preservando comportamento | Should | Cada módulo converte sem alteração observável; verificação por módulo | 🟢 |
 | RF-12 | O modo offline possui dados iniciais alinhados ao contrato das entidades | Should | Dados iniciais do modo offline validam contra os contratos | 🟢 |
-| RF-13 | ~~Dependências declaradas e não utilizadas são removidas~~ **Retirado do escopo** na sessão de esclarecimentos: a remoção não integra esta feature e fica registrada como pendência separada | — | n/a | 🟢 |
+| RF-13 | ~~Dependências declaradas e não utilizadas são removidas~~ **Retirado do escopo** na sessão de esclarecimentos: a remoção não integra esta feature e fica registrada como pendência separada (linha mantida na tabela apenas para preservar a numeração estável dos IDs) | — | n/a | 🟢 |
 
 ## 6. Requisitos Não Funcionais
 
 | Tipo | Requisito | Evidência ou justificativa | Confidência |
 |------|-----------|----------------------------|-------------|
-| Paridade | Nenhuma alteração de comportamento observável é introduzida, e a paridade é comprovada por verificação de tipos somada a roteiro manual de fumaça derivado dos 26 cenários já existentes em `_reversa_sdd/migration/parity_tests/` | Regra de ouro do plano; projeto sem testes automatizados e sem dependência nova autorizada | 🟢 |
+| Paridade | Nenhuma alteração de comportamento observável é introduzida, e a paridade é comprovada por verificação de tipos somada a roteiro manual de fumaça derivado dos 26 arquivos de cenário (55 cenários: 39 de fluxo + 16 de tela) já existentes em `_reversa_sdd/migration/parity_tests/` | Regra de ouro do plano; projeto sem testes automatizados e sem dependência nova autorizada | 🟢 |
 | Segurança | A verificação de tipos confere forma, nunca autorização; o isolamento real permanece no servidor | `_reversa_sdd/permissions.md`; achados de auditoria F-01/F-02/F-03 referidos à codificação | 🟢 |
 | Segurança | O contrato de campo sensível não substitui a proteção do dado, que permanece no servidor | `_reversa_sdd/inventory.md#Visão geral` | 🟢 |
 | Privacidade | Campos sensíveis e de consentimento são marcados no contrato | Requisito regulatório LGPD | 🟢 |
@@ -126,7 +127,7 @@ extração original: o projeto não possui nenhum teste automatizado.
   status, ausência de paginação na trilha de auditoria e ausência de aviso visual
   no modo offline. 🟢
 - Não são introduzidos componentes, produtos ou serviços novos; em particular, **nenhum arcabouço de teste automatizado é adicionado** nesta feature. 🟢
-- A paridade de comportamento é atestada por roteiro manual de fumaça derivado dos 26 cenários de paridade já existentes, **não** por execução automatizada. A expressão "paridade comprovada" não deve ser usada: a evidência é verificável, mas manual. 🟢
+- A paridade de comportamento é atestada por roteiro manual de fumaça derivado dos 55 cenários de paridade (26 arquivos) já existentes, **não** por execução automatizada. A expressão "paridade comprovada" não deve ser usada: a evidência é verificável, mas manual. 🟢
 
 ## 7. Critérios de Aceitação
 
@@ -207,7 +208,7 @@ Cenário: Paridade atestada por roteiro manual
 | RF-07 | Must | Torna explícita a ausência de papel no modo offline |
 | RF-08 | Must | Sem gate executável o processo não tem barreira objetiva |
 | RF-09 | Must | É o critério final de conclusão, ressalvada a exclusão registrada da pasta de componentes herdados |
-| RF-10 | Should | Amplia a cobertura do gate para a camada de interface |
+| RF-10 | Should | Amplia a cobertura do gate para os componentes da aplicação que consomem dados; os herdados entram por declaração de tipo |
 | RF-11 | Should | Converte o restante do sistema por módulo, com verificação parcial |
 | RF-12 | Should | Alinha os dados do modo offline ao contrato |
 | RF-13 | Won't | Retirado do escopo por decisão humana: a remoção das dependências não utilizadas não pertence a esta feature |
@@ -219,16 +220,37 @@ Cenário: Paridade atestada por roteiro manual
 - **Q:** As 14 dependências declaradas e não utilizadas entram no escopo desta feature?
   **R:** Não. Ficam fora do escopo; a remoção é registrada como pendência separada. Consequência: RF-13 retirado, prioridade passa a `Won't`.
 - **Q:** Com o que a paridade de comportamento será comprovada?
-  **R:** Verificação de tipos somada a roteiro manual de fumaça derivado dos 26 cenários Gherkin já existentes em `_reversa_sdd/migration/parity_tests/`. Nenhuma dependência nova é introduzida e nenhum arcabouço de teste é adicionado.
+  **R:** Verificação de tipos somada a roteiro manual de fumaça derivado dos 26 arquivos / 55 cenários Gherkin já existentes em `_reversa_sdd/migration/parity_tests/`. Nenhuma dependência nova é introduzida e nenhum arcabouço de teste é adicionado.
 - **Q:** O modo estrito se aplica aos componentes de interface herdados de biblioteca?
   **R:** Estrito em todo o código-fonte, **exceto** a pasta de componentes de interface herdados, cuja exclusão é registrada no próprio arquivo de configuração da verificação — a justificativa por escrito vive no roadmap (D-01), porque o verificador não aceita comentários nesse arquivo.
 
+### Sessão 2026-09-17
+
+Sessão dedicada a destravar os achados de `audit/cross-check.md` que pertencem a este
+documento (A005, A006, A007, A011 e A019). Resposta do responsável, dada de uma vez: **aplicar
+o Apêndice A.1 do relatório de auditoria como texto final**, sem variantes — as variantes já
+haviam sido decididas em 2026-09-17 (decisões 1A, 2A e 3A1, seção 6.1 do relatório). O Apêndice
+A.1 também previa os achados A002 e A003, já aplicados no commit `c7661a5`; nesta sessão nada
+além dos cinco achados acima foi tocado.
+
+- **Q:** RF-10 continua exigindo verificação estrita da camada de interface, mesmo com RF-09/D-01 excluindo a pasta de componentes herdados de biblioteca? (achado A005)
+  **R:** Não. RF-10 passa a designar os componentes de interface **da aplicação** (`src/components/medical`, `src/components/appointments`), verificados sob modo estrito; os herdados de biblioteca são verificados por declaração de tipo. A justificativa de RF-10 em §8 acompanha a mesma distinção. Fica pendente, do lado do `/reversa-plan`, o mapeamento requisito↔decisão (§3.1) e o registro de que os herdados entram no gate por declaração.
+- **Q:** RN-03 pode afirmar com confiança 🟢 que a transição de status do Agendamento permanece manual, se `_reversa_sdd/domain.md#2.2` traz BR-A02 como 🟡 e afirmando o contrário? (achado A006)
+  **R:** Pode, desde que a divergência seja declarada em vez de omitida. RN-03 mantém a 🟢, passa a nomear o congelamento deliberado (decisão D-12 do roadmap) e marca BR-A02 como 🟡 cuja regra inferida afirma o contrário. A criação da decisão D-12 no `roadmap.md` é do `/reversa-plan`.
+- **Q:** A lacuna pré-existente de `{DIAS_AFASTAMENTO}` (oferecida e nunca interpolada) entra em §10 deste documento? (achado A007)
+  **R:** Sim. §10 deixa de declarar "nenhuma lacuna em aberto" e registra a pendência como lacuna **pré-existente** do legado, preservada de propósito, com ponteiro para `questions.md` (DIV-05) e para o adendo da extração.
+- **Q:** A evidência de paridade é de "26 cenários" ou de "26 arquivos com 55 cenários"? (achado A011)
+  **R:** 26 arquivos com 55 cenários (39 de fluxo + 16 de tela). Os três pontos do documento — NFR Paridade, §6.1 e o esclarecimento de 2026-09-14 — foram corrigidos para essa contagem.
+- **Q:** RF-13 permanece como linha numerada na tabela de requisitos funcionais, apesar de retirado do escopo? (achado A019)
+  **R:** Sim, por estabilidade dos identificadores, agora com a razão declarada na própria célula. A prioridade permanece `Won't` em §8.
+
 ## 10. Lacunas
 
-Nenhuma lacuna em aberto. As três dúvidas do documento inicial foram resolvidas na sessão de esclarecimentos acima.
+As três dúvidas do documento inicial foram resolvidas na sessão de esclarecimentos acima. Permanece uma pendência registrada fora desta feature, encontrada no fumo de paridade:
 
-### Pendência transferida para fora desta feature
+### Pendências transferidas para fora desta feature
 
+- 🟡 **`{DIAS_AFASTAMENTO}` oferecida e nunca interpolada** — a variável aparece na lista de variáveis disponíveis e o editor substitui apenas `{PACIENTE_NOME}`, `{PACIENTE_CPF}`, `{DATA}` e `{DATA_EXTENSO}`. Lacuna **pré-existente** do legado, preservada de propósito. Registro: `questions.md` DIV-05; `_reversa_sdd/addenda/001-migracao-typescript.md`.
 - 🟡 **Remoção das 14 dependências declaradas e não utilizadas** (`@stripe/react-stripe-js`, `@stripe/stripe-js`, `react-leaflet`, `jspdf`, `html2canvas`, `lodash`, `react-quill`, `three`, `react-markdown`, `canvas-confetti`, `@hello-pangea/dnd`, `@radix-ui/react-toast`, `zod`, `@hookform/resolvers`). Não pertence a esta feature. Exige reconfirmação por busca no código-fonte e aprovação explícita antes de qualquer remoção (plano original, RISK-006).
 
 ## 11. Histórico de alterações
@@ -238,3 +260,4 @@ Nenhuma lacuna em aberto. As três dúvidas do documento inicial foram resolvida
 | 2026-09-14 | Versão inicial gerada por `/reversa-requirements` | reversa |
 | 2026-09-14 | Registrado o ponto de partida correto (1.324 erros) e os limites explícitos de alcance da verificação de tipos | reversa |
 | 2026-09-14 | Sessão de esclarecimentos: 3 dúvidas resolvidas. RF-13 retirado do escopo; paridade passa a ser atestada por roteiro manual; exclusão da biblioteca de interface registrada | reversa-clarify |
+| 2026-09-17 | Aplicado o Apêndice A.1 do `audit/cross-check.md`: RF-10 e §8 estreitados aos componentes da aplicação (A005), RN-03 com o congelamento declarado (A006), §10 com a pendência de `{DIAS_AFASTAMENTO}` (A007), contagem de cenários corrigida para 26 arquivos/55 cenários (A011) e razão da permanência de RF-13 (A019) | reversa-clarify |
