@@ -32,6 +32,11 @@
     { "term": "Tailwind CSS", "category": "Técnico", "definition": "Framework CSS utilitário. A estilização é feita por classes utilitárias, evitando CSS puro isolado por componente (decisão D3)." },
     { "term": "Radix UI / shadcn", "category": "Técnico", "definition": "Primitivas de acessibilidade usadas para compor a UI (diálogos, selects, tabs). Base do design system do projeto." },
     { "term": "Hot Path", "category": "Técnico", "definition": "Arquivo muito dependido por outros módulos (alto in-degree). No Code City e no grafo, é destacado em vermelho." },
-    { "term": "localStorage", "category": "Técnico", "definition": "Armazenamento chave-valor do navegador. No modo offline, cada entidade vive sob a chave mock_db_<EntityName>." }
+    { "term": "localStorage", "category": "Técnico", "definition": "Armazenamento chave-valor do navegador. No modo offline, cada entidade vive sob a chave mock_db_<EntityName>." },
+    { "term": "TypeScript", "category": "Técnico", "definition": "Superset tipado de JavaScript. Aqui é usado como rede de proteção: o contrato de dados (entidades, enums e acesso) passa a ser verificado em tempo de compilação, antes de falhar em uso real." },
+    { "term": "AppDataClient", "category": "Arquitetura", "definition": "Contrato único de acesso a dados da aplicação, honrado tanto pelo adaptador online (SDK Base44) quanto pelo offline (mock + localStorage). Recebeu nome próprio para não colidir com o tipo Base44Client exportado pelo SDK." },
+    { "term": "Registro fechado de entidades", "category": "Técnico", "definition": "O acesso a dados é tipado com as 8 entidades de domínio mais a entidade embutida User, em vez de um índice aberto. Referenciar uma entidade com nome inexistente deixa de compilar." },
+    { "term": "Escopo de leitura", "category": "Segurança", "definition": "A leitura de dado clínico exige declarar o escopo (listOwned, filterOwned, filterAsAdmin) na fronteira de tipos. Código que esquece o isolamento por dono não compila; a autorização real continua na RLS do servidor." },
+    { "term": "Gate de tipos (typecheck)", "category": "Técnico", "definition": "Critério objetivo de pronto da migração: tsc --noEmit em modo estrito sobre todo o código próprio, com 0 erros. Partiu de um baseline medido de 1.324 erros em 81 arquivos." }
   ]
 }

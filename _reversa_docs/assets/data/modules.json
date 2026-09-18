@@ -2,6 +2,15 @@
   "schemaVersion": 1,
   "nodes": [
     {
+      "id": "src/pages/PatientForm.tsx",
+      "name": "PatientForm.tsx",
+      "path": "src/pages/PatientForm.tsx",
+      "group": "pages",
+      "language": "tsx",
+      "loc": 600,
+      "type": "file"
+    },
+    {
       "id": "src/components/ui/sidebar.jsx",
       "name": "sidebar.jsx",
       "path": "src/components/ui/sidebar.jsx",
@@ -11,75 +20,66 @@
       "type": "file"
     },
     {
-      "id": "src/pages/PatientForm.jsx",
-      "name": "PatientForm.jsx",
-      "path": "src/pages/PatientForm.jsx",
+      "id": "src/pages/PatientDetail.tsx",
+      "name": "PatientDetail.tsx",
+      "path": "src/pages/PatientDetail.tsx",
       "group": "pages",
-      "language": "jsx",
-      "loc": 495,
+      "language": "tsx",
+      "loc": 470,
       "type": "file"
     },
     {
-      "id": "src/pages/PatientDetail.jsx",
-      "name": "PatientDetail.jsx",
-      "path": "src/pages/PatientDetail.jsx",
+      "id": "src/pages/Consultation.tsx",
+      "name": "Consultation.tsx",
+      "path": "src/pages/Consultation.tsx",
       "group": "pages",
-      "language": "jsx",
-      "loc": 431,
+      "language": "tsx",
+      "loc": 451,
       "type": "file"
     },
     {
-      "id": "src/pages/Consultation.jsx",
-      "name": "Consultation.jsx",
-      "path": "src/pages/Consultation.jsx",
+      "id": "src/pages/NewConsultation.tsx",
+      "name": "NewConsultation.tsx",
+      "path": "src/pages/NewConsultation.tsx",
       "group": "pages",
-      "language": "jsx",
-      "loc": 421,
+      "language": "tsx",
+      "loc": 440,
       "type": "file"
     },
     {
-      "id": "src/pages/NewConsultation.jsx",
-      "name": "NewConsultation.jsx",
-      "path": "src/pages/NewConsultation.jsx",
+      "id": "src/pages/Templates.tsx",
+      "name": "Templates.tsx",
+      "path": "src/pages/Templates.tsx",
       "group": "pages",
-      "language": "jsx",
-      "loc": 399,
+      "language": "tsx",
+      "loc": 406,
       "type": "file"
     },
     {
-      "id": "src/pages/Templates.jsx",
-      "name": "Templates.jsx",
-      "path": "src/pages/Templates.jsx",
-      "group": "pages",
-      "language": "jsx",
-      "loc": 399,
-      "type": "file"
-    },
-    {
-      "id": "src/components/medical/PrescriptionEditor.jsx",
-      "name": "PrescriptionEditor.jsx",
-      "path": "src/components/medical/PrescriptionEditor.jsx",
+      "id": "src/components/medical/PrescriptionEditor.tsx",
+      "name": "PrescriptionEditor.tsx",
+      "path": "src/components/medical/PrescriptionEditor.tsx",
       "group": "components/medical",
-      "language": "jsx",
-      "loc": 316,
+      "language": "tsx",
+      "loc": 382,
       "type": "file"
     },
     {
-      "id": "src/pages/Dashboard.jsx",
-      "name": "Dashboard.jsx",
-      "path": "src/pages/Dashboard.jsx",
+      "id": "src/pages/Dashboard.tsx",
+      "name": "Dashboard.tsx",
+      "path": "src/pages/Dashboard.tsx",
       "group": "pages",
-      "language": "jsx",
-      "loc": 314,
+      "language": "tsx",
+      "loc": 334,
       "type": "file"
     },
     {
-      "id": "src/pages/Doctors.jsx",
-      "name": "Doctors.jsx",
-      "path": "src/pages/Doctors.jsx",
+      "id": "src/pages/Doctors.tsx",
+      "name": "Doctors.tsx",
+      "path": "src/pages/Doctors.tsx",
       "group": "pages",
-      "language": "jsx",
-      "loc": 312,
+      "language": "tsx",
+      "loc": 320,
       "type": "file"
     },
     {
@@ -92,12 +92,57 @@
       "type": "file"
     },
     {
-      "id": "src/pages/AccessLogs.jsx",
-      "name": "AccessLogs.jsx",
-      "path": "src/pages/AccessLogs.jsx",
+      "id": "src/components/medical/ExamUploader.tsx",
+      "name": "ExamUploader.tsx",
+      "path": "src/components/medical/ExamUploader.tsx",
+      "group": "components/medical",
+      "language": "tsx",
+      "loc": 294,
+      "type": "file"
+    },
+    {
+      "id": "src/pages/NewAppointment.tsx",
+      "name": "NewAppointment.tsx",
+      "path": "src/pages/NewAppointment.tsx",
       "group": "pages",
-      "language": "jsx",
-      "loc": 265,
+      "language": "tsx",
+      "loc": 285,
+      "type": "file"
+    },
+    {
+      "id": "src/components/medical/ReportsView.tsx",
+      "name": "ReportsView.tsx",
+      "path": "src/components/medical/ReportsView.tsx",
+      "group": "components/medical",
+      "language": "tsx",
+      "loc": 279,
+      "type": "file"
+    },
+    {
+      "id": "src/pages/AccessLogs.tsx",
+      "name": "AccessLogs.tsx",
+      "path": "src/pages/AccessLogs.tsx",
+      "group": "pages",
+      "language": "tsx",
+      "loc": 277,
+      "type": "file"
+    },
+    {
+      "id": "src/pages/Consultations.tsx",
+      "name": "Consultations.tsx",
+      "path": "src/pages/Consultations.tsx",
+      "group": "pages",
+      "language": "tsx",
+      "loc": 270,
+      "type": "file"
+    },
+    {
+      "id": "src/pages/Patients.tsx",
+      "name": "Patients.tsx",
+      "path": "src/pages/Patients.tsx",
+      "group": "pages",
+      "language": "tsx",
+      "loc": 262,
       "type": "file"
     },
     {
@@ -110,57 +155,39 @@
       "type": "file"
     },
     {
-      "id": "src/pages/NewAppointment.jsx",
-      "name": "NewAppointment.jsx",
-      "path": "src/pages/NewAppointment.jsx",
-      "group": "pages",
-      "language": "jsx",
+      "id": "src/Layout.tsx",
+      "name": "Layout.tsx",
+      "path": "src/Layout.tsx",
+      "group": "root",
+      "language": "tsx",
       "loc": 255,
       "type": "file"
     },
     {
-      "id": "src/components/medical/ExamUploader.jsx",
-      "name": "ExamUploader.jsx",
-      "path": "src/components/medical/ExamUploader.jsx",
+      "id": "src/pages/Appointments.tsx",
+      "name": "Appointments.tsx",
+      "path": "src/pages/Appointments.tsx",
+      "group": "pages",
+      "language": "tsx",
+      "loc": 244,
+      "type": "file"
+    },
+    {
+      "id": "src/components/medical/ConsultationTimeline.tsx",
+      "name": "ConsultationTimeline.tsx",
+      "path": "src/components/medical/ConsultationTimeline.tsx",
       "group": "components/medical",
-      "language": "jsx",
-      "loc": 252,
+      "language": "tsx",
+      "loc": 243,
       "type": "file"
     },
     {
-      "id": "src/Layout.jsx",
-      "name": "Layout.jsx",
-      "path": "src/Layout.jsx",
-      "group": "root",
-      "language": "jsx",
-      "loc": 250,
-      "type": "file"
-    },
-    {
-      "id": "src/pages/Consultations.jsx",
-      "name": "Consultations.jsx",
-      "path": "src/pages/Consultations.jsx",
-      "group": "pages",
-      "language": "jsx",
-      "loc": 247,
-      "type": "file"
-    },
-    {
-      "id": "src/lib/AuthContext.jsx",
-      "name": "AuthContext.jsx",
-      "path": "src/lib/AuthContext.jsx",
+      "id": "src/lib/AuthContext.tsx",
+      "name": "AuthContext.tsx",
+      "path": "src/lib/AuthContext.tsx",
       "group": "lib",
-      "language": "jsx",
-      "loc": 224,
-      "type": "file"
-    },
-    {
-      "id": "src/pages/Appointments.jsx",
-      "name": "Appointments.jsx",
-      "path": "src/pages/Appointments.jsx",
-      "group": "pages",
-      "language": "jsx",
-      "loc": 224,
+      "language": "tsx",
+      "loc": 223,
       "type": "file"
     },
     {
@@ -173,30 +200,21 @@
       "type": "file"
     },
     {
-      "id": "src/pages/Patients.jsx",
-      "name": "Patients.jsx",
-      "path": "src/pages/Patients.jsx",
-      "group": "pages",
-      "language": "jsx",
-      "loc": 217,
+      "id": "src/api/mockClient.ts",
+      "name": "mockClient.ts",
+      "path": "src/api/mockClient.ts",
+      "group": "api",
+      "language": "ts",
+      "loc": 187,
       "type": "file"
     },
     {
-      "id": "src/components/medical/ConsultationTimeline.jsx",
-      "name": "ConsultationTimeline.jsx",
-      "path": "src/components/medical/ConsultationTimeline.jsx",
-      "group": "components/medical",
-      "language": "jsx",
-      "loc": 199,
-      "type": "file"
-    },
-    {
-      "id": "src/components/medical/ReportsView.jsx",
-      "name": "ReportsView.jsx",
-      "path": "src/components/medical/ReportsView.jsx",
-      "group": "components/medical",
-      "language": "jsx",
-      "loc": 194,
+      "id": "src/api/contract.ts",
+      "name": "contract.ts",
+      "path": "src/api/contract.ts",
+      "group": "api",
+      "language": "ts",
+      "loc": 186,
       "type": "file"
     },
     {
@@ -209,6 +227,15 @@
       "type": "file"
     },
     {
+      "id": "src/components/appointments/AppointmentCalendar.tsx",
+      "name": "AppointmentCalendar.tsx",
+      "path": "src/components/appointments/AppointmentCalendar.tsx",
+      "group": "components/appointments",
+      "language": "tsx",
+      "loc": 167,
+      "type": "file"
+    },
+    {
       "id": "base44/entities/Patient.jsonc",
       "name": "Patient.jsonc",
       "path": "base44/entities/Patient.jsonc",
@@ -216,6 +243,33 @@
       "language": "jsonc",
       "loc": 159,
       "type": "entity"
+    },
+    {
+      "id": "src/components/medical/LGPDConsent.tsx",
+      "name": "LGPDConsent.tsx",
+      "path": "src/components/medical/LGPDConsent.tsx",
+      "group": "components/medical",
+      "language": "tsx",
+      "loc": 155,
+      "type": "file"
+    },
+    {
+      "id": "src/api/scopedRead.ts",
+      "name": "scopedRead.ts",
+      "path": "src/api/scopedRead.ts",
+      "group": "api",
+      "language": "ts",
+      "loc": 147,
+      "type": "file"
+    },
+    {
+      "id": "src/api/registry.ts",
+      "name": "registry.ts",
+      "path": "src/api/registry.ts",
+      "group": "api",
+      "language": "ts",
+      "loc": 143,
+      "type": "file"
     },
     {
       "id": "src/components/ui/context-menu.jsx",
@@ -236,30 +290,21 @@
       "type": "file"
     },
     {
-      "id": "src/components/appointments/AppointmentCalendar.jsx",
-      "name": "AppointmentCalendar.jsx",
-      "path": "src/components/appointments/AppointmentCalendar.jsx",
-      "group": "components/appointments",
-      "language": "jsx",
-      "loc": 137,
-      "type": "file"
-    },
-    {
-      "id": "src/components/medical/LGPDConsent.jsx",
-      "name": "LGPDConsent.jsx",
-      "path": "src/components/medical/LGPDConsent.jsx",
-      "group": "components/medical",
-      "language": "jsx",
-      "loc": 135,
-      "type": "file"
-    },
-    {
-      "id": "src/api/mockClient.js",
-      "name": "mockClient.js",
-      "path": "src/api/mockClient.js",
+      "id": "src/api/entities.ts",
+      "name": "entities.ts",
+      "path": "src/api/entities.ts",
       "group": "api",
-      "language": "js",
-      "loc": 128,
+      "language": "ts",
+      "loc": 136,
+      "type": "file"
+    },
+    {
+      "id": "src/api/base44Client.ts",
+      "name": "base44Client.ts",
+      "path": "src/api/base44Client.ts",
+      "group": "api",
+      "language": "ts",
+      "loc": 132,
       "type": "file"
     },
     {
@@ -278,6 +323,15 @@
       "group": "components/ui",
       "language": "jsx",
       "loc": 112,
+      "type": "file"
+    },
+    {
+      "id": "src/components/medical/PatientSearch.tsx",
+      "name": "PatientSearch.tsx",
+      "path": "src/components/medical/PatientSearch.tsx",
+      "group": "components/medical",
+      "language": "tsx",
+      "loc": 110,
       "type": "file"
     },
     {
@@ -308,12 +362,12 @@
       "type": "entity"
     },
     {
-      "id": "src/components/medical/PatientSearch.jsx",
-      "name": "PatientSearch.jsx",
-      "path": "src/components/medical/PatientSearch.jsx",
-      "group": "components/medical",
-      "language": "jsx",
-      "loc": 101,
+      "id": "src/components/appointments/TimeSlotPicker.tsx",
+      "name": "TimeSlotPicker.tsx",
+      "path": "src/components/appointments/TimeSlotPicker.tsx",
+      "group": "components/appointments",
+      "language": "tsx",
+      "loc": 107,
       "type": "file"
     },
     {
@@ -335,6 +389,15 @@
       "type": "file"
     },
     {
+      "id": "src/lib/app-params.ts",
+      "name": "app-params.ts",
+      "path": "src/lib/app-params.ts",
+      "group": "lib",
+      "language": "ts",
+      "loc": 97,
+      "type": "file"
+    },
+    {
       "id": "src/components/ui/sheet.jsx",
       "name": "sheet.jsx",
       "path": "src/components/ui/sheet.jsx",
@@ -350,15 +413,6 @@
       "group": "components/ui",
       "language": "jsx",
       "loc": 95,
-      "type": "file"
-    },
-    {
-      "id": "src/components/appointments/TimeSlotPicker.jsx",
-      "name": "TimeSlotPicker.jsx",
-      "path": "src/components/appointments/TimeSlotPicker.jsx",
-      "group": "components/appointments",
-      "language": "jsx",
-      "loc": 94,
       "type": "file"
     },
     {
@@ -389,11 +443,11 @@
       "type": "file"
     },
     {
-      "id": "src/lib/app-params.js",
-      "name": "app-params.js",
-      "path": "src/lib/app-params.js",
-      "group": "lib",
-      "language": "js",
+      "id": "src/App.tsx",
+      "name": "App.tsx",
+      "path": "src/App.tsx",
+      "group": "root",
+      "language": "tsx",
       "loc": 89,
       "type": "file"
     },
@@ -407,12 +461,21 @@
       "type": "entity"
     },
     {
-      "id": "src/App.jsx",
-      "name": "App.jsx",
-      "path": "src/App.jsx",
-      "group": "root",
-      "language": "jsx",
+      "id": "src/lib/PageNotFound.tsx",
+      "name": "PageNotFound.tsx",
+      "path": "src/lib/PageNotFound.tsx",
+      "group": "lib",
+      "language": "tsx",
       "loc": 86,
+      "type": "file"
+    },
+    {
+      "id": "src/api/mockSeed.ts",
+      "name": "mockSeed.ts",
+      "path": "src/api/mockSeed.ts",
+      "group": "api",
+      "language": "ts",
+      "loc": 85,
       "type": "file"
     },
     {
@@ -461,11 +524,11 @@
       "type": "file"
     },
     {
-      "id": "src/lib/PageNotFound.jsx",
-      "name": "PageNotFound.jsx",
-      "path": "src/lib/PageNotFound.jsx",
-      "group": "lib",
-      "language": "jsx",
+      "id": "src/types/User.ts",
+      "name": "User.ts",
+      "path": "src/types/User.ts",
+      "group": "types",
+      "language": "ts",
       "loc": 79,
       "type": "file"
     },
@@ -488,6 +551,15 @@
       "type": "entity"
     },
     {
+      "id": "src/components/medical/AccessLogger.ts",
+      "name": "AccessLogger.ts",
+      "path": "src/components/medical/AccessLogger.ts",
+      "group": "components/medical",
+      "language": "ts",
+      "loc": 69,
+      "type": "file"
+    },
+    {
       "id": "src/components/ui/calendar.jsx",
       "name": "calendar.jsx",
       "path": "src/components/ui/calendar.jsx",
@@ -497,30 +569,84 @@
       "type": "file"
     },
     {
-      "id": "src/components/medical/VitalSignsForm.jsx",
-      "name": "VitalSignsForm.jsx",
-      "path": "src/components/medical/VitalSignsForm.jsx",
+      "id": "src/components/medical/StatsCard.tsx",
+      "name": "StatsCard.tsx",
+      "path": "src/components/medical/StatsCard.tsx",
       "group": "components/medical",
-      "language": "jsx",
-      "loc": 60,
+      "language": "tsx",
+      "loc": 66,
       "type": "file"
     },
     {
-      "id": "src/components/medical/StatsCard.jsx",
-      "name": "StatsCard.jsx",
-      "path": "src/components/medical/StatsCard.jsx",
-      "group": "components/medical",
-      "language": "jsx",
-      "loc": 59,
+      "id": "src/api/sessionScope.ts",
+      "name": "sessionScope.ts",
+      "path": "src/api/sessionScope.ts",
+      "group": "api",
+      "language": "ts",
+      "loc": 63,
       "type": "file"
     },
     {
-      "id": "src/components/medical/AccessLogger.jsx",
-      "name": "AccessLogger.jsx",
-      "path": "src/components/medical/AccessLogger.jsx",
+      "id": "src/components/medical/VitalSignsForm.tsx",
+      "name": "VitalSignsForm.tsx",
+      "path": "src/components/medical/VitalSignsForm.tsx",
       "group": "components/medical",
-      "language": "jsx",
-      "loc": 53,
+      "language": "tsx",
+      "loc": 61,
+      "type": "file"
+    },
+    {
+      "id": "src/types/Patient.ts",
+      "name": "Patient.ts",
+      "path": "src/types/Patient.ts",
+      "group": "types",
+      "language": "ts",
+      "loc": 54,
+      "type": "file"
+    },
+    {
+      "id": "src/types/Consultation.ts",
+      "name": "Consultation.ts",
+      "path": "src/types/Consultation.ts",
+      "group": "types",
+      "language": "ts",
+      "loc": 51,
+      "type": "file"
+    },
+    {
+      "id": "src/types/Prescription.ts",
+      "name": "Prescription.ts",
+      "path": "src/types/Prescription.ts",
+      "group": "types",
+      "language": "ts",
+      "loc": 51,
+      "type": "file"
+    },
+    {
+      "id": "src/lib/session.ts",
+      "name": "session.ts",
+      "path": "src/lib/session.ts",
+      "group": "lib",
+      "language": "ts",
+      "loc": 50,
+      "type": "file"
+    },
+    {
+      "id": "src/pages.config.ts",
+      "name": "pages.config.ts",
+      "path": "src/pages.config.ts",
+      "group": "root",
+      "language": "ts",
+      "loc": 49,
+      "type": "file"
+    },
+    {
+      "id": "src/types/Appointment.ts",
+      "name": "Appointment.ts",
+      "path": "src/types/Appointment.ts",
+      "group": "types",
+      "language": "ts",
+      "loc": 49,
       "type": "file"
     },
     {
@@ -533,15 +659,6 @@
       "type": "file"
     },
     {
-      "id": "src/lib/NavigationTracker.jsx",
-      "name": "NavigationTracker.jsx",
-      "path": "src/lib/NavigationTracker.jsx",
-      "group": "lib",
-      "language": "jsx",
-      "loc": 47,
-      "type": "file"
-    },
-    {
       "id": "src/components/ui/input-otp.jsx",
       "name": "input-otp.jsx",
       "path": "src/components/ui/input-otp.jsx",
@@ -551,11 +668,11 @@
       "type": "file"
     },
     {
-      "id": "src/pages.config.js",
-      "name": "pages.config.js",
-      "path": "src/pages.config.js",
-      "group": "root",
-      "language": "js",
+      "id": "src/lib/NavigationTracker.tsx",
+      "name": "NavigationTracker.tsx",
+      "path": "src/lib/NavigationTracker.tsx",
+      "group": "lib",
+      "language": "tsx",
       "loc": 46,
       "type": "file"
     },
@@ -565,6 +682,15 @@
       "path": "src/components/ui/badge.jsx",
       "group": "components/ui",
       "language": "jsx",
+      "loc": 45,
+      "type": "file"
+    },
+    {
+      "id": "src/types/common.ts",
+      "name": "common.ts",
+      "path": "src/types/common.ts",
+      "group": "types",
+      "language": "ts",
       "loc": 45,
       "type": "file"
     },
@@ -587,15 +713,6 @@
       "type": "file"
     },
     {
-      "id": "src/api/mockSeed.js",
-      "name": "mockSeed.js",
-      "path": "src/api/mockSeed.js",
-      "group": "api",
-      "language": "js",
-      "loc": 41,
-      "type": "file"
-    },
-    {
       "id": "src/components/ui/alert.jsx",
       "name": "alert.jsx",
       "path": "src/components/ui/alert.jsx",
@@ -605,12 +722,39 @@
       "type": "file"
     },
     {
-      "id": "src/components/UserNotRegisteredError.jsx",
-      "name": "UserNotRegisteredError.jsx",
-      "path": "src/components/UserNotRegisteredError.jsx",
+      "id": "src/types/AccessLog.ts",
+      "name": "AccessLog.ts",
+      "path": "src/types/AccessLog.ts",
+      "group": "types",
+      "language": "ts",
+      "loc": 39,
+      "type": "file"
+    },
+    {
+      "id": "src/components/ui/use-toast.d.ts",
+      "name": "use-toast.d.ts",
+      "path": "src/components/ui/use-toast.d.ts",
+      "group": "components/ui",
+      "language": "ts",
+      "loc": 38,
+      "type": "file"
+    },
+    {
+      "id": "src/types/index.ts",
+      "name": "index.ts",
+      "path": "src/types/index.ts",
+      "group": "types",
+      "language": "ts",
+      "loc": 38,
+      "type": "file"
+    },
+    {
+      "id": "src/components/UserNotRegisteredError.tsx",
+      "name": "UserNotRegisteredError.tsx",
+      "path": "src/components/UserNotRegisteredError.tsx",
       "group": "components",
-      "language": "jsx",
-      "loc": 41,
+      "language": "tsx",
+      "loc": 37,
       "type": "file"
     },
     {
@@ -628,6 +772,15 @@
       "path": "src/components/ui/toggle-group.jsx",
       "group": "components/ui",
       "language": "jsx",
+      "loc": 36,
+      "type": "file"
+    },
+    {
+      "id": "src/types/Template.ts",
+      "name": "Template.ts",
+      "path": "src/types/Template.ts",
+      "group": "types",
+      "language": "ts",
       "loc": 36,
       "type": "file"
     },
@@ -668,12 +821,39 @@
       "type": "file"
     },
     {
-      "id": "src/lib/utils.js",
-      "name": "utils.js",
-      "path": "src/lib/utils.js",
-      "group": "lib",
-      "language": "js",
-      "loc": 30,
+      "id": "src/components/ui/select.d.ts",
+      "name": "select.d.ts",
+      "path": "src/components/ui/select.d.ts",
+      "group": "components/ui",
+      "language": "ts",
+      "loc": 32,
+      "type": "file"
+    },
+    {
+      "id": "src/types/Doctor.ts",
+      "name": "Doctor.ts",
+      "path": "src/types/Doctor.ts",
+      "group": "types",
+      "language": "ts",
+      "loc": 32,
+      "type": "file"
+    },
+    {
+      "id": "src/types/base.ts",
+      "name": "base.ts",
+      "path": "src/types/base.ts",
+      "group": "types",
+      "language": "ts",
+      "loc": 31,
+      "type": "file"
+    },
+    {
+      "id": "src/types/Exam.ts",
+      "name": "Exam.ts",
+      "path": "src/types/Exam.ts",
+      "group": "types",
+      "language": "ts",
+      "loc": 31,
       "type": "file"
     },
     {
@@ -686,12 +866,12 @@
       "type": "file"
     },
     {
-      "id": "src/hooks/use-mobile.jsx",
-      "name": "use-mobile.jsx",
-      "path": "src/hooks/use-mobile.jsx",
-      "group": "hooks",
-      "language": "jsx",
-      "loc": 28,
+      "id": "src/components/ui/checkbox.d.ts",
+      "name": "checkbox.d.ts",
+      "path": "src/components/ui/checkbox.d.ts",
+      "group": "components/ui",
+      "language": "ts",
+      "loc": 29,
       "type": "file"
     },
     {
@@ -713,21 +893,48 @@
       "type": "file"
     },
     {
-      "id": "src/api/base44Client.js",
-      "name": "base44Client.js",
-      "path": "src/api/base44Client.js",
-      "group": "api",
-      "language": "js",
-      "loc": 25,
-      "type": "file"
-    },
-    {
       "id": "src/components/ui/radio-group.jsx",
       "name": "radio-group.jsx",
       "path": "src/components/ui/radio-group.jsx",
       "group": "components/ui",
       "language": "jsx",
       "loc": 25,
+      "type": "file"
+    },
+    {
+      "id": "src/vite-env.d.ts",
+      "name": "vite-env.d.ts",
+      "path": "src/vite-env.d.ts",
+      "group": "root",
+      "language": "ts",
+      "loc": 25,
+      "type": "file"
+    },
+    {
+      "id": "src/components/ui/dropdown-menu.d.ts",
+      "name": "dropdown-menu.d.ts",
+      "path": "src/components/ui/dropdown-menu.d.ts",
+      "group": "components/ui",
+      "language": "ts",
+      "loc": 24,
+      "type": "file"
+    },
+    {
+      "id": "src/hooks/use-mobile.ts",
+      "name": "use-mobile.ts",
+      "path": "src/hooks/use-mobile.ts",
+      "group": "hooks",
+      "language": "ts",
+      "loc": 24,
+      "type": "file"
+    },
+    {
+      "id": "src/components/ui/button.d.ts",
+      "name": "button.d.ts",
+      "path": "src/components/ui/button.d.ts",
+      "group": "components/ui",
+      "language": "ts",
+      "loc": 22,
       "type": "file"
     },
     {
@@ -749,6 +956,15 @@
       "type": "file"
     },
     {
+      "id": "src/lib/utils.ts",
+      "name": "utils.ts",
+      "path": "src/lib/utils.ts",
+      "group": "lib",
+      "language": "ts",
+      "loc": 21,
+      "type": "file"
+    },
+    {
       "id": "src/components/ui/separator.jsx",
       "name": "separator.jsx",
       "path": "src/components/ui/separator.jsx",
@@ -758,12 +974,12 @@
       "type": "file"
     },
     {
-      "id": "src/lib/query-client.js",
-      "name": "query-client.js",
-      "path": "src/lib/query-client.js",
-      "group": "lib",
-      "language": "js",
-      "loc": 20,
+      "id": "src/components/ui/alert-dialog.d.ts",
+      "name": "alert-dialog.d.ts",
+      "path": "src/components/ui/alert-dialog.d.ts",
+      "group": "components/ui",
+      "language": "ts",
+      "loc": 19,
       "type": "file"
     },
     {
@@ -803,12 +1019,30 @@
       "type": "file"
     },
     {
+      "id": "src/components/ui/dialog.d.ts",
+      "name": "dialog.d.ts",
+      "path": "src/components/ui/dialog.d.ts",
+      "group": "components/ui",
+      "language": "ts",
+      "loc": 18,
+      "type": "file"
+    },
+    {
       "id": "src/components/ui/slider.jsx",
       "name": "slider.jsx",
       "path": "src/components/ui/slider.jsx",
       "group": "components/ui",
       "language": "jsx",
       "loc": 18,
+      "type": "file"
+    },
+    {
+      "id": "src/components/ui/table.d.ts",
+      "name": "table.d.ts",
+      "path": "src/components/ui/table.d.ts",
+      "group": "components/ui",
+      "language": "ts",
+      "loc": 17,
       "type": "file"
     },
     {
@@ -821,12 +1055,84 @@
       "type": "file"
     },
     {
+      "id": "src/lib/query-client.ts",
+      "name": "query-client.ts",
+      "path": "src/lib/query-client.ts",
+      "group": "lib",
+      "language": "ts",
+      "loc": 16,
+      "type": "file"
+    },
+    {
+      "id": "src/components/ui/card.d.ts",
+      "name": "card.d.ts",
+      "path": "src/components/ui/card.d.ts",
+      "group": "components/ui",
+      "language": "ts",
+      "loc": 15,
+      "type": "file"
+    },
+    {
+      "id": "src/components/ui/scroll-area.d.ts",
+      "name": "scroll-area.d.ts",
+      "path": "src/components/ui/scroll-area.d.ts",
+      "group": "components/ui",
+      "language": "ts",
+      "loc": 15,
+      "type": "file"
+    },
+    {
       "id": "src/components/ui/textarea.jsx",
       "name": "textarea.jsx",
       "path": "src/components/ui/textarea.jsx",
       "group": "components/ui",
       "language": "jsx",
       "loc": 15,
+      "type": "file"
+    },
+    {
+      "id": "src/components/ui/badge.d.ts",
+      "name": "badge.d.ts",
+      "path": "src/components/ui/badge.d.ts",
+      "group": "components/ui",
+      "language": "ts",
+      "loc": 14,
+      "type": "file"
+    },
+    {
+      "id": "src/components/ui/tabs.d.ts",
+      "name": "tabs.d.ts",
+      "path": "src/components/ui/tabs.d.ts",
+      "group": "components/ui",
+      "language": "ts",
+      "loc": 14,
+      "type": "file"
+    },
+    {
+      "id": "src/components/ui/tooltip.d.ts",
+      "name": "tooltip.d.ts",
+      "path": "src/components/ui/tooltip.d.ts",
+      "group": "components/ui",
+      "language": "ts",
+      "loc": 14,
+      "type": "file"
+    },
+    {
+      "id": "src/components/ui/calendar.d.ts",
+      "name": "calendar.d.ts",
+      "path": "src/components/ui/calendar.d.ts",
+      "group": "components/ui",
+      "language": "ts",
+      "loc": 12,
+      "type": "file"
+    },
+    {
+      "id": "src/components/ui/label.d.ts",
+      "name": "label.d.ts",
+      "path": "src/components/ui/label.d.ts",
+      "group": "components/ui",
+      "language": "ts",
+      "loc": 12,
       "type": "file"
     },
     {
@@ -839,6 +1145,42 @@
       "type": "file"
     },
     {
+      "id": "src/components/ui/switch.d.ts",
+      "name": "switch.d.ts",
+      "path": "src/components/ui/switch.d.ts",
+      "group": "components/ui",
+      "language": "ts",
+      "loc": 12,
+      "type": "file"
+    },
+    {
+      "id": "src/components/ui/textarea.d.ts",
+      "name": "textarea.d.ts",
+      "path": "src/components/ui/textarea.d.ts",
+      "group": "components/ui",
+      "language": "ts",
+      "loc": 12,
+      "type": "file"
+    },
+    {
+      "id": "src/components/ui/toaster.d.ts",
+      "name": "toaster.d.ts",
+      "path": "src/components/ui/toaster.d.ts",
+      "group": "components/ui",
+      "language": "ts",
+      "loc": 12,
+      "type": "file"
+    },
+    {
+      "id": "src/components/ui/input.d.ts",
+      "name": "input.d.ts",
+      "path": "src/components/ui/input.d.ts",
+      "group": "components/ui",
+      "language": "ts",
+      "loc": 10,
+      "type": "file"
+    },
+    {
       "id": "base44/config.jsonc",
       "name": "config.jsonc",
       "path": "base44/config.jsonc",
@@ -848,11 +1190,11 @@
       "type": "entity"
     },
     {
-      "id": "src/main.jsx",
-      "name": "main.jsx",
-      "path": "src/main.jsx",
+      "id": "src/main.tsx",
+      "name": "main.tsx",
+      "path": "src/main.tsx",
       "group": "root",
-      "language": "jsx",
+      "language": "tsx",
       "loc": 7,
       "type": "file"
     },
@@ -885,24 +1227,25 @@
     }
   ],
   "summary": {
-    "totalFiles": 98,
-    "totalLoc": 11465,
+    "totalFiles": 136,
+    "totalLoc": 14018,
     "languages": {
-      "jsx": 80,
+      "tsx": 29,
+      "jsx": 49,
+      "ts": 48,
       "jsonc": 9,
-      "js": 7,
-      "css": 1,
-      "ts": 1
+      "css": 1
     },
     "groups": {
-      "components/ui": 49,
       "pages": 12,
+      "components/ui": 68,
       "components/medical": 9,
-      "root": 5,
-      "lib": 6,
-      "base44": 9,
+      "root": 6,
+      "lib": 7,
+      "api": 8,
       "components/appointments": 2,
-      "api": 3,
+      "base44": 9,
+      "types": 12,
       "components": 1,
       "hooks": 1,
       "utils": 1

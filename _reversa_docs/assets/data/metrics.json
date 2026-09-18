@@ -1,21 +1,26 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-10T13:37:29.069Z",
+  "generatedAt": "2026-09-18T18:04:40.439Z",
   "treemap_loc_by_folder": [
     {
       "name": "pages",
-      "value": 3979,
+      "value": 4359,
       "modules": 12
     },
     {
       "name": "components/ui",
-      "value": 3791,
-      "modules": 49
+      "value": 4132,
+      "modules": 68
     },
     {
       "name": "components/medical",
-      "value": 1369,
+      "value": 1659,
       "modules": 9
+    },
+    {
+      "name": "api",
+      "value": 1079,
+      "modules": 8
     },
     {
       "name": "base44",
@@ -24,32 +29,32 @@
     },
     {
       "name": "lib",
-      "value": 489,
-      "modules": 6
+      "value": 539,
+      "modules": 7
+    },
+    {
+      "name": "types",
+      "value": 536,
+      "modules": 12
     },
     {
       "name": "root",
-      "value": 483,
-      "modules": 5
+      "value": 519,
+      "modules": 6
     },
     {
       "name": "components/appointments",
-      "value": 231,
+      "value": 274,
       "modules": 2
     },
     {
-      "name": "api",
-      "value": 194,
-      "modules": 3
-    },
-    {
       "name": "components",
-      "value": 41,
+      "value": 37,
       "modules": 1
     },
     {
       "name": "hooks",
-      "value": 28,
+      "value": 24,
       "modules": 1
     },
     {
@@ -60,10 +65,16 @@
   ],
   "top_complexity": [
     {
-      "id": "src/lib/utils.js",
-      "name": "utils.js",
+      "id": "src/lib/utils.ts",
+      "name": "utils.ts",
       "complexity": 44,
-      "loc": 30
+      "loc": 21
+    },
+    {
+      "id": "src/types/index.ts",
+      "name": "index.ts",
+      "complexity": 29,
+      "loc": 38
     },
     {
       "id": "src/components/ui/button.jsx",
@@ -72,10 +83,10 @@
       "loc": 44
     },
     {
-      "id": "src/api/base44Client.js",
-      "name": "base44Client.js",
+      "id": "src/api/base44Client.ts",
+      "name": "base44Client.ts",
       "complexity": 20,
-      "loc": 25
+      "loc": 132
     },
     {
       "id": "src/components/ui/card.jsx",
@@ -90,22 +101,46 @@
       "loc": 3
     },
     {
+      "id": "src/lib/session.ts",
+      "name": "session.ts",
+      "complexity": 14,
+      "loc": 50
+    },
+    {
       "id": "src/components/ui/input.jsx",
       "name": "input.jsx",
       "complexity": 13,
       "loc": 16
     },
     {
+      "id": "src/api/sessionScope.ts",
+      "name": "sessionScope.ts",
+      "complexity": 11,
+      "loc": 63
+    },
+    {
       "id": "src/components/ui/select.jsx",
       "name": "select.jsx",
-      "complexity": 11,
+      "complexity": 10,
       "loc": 108
     },
     {
       "id": "src/components/ui/badge.jsx",
       "name": "badge.jsx",
-      "complexity": 11,
+      "complexity": 10,
       "loc": 45
+    },
+    {
+      "id": "src/types/common.ts",
+      "name": "common.ts",
+      "complexity": 10,
+      "loc": 45
+    },
+    {
+      "id": "src/types/base.ts",
+      "name": "base.ts",
+      "complexity": 10,
+      "loc": 31
     },
     {
       "id": "src/components/ui/label.jsx",
@@ -114,16 +149,28 @@
       "loc": 12
     },
     {
+      "id": "src/api/registry.ts",
+      "name": "registry.ts",
+      "complexity": 7,
+      "loc": 143
+    },
+    {
       "id": "src/components/ui/dialog.jsx",
       "name": "dialog.jsx",
       "complexity": 7,
       "loc": 83
     },
     {
-      "id": "src/components/medical/AccessLogger.jsx",
-      "name": "AccessLogger.jsx",
+      "id": "src/api/contract.ts",
+      "name": "contract.ts",
       "complexity": 6,
-      "loc": 53
+      "loc": 186
+    },
+    {
+      "id": "src/components/medical/AccessLogger.ts",
+      "name": "AccessLogger.ts",
+      "complexity": 6,
+      "loc": 69
     },
     {
       "id": "src/components/ui/textarea.jsx",
@@ -136,48 +183,6 @@
       "name": "use-toast.jsx",
       "complexity": 3,
       "loc": 217
-    },
-    {
-      "id": "src/components/ui/alert-dialog.jsx",
-      "name": "alert-dialog.jsx",
-      "complexity": 3,
-      "loc": 84
-    },
-    {
-      "id": "src/components/ui/tabs.jsx",
-      "name": "tabs.jsx",
-      "complexity": 3,
-      "loc": 35
-    },
-    {
-      "id": "src/components/medical/PrescriptionEditor.jsx",
-      "name": "PrescriptionEditor.jsx",
-      "complexity": 2,
-      "loc": 316
-    },
-    {
-      "id": "src/components/medical/ExamUploader.jsx",
-      "name": "ExamUploader.jsx",
-      "complexity": 2,
-      "loc": 252
-    },
-    {
-      "id": "src/lib/AuthContext.jsx",
-      "name": "AuthContext.jsx",
-      "complexity": 2,
-      "loc": 224
-    },
-    {
-      "id": "src/api/mockClient.js",
-      "name": "mockClient.js",
-      "complexity": 2,
-      "loc": 128
-    },
-    {
-      "id": "src/lib/app-params.js",
-      "name": "app-params.js",
-      "complexity": 2,
-      "loc": 89
     }
   ],
   "loc_histogram": {
@@ -191,21 +196,21 @@
       5000
     ],
     "counts": [
-      40,
+      66,
+      27,
       21,
-      17,
-      19,
-      1,
+      20,
+      2,
       0
     ]
   },
   "dependency_sankey": {
     "nodes": [
       {
-        "id": "components/ui"
+        "id": "pages"
       },
       {
-        "id": "pages"
+        "id": "components/ui"
       },
       {
         "id": "components/medical"
@@ -217,13 +222,16 @@
         "id": "lib"
       },
       {
-        "id": "base44"
+        "id": "api"
       },
       {
         "id": "components/appointments"
       },
       {
-        "id": "api"
+        "id": "base44"
+      },
+      {
+        "id": "types"
       },
       {
         "id": "components"
@@ -242,6 +250,11 @@
         "value": 1
       },
       {
+        "source": "api",
+        "target": "types",
+        "value": 6
+      },
+      {
         "source": "root",
         "target": "components/ui",
         "value": 5
@@ -249,7 +262,7 @@
       {
         "source": "root",
         "target": "lib",
-        "value": 4
+        "value": 5
       },
       {
         "source": "root",
@@ -259,12 +272,27 @@
       {
         "source": "components/appointments",
         "target": "components/ui",
-        "value": 4
+        "value": 3
+      },
+      {
+        "source": "components/appointments",
+        "target": "types",
+        "value": 2
       },
       {
         "source": "components/medical",
         "target": "api",
-        "value": 4
+        "value": 6
+      },
+      {
+        "source": "components/medical",
+        "target": "lib",
+        "value": 2
+      },
+      {
+        "source": "components/medical",
+        "target": "types",
+        "value": 6
       },
       {
         "source": "components/medical",
@@ -303,13 +331,18 @@
       },
       {
         "source": "lib",
+        "target": "types",
+        "value": 3
+      },
+      {
+        "source": "lib",
         "target": "root",
         "value": 1
       },
       {
         "source": "pages",
         "target": "api",
-        "value": 12
+        "value": 27
       },
       {
         "source": "pages",
@@ -319,7 +352,17 @@
       {
         "source": "pages",
         "target": "components/ui",
-        "value": 73
+        "value": 72
+      },
+      {
+        "source": "pages",
+        "target": "types",
+        "value": 12
+      },
+      {
+        "source": "pages",
+        "target": "lib",
+        "value": 9
       },
       {
         "source": "pages",
@@ -340,9 +383,19 @@
   },
   "language_distribution": [
     {
+      "language": "tsx",
+      "modules": 29,
+      "loc": 6966
+    },
+    {
       "language": "jsx",
-      "modules": 80,
-      "loc": 10132
+      "modules": 49,
+      "loc": 3791
+    },
+    {
+      "language": "ts",
+      "modules": 48,
+      "loc": 2310
     },
     {
       "language": "jsonc",
@@ -350,29 +403,19 @@
       "loc": 857
     },
     {
-      "language": "js",
-      "modules": 7,
-      "loc": 379
-    },
-    {
       "language": "css",
       "modules": 1,
       "loc": 94
-    },
-    {
-      "language": "ts",
-      "modules": 1,
-      "loc": 3
     }
   ],
   "external_deps": [
     {
       "name": "react",
-      "count": 71
+      "count": 87
     },
     {
       "name": "lucide-react",
-      "count": 41
+      "count": 42
     },
     {
       "name": "@tanstack/react-query",
@@ -388,19 +431,15 @@
     },
     {
       "name": "date-fns",
-      "count": 12
+      "count": 11
     },
     {
       "name": "class-variance-authority",
-      "count": 9
+      "count": 10
     },
     {
       "name": "@radix-ui/react-slot",
       "count": 4
-    },
-    {
-      "name": "@base44/sdk",
-      "count": 2
     },
     {
       "name": "next-themes",
@@ -413,6 +452,10 @@
     {
       "name": "@radix-ui/react-dialog",
       "count": 2
+    },
+    {
+      "name": "@base44/sdk",
+      "count": 1
     },
     {
       "name": "@radix-ui/react-accordion",
@@ -428,24 +471,25 @@
     }
   ],
   "summary": {
-    "totalFiles": 98,
-    "totalLoc": 11465,
+    "totalFiles": 136,
+    "totalLoc": 14018,
     "languages": {
-      "jsx": 80,
+      "tsx": 29,
+      "jsx": 49,
+      "ts": 48,
       "jsonc": 9,
-      "js": 7,
-      "css": 1,
-      "ts": 1
+      "css": 1
     },
     "groups": {
-      "components/ui": 49,
       "pages": 12,
+      "components/ui": 68,
       "components/medical": 9,
-      "root": 5,
-      "lib": 6,
-      "base44": 9,
+      "root": 6,
+      "lib": 7,
+      "api": 8,
       "components/appointments": 2,
-      "api": 3,
+      "base44": 9,
+      "types": 12,
       "components": 1,
       "hooks": 1,
       "utils": 1

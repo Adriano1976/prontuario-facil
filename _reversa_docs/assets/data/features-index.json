@@ -8,6 +8,7 @@
     { "id": "templates", "slug": "templates", "title": "Templates", "emoji": "📝", "tagline": "Modelos de documentos médicos.", "desc": "Modelos pré-definidos (receitas, atestados, anamnese) com variáveis interpoladas para agilizar o atendimento." },
     { "id": "logs-acesso", "slug": "logs-acesso", "title": "Logs de Acesso", "emoji": "🔐", "tagline": "Auditoria e rastreabilidade LGPD.", "desc": "Registros append-only de ações sensíveis (visualização, edição, exclusão) para auditoria de segurança." },
     { "id": "dashboard", "slug": "dashboard", "title": "Dashboard", "emoji": "📊", "tagline": "KPIs e atividade recente.", "desc": "Métricas-chave de pacientes, consultas, prescrições e agendamentos, com atalhos de ação rápida e busca global." },
-    { "id": "modo-offline", "slug": "modo-offline", "title": "Modo Offline", "emoji": "🔌", "tagline": "Runtime alternativo com mock + localStorage.", "desc": "Unit transversal que substitui o backend Base44 por um mock client persistido no navegador via VITE_OFFLINE=true." }
+    { "id": "modo-offline", "slug": "modo-offline", "title": "Modo Offline", "emoji": "🔌", "tagline": "Runtime alternativo com mock + localStorage.", "desc": "Unit transversal que substitui o backend Base44 por um mock client persistido no navegador via VITE_OFFLINE=true." },
+    { "id": "migracao-typescript", "slug": "migracao-typescript", "title": "Migração TypeScript", "emoji": "🟦", "tagline": "Contrato de dados verificável em compile-time.", "desc": "Converte o código para TypeScript: tipa as 8 entidades, os enums fechados e o contrato único de acesso a dados (online e offline)." }
   ]
 }

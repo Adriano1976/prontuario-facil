@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-10T16:52:49.881165+00:00",
+  "generatedAt": "2026-09-18T18:17:09.797936+00:00",
   "events": [
     {
       "date": "2026-08-17",
@@ -106,6 +106,61 @@
       "date": "2026-09-10",
       "title": "2026-09-10 — Tema claro/escuro, Navigation Pad 3D e logo de prontuário médico",
       "raw": "- 2026-09-10 — Tema claro/escuro, Navigation Pad 3D e logo de prontuário médico"
+    },
+    {
+      "date": "2026-09-14",
+      "title": "2026-09-14 — /reversa-forward abre a feature 001-migracao-typescript (requirements, roadmap e actions)",
+      "raw": "- 2026-09-14 — /reversa-forward abre a feature 001-migracao-typescript (requirements, roadmap e actions)"
+    },
+    {
+      "date": "2026-09-14",
+      "title": "2026-09-14 — Conversão em massa de JSX para TSX: componentes, pages e lib migrados",
+      "raw": "- 2026-09-14 — Conversão em massa de JSX para TSX: componentes, pages e lib migrados"
+    },
+    {
+      "date": "2026-09-14",
+      "title": "2026-09-14 — Gate de tipos fechado em 0 erros e build de produção validado (44 de 44 ações)",
+      "raw": "- 2026-09-14 — Gate de tipos fechado em 0 erros e build de produção validado (44 de 44 ações)"
+    },
+    {
+      "date": "2026-09-15",
+      "title": "2026-09-15 — /reversa-sync registra o adendo da migração TypeScript na extração reversa",
+      "raw": "- 2026-09-15 — /reversa-sync registra o adendo da migração TypeScript na extração reversa"
+    },
+    {
+      "date": "2026-09-15",
+      "title": "2026-09-15 — mockClient atualizado com as novas entidades do contrato de dados",
+      "raw": "- 2026-09-15 — mockClient atualizado com as novas entidades do contrato de dados"
+    },
+    {
+      "date": "2026-09-16",
+      "title": "2026-09-16 — Diagrama do modelo de dados e README do projeto atualizados",
+      "raw": "- 2026-09-16 — Diagrama do modelo de dados e README do projeto atualizados"
+    },
+    {
+      "date": "2026-09-17",
+      "title": "2026-09-17 — Ponto de entrada convertido para src/main.tsx (achado A009)",
+      "raw": "- 2026-09-17 — Ponto de entrada convertido para src/main.tsx (achado A009)"
+    },
+    {
+      "date": "2026-09-17",
+      "title": "2026-09-17 — Auditoria cruzada: revisões 5 e 6, com 22 achados abertos e todos fechados",
+      "raw": "- 2026-09-17 — Auditoria cruzada: revisões 5 e 6, com 22 achados abertos e todos fechados"
+    },
+    {
+      "date": "2026-09-17",
+      "title": "2026-09-17 — Endurecimento final: allowJs desligado e decisão D-13 registrada (A020 a A022)",
+      "raw": "- 2026-09-17 — Endurecimento final: allowJs desligado e decisão D-13 registrada (A020 a A022)"
+    },
+    {
+      "date": "2026-09-18",
+      "title": "2026-09-18 — Documentada a unit Migração TypeScript no mini-site e ampliado o glossário",
+      "raw": "- 2026-09-18 — Documentada a unit Migração TypeScript no mini-site e ampliado o glossário"
+    },
+    {
+      "date": "2026-09-18",
+      "title": "2026-09-18 — Mini-site Reversa Docs regenerado: 136 arquivos, 346 importações e 1 ciclo",
+      "raw": "- 2026-09-18 — Mini-site Reversa Docs regenerado: 136 arquivos, 346 importações e 1 ciclo"
     }
   ]
 }

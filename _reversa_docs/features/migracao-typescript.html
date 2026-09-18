@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <script>try{document.documentElement.setAttribute("data-theme",localStorage.getItem("rv-theme")==="light"?"light":"dark");}catch(e){}</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Migração TypeScript — Prontuário Fácil</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg">
+  <meta name="reversa-category" content="diagram">
+  <meta name="reversa-producer-agent" content="reversa-docs-storyteller">
+  <meta name="reversa-template" content="feature">
+  <meta name="reversa-generated-at" content="2026-09-18T18:10:00Z">
+  <link rel="stylesheet" href="../assets/css/theme.css">
+  <script src="../assets/js/data.js"></script>
+  <script src="../assets/js/theme.js" defer></script>
+  <style>
+    .feat-hero .rv-hero__inner { text-align: left; }
+    .breadcrumb { font-size: 13px; color: var(--rv-text-faint); margin-bottom: 18px; }
+    .breadcrumb a:hover { color: #fff; }
+    .br-list { display: grid; gap: 12px; }
+    .br-item { display: flex; gap: 14px; border: 1px solid var(--rv-border); background: var(--rv-panel); border-radius: 12px; padding: 15px 18px; }
+    .br-item__code { flex: 0 0 auto; font-family: var(--rv-mono); font-size: 12px; font-weight: 700; color: var(--rv-accent-1); padding-top: 1px; }
+    .br-item__text { font-size: 14px; color: var(--rv-text-dim); }
+    .br-item__text b { color: var(--rv-text); }
+    .feat-pager { display: flex; justify-content: space-between; gap: 16px; margin-top: 8px; }
+    .feat-pager a { flex: 1; }
+    .feat-pager .next { text-align: right; }
+    .flow { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+    .flow__step { border: 1px solid var(--rv-border); background: var(--rv-panel); border-radius: 12px; padding: 14px; }
+    .flow__step b { display: block; font-size: 12px; color: var(--rv-accent-1); letter-spacing: .06em; text-transform: uppercase; margin-bottom: 6px; }
+    .flow__step span { font-size: 13px; color: var(--rv-text-dim); }
+    .gherkin { font-family: var(--rv-mono); font-size: 13px; background: rgba(0,0,0,.3); border: 1px solid var(--rv-border); border-radius: 12px; padding: 18px; white-space: pre-wrap; color: var(--rv-text-dim); }
+    :root[data-theme="light"] .gherkin { background: rgba(15,23,42,.04); }
+  </style>
+</head>
+<body data-page="feature-migracao-typescript">
+  <header class="rv-header">
+    <div class="rv-header__inner">
+      <a class="rv-brand" href="../index.html">
+        <span class="seal-mini" data-seal></span>
+        <span class="rv-brand__name">Prontuário Fácil</span>
+      </a>
+      <button class="rv-nav-toggle" aria-label="Abrir menu" aria-expanded="false">☰</button>
+      <nav class="rv-nav" aria-label="Navegação principal">
+        <a href="../index.html" data-page-id="index">Visão geral</a>
+        <a href="../arquitetura.html" data-page-id="arquitetura">Arquitetura 3D</a>
+        <a href="../modulos.html" data-page-id="modulos">Módulos</a>
+        <a href="../topologia.html" data-page-id="topologia">Topologia</a>
+        <a href="../metricas.html" data-page-id="metricas">Métricas</a>
+        <a href="../timeline.html" data-page-id="timeline">Timeline</a>
+        <a href="../glossario.html" data-page-id="glossario">Glossário</a>
+        <a href="../deck.html" data-page-id="deck">Deck</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="rv-hero feat-hero" style="padding:48px 24px 36px">
+    <canvas class="rv-hero__canvas"></canvas>
+    <div class="rv-hero__inner">
+      <div class="breadcrumb"><a href="../index.html">Início</a> / <a href="../index.html#features">Features</a> / Migração TypeScript</div>
+      <h1 style="font-size:clamp(2rem,5vw,3.2rem)">🟦 Migração TypeScript</h1>
+      <p class="rv-hero__tagline" style="margin-left:0">Tornar o contrato de dados verificável em tempo de compilação, sem alterar comportamento observável.</p>
+      <div class="rv-hero__actions" style="justify-content:flex-start">
+        <span class="rv-chip">Feature 001</span>
+        <span class="rv-chip rv-chip--good">44/44 ações</span>
+        <span class="rv-chip rv-chip--good">0 erros de tipo</span>
+        <span class="rv-chip">Cenário legado</span>
+      </div>
+    </div>
+  </section>
+
+  <main class="rv-container">
+    <section class="rv-section">
+      <div class="rv-section__head rv-reveal">
+        <div class="rv-section__eyebrow">Visão geral</div>
+        <h2 class="rv-section__title">A rede de proteção que o projeto não tinha</h2>
+        <p class="rv-section__desc">A unit torna verificável, por um verificador de tipos, o contrato de dados do Prontuário Fácil: as 8 entidades clínicas, os enums fechados de status e tipo, e o contrato único de acesso a dados compartilhado entre o modo online e o offline. Antes, o desenvolvedor único não tinha como saber que havia quebrado um nome de campo, um status ou a fronteira de isolamento por dono antes de o sistema falhar em uso real — o projeto <b>não possui teste automatizado</b>.</p>
+      </div>
+
+      <div class="rv-stats rv-reveal" style="margin-top:24px">
+        <div class="rv-stat"><div class="rv-stat__value" data-count="1324">0</div><div class="rv-stat__label">Erros de tipo no baseline</div></div>
+        <div class="rv-stat"><div class="rv-stat__value" data-count="44">0</div><div class="rv-stat__label">Ações concluídas</div></div>
+        <div class="rv-stat"><div class="rv-stat__value" data-count="13">0</div><div class="rv-stat__label">Decisões técnicas</div></div>
+        <div class="rv-stat"><div class="rv-stat__value" data-count="8">0</div><div class="rv-stat__label">Regras novas/alteradas</div></div>
+        <div class="rv-stat"><div class="rv-stat__value" data-count="9">0</div><div class="rv-stat__label">Regras sob vigilância</div></div>
+      </div>
+    </section>
+
+    <section class="rv-section">
+      <div class="rv-section__head rv-reveal">
+        <div class="rv-section__eyebrow">Estratégia</div>
+        <h2 class="rv-section__title">Incremental, de dentro para fora</h2>
+        <p class="rv-section__desc">A SPA continua idêntica em runtime, o backend continua sendo o BaaS e nenhum contrato de dados é alterado. A conversão sobe camada por camada, cada etapa reversível e com critério objetivo de aceite (decisão D-06).</p>
+      </div>
+      <div class="flow rv-reveal">
+        <div class="flow__step"><b>Etapa 1</b><span>Gate de verificação e configuração estrita</span></div>
+        <div class="flow__step"><b>Etapa 2</b><span>Contratos de tipo das entidades (<span class="rv-mono">src/types/</span>)</span></div>
+        <div class="flow__step"><b>Etapa 3</b><span>Contrato único de acesso a dados (<span class="rv-mono">src/api/</span>)</span></div>
+        <div class="flow__step"><b>Etapa 4</b><span>Componentes</span></div>
+        <div class="flow__step"><b>Etapa 5</b><span>Telas, módulo a módulo</span></div>
+      </div>
+    </section>
+
+    <section class="rv-section">
+      <div class="rv-section__head rv-reveal">
+        <div class="rv-section__eyebrow">Arquitetura</div>
+        <h2 class="rv-section__title">Duas camadas novas</h2>
+        <p class="rv-section__desc">O código de aplicação deixou de falar com o SDK do BaaS diretamente.</p>
+      </div>
+      <div class="rv-table-wrap rv-reveal">
+        <table class="rv-table">
+          <thead><tr><th>Camada</th><th>Papel</th></tr></thead>
+          <tbody>
+            <tr><td class="rv-mono">src/types/</td><td>Contratos de dados: as 8 entidades clínicas, a entidade embutida <b>User</b> e os conjuntos fechados (status, tipos, tipo sanguíneo, ações auditadas)</td></tr>
+            <tr><td class="rv-mono">src/api/</td><td>Contrato único de acesso a dados (<b>AppDataClient</b>) honrado pelas duas implementações: online (SDK) e offline (mock + localStorage)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="rv-section">
+      <div class="rv-section__head rv-reveal">
+        <div class="rv-section__eyebrow">Decisões técnicas</div>
+        <h2 class="rv-section__title">As que sustentam o resto</h2>
+      </div>
+      <div class="rv-table-wrap rv-reveal">
+        <table class="rv-table">
+          <thead><tr><th>ID</th><th>Decisão</th><th>Por quê</th></tr></thead>
+          <tbody>
+            <tr><td>D-02</td><td><b>Registro fechado</b> de entidades</td><td>Com índice aberto, erro de digitação no nome da entidade continuaria compilando</td></tr>
+            <tr><td>D-03</td><td>Leitura sob isolamento por dono <b>exige escopo</b></td><td>Código que esquece o filtro de propriedade não compila</td></tr>
+            <tr><td>D-04</td><td>O contrato recebe nome próprio: <b>AppDataClient</b></td><td>Evita dois tipos homônimos com significados diferentes no mesmo projeto</td></tr>
+            <tr><td>D-05</td><td>Contrato anexado por <b>função de verificação</b> em compile-time</td><td>Uma única função comprova que online e offline honram o mesmo contrato</td></tr>
+            <tr><td>D-06</td><td>Conversão <b>de dentro para fora</b></td><td>Erro de tipo fica localizado na camada que está sendo convertida</td></tr>
+            <tr><td>D-12</td><td>Congelar divergências conhecidas do legado</td><td>A feature converte linguagem, não corrige comportamento</td></tr>
+            <tr><td>D-13</td><td>Nenhum <span class="rv-mono">.js</span>/<span class="rv-mono">.jsx</span> entra no programa de verificação</td><td>Sem isso, um arquivo novo sem verificação esvaziaria a garantia prometida</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="rv-section">
+      <div class="rv-section__head rv-reveal">
+        <div class="rv-section__eyebrow">Regras de negócio</div>
+        <h2 class="rv-section__title">O que passou a ser verificado</h2>
+      </div>
+      <div class="br-list rv-reveal">
+        <div class="br-item"><span class="br-item__code">RN-01</span><span class="br-item__text">Todo registro persistido tem <b>identificador e data de criação</b> preenchidos pelo servidor; a tela não os define.</span></div>
+        <div class="br-item"><span class="br-item__code">RN-02</span><span class="br-item__text">Status de Consulta pertence ao conjunto fechado <b>agendada, em_andamento, concluida, cancelada</b>.</span></div>
+        <div class="br-item"><span class="br-item__code">RN-03</span><span class="br-item__text">Status de Agendamento é conjunto fechado e a transição permanece <b>manual</b> (congelamento deliberado D-12).</span></div>
+        <div class="br-item"><span class="br-item__code">RN-04</span><span class="br-item__text">Tipo sanguíneo pertence ao conjunto fechado <b>ABO/Rh + desconhecido</b>.</span></div>
+        <div class="br-item"><span class="br-item__code">RN-05</span><span class="br-item__text">Tipos de documento clínico e de modelo são fechados: um modelo de atestado não aparece ao emitir receita.</span></div>
+        <div class="br-item"><span class="br-item__code">RN-07</span><span class="br-item__text">A leitura de dado clínico <b>exige a declaração do escopo</b> na fronteira de tipos. A autorização real segue na RLS do servidor.</span></div>
+        <div class="br-item"><span class="br-item__code">RN-08</span><span class="br-item__text">O usuário do modo offline é uma variante <b>sem papel e sem dono</b>, de forma estrutural e não silenciosa.</span></div>
+      </div>
+    </section>
+
+    <section class="rv-section">
+      <div class="rv-section__head rv-reveal">
+        <div class="rv-section__eyebrow">Achados</div>
+        <h2 class="rv-section__title">O que a validação revelou</h2>
+      </div>
+      <div class="br-list rv-reveal">
+        <div class="br-item"><span class="br-item__code">🔴</span><span class="br-item__text"><b>Variável fantasma:</b> <span class="rv-mono">{DIAS_AFASTAMENTO}</span> é listada como disponível na UI, mas <b>nunca é interpolada</b> — o editor substitui apenas <span class="rv-mono">{PACIENTE_NOME}</span>, <span class="rv-mono">{PACIENTE_CPF}</span>, <span class="rv-mono">{DATA}</span> e <span class="rv-mono">{DATA_EXTENSO}</span>. Fora do escopo, ficou documentado.</span></div>
+        <div class="br-item"><span class="br-item__code">🐞</span><span class="br-item__text"><b>Defeito corrigido no fumaça:</b> o adaptador offline não preenchia <span class="rv-mono">created_by_id</span> no <span class="rv-mono">create</span> — todo registro criado offline ficava <b>invisível</b> para as leituras com escopo.</span></div>
+        <div class="br-item"><span class="br-item__code">📐</span><span class="br-item__text"><b>Premissa do plano corrigida:</b> o ponto de partida não era "677 erros em 43 arquivos", e sim <b>1.324 erros em 81 arquivos</b> — a medição antiga cobria só parte do código-fonte.</span></div>
+      </div>
+    </section>
+
+    <section class="rv-section">
+      <div class="rv-section__head rv-reveal">
+        <div class="rv-section__eyebrow">Auditoria</div>
+        <h2 class="rv-section__title">Cross-check independente</h2>
+        <p class="rv-section__desc">Seis revisões, 22 achados abertos e todos fechados. A revisão final foi refeita por comando, com sonda adversarial, e não pela leitura do que foi escrito na rodada de correção.</p>
+      </div>
+      <div class="gherkin rv-reveal">Revisão 6 — 2026-09-17
+Resultado: 0 achados
+Nenhum CRITICAL, HIGH, MEDIUM ou LOW.
+Os 22 achados das revisões 4 e 5 estão fechados.</div>
+    </section>
+
+    <section class="rv-section">
+      <div class="rv-section__head rv-reveal">
+        <div class="rv-section__eyebrow">Paridade</div>
+        <h2 class="rv-section__title">Como a equivalência foi atestada</h2>
+      </div>
+      <div class="br-list rv-reveal">
+        <div class="br-item"><span class="br-item__code">D-07</span><span class="br-item__text">A paridade é atestada pela <b>verificação de tipos</b> somada a um <b>roteiro manual de fumaça</b> derivado dos <b>26 arquivos / 55 cenários</b> de paridade já existentes — sem dependência nova e sem arcabouço de teste nesta feature.</span></div>
+        <div class="br-item"><span class="br-item__code">Gate</span><span class="br-item__text">Critério de pronto: <span class="rv-mono">npm run typecheck</span> em <b>0 erros</b> e <span class="rv-mono">npm run build</span> validado.</span></div>
+      </div>
+    </section>
+
+    <section class="rv-section">
+      <div class="rv-section__head rv-reveal">
+        <div class="rv-section__eyebrow">Rastreabilidade</div>
+        <h2 class="rv-section__title">Fontes</h2>
+      </div>
+      <div class="rv-table-wrap rv-reveal">
+        <table class="rv-table">
+          <thead><tr><th>Artefato</th><th>Conteúdo</th></tr></thead>
+          <tbody>
+            <tr><td class="rv-mono">_reversa_forward/001-migracao-typescript/requirements.md</td><td>Requisitos, personas e regras da unit</td></tr>
+            <tr><td class="rv-mono">_reversa_forward/001-migracao-typescript/roadmap.md</td><td>Estratégia por camadas e 13 decisões técnicas</td></tr>
+            <tr><td class="rv-mono">_reversa_forward/001-migracao-typescript/actions.md</td><td>As 44 ações executadas</td></tr>
+            <tr><td class="rv-mono">_reversa_forward/001-migracao-typescript/regression-watch.md</td><td>Regras sob vigilância (W001 a W009)</td></tr>
+            <tr><td class="rv-mono">_reversa_forward/001-migracao-typescript/audit/cross-check.md</td><td>Auditoria cruzada independente</td></tr>
+            <tr><td class="rv-mono">_reversa_sdd/addenda/001-migracao-typescript.md</td><td>Adendo de vigência na extração reversa</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="rv-section">
+      <div class="feat-pager">
+        <a class="rv-card" href="modo-offline.html"><div class="rv-card__meta">← Anterior</div><div class="rv-card__title">Modo Offline</div></a>
+        <a class="rv-card next" href="../index.html#features"><div class="rv-card__meta">Próxima →</div><div class="rv-card__title">Todas as features</div></a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="rv-footer">
+    <div class="rv-container">
+      <div class="rv-footer__bottom"><span>Gerado por Reversa Docs · seed 89000d65</span><span>LGPD · Base44 · React 18</span></div>
+    </div>
+  </footer>
+</body>
+</html>
