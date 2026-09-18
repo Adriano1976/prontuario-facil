@@ -25,3 +25,14 @@
 - 2026-09-09 — README bilíngue (pt-BR e en)
 - 2026-09-10 — Mini-site Reversa Docs publicado (15 páginas)
 - 2026-09-10 — Tema claro/escuro, Navigation Pad 3D e logo de prontuário médico
+- 2026-09-14 — /reversa-forward abre a feature 001-migracao-typescript (requirements, roadmap e actions)
+- 2026-09-14 — Conversão em massa de JSX para TSX: componentes, pages e lib migrados
+- 2026-09-14 — Gate de tipos fechado em 0 erros e build de produção validado (44 de 44 ações)
+- 2026-09-15 — /reversa-sync registra o adendo da migração TypeScript na extração reversa
+- 2026-09-15 — mockClient atualizado com as novas entidades do contrato de dados
+- 2026-09-16 — Diagrama do modelo de dados e README do projeto atualizados
+- 2026-09-17 — Ponto de entrada convertido para src/main.tsx (achado A009)
+- 2026-09-17 — Auditoria cruzada: revisões 5 e 6, com 22 achados abertos e todos fechados
+- 2026-09-17 — Endurecimento final: allowJs desligado e decisão D-13 registrada (A020 a A022)
+- 2026-09-18 — Documentada a unit Migração TypeScript no mini-site e ampliado o glossário
+- 2026-09-18 — Mini-site Reversa Docs regenerado: 136 arquivos, 346 importações e 1 ciclo
