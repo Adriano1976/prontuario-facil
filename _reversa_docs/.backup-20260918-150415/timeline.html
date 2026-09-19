@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <script>try{document.documentElement.setAttribute("data-theme",localStorage.getItem("rv-theme")==="light"?"light":"dark");}catch(e){}</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Timeline — Prontuário Fácil</title>
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+  <meta name="reversa-category" content="diagram">
+  <meta name="reversa-producer-agent" content="reversa-docs-analyst">
+  <meta name="reversa-template" content="timeline">
+  <meta name="reversa-generated-at" content="2026-09-10T16:52:49Z">
+  <link rel="stylesheet" href="assets/css/theme.css">
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/theme.js" defer></script>
+  <style>
+    .tl-filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
+    .tl-chip { cursor: pointer; }
+    .tl-chip.is-active { background: var(--rv-grad); color: #05070d; border-color: transparent; }
+    .tl-list { display: grid; gap: 12px; }
+    .tl-item {
+      display: flex; gap: 16px; align-items: flex-start;
+      border: 1px solid var(--rv-border);
+      background: var(--rv-panel);
+      border-radius: 14px;
+      padding: 16px 18px;
+      cursor: pointer;
+      transition: transform .18s ease, border-color .18s ease, background .18s ease;
+      animation: tl-in .34s cubic-bezier(.2,.8,.3,1) backwards;
+    }
+    @keyframes tl-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .tl-item:hover { transform: translateX(4px); border-color: var(--rv-border-strong); background: var(--rv-panel-strong); }
+    .tl-item__date {
+      flex: 0 0 auto; width: 74px;
+      font-family: var(--rv-mono); font-size: 12px; font-weight: 700;
+      color: var(--rv-accent-1); padding-top: 2px;
+    }
+    .tl-item__body { flex: 1; min-width: 0; }
+    .tl-item__title { font-size: 14.5px; font-weight: 600; }
+    .tl-item__cat { margin-top: 6px; }
+    .rv-chart { border: 1px solid var(--rv-border); border-radius: var(--rv-radius); background: var(--rv-panel); padding: 18px; }
+    .tl-legend { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--rv-border); }
+    .tl-legend__item { display: inline-flex; align-items: center; gap: 7px; font-size: 12.5px; font-weight: 500; color: var(--rv-text-dim); }
+    .tl-legend__item i { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+    /* ---- linha do tempo customizada ---- */
+    .tl-visual { overflow-x: auto; overflow-y: hidden; scrollbar-width: thin; scrollbar-color: var(--rv-border-strong) transparent; }
+    .tl-track { position: relative; height: 460px; min-width: 100%; }
+    .tl-track__line {
+      position: absolute; top: 50%; left: 0; right: 0;
+      height: 1px; background: var(--rv-border-strong);
+      transform: translateY(-50%);
+    }
+    .tl-evt { position: absolute; top: 50%; width: 0; height: 0; }
+    .tl-evt__dot {
+      position: absolute; left: 0; top: 0;
+      width: 11px; height: 11px; border-radius: 50%;
+      transform: translate(-50%, -50%);
+      background: var(--evt-color);
+      box-shadow: 0 0 0 5px var(--evt-halo);
+      transition: box-shadow .25s ease, transform .25s ease;
+    }
+    .tl-evt__connector {
+      position: absolute; left: 0;
+      width: 1px;
+      transform: translateX(-50%);
+      background: var(--evt-color);
+      opacity: .35;
+      transition: opacity .2s ease, box-shadow .2s ease;
+    }
+    .tl-evt__text {
+      position: absolute; left: 0;
+      max-width: 140px;
+      transform: translateX(-50%);
+      text-align: center;
+      cursor: pointer;
+    }
+    .tl-evt__date {
+      display: block;
+      font-size: 14px; font-weight: 700; line-height: 1.25; letter-spacing: .02em;
+      color: var(--evt-color);
+    }
+    .tl-evt__title {
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      font-size: 13px; line-height: 1.35; margin-top: 4px;
+      color: var(--rv-text-dim);
+      transition: color .2s ease;
+    }
+    /* escalonamento: blocos acima alternam alto(110px)/baixo(40px); abaixo alternam perto(40px)/profundo(110px) */
+    .tl-evt--above.tl-evt--far .tl-evt__connector { top: -110px; height: 110px; }
+    .tl-evt--above.tl-evt--far .tl-evt__text { bottom: 110px; }
+    .tl-evt--above.tl-evt--near .tl-evt__connector { top: -40px; height: 40px; }
+    .tl-evt--above.tl-evt--near .tl-evt__text { bottom: 40px; }
+    .tl-evt--below.tl-evt--near .tl-evt__connector { top: 0; height: 40px; }
+    .tl-evt--below.tl-evt--near .tl-evt__text { top: 40px; }
+    .tl-evt--below.tl-evt--far .tl-evt__connector { top: 0; height: 110px; }
+    .tl-evt--below.tl-evt--far .tl-evt__text { top: 110px; }
+    .tl-evt:hover .tl-evt__dot,
+    .tl-evt:focus-visible .tl-evt__dot {
+      box-shadow: 0 0 0 7px var(--evt-halo), 0 0 18px 2px var(--evt-color);
+    }
+    .tl-evt:hover .tl-evt__connector,
+    .tl-evt:focus-visible .tl-evt__connector {
+      opacity: .95; box-shadow: 0 0 8px var(--evt-color);
+    }
+    .tl-evt:hover .tl-evt__title,
+    .tl-evt:focus-visible .tl-evt__title { color: var(--rv-text); }
+    .tl-evt:focus-visible { outline: none; }
+    @media (max-width: 560px) {
+      .tl-evt__text { max-width: 118px; }
+      .tl-evt__title { font-size: 11px; }
+    }
+    .tl-detail {
+      position: fixed; top: var(--rv-header-h); right: 0; bottom: 0;
+      width: min(420px, 92vw);
+      z-index: 70;
+      background: rgba(9, 13, 22, 0.97);
+      border-left: 1px solid var(--rv-border-strong);
+      padding: 26px 24px;
+      transform: translateX(102%);
+      transition: transform .28s cubic-bezier(.3,.8,.3,1);
+      overflow-y: auto;
+      backdrop-filter: blur(14px);
+    }
+    :root[data-theme="light"] .tl-detail { background: rgba(255, 255, 255, 0.98); }
+    .tl-detail.is-open { transform: translateX(0); }
+    .tl-detail__close {
+      position: absolute; top: 16px; right: 16px;
+      width: 34px; height: 34px; border-radius: 9px;
+      border: 1px solid var(--rv-border); background: var(--rv-panel);
+      color: var(--rv-text); cursor: pointer; font-size: 16px;
+    }
+    .tl-detail__close:hover { background: var(--rv-panel-strong); }
+    .tl-detail__date { font-family: var(--rv-mono); color: var(--rv-accent-1); font-size: 13px; font-weight: 700; }
+    .tl-detail h3 { margin: 10px 0 14px; font-size: 19px; line-height: 1.35; }
+    .tl-detail__raw {
+      font-family: var(--rv-mono); font-size: 12.5px; color: var(--rv-text-dim);
+      border: 1px solid var(--rv-border); border-radius: 10px; padding: 12px; background: rgba(0,0,0,.18);
+      white-space: pre-wrap; word-break: break-word;
+    }
+    :root[data-theme="light"] .tl-detail__raw { background: rgba(15,23,42,.04); }
+  </style>
+</head>
+<body data-page="timeline">
+  <header class="rv-header">
+    <div class="rv-header__inner">
+      <a class="rv-brand" href="index.html">
+        <span class="seal-mini" data-seal></span>
+        <span class="rv-brand__name">Prontuário Fácil</span>
+      </a>
+      <button class="rv-nav-toggle" aria-label="Abrir menu" aria-expanded="false">☰</button>
+      <nav class="rv-nav" aria-label="Navegação principal">
+        <a href="index.html" data-page-id="index">Visão geral</a>
+        <a href="arquitetura.html" data-page-id="arquitetura">Arquitetura 3D</a>
+        <a href="modulos.html" data-page-id="modulos">Módulos</a>
+        <a href="topologia.html" data-page-id="topologia">Topologia</a>
+        <a href="metricas.html" data-page-id="metricas">Métricas</a>
+        <a href="timeline.html" data-page-id="timeline">Timeline</a>
+        <a href="glossario.html" data-page-id="glossario">Glossário</a>
+        <a href="deck.html" data-page-id="deck">Deck</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="rv-hero" style="padding:56px 24px 34px">
+    <canvas class="rv-hero__canvas"></canvas>
+    <div class="rv-hero__inner">
+      <span class="rv-eyebrow"><span class="dot"></span> Crônica do projeto</span>
+      <h1>Linha do <span class="grad">tempo</span></h1>
+      <p class="rv-hero__tagline">Histórico de eventos do Prontuário Fácil, da descoberta Reversa à publicação deste mini-site.</p>
+    </div>
+  </section>
+
+  <main class="rv-container">
+    <section class="rv-section" style="padding-top:6px">
+      <div class="rv-stats rv-reveal">
+        <div class="rv-stat"><div class="rv-stat__value" id="tl-total">0</div><div class="rv-stat__label">Eventos registrados</div></div>
+        <div class="rv-stat"><div class="rv-stat__value" id="tl-first">—</div><div class="rv-stat__label">Primeiro evento</div></div>
+        <div class="rv-stat"><div class="rv-stat__value" id="tl-last">—</div><div class="rv-stat__label">Último evento</div></div>
+        <div class="rv-stat"><div class="rv-stat__value" id="tl-span">0</div><div class="rv-stat__label">Dias cobertos</div></div>
+      </div>
+    </section>
+
+    <section class="rv-section">
+      <div class="rv-section__head rv-reveal">
+        <div class="rv-section__eyebrow">Visualização</div>
+        <h2 class="rv-section__title">Evolução do projeto</h2>
+        <p class="rv-section__desc">Cada ponto é um evento datado extraído da crônica. Clique em um evento para ver os detalhes.</p>
+      </div>
+      <div class="rv-chart rv-reveal">
+        <div class="tl-legend" id="tl-legend"></div>
+        <div class="tl-visual" id="tl-visual">
+          <div class="tl-track" id="tl-track">
+            <div class="tl-track__line"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="rv-section">
+      <div class="rv-section__head rv-reveal">
+        <div class="rv-section__eyebrow">Eventos</div>
+        <h2 class="rv-section__title">Lista detalhada</h2>
+      </div>
+      <div class="tl-filters" id="tl-filters">
+        <span class="rv-chip tl-chip is-active" data-cat="all">Todos</span>
+        <span class="rv-chip tl-chip" data-cat="Reversa">Reversa</span>
+        <span class="rv-chip tl-chip" data-cat="Código">Código</span>
+        <span class="rv-chip tl-chip" data-cat="Documentação">Documentação</span>
+        <span class="rv-chip tl-chip" data-cat="Segurança">Segurança</span>
+        <span class="rv-chip tl-chip" data-cat="Migração">Migração</span>
+      </div>
+      <div class="tl-list" id="tl-list"></div>
+    </section>
+  </main>
+
+  <aside class="tl-detail" id="tl-detail" aria-hidden="true">
+    <button class="tl-detail__close" id="tl-close" aria-label="Fechar">✕</button>
+    <div class="tl-detail__date" id="tl-detail-date">—</div>
+    <h3 id="tl-detail-title">—</h3>
+    <div class="tl-detail__raw" id="tl-detail-raw">—</div>
+    <p style="font-size:12.5px;color:var(--rv-text-faint);margin-top:18px">Evento extraído de <span class="rv-mono">.reversa/chronicle.md</span> via <span class="rv-mono">convert_chronicle.py</span>.</p>
+  </aside>
+
+  <footer class="rv-footer">
+    <div class="rv-container">
+      <div class="rv-footer__grid">
+        <div><h4>Prontuário Fácil</h4><p style="font-size:13.5px;color:var(--rv-text-dim);margin:0">Prontuário eletrônico LGPD. SPA React + Base44.</p></div>
+        <div><h4>Navegação</h4><ul><li><a href="index.html">Visão geral</a></li><li><a href="metricas.html">Métricas</a></li><li><a href="arquitetura.html">Arquitetura 3D</a></li><li><a href="glossario.html">Glossário</a></li></ul></div>
+        <div><h4>Features</h4><ul><li><a href="features/pacientes.html">Pacientes</a></li><li><a href="features/consultas.html">Consultas</a></li><li><a href="features/agendamentos.html">Agendamentos</a></li><li><a href="features/dashboard.html">Dashboard</a></li></ul></div>
+        <div><h4>Sobre</h4><ul><li><a href="deck.html">Deck</a></li></ul></div>
+      </div>
+      <div class="rv-footer__bottom"><span>Gerado por Reversa Docs · seed 89000d65</span><span>LGPD · Base44 · React 18</span></div>
+    </div>
+  </footer>
+
+  <script>
+  (function () {
+    "use strict";
+    var rv = window.RV_DATA || {};
+    var tl = rv.timeline || {};
+    var events = (tl.events || []).slice().sort(function (a, b) { return a.date < b.date ? -1 : 1; });
+
+    // ---- utilidades ----
+    function cleanTitle(t) {
+      return String(t || "").replace(/^\d{4}-\d{2}-\d{2}\s*[—–-]\s*/, "");
+    }
+    var MONTHS = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"];
+    function shortDate(iso) {
+      var p = String(iso).split("-");
+      if (p.length !== 3) return iso;
+      return p[2] + " " + (MONTHS[parseInt(p[1], 10) - 1] || p[1]);
+    }
+    function longDate(iso) {
+      var p = String(iso).split("-");
+      if (p.length !== 3) return iso;
+      return p[2] + " de " + (MONTHS[parseInt(p[1], 10) - 1] || p[1]) + " de " + p[0];
+    }
+    function categorize(title) {
+      var t = title.toLowerCase();
+      if (/migra|paridade|handoff|cutover/.test(t)) return "Migração";
+      if (/lgpd|auditoria|seguran|security|consentimento/.test(t)) return "Segurança";
+      if (/readme|documenta|docs|relatório|relatorio/.test(t)) return "Documentação";
+      if (/reversa|scout|archaeologist|detective|architect|data master|design system|visor|soul|specs sdd|spec sdd|review-report|confidence|gaps|\bc4\b|\berd\b|impact matrix|can[oô]nic/.test(t)) return "Reversa";
+      return "Código";
+    }
+    function catClass(cat) {
+      return cat === "Segurança" ? "rv-chip--bad"
+        : cat === "Migração" ? "rv-chip--warn"
+        : cat === "Documentação" ? "rv-chip--good" : "";
+    }
+
+    // ---- KPIs ----
+    document.getElementById("tl-total").textContent = events.length;
+    if (events.length) {
+      var first = events[0].date, last = events[events.length - 1].date;
+      document.getElementById("tl-first").textContent = shortDate(first);
+      document.getElementById("tl-last").textContent = shortDate(last);
+      var days = Math.round((Date.parse(last) - Date.parse(first)) / 86400000);
+      document.getElementById("tl-span").textContent = days;
+    }
+
+    // ---- cores do tema (lidas das CSS variables para uso inline) ----
+    function themeColors() {
+      var cs = getComputedStyle(document.documentElement);
+      function v(n, f) { var x = cs.getPropertyValue(n).trim(); return x || f; }
+      return {
+        text: v("--rv-text", "#e8eefb"),
+        dim: v("--rv-text-dim", "#a7b3c8"),
+        border: v("--rv-border", "rgba(148,163,184,.14)"),
+        a1: v("--rv-accent-1", "#22d3ee"),
+        a2: v("--rv-accent-2", "#6366f1"),
+        a3: v("--rv-accent-3", "#a855f7"),
+        good: v("--rv-good", "#34d399"),
+        warn: v("--rv-warn", "#fbbf24"),
+        bad: v("--rv-bad", "#fb7185")
+      };
+    }
+
+    // ---- categorias + cores (compartilhadas pelo gráfico e pela legenda) ----
+    var CATEGORIES = ["Reversa", "Código", "Documentação", "Segurança", "Migração"];
+    function catColor(cat) {
+      var c = themeColors();
+      return cat === "Reversa" ? c.a1
+        : cat === "Código" ? c.a2
+        : cat === "Documentação" ? c.good
+        : cat === "Segurança" ? c.bad
+        : cat === "Migração" ? c.warn
+        : c.a3;
+    }
+
+    // ---- linha do tempo customizada (HTML/CSS, sem Highcharts) ----
+    function renderTimeline() {
+      var track = document.getElementById("tl-track");
+      if (!track || !events.length) return;
+      var first = Date.parse(events[0].date);
+      var last = Date.parse(events[events.length - 1].date);
+      var spanDays = Math.max(1, Math.round((last - first) / 86400000));
+      var PX_PER_DAY = 64, SIDE_PAD = 64;
+      track.style.width = (SIDE_PAD * 2 + spanDays * PX_PER_DAY) + "px";
+      track.querySelectorAll(".tl-evt").forEach(function (el) { el.remove(); });
+      events.forEach(function (e, i) {
+        var xPx = SIDE_PAD + Math.round((Date.parse(e.date) - first) / 86400000) * PX_PER_DAY;
+        var title = cleanTitle(e.title);
+        var color = catColor(categorize(title));
+        var isAbove = (i % 2 === 0);
+        var rowPos = isAbove ? (i / 2) : ((i - 1) / 2);
+        // acima: 1o longe(60px), 2o perto(35px)... ; abaixo: 1o perto(35px), 2o longe(60px)...
+        var depth = isAbove
+          ? (rowPos % 2 === 0 ? "tl-evt--far" : "tl-evt--near")
+          : (rowPos % 2 === 0 ? "tl-evt--near" : "tl-evt--far");
+        var evt = document.createElement("div");
+        evt.className = "tl-evt " + (isAbove ? "tl-evt--above" : "tl-evt--below") + " " + depth;
+        evt.style.left = xPx + "px";
+        evt.style.setProperty("--evt-color", color);
+        evt.style.setProperty("--evt-halo", color + "33");
+        evt.title = title;
+        evt.tabIndex = 0;
+        evt.setAttribute("role", "button");
+        evt.setAttribute("aria-label", shortDate(e.date) + ": " + title);
+        evt.innerHTML =
+          '<span class="tl-evt__dot"></span>' +
+          '<span class="tl-evt__connector"></span>' +
+          '<div class="tl-evt__text">' +
+            '<span class="tl-evt__date">' + shortDate(e.date) + '</span>' +
+            '<span class="tl-evt__title">' + title + '</span>' +
+          '</div>';
+        evt.addEventListener("click", function () { openDetail(e); });
+        evt.addEventListener("keydown", function (ke) {
+          if (ke.key === "Enter" || ke.key === " ") { ke.preventDefault(); openDetail(e); }
+        });
+        track.appendChild(evt);
+      });
+    }
+
+    // ---- legenda de categorias ----
+    function renderLegend() {
+      var host = document.getElementById("tl-legend");
+      if (!host) return;
+      host.innerHTML = CATEGORIES.map(function (cat) {
+        return '<span class="tl-legend__item"><i style="background:' + catColor(cat) + '"></i>' + cat + '</span>';
+      }).join("");
+    }
+
+    // ---- lista de eventos + filtro ----
+    var activeCat = "all";
+    function renderList() {
+      var host = document.getElementById("tl-list");
+      var list = events.filter(function (e) { return activeCat === "all" || categorize(cleanTitle(e.title)) === activeCat; });
+      if (!list.length) {
+        host.innerHTML = '<p style="color:var(--rv-text-faint);text-align:center;padding:30px 0">Nenhum evento nesta categoria.</p>';
+        return;
+      }
+      host.innerHTML = list.map(function (e, i) {
+        var cat = categorize(cleanTitle(e.title));
+        return '<article class="tl-item" style="animation-delay:' + Math.min(i * 24, 420) + 'ms" data-idx="' + events.indexOf(e) + '">' +
+          '<div class="tl-item__date">' + e.date + '</div>' +
+          '<div class="tl-item__body">' +
+            '<div class="tl-item__title">' + cleanTitle(e.title) + '</div>' +
+            '<div class="tl-item__cat"><span class="rv-chip ' + catClass(cat) + '">' + cat + '</span></div>' +
+          '</div>' +
+        '</article>';
+      }).join("");
+      host.querySelectorAll(".tl-item").forEach(function (el) {
+        el.addEventListener("click", function () { openDetail(events[parseInt(el.getAttribute("data-idx"), 10)]); });
+      });
+    }
+
+    document.getElementById("tl-filters").addEventListener("click", function (e) {
+      var chip = e.target.closest(".tl-chip");
+      if (!chip) return;
+      document.querySelectorAll(".tl-chip").forEach(function (c) { c.classList.remove("is-active"); });
+      chip.classList.add("is-active");
+      activeCat = chip.getAttribute("data-cat");
+      renderList();
+    });
+
+    // ---- painel de detalhes (EVENT_DETAILS) ----
+    var panel = document.getElementById("tl-detail");
+    function openDetail(e) {
+      if (!e) return;
+      document.getElementById("tl-detail-date").textContent = longDate(e.date);
+      document.getElementById("tl-detail-title").textContent = cleanTitle(e.title);
+      document.getElementById("tl-detail-raw").textContent = e.raw || e.title;
+      panel.classList.add("is-open");
+      panel.setAttribute("aria-hidden", "false");
+    }
+    document.getElementById("tl-close").addEventListener("click", function () {
+      panel.classList.remove("is-open");
+      panel.setAttribute("aria-hidden", "true");
+    });
+    document.addEventListener("keydown", function (ev) {
+      if (ev.key === "Escape") { panel.classList.remove("is-open"); panel.setAttribute("aria-hidden", "true"); }
+    });
+
+    renderTimeline();
+    renderLegend();
+    renderList();
+
+    // Re-renderiza a timeline e a legenda quando o tema muda (cores vêm de CSS variables)
+    new MutationObserver(function () { renderTimeline(); renderLegend(); }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+  })();
+  </script>
+</body>
+</html>

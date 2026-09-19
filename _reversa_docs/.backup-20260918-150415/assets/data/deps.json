@@ -1,0 +1,2363 @@
+{
+  "schemaVersion": 1,
+  "nodes": [
+    {
+      "id": "src/components/ui/sidebar.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 594
+    },
+    {
+      "id": "src/pages/PatientForm.jsx",
+      "group": "pages",
+      "language": "jsx",
+      "loc": 495
+    },
+    {
+      "id": "src/pages/PatientDetail.jsx",
+      "group": "pages",
+      "language": "jsx",
+      "loc": 431
+    },
+    {
+      "id": "src/pages/Consultation.jsx",
+      "group": "pages",
+      "language": "jsx",
+      "loc": 421
+    },
+    {
+      "id": "src/pages/NewConsultation.jsx",
+      "group": "pages",
+      "language": "jsx",
+      "loc": 399
+    },
+    {
+      "id": "src/pages/Templates.jsx",
+      "group": "pages",
+      "language": "jsx",
+      "loc": 399
+    },
+    {
+      "id": "src/components/medical/PrescriptionEditor.jsx",
+      "group": "components/medical",
+      "language": "jsx",
+      "loc": 316
+    },
+    {
+      "id": "src/pages/Dashboard.jsx",
+      "group": "pages",
+      "language": "jsx",
+      "loc": 314
+    },
+    {
+      "id": "src/pages/Doctors.jsx",
+      "group": "pages",
+      "language": "jsx",
+      "loc": 312
+    },
+    {
+      "id": "src/components/ui/chart.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 306
+    },
+    {
+      "id": "src/pages/AccessLogs.jsx",
+      "group": "pages",
+      "language": "jsx",
+      "loc": 265
+    },
+    {
+      "id": "src/components/ui/menubar.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 256
+    },
+    {
+      "id": "src/pages/NewAppointment.jsx",
+      "group": "pages",
+      "language": "jsx",
+      "loc": 255
+    },
+    {
+      "id": "src/components/medical/ExamUploader.jsx",
+      "group": "components/medical",
+      "language": "jsx",
+      "loc": 252
+    },
+    {
+      "id": "src/Layout.jsx",
+      "group": "root",
+      "language": "jsx",
+      "loc": 250
+    },
+    {
+      "id": "src/pages/Consultations.jsx",
+      "group": "pages",
+      "language": "jsx",
+      "loc": 247
+    },
+    {
+      "id": "src/lib/AuthContext.jsx",
+      "group": "lib",
+      "language": "jsx",
+      "loc": 224
+    },
+    {
+      "id": "src/pages/Appointments.jsx",
+      "group": "pages",
+      "language": "jsx",
+      "loc": 224
+    },
+    {
+      "id": "src/components/ui/use-toast.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 217
+    },
+    {
+      "id": "src/pages/Patients.jsx",
+      "group": "pages",
+      "language": "jsx",
+      "loc": 217
+    },
+    {
+      "id": "src/components/medical/ConsultationTimeline.jsx",
+      "group": "components/medical",
+      "language": "jsx",
+      "loc": 199
+    },
+    {
+      "id": "src/components/medical/ReportsView.jsx",
+      "group": "components/medical",
+      "language": "jsx",
+      "loc": 194
+    },
+    {
+      "id": "src/components/ui/carousel.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 183
+    },
+    {
+      "id": "base44/entities/Patient.jsonc",
+      "group": "base44",
+      "language": "jsonc",
+      "loc": 159
+    },
+    {
+      "id": "src/components/ui/context-menu.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 139
+    },
+    {
+      "id": "src/components/ui/dropdown-menu.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 139
+    },
+    {
+      "id": "src/components/appointments/AppointmentCalendar.jsx",
+      "group": "components/appointments",
+      "language": "jsx",
+      "loc": 137
+    },
+    {
+      "id": "src/components/medical/LGPDConsent.jsx",
+      "group": "components/medical",
+      "language": "jsx",
+      "loc": 135
+    },
+    {
+      "id": "src/api/mockClient.js",
+      "group": "api",
+      "language": "js",
+      "loc": 128
+    },
+    {
+      "id": "base44/entities/Consultation.jsonc",
+      "group": "base44",
+      "language": "jsonc",
+      "loc": 128
+    },
+    {
+      "id": "src/components/ui/form.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 112
+    },
+    {
+      "id": "base44/entities/Prescription.jsonc",
+      "group": "base44",
+      "language": "jsonc",
+      "loc": 110
+    },
+    {
+      "id": "src/components/ui/select.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 108
+    },
+    {
+      "id": "base44/entities/Appointment.jsonc",
+      "group": "base44",
+      "language": "jsonc",
+      "loc": 108
+    },
+    {
+      "id": "src/components/medical/PatientSearch.jsx",
+      "group": "components/medical",
+      "language": "jsx",
+      "loc": 101
+    },
+    {
+      "id": "base44/entities/Exam.jsonc",
+      "group": "base44",
+      "language": "jsonc",
+      "loc": 101
+    },
+    {
+      "id": "src/components/ui/command.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 100
+    },
+    {
+      "id": "src/components/ui/sheet.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 96
+    },
+    {
+      "id": "src/components/ui/toast.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 95
+    },
+    {
+      "id": "src/components/appointments/TimeSlotPicker.jsx",
+      "group": "components/appointments",
+      "language": "jsx",
+      "loc": 94
+    },
+    {
+      "id": "src/index.css",
+      "group": "root",
+      "language": "css",
+      "loc": 94
+    },
+    {
+      "id": "src/components/ui/navigation-menu.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 93
+    },
+    {
+      "id": "src/components/ui/pagination.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 91
+    },
+    {
+      "id": "src/lib/app-params.js",
+      "group": "lib",
+      "language": "js",
+      "loc": 89
+    },
+    {
+      "id": "base44/entities/Doctor.jsonc",
+      "group": "base44",
+      "language": "jsonc",
+      "loc": 88
+    },
+    {
+      "id": "src/App.jsx",
+      "group": "root",
+      "language": "jsx",
+      "loc": 86
+    },
+    {
+      "id": "src/components/ui/alert-dialog.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 84
+    },
+    {
+      "id": "src/components/ui/dialog.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 83
+    },
+    {
+      "id": "src/components/ui/breadcrumb.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 82
+    },
+    {
+      "id": "base44/entities/Template.jsonc",
+      "group": "base44",
+      "language": "jsonc",
+      "loc": 80
+    },
+    {
+      "id": "src/components/ui/drawer.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 79
+    },
+    {
+      "id": "src/lib/PageNotFound.jsx",
+      "group": "lib",
+      "language": "jsx",
+      "loc": 79
+    },
+    {
+      "id": "src/components/ui/table.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 76
+    },
+    {
+      "id": "base44/entities/AccessLog.jsonc",
+      "group": "base44",
+      "language": "jsonc",
+      "loc": 74
+    },
+    {
+      "id": "src/components/ui/calendar.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 68
+    },
+    {
+      "id": "src/components/medical/VitalSignsForm.jsx",
+      "group": "components/medical",
+      "language": "jsx",
+      "loc": 60
+    },
+    {
+      "id": "src/components/medical/StatsCard.jsx",
+      "group": "components/medical",
+      "language": "jsx",
+      "loc": 59
+    },
+    {
+      "id": "src/components/medical/AccessLogger.jsx",
+      "group": "components/medical",
+      "language": "jsx",
+      "loc": 53
+    },
+    {
+      "id": "src/components/ui/toaster.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 48
+    },
+    {
+      "id": "src/lib/NavigationTracker.jsx",
+      "group": "lib",
+      "language": "jsx",
+      "loc": 47
+    },
+    {
+      "id": "src/components/ui/input-otp.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 46
+    },
+    {
+      "id": "src/pages.config.js",
+      "group": "root",
+      "language": "js",
+      "loc": 46
+    },
+    {
+      "id": "src/components/ui/badge.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 45
+    },
+    {
+      "id": "src/components/ui/button.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 44
+    },
+    {
+      "id": "src/components/ui/card.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 42
+    },
+    {
+      "id": "src/api/mockSeed.js",
+      "group": "api",
+      "language": "js",
+      "loc": 41
+    },
+    {
+      "id": "src/components/ui/alert.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 41
+    },
+    {
+      "id": "src/components/UserNotRegisteredError.jsx",
+      "group": "components",
+      "language": "jsx",
+      "loc": 41
+    },
+    {
+      "id": "src/components/ui/resizable.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 36
+    },
+    {
+      "id": "src/components/ui/toggle-group.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 36
+    },
+    {
+      "id": "src/components/ui/accordion.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 35
+    },
+    {
+      "id": "src/components/ui/tabs.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 35
+    },
+    {
+      "id": "src/components/ui/scroll-area.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 34
+    },
+    {
+      "id": "src/components/ui/toggle.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 33
+    },
+    {
+      "id": "src/lib/utils.js",
+      "group": "lib",
+      "language": "js",
+      "loc": 30
+    },
+    {
+      "id": "src/components/ui/avatar.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 29
+    },
+    {
+      "id": "src/hooks/use-mobile.jsx",
+      "group": "hooks",
+      "language": "jsx",
+      "loc": 28
+    },
+    {
+      "id": "src/components/ui/skeleton.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 27
+    },
+    {
+      "id": "src/components/ui/sonner.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 26
+    },
+    {
+      "id": "src/api/base44Client.js",
+      "group": "api",
+      "language": "js",
+      "loc": 25
+    },
+    {
+      "id": "src/components/ui/radio-group.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 25
+    },
+    {
+      "id": "src/components/ui/popover.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 21
+    },
+    {
+      "id": "src/components/ui/tooltip.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 21
+    },
+    {
+      "id": "src/components/ui/separator.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 20
+    },
+    {
+      "id": "src/lib/query-client.js",
+      "group": "lib",
+      "language": "js",
+      "loc": 20
+    },
+    {
+      "id": "src/components/ui/checkbox.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 19
+    },
+    {
+      "id": "src/components/ui/hover-card.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 19
+    },
+    {
+      "id": "src/components/ui/progress.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 19
+    },
+    {
+      "id": "src/components/ui/switch.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 19
+    },
+    {
+      "id": "src/components/ui/slider.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 18
+    },
+    {
+      "id": "src/components/ui/input.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 16
+    },
+    {
+      "id": "src/components/ui/textarea.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 15
+    },
+    {
+      "id": "src/components/ui/label.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 12
+    },
+    {
+      "id": "base44/config.jsonc",
+      "group": "base44",
+      "language": "jsonc",
+      "loc": 9
+    },
+    {
+      "id": "src/main.jsx",
+      "group": "root",
+      "language": "jsx",
+      "loc": 7
+    },
+    {
+      "id": "src/components/ui/collapsible.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 6
+    },
+    {
+      "id": "src/components/ui/aspect-ratio.jsx",
+      "group": "components/ui",
+      "language": "jsx",
+      "loc": 3
+    },
+    {
+      "id": "src/utils/index.ts",
+      "group": "utils",
+      "language": "ts",
+      "loc": 3
+    }
+  ],
+  "edges": [
+    {
+      "source": "src/api/base44Client.js",
+      "target": "src/lib/app-params.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/api/base44Client.js",
+      "target": "src/api/mockClient.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/api/mockClient.js",
+      "target": "src/api/mockSeed.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/App.jsx",
+      "target": "src/components/ui/toaster.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/App.jsx",
+      "target": "src/lib/query-client.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/App.jsx",
+      "target": "src/lib/NavigationTracker.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/App.jsx",
+      "target": "src/pages.config.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/App.jsx",
+      "target": "src/lib/PageNotFound.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/App.jsx",
+      "target": "src/lib/AuthContext.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/App.jsx",
+      "target": "src/components/UserNotRegisteredError.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/appointments/AppointmentCalendar.jsx",
+      "target": "src/components/ui/card.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/appointments/AppointmentCalendar.jsx",
+      "target": "src/components/ui/button.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/appointments/AppointmentCalendar.jsx",
+      "target": "src/components/ui/badge.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/appointments/TimeSlotPicker.jsx",
+      "target": "src/components/ui/button.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/medical/AccessLogger.jsx",
+      "target": "src/api/base44Client.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/medical/ConsultationTimeline.jsx",
+      "target": "src/components/ui/card.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/medical/ConsultationTimeline.jsx",
+      "target": "src/components/ui/badge.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/medical/ConsultationTimeline.jsx",
+      "target": "src/components/ui/button.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/medical/ConsultationTimeline.jsx",
+      "target": "src/utils/index.ts",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/medical/ExamUploader.jsx",
+      "target": "src/components/ui/button.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/medical/ExamUploader.jsx",
+      "target": "src/components/ui/input.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/medical/ExamUploader.jsx",
+      "target": "src/components/ui/label.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/medical/ExamUploader.jsx",
+      "target": "src/components/ui/textarea.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/medical/ExamUploader.jsx",
+      "target": "src/components/ui/select.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/medical/ExamUploader.jsx",
+      "target": "src/components/ui/dialog.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/medical/ExamUploader.jsx",
+      "target": "src/api/base44Client.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/medical/ExamUploader.jsx",
+      "target": "src/components/medical/AccessLogger.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/medical/LGPDConsent.jsx",
+      "target": "src/components/ui/button.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/medical/LGPDConsent.jsx",
+      "target": "src/components/ui/checkbox.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/medical/LGPDConsent.jsx",
+      "target": "src/components/ui/dialog.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/medical/LGPDConsent.jsx",
+      "target": "src/components/ui/scroll-area.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/medical/PatientSearch.jsx",
+      "target": "src/components/ui/input.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/medical/PatientSearch.jsx",
+      "target": "src/components/ui/button.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/medical/PatientSearch.jsx",
+      "target": "src/utils/index.ts",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/medical/PrescriptionEditor.jsx",
+      "target": "src/components/ui/button.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/medical/PrescriptionEditor.jsx",
+      "target": "src/components/ui/input.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/medical/PrescriptionEditor.jsx",
+      "target": "src/components/ui/label.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/medical/PrescriptionEditor.jsx",
+      "target": "src/components/ui/textarea.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/medical/PrescriptionEditor.jsx",
+      "target": "src/components/ui/select.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/medical/PrescriptionEditor.jsx",
+      "target": "src/components/ui/dialog.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/medical/PrescriptionEditor.jsx",
+      "target": "src/components/ui/card.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/medical/PrescriptionEditor.jsx",
+      "target": "src/api/base44Client.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/medical/ReportsView.jsx",
+      "target": "src/api/base44Client.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/medical/ReportsView.jsx",
+      "target": "src/components/ui/card.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/medical/ReportsView.jsx",
+      "target": "src/components/ui/badge.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/medical/VitalSignsForm.jsx",
+      "target": "src/components/ui/input.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/medical/VitalSignsForm.jsx",
+      "target": "src/components/ui/label.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/ui/accordion.jsx",
+      "target": "src/lib/utils.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/ui/alert-dialog.jsx",
+      "target": "src/lib/utils.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/ui/alert-dialog.jsx",
+      "target": "src/components/ui/button.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/ui/alert.jsx",
+      "target": "src/lib/utils.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/ui/avatar.jsx",
+      "target": "src/lib/utils.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/ui/badge.jsx",
+      "target": "src/lib/utils.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/ui/breadcrumb.jsx",
+      "target": "src/lib/utils.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/ui/button.jsx",
+      "target": "src/lib/utils.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/ui/calendar.jsx",
+      "target": "src/lib/utils.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/ui/calendar.jsx",
+      "target": "src/components/ui/button.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/ui/card.jsx",
+      "target": "src/lib/utils.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/ui/carousel.jsx",
+      "target": "src/lib/utils.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/ui/carousel.jsx",
+      "target": "src/components/ui/button.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/ui/chart.jsx",
+      "target": "src/lib/utils.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/ui/checkbox.jsx",
+      "target": "src/lib/utils.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/ui/command.jsx",
+      "target": "src/lib/utils.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/ui/command.jsx",
+      "target": "src/components/ui/dialog.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/ui/context-menu.jsx",
+      "target": "src/lib/utils.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/ui/dialog.jsx",
+      "target": "src/lib/utils.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/ui/drawer.jsx",
+      "target": "src/lib/utils.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/ui/dropdown-menu.jsx",
+      "target": "src/lib/utils.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/ui/form.jsx",
+      "target": "src/lib/utils.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/ui/form.jsx",
+      "target": "src/components/ui/label.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/ui/hover-card.jsx",
+      "target": "src/lib/utils.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/ui/input-otp.jsx",
+      "target": "src/lib/utils.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/ui/input.jsx",
+      "target": "src/lib/utils.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/ui/label.jsx",
+      "target": "src/lib/utils.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/ui/menubar.jsx",
+      "target": "src/lib/utils.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/ui/navigation-menu.jsx",
+      "target": "src/lib/utils.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/ui/pagination.jsx",
+      "target": "src/lib/utils.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/ui/pagination.jsx",
+      "target": "src/components/ui/button.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/ui/popover.jsx",
+      "target": "src/lib/utils.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/ui/progress.jsx",
+      "target": "src/lib/utils.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/ui/radio-group.jsx",
+      "target": "src/lib/utils.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/ui/resizable.jsx",
+      "target": "src/lib/utils.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/ui/scroll-area.jsx",
+      "target": "src/lib/utils.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/ui/select.jsx",
+      "target": "src/lib/utils.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/ui/separator.jsx",
+      "target": "src/lib/utils.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/ui/sheet.jsx",
+      "target": "src/lib/utils.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/ui/sidebar.jsx",
+      "target": "src/hooks/use-mobile.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/ui/sidebar.jsx",
+      "target": "src/lib/utils.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/ui/sidebar.jsx",
+      "target": "src/components/ui/button.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/ui/sidebar.jsx",
+      "target": "src/components/ui/input.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/ui/sidebar.jsx",
+      "target": "src/components/ui/separator.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/ui/sidebar.jsx",
+      "target": "src/components/ui/sheet.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/ui/sidebar.jsx",
+      "target": "src/components/ui/skeleton.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/ui/sidebar.jsx",
+      "target": "src/components/ui/tooltip.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/ui/skeleton.jsx",
+      "target": "src/lib/utils.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/ui/slider.jsx",
+      "target": "src/lib/utils.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/ui/switch.jsx",
+      "target": "src/lib/utils.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/ui/table.jsx",
+      "target": "src/lib/utils.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/ui/tabs.jsx",
+      "target": "src/lib/utils.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/ui/textarea.jsx",
+      "target": "src/lib/utils.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/ui/toast.jsx",
+      "target": "src/lib/utils.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/ui/toaster.jsx",
+      "target": "src/components/ui/use-toast.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/ui/toaster.jsx",
+      "target": "src/components/ui/toast.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/ui/toggle-group.jsx",
+      "target": "src/lib/utils.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/ui/toggle-group.jsx",
+      "target": "src/components/ui/toggle.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/ui/toggle.jsx",
+      "target": "src/lib/utils.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/components/ui/tooltip.jsx",
+      "target": "src/lib/utils.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/Layout.jsx",
+      "target": "src/utils/index.ts",
+      "kind": "import"
+    },
+    {
+      "source": "src/Layout.jsx",
+      "target": "src/api/base44Client.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/Layout.jsx",
+      "target": "src/components/ui/button.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/Layout.jsx",
+      "target": "src/components/ui/dropdown-menu.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/Layout.jsx",
+      "target": "src/components/ui/alert-dialog.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/Layout.jsx",
+      "target": "src/components/ui/use-toast.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/lib/AuthContext.jsx",
+      "target": "src/api/base44Client.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/lib/AuthContext.jsx",
+      "target": "src/lib/app-params.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/lib/AuthContext.jsx",
+      "target": "src/api/mockClient.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/lib/NavigationTracker.jsx",
+      "target": "src/lib/AuthContext.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/lib/NavigationTracker.jsx",
+      "target": "src/api/base44Client.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/lib/NavigationTracker.jsx",
+      "target": "src/pages.config.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/lib/PageNotFound.jsx",
+      "target": "src/api/base44Client.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/main.jsx",
+      "target": "src/App.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/main.jsx",
+      "target": "src/index.css",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/AccessLogs.jsx",
+      "target": "src/api/base44Client.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/AccessLogs.jsx",
+      "target": "src/utils/index.ts",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/AccessLogs.jsx",
+      "target": "src/components/ui/button.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/AccessLogs.jsx",
+      "target": "src/components/ui/input.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/AccessLogs.jsx",
+      "target": "src/components/ui/card.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/AccessLogs.jsx",
+      "target": "src/components/ui/badge.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/AccessLogs.jsx",
+      "target": "src/components/ui/select.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/AccessLogs.jsx",
+      "target": "src/components/ui/table.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Appointments.jsx",
+      "target": "src/api/base44Client.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Appointments.jsx",
+      "target": "src/utils/index.ts",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Appointments.jsx",
+      "target": "src/components/ui/button.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Appointments.jsx",
+      "target": "src/components/ui/card.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Appointments.jsx",
+      "target": "src/components/ui/badge.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Appointments.jsx",
+      "target": "src/components/ui/tabs.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Appointments.jsx",
+      "target": "src/components/appointments/AppointmentCalendar.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Appointments.jsx",
+      "target": "src/components/ui/dialog.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Appointments.jsx",
+      "target": "src/components/ui/select.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Consultation.jsx",
+      "target": "src/api/base44Client.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Consultation.jsx",
+      "target": "src/utils/index.ts",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Consultation.jsx",
+      "target": "src/components/ui/button.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Consultation.jsx",
+      "target": "src/components/ui/card.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Consultation.jsx",
+      "target": "src/components/ui/badge.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Consultation.jsx",
+      "target": "src/components/medical/PrescriptionEditor.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Consultation.jsx",
+      "target": "src/components/medical/ExamUploader.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Consultation.jsx",
+      "target": "src/components/medical/AccessLogger.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Consultations.jsx",
+      "target": "src/api/base44Client.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Consultations.jsx",
+      "target": "src/utils/index.ts",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Consultations.jsx",
+      "target": "src/components/ui/button.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Consultations.jsx",
+      "target": "src/components/ui/input.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Consultations.jsx",
+      "target": "src/components/ui/card.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Consultations.jsx",
+      "target": "src/components/ui/badge.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Consultations.jsx",
+      "target": "src/components/ui/select.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Dashboard.jsx",
+      "target": "src/api/base44Client.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Dashboard.jsx",
+      "target": "src/utils/index.ts",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Dashboard.jsx",
+      "target": "src/components/ui/button.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Dashboard.jsx",
+      "target": "src/components/ui/card.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Dashboard.jsx",
+      "target": "src/components/medical/StatsCard.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Dashboard.jsx",
+      "target": "src/components/medical/PatientSearch.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Dashboard.jsx",
+      "target": "src/components/medical/AccessLogger.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Dashboard.jsx",
+      "target": "src/components/medical/ReportsView.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Dashboard.jsx",
+      "target": "src/components/ui/tabs.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Doctors.jsx",
+      "target": "src/api/base44Client.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Doctors.jsx",
+      "target": "src/utils/index.ts",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Doctors.jsx",
+      "target": "src/components/ui/button.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Doctors.jsx",
+      "target": "src/components/ui/input.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Doctors.jsx",
+      "target": "src/components/ui/label.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Doctors.jsx",
+      "target": "src/components/ui/card.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Doctors.jsx",
+      "target": "src/components/ui/badge.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Doctors.jsx",
+      "target": "src/components/ui/select.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Doctors.jsx",
+      "target": "src/components/ui/dialog.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Doctors.jsx",
+      "target": "src/components/ui/switch.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Doctors.jsx",
+      "target": "src/components/ui/checkbox.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/NewAppointment.jsx",
+      "target": "src/api/base44Client.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/NewAppointment.jsx",
+      "target": "src/utils/index.ts",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/NewAppointment.jsx",
+      "target": "src/components/ui/button.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/NewAppointment.jsx",
+      "target": "src/components/ui/input.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/NewAppointment.jsx",
+      "target": "src/components/ui/label.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/NewAppointment.jsx",
+      "target": "src/components/ui/textarea.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/NewAppointment.jsx",
+      "target": "src/components/ui/card.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/NewAppointment.jsx",
+      "target": "src/components/ui/select.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/NewAppointment.jsx",
+      "target": "src/components/ui/calendar.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/NewAppointment.jsx",
+      "target": "src/components/appointments/TimeSlotPicker.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/NewConsultation.jsx",
+      "target": "src/api/base44Client.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/NewConsultation.jsx",
+      "target": "src/utils/index.ts",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/NewConsultation.jsx",
+      "target": "src/components/ui/button.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/NewConsultation.jsx",
+      "target": "src/components/ui/input.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/NewConsultation.jsx",
+      "target": "src/components/ui/label.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/NewConsultation.jsx",
+      "target": "src/components/ui/textarea.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/NewConsultation.jsx",
+      "target": "src/components/ui/card.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/NewConsultation.jsx",
+      "target": "src/components/ui/select.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/NewConsultation.jsx",
+      "target": "src/components/medical/VitalSignsForm.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/NewConsultation.jsx",
+      "target": "src/components/medical/AccessLogger.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/PatientDetail.jsx",
+      "target": "src/api/base44Client.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/PatientDetail.jsx",
+      "target": "src/utils/index.ts",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/PatientDetail.jsx",
+      "target": "src/components/ui/button.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/PatientDetail.jsx",
+      "target": "src/components/ui/card.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/PatientDetail.jsx",
+      "target": "src/components/ui/badge.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/PatientDetail.jsx",
+      "target": "src/components/ui/tabs.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/PatientDetail.jsx",
+      "target": "src/components/medical/ConsultationTimeline.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/PatientDetail.jsx",
+      "target": "src/components/medical/ExamUploader.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/PatientDetail.jsx",
+      "target": "src/components/medical/PrescriptionEditor.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/PatientDetail.jsx",
+      "target": "src/components/medical/AccessLogger.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/PatientDetail.jsx",
+      "target": "src/components/ui/alert-dialog.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/PatientForm.jsx",
+      "target": "src/api/base44Client.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/PatientForm.jsx",
+      "target": "src/utils/index.ts",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/PatientForm.jsx",
+      "target": "src/components/ui/button.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/PatientForm.jsx",
+      "target": "src/components/ui/input.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/PatientForm.jsx",
+      "target": "src/components/ui/label.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/PatientForm.jsx",
+      "target": "src/components/ui/textarea.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/PatientForm.jsx",
+      "target": "src/components/ui/card.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/PatientForm.jsx",
+      "target": "src/components/ui/select.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/PatientForm.jsx",
+      "target": "src/components/medical/LGPDConsent.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/PatientForm.jsx",
+      "target": "src/components/medical/AccessLogger.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/PatientForm.jsx",
+      "target": "src/components/ui/use-toast.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Patients.jsx",
+      "target": "src/api/base44Client.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Patients.jsx",
+      "target": "src/utils/index.ts",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Patients.jsx",
+      "target": "src/components/ui/button.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Patients.jsx",
+      "target": "src/components/ui/input.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Patients.jsx",
+      "target": "src/components/ui/card.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Patients.jsx",
+      "target": "src/components/ui/badge.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Patients.jsx",
+      "target": "src/components/ui/select.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Templates.jsx",
+      "target": "src/api/base44Client.js",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Templates.jsx",
+      "target": "src/utils/index.ts",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Templates.jsx",
+      "target": "src/components/ui/button.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Templates.jsx",
+      "target": "src/components/ui/input.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Templates.jsx",
+      "target": "src/components/ui/label.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Templates.jsx",
+      "target": "src/components/ui/textarea.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Templates.jsx",
+      "target": "src/components/ui/card.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Templates.jsx",
+      "target": "src/components/ui/badge.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Templates.jsx",
+      "target": "src/components/ui/select.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Templates.jsx",
+      "target": "src/components/ui/dialog.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Templates.jsx",
+      "target": "src/components/ui/switch.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Templates.jsx",
+      "target": "src/components/ui/alert-dialog.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages/Templates.jsx",
+      "target": "src/components/ui/tooltip.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages.config.js",
+      "target": "src/pages/AccessLogs.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages.config.js",
+      "target": "src/pages/Consultation.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages.config.js",
+      "target": "src/pages/Consultations.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages.config.js",
+      "target": "src/pages/Dashboard.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages.config.js",
+      "target": "src/pages/NewConsultation.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages.config.js",
+      "target": "src/pages/PatientDetail.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages.config.js",
+      "target": "src/pages/PatientForm.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages.config.js",
+      "target": "src/pages/Patients.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages.config.js",
+      "target": "src/pages/Templates.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages.config.js",
+      "target": "src/pages/Appointments.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages.config.js",
+      "target": "src/pages/NewAppointment.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages.config.js",
+      "target": "src/pages/Doctors.jsx",
+      "kind": "import"
+    },
+    {
+      "source": "src/pages.config.js",
+      "target": "src/Layout.jsx",
+      "kind": "import"
+    }
+  ],
+  "externalDeps": [
+    {
+      "package": "react",
+      "count": 71,
+      "files": [
+        "src/components/appointments/AppointmentCalendar.jsx",
+        "src/components/appointments/TimeSlotPicker.jsx",
+        "src/components/medical/ConsultationTimeline.jsx",
+        "src/components/medical/ExamUploader.jsx",
+        "src/components/medical/LGPDConsent.jsx",
+        "src/components/medical/PatientSearch.jsx",
+        "src/components/medical/PrescriptionEditor.jsx",
+        "src/components/medical/ReportsView.jsx",
+        "src/components/medical/StatsCard.jsx",
+        "src/components/medical/VitalSignsForm.jsx",
+        "src/components/ui/accordion.jsx",
+        "src/components/ui/alert-dialog.jsx",
+        "src/components/ui/alert.jsx",
+        "src/components/ui/avatar.jsx",
+        "src/components/ui/badge.jsx",
+        "src/components/ui/breadcrumb.jsx",
+        "src/components/ui/button.jsx",
+        "src/components/ui/calendar.jsx",
+        "src/components/ui/card.jsx",
+        "src/components/ui/carousel.jsx",
+        "src/components/ui/chart.jsx",
+        "src/components/ui/checkbox.jsx",
+        "src/components/ui/command.jsx",
+        "src/components/ui/context-menu.jsx",
+        "src/components/ui/dialog.jsx",
+        "src/components/ui/drawer.jsx",
+        "src/components/ui/dropdown-menu.jsx",
+        "src/components/ui/form.jsx",
+        "src/components/ui/hover-card.jsx",
+        "src/components/ui/input-otp.jsx",
+        "src/components/ui/input.jsx",
+        "src/components/ui/label.jsx",
+        "src/components/ui/menubar.jsx",
+        "src/components/ui/navigation-menu.jsx",
+        "src/components/ui/pagination.jsx",
+        "src/components/ui/popover.jsx",
+        "src/components/ui/progress.jsx",
+        "src/components/ui/radio-group.jsx",
+        "src/components/ui/scroll-area.jsx",
+        "src/components/ui/select.jsx",
+        "src/components/ui/separator.jsx",
+        "src/components/ui/sheet.jsx",
+        "src/components/ui/sidebar.jsx",
+        "src/components/ui/slider.jsx",
+        "src/components/ui/switch.jsx",
+        "src/components/ui/table.jsx",
+        "src/components/ui/tabs.jsx",
+        "src/components/ui/textarea.jsx",
+        "src/components/ui/toast.jsx",
+        "src/components/ui/toggle-group.jsx",
+        "src/components/ui/toggle.jsx",
+        "src/components/ui/tooltip.jsx",
+        "src/components/ui/use-toast.jsx",
+        "src/components/UserNotRegisteredError.jsx",
+        "src/hooks/use-mobile.jsx",
+        "src/Layout.jsx",
+        "src/lib/AuthContext.jsx",
+        "src/lib/NavigationTracker.jsx",
+        "src/main.jsx",
+        "src/pages/AccessLogs.jsx",
+        "src/pages/Appointments.jsx",
+        "src/pages/Consultation.jsx",
+        "src/pages/Consultations.jsx",
+        "src/pages/Dashboard.jsx",
+        "src/pages/Doctors.jsx",
+        "src/pages/NewAppointment.jsx",
+        "src/pages/NewConsultation.jsx",
+        "src/pages/PatientDetail.jsx",
+        "src/pages/PatientForm.jsx",
+        "src/pages/Patients.jsx",
+        "src/pages/Templates.jsx"
+      ]
+    },
+    {
+      "package": "lucide-react",
+      "count": 41,
+      "files": [
+        "src/components/appointments/AppointmentCalendar.jsx",
+        "src/components/appointments/TimeSlotPicker.jsx",
+        "src/components/medical/ConsultationTimeline.jsx",
+        "src/components/medical/ExamUploader.jsx",
+        "src/components/medical/LGPDConsent.jsx",
+        "src/components/medical/PatientSearch.jsx",
+        "src/components/medical/PrescriptionEditor.jsx",
+        "src/components/medical/ReportsView.jsx",
+        "src/components/medical/VitalSignsForm.jsx",
+        "src/components/ui/accordion.jsx",
+        "src/components/ui/breadcrumb.jsx",
+        "src/components/ui/calendar.jsx",
+        "src/components/ui/carousel.jsx",
+        "src/components/ui/checkbox.jsx",
+        "src/components/ui/command.jsx",
+        "src/components/ui/context-menu.jsx",
+        "src/components/ui/dialog.jsx",
+        "src/components/ui/dropdown-menu.jsx",
+        "src/components/ui/input-otp.jsx",
+        "src/components/ui/menubar.jsx",
+        "src/components/ui/navigation-menu.jsx",
+        "src/components/ui/pagination.jsx",
+        "src/components/ui/radio-group.jsx",
+        "src/components/ui/resizable.jsx",
+        "src/components/ui/select.jsx",
+        "src/components/ui/sheet.jsx",
+        "src/components/ui/sidebar.jsx",
+        "src/components/ui/toast.jsx",
+        "src/Layout.jsx",
+        "src/pages/AccessLogs.jsx",
+        "src/pages/Appointments.jsx",
+        "src/pages/Consultation.jsx",
+        "src/pages/Consultations.jsx",
+        "src/pages/Dashboard.jsx",
+        "src/pages/Doctors.jsx",
+        "src/pages/NewAppointment.jsx",
+        "src/pages/NewConsultation.jsx",
+        "src/pages/PatientDetail.jsx",
+        "src/pages/PatientForm.jsx",
+        "src/pages/Patients.jsx",
+        "src/pages/Templates.jsx"
+      ]
+    },
+    {
+      "package": "@tanstack/react-query",
+      "count": 18,
+      "files": [
+        "src/App.jsx",
+        "src/components/medical/PrescriptionEditor.jsx",
+        "src/components/medical/ReportsView.jsx",
+        "src/Layout.jsx",
+        "src/lib/PageNotFound.jsx",
+        "src/lib/query-client.js",
+        "src/pages/AccessLogs.jsx",
+        "src/pages/Appointments.jsx",
+        "src/pages/Consultation.jsx",
+        "src/pages/Consultations.jsx",
+        "src/pages/Dashboard.jsx",
+        "src/pages/Doctors.jsx",
+        "src/pages/NewAppointment.jsx",
+        "src/pages/NewConsultation.jsx",
+        "src/pages/PatientDetail.jsx",
+        "src/pages/PatientForm.jsx",
+        "src/pages/Patients.jsx",
+        "src/pages/Templates.jsx"
+      ]
+    },
+    {
+      "package": "react-router-dom",
+      "count": 18,
+      "files": [
+        "src/App.jsx",
+        "src/components/medical/ConsultationTimeline.jsx",
+        "src/components/medical/PatientSearch.jsx",
+        "src/Layout.jsx",
+        "src/lib/NavigationTracker.jsx",
+        "src/lib/PageNotFound.jsx",
+        "src/pages/AccessLogs.jsx",
+        "src/pages/Appointments.jsx",
+        "src/pages/Consultation.jsx",
+        "src/pages/Consultations.jsx",
+        "src/pages/Dashboard.jsx",
+        "src/pages/Doctors.jsx",
+        "src/pages/NewAppointment.jsx",
+        "src/pages/NewConsultation.jsx",
+        "src/pages/PatientDetail.jsx",
+        "src/pages/PatientForm.jsx",
+        "src/pages/Patients.jsx",
+        "src/pages/Templates.jsx"
+      ]
+    },
+    {
+      "package": "framer-motion",
+      "count": 17,
+      "files": [
+        "src/components/appointments/AppointmentCalendar.jsx",
+        "src/components/medical/ConsultationTimeline.jsx",
+        "src/components/medical/PatientSearch.jsx",
+        "src/components/medical/ReportsView.jsx",
+        "src/components/medical/StatsCard.jsx",
+        "src/pages/AccessLogs.jsx",
+        "src/pages/Appointments.jsx",
+        "src/pages/Consultation.jsx",
+        "src/pages/Consultations.jsx",
+        "src/pages/Dashboard.jsx",
+        "src/pages/Doctors.jsx",
+        "src/pages/NewAppointment.jsx",
+        "src/pages/NewConsultation.jsx",
+        "src/pages/PatientDetail.jsx",
+        "src/pages/PatientForm.jsx",
+        "src/pages/Patients.jsx",
+        "src/pages/Templates.jsx"
+      ]
+    },
+    {
+      "package": "date-fns",
+      "count": 12,
+      "files": [
+        "src/components/appointments/AppointmentCalendar.jsx",
+        "src/components/appointments/TimeSlotPicker.jsx",
+        "src/components/medical/ConsultationTimeline.jsx",
+        "src/components/medical/ReportsView.jsx",
+        "src/pages/AccessLogs.jsx",
+        "src/pages/Appointments.jsx",
+        "src/pages/Consultation.jsx",
+        "src/pages/Consultations.jsx",
+        "src/pages/Dashboard.jsx",
+        "src/pages/NewAppointment.jsx",
+        "src/pages/PatientDetail.jsx",
+        "src/pages/Patients.jsx"
+      ]
+    },
+    {
+      "package": "class-variance-authority",
+      "count": 9,
+      "files": [
+        "src/components/ui/alert.jsx",
+        "src/components/ui/badge.jsx",
+        "src/components/ui/button.jsx",
+        "src/components/ui/label.jsx",
+        "src/components/ui/navigation-menu.jsx",
+        "src/components/ui/sheet.jsx",
+        "src/components/ui/sidebar.jsx",
+        "src/components/ui/toast.jsx",
+        "src/components/ui/toggle.jsx"
+      ]
+    },
+    {
+      "package": "@radix-ui/react-slot",
+      "count": 4,
+      "files": [
+        "src/components/ui/breadcrumb.jsx",
+        "src/components/ui/button.jsx",
+        "src/components/ui/form.jsx",
+        "src/components/ui/sidebar.jsx"
+      ]
+    },
+    {
+      "package": "@base44/sdk",
+      "count": 2,
+      "files": [
+        "src/api/base44Client.js",
+        "src/lib/AuthContext.jsx"
+      ]
+    },
+    {
+      "package": "next-themes",
+      "count": 2,
+      "files": [
+        "src/App.jsx",
+        "src/components/ui/sonner.jsx"
+      ]
+    },
+    {
+      "package": "recharts",
+      "count": 2,
+      "files": [
+        "src/components/medical/ReportsView.jsx",
+        "src/components/ui/chart.jsx"
+      ]
+    },
+    {
+      "package": "@radix-ui/react-dialog",
+      "count": 2,
+      "files": [
+        "src/components/ui/dialog.jsx",
+        "src/components/ui/sheet.jsx"
+      ]
+    },
+    {
+      "package": "@radix-ui/react-accordion",
+      "count": 1,
+      "files": [
+        "src/components/ui/accordion.jsx"
+      ]
+    },
+    {
+      "package": "@radix-ui/react-alert-dialog",
+      "count": 1,
+      "files": [
+        "src/components/ui/alert-dialog.jsx"
+      ]
+    },
+    {
+      "package": "@radix-ui/react-aspect-ratio",
+      "count": 1,
+      "files": [
+        "src/components/ui/aspect-ratio.jsx"
+      ]
+    },
+    {
+      "package": "@radix-ui/react-avatar",
+      "count": 1,
+      "files": [
+        "src/components/ui/avatar.jsx"
+      ]
+    },
+    {
+      "package": "react-day-picker",
+      "count": 1,
+      "files": [
+        "src/components/ui/calendar.jsx"
+      ]
+    },
+    {
+      "package": "embla-carousel-react",
+      "count": 1,
+      "files": [
+        "src/components/ui/carousel.jsx"
+      ]
+    },
+    {
+      "package": "@radix-ui/react-checkbox",
+      "count": 1,
+      "files": [
+        "src/components/ui/checkbox.jsx"
+      ]
+    },
+    {
+      "package": "@radix-ui/react-collapsible",
+      "count": 1,
+      "files": [
+        "src/components/ui/collapsible.jsx"
+      ]
+    },
+    {
+      "package": "cmdk",
+      "count": 1,
+      "files": [
+        "src/components/ui/command.jsx"
+      ]
+    },
+    {
+      "package": "@radix-ui/react-context-menu",
+      "count": 1,
+      "files": [
+        "src/components/ui/context-menu.jsx"
+      ]
+    },
+    {
+      "package": "vaul",
+      "count": 1,
+      "files": [
+        "src/components/ui/drawer.jsx"
+      ]
+    },
+    {
+      "package": "@radix-ui/react-dropdown-menu",
+      "count": 1,
+      "files": [
+        "src/components/ui/dropdown-menu.jsx"
+      ]
+    },
+    {
+      "package": "react-hook-form",
+      "count": 1,
+      "files": [
+        "src/components/ui/form.jsx"
+      ]
+    },
+    {
+      "package": "@radix-ui/react-hover-card",
+      "count": 1,
+      "files": [
+        "src/components/ui/hover-card.jsx"
+      ]
+    },
+    {
+      "package": "input-otp",
+      "count": 1,
+      "files": [
+        "src/components/ui/input-otp.jsx"
+      ]
+    },
+    {
+      "package": "@radix-ui/react-label",
+      "count": 1,
+      "files": [
+        "src/components/ui/label.jsx"
+      ]
+    },
+    {
+      "package": "@radix-ui/react-menubar",
+      "count": 1,
+      "files": [
+        "src/components/ui/menubar.jsx"
+      ]
+    },
+    {
+      "package": "@radix-ui/react-navigation-menu",
+      "count": 1,
+      "files": [
+        "src/components/ui/navigation-menu.jsx"
+      ]
+    },
+    {
+      "package": "@radix-ui/react-popover",
+      "count": 1,
+      "files": [
+        "src/components/ui/popover.jsx"
+      ]
+    },
+    {
+      "package": "@radix-ui/react-progress",
+      "count": 1,
+      "files": [
+        "src/components/ui/progress.jsx"
+      ]
+    },
+    {
+      "package": "@radix-ui/react-radio-group",
+      "count": 1,
+      "files": [
+        "src/components/ui/radio-group.jsx"
+      ]
+    },
+    {
+      "package": "react-resizable-panels",
+      "count": 1,
+      "files": [
+        "src/components/ui/resizable.jsx"
+      ]
+    },
+    {
+      "package": "@radix-ui/react-scroll-area",
+      "count": 1,
+      "files": [
+        "src/components/ui/scroll-area.jsx"
+      ]
+    },
+    {
+      "package": "@radix-ui/react-select",
+      "count": 1,
+      "files": [
+        "src/components/ui/select.jsx"
+      ]
+    },
+    {
+      "package": "@radix-ui/react-separator",
+      "count": 1,
+      "files": [
+        "src/components/ui/separator.jsx"
+      ]
+    },
+    {
+      "package": "@radix-ui/react-slider",
+      "count": 1,
+      "files": [
+        "src/components/ui/slider.jsx"
+      ]
+    },
+    {
+      "package": "sonner",
+      "count": 1,
+      "files": [
+        "src/components/ui/sonner.jsx"
+      ]
+    },
+    {
+      "package": "@radix-ui/react-switch",
+      "count": 1,
+      "files": [
+        "src/components/ui/switch.jsx"
+      ]
+    },
+    {
+      "package": "@radix-ui/react-tabs",
+      "count": 1,
+      "files": [
+        "src/components/ui/tabs.jsx"
+      ]
+    },
+    {
+      "package": "@radix-ui/react-toggle-group",
+      "count": 1,
+      "files": [
+        "src/components/ui/toggle-group.jsx"
+      ]
+    },
+    {
+      "package": "@radix-ui/react-toggle",
+      "count": 1,
+      "files": [
+        "src/components/ui/toggle.jsx"
+      ]
+    },
+    {
+      "package": "@radix-ui/react-tooltip",
+      "count": 1,
+      "files": [
+        "src/components/ui/tooltip.jsx"
+      ]
+    },
+    {
+      "package": "clsx",
+      "count": 1,
+      "files": [
+        "src/lib/utils.js"
+      ]
+    },
+    {
+      "package": "tailwind-merge",
+      "count": 1,
+      "files": [
+        "src/lib/utils.js"
+      ]
+    },
+    {
+      "package": "react-dom",
+      "count": 1,
+      "files": [
+        "src/main.jsx"
+      ]
+    }
+  ],
+  "cycles": [],
+  "summary": {
+    "edges": 249,
+    "cycles": 0,
+    "externalPackages": 47
+  }
+}

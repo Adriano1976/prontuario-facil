@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <script>try{document.documentElement.setAttribute("data-theme",localStorage.getItem("rv-theme")==="light"?"light":"dark");}catch(e){}</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Métricas — Prontuário Fácil</title>
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+  <meta name="reversa-category" content="diagram">
+  <meta name="reversa-producer-agent" content="reversa-docs-analyst">
+  <meta name="reversa-template" content="metricas">
+  <meta name="reversa-generated-at" content="2026-09-10T13:20:00Z">
+  <link rel="stylesheet" href="assets/css/theme.css">
+  <script src="assets/js/data.js"></script>
+  <script src="assets/vendor/highcharts.js"></script>
+  <script src="assets/vendor/highcharts-accessibility.js"></script>
+  <script src="assets/vendor/highcharts-exporting.js"></script>
+  <script src="assets/vendor/highcharts-treemap.js"></script>
+  <script src="assets/vendor/highcharts-sankey.js"></script>
+  <script src="assets/js/theme.js" defer></script>
+  <style>
+    .rv-chart { border: 1px solid var(--rv-border); border-radius: var(--rv-radius); background: var(--rv-panel); padding: 18px; }
+    .rv-chart h3 { margin: 0 0 12px; font-size: 15.5px; font-weight: 650; }
+    .rv-chart p { margin: 0 0 4px; font-size: 12.5px; color: var(--rv-text-dim); }
+    .rv-dash { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .rv-dash .rv-chart--wide { grid-column: 1 / -1; }
+    @media (max-width: 860px) { .rv-dash { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body data-page="metricas">
+  <header class="rv-header">
+    <div class="rv-header__inner">
+      <a class="rv-brand" href="index.html">
+        <span class="seal-mini" data-seal></span>
+        <span class="rv-brand__name">Prontuário Fácil</span>
+      </a>
+      <button class="rv-nav-toggle" aria-label="Abrir menu" aria-expanded="false">☰</button>
+      <nav class="rv-nav" aria-label="Navegação principal">
+        <a href="index.html" data-page-id="index">Visão geral</a>
+        <a href="arquitetura.html" data-page-id="arquitetura">Arquitetura 3D</a>
+        <a href="modulos.html" data-page-id="modulos">Módulos</a>
+        <a href="topologia.html" data-page-id="topologia">Topologia</a>
+        <a href="metricas.html" data-page-id="metricas">Métricas</a>
+        <a href="glossario.html" data-page-id="glossario">Glossário</a>
+        <a href="deck.html" data-page-id="deck">Deck</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="rv-hero" style="padding:56px 24px 36px">
+    <canvas class="rv-hero__canvas"></canvas>
+    <div class="rv-hero__inner">
+      <span class="rv-eyebrow"><span class="dot"></span> Métricas de auditoria</span>
+      <h1>O sistema <span class="grad">em números</span></h1>
+      <p class="rv-hero__tagline">Visão quantitativa do código: tamanho, distribuição, fluxo de dependências e pacotes externos. Dados extraídos estaticamente do código fonte.</p>
+    </div>
+  </section>
+
+  <main class="rv-container">
+    <section class="rv-section" style="padding-top:8px">
+      <div class="rv-stats rv-reveal">
+        <div class="rv-stat"><div class="rv-stat__value" data-count="11465">0</div><div class="rv-stat__label">Linhas de código</div></div>
+        <div class="rv-stat"><div class="rv-stat__value" data-count="98">0</div><div class="rv-stat__label">Arquivos</div></div>
+        <div class="rv-stat"><div class="rv-stat__value" data-count="249">0</div><div class="rv-stat__label">Importações internas</div></div>
+        <div class="rv-stat"><div class="rv-stat__value" data-count="47">0</div><div class="rv-stat__label">Pacotes externos</div></div>
+        <div class="rv-stat"><div class="rv-stat__value" data-count="11">0</div><div class="rv-stat__label">Distritos (pastas)</div></div>
+      </div>
+    </section>
+
+    <section class="rv-section">
+      <div class="rv-dash">
+        <div class="rv-chart rv-reveal">
+          <h3>LOC por distrito</h3>
+          <p>Treemap: área proporcional às linhas de código de cada pasta.</p>
+          <div id="chart-treemap" style="height:360px"></div>
+        </div>
+        <div class="rv-chart rv-reveal" data-delay="1">
+          <h3>Arquivos mais dependidos</h3>
+          <p>Top 20 arquivos por número de dependentes (hot path).</p>
+          <div id="chart-complexity" style="height:360px"></div>
+        </div>
+        <div class="rv-chart rv-reveal">
+          <h3>Distribuição de tamanho</h3>
+          <p>Histograma de arquivos por faixa de linhas de código.</p>
+          <div id="chart-histogram" style="height:320px"></div>
+        </div>
+        <div class="rv-chart rv-reveal" data-delay="1">
+          <h3>Linguagens</h3>
+          <p>Composição do código por linguagem (LOC).</p>
+          <div id="chart-lang" style="height:320px"></div>
+        </div>
+        <div class="rv-chart rv-chart--wide rv-reveal">
+          <h3>Fluxo de dependências entre distritos</h3>
+          <p>Sankey: importações agregadas por pasta (origem → destino).</p>
+          <div id="chart-sankey" style="height:380px"></div>
+        </div>
+        <div class="rv-chart rv-reveal">
+          <h3>Dependências externas</h3>
+          <p>Pacotes mais importados no projeto.</p>
+          <div id="chart-external" style="height:340px"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="rv-footer">
+    <div class="rv-container">
+      <div class="rv-footer__grid">
+        <div><h4>Prontuário Fácil</h4><p style="font-size:13.5px;color:var(--rv-text-dim);margin:0">Prontuário eletrônico LGPD. SPA React + Base44.</p></div>
+        <div><h4>Navegação</h4><ul><li><a href="index.html">Visão geral</a></li><li><a href="arquitetura.html">Arquitetura 3D</a></li><li><a href="modulos.html">Módulos</a></li><li><a href="topologia.html">Topologia</a></li></ul></div>
+        <div><h4>Features</h4><ul><li><a href="features/pacientes.html">Pacientes</a></li><li><a href="features/consultas.html">Consultas</a></li><li><a href="features/agendamentos.html">Agendamentos</a></li><li><a href="features/dashboard.html">Dashboard</a></li></ul></div>
+        <div><h4>Sobre</h4><ul><li><a href="glossario.html">Glossário</a></li><li><a href="deck.html">Deck</a></li></ul></div>
+      </div>
+      <div class="rv-footer__bottom"><span>Gerado por Reversa Docs · seed 89000d65</span><span>LGPD · Base44 · React 18</span></div>
+    </div>
+  </footer>
+
+  <script>
+  (function () {
+    "use strict";
+    var rv = window.RV_DATA || {};
+    var m = rv.metrics || {};
+
+    Highcharts.setOptions({
+      chart: { backgroundColor: 'transparent', style: { fontFamily: "'Segoe UI', system-ui, sans-serif" } },
+      colors: ['#22d3ee', '#6366f1', '#a855f7', '#34d399', '#fbbf24', '#fb7185', '#60a5fa', '#f472b6', '#4ade80', '#e879f9', '#f59e0b'],
+      title: { style: { color: '#e8eefb' } },
+      legend: { itemStyle: { color: '#a7b3c8' }, itemHoverStyle: { color: '#fff' } },
+      xAxis: { labels: { style: { color: '#a7b3c8' } }, lineColor: 'rgba(148,163,184,.2)', tickColor: 'rgba(148,163,184,.2)' },
+      yAxis: { gridLineColor: 'rgba(148,163,184,.12)', labels: { style: { color: '#a7b3c8' } }, title: { style: { color: '#a7b3c8' } } },
+      tooltip: { backgroundColor: 'rgba(9,13,22,.96)', borderColor: 'rgba(148,163,184,.3)', style: { color: '#e8eefb' } },
+      credits: { enabled: false }
+    });
+
+    // Treemap LOC por distrito
+    Highcharts.chart('chart-treemap', {
+      chart: { type: 'treemap' },
+      colorAxis: { minColor: '#1e293b', maxColor: '#6366f1' },
+      series: [{
+        type: 'treemap',
+        layoutAlgorithm: 'squarified',
+        dataLabels: { style: { color: '#fff', textOutline: 'none' } },
+        data: (m.treemap_loc_by_folder || []).map(function (f) { return { name: f.name, value: f.value, modules: f.modules }; }),
+        tooltip: { pointFormat: '<b>{point.name}</b><br>{point.value} LOC · {point.modules} arquivos' }
+      }],
+      title: { text: '' }
+    });
+
+    // Top dependidos (barra horizontal)
+    var tc = (m.top_complexity || []).slice().reverse();
+    Highcharts.chart('chart-complexity', {
+      chart: { type: 'bar' },
+      xAxis: { categories: tc.map(function (x) { return x.name; }), labels: { style: { color: '#a7b3c8', fontSize: '10px' } } },
+      yAxis: { title: { text: 'dependentes' } },
+      series: [{
+        name: 'Dependentes',
+        data: tc.map(function (x) { return { y: x.complexity, name: x.name, loc: x.loc }; }),
+        color: '#fb7185',
+        tooltip: { pointFormat: '<b>{point.name}</b><br>{point.y} dependentes · {point.loc} LOC' }
+      }],
+      title: { text: '' },
+      legend: { enabled: false }
+    });
+
+    // Histograma
+    var bins = m.loc_histogram.bins, counts = m.loc_histogram.counts;
+    var labels = [];
+    for (var i = 0; i < bins.length - 1; i++) {
+      labels.push(i === bins.length - 2 ? bins[i] + '+' : bins[i] + '–' + bins[i + 1]);
+    }
+    Highcharts.chart('chart-histogram', {
+      chart: { type: 'column' },
+      xAxis: { categories: labels },
+      yAxis: { title: { text: 'arquivos' } },
+      plotOptions: { column: { borderRadius: 5, colorByPoint: true } },
+      series: [{ name: 'Arquivos', data: counts, tooltip: { pointFormat: '<b>{point.y}</b> arquivos nesta faixa' } }],
+      title: { text: '' },
+      legend: { enabled: false }
+    });
+
+    // Linguagens (donut)
+    Highcharts.chart('chart-lang', {
+      chart: { type: 'pie' },
+      series: [{
+        name: 'LOC',
+        innerSize: '55%',
+        data: (m.language_distribution || []).map(function (l) { return { name: l.language, y: l.loc, modules: l.modules }; }),
+        tooltip: { pointFormat: '<b>{point.name}</b><br>{point.y} LOC · {point.modules} arquivos' }
+      }],
+      title: { text: '' }
+    });
+
+    // Sankey
+    var sankeyData = (m.dependency_sankey.links || []).map(function (l) { return [l.source, l.target, l.value]; });
+    Highcharts.chart('chart-sankey', {
+      series: [{
+        type: 'sankey',
+        keys: ['from', 'to', 'weight'],
+        data: sankeyData,
+        name: 'Importações',
+        nodeWidth: 14,
+        colors: Highcharts.getOptions().colors,
+        tooltip: { pointFormat: '<b>{point.from}</b> → <b>{point.to}</b><br>{point.weight} importações' }
+      }],
+      title: { text: '' }
+    });
+
+    // Externas (barra)
+    var ext = (m.external_deps || []).slice().reverse();
+    Highcharts.chart('chart-external', {
+      chart: { type: 'bar' },
+      xAxis: { categories: ext.map(function (e) { return e.name; }), labels: { style: { color: '#a7b3c8', fontSize: '10px' } } },
+      yAxis: { title: { text: 'arquivos que importam' } },
+      series: [{ name: 'Arquivos', data: ext.map(function (e) { return e.count; }), color: '#22d3ee' }],
+      title: { text: '' },
+      legend: { enabled: false }
+    });
+  })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "specs": [
+    { "id": "pacientes", "slug": "pacientes", "title": "Pacientes", "emoji": "🪪", "tagline": "Entidade central: cadastro, saúde e consentimento LGPD.", "desc": "Gerencia dados cadastrais, informações de saúde (alergias, tipo sanguíneo, condições crônicas) e o controle de consentimento LGPD de cada paciente." },
+    { "id": "consultas", "slug": "consultas", "title": "Consultas", "emoji": "🩺", "tagline": "Registro clínico do atendimento médico.", "desc": "Anamnese, sinais vitais, hipótese diagnóstica (CID-10), plano de tratamento e emissão de prescrições e exames." },
+    { "id": "agendamentos", "slug": "agendamentos", "title": "Agendamentos", "emoji": "📅", "tagline": "Agenda da clínica e ciclo de status.", "desc": "Marcação de horários entre pacientes e médicos, calendário semanal, lista e controle de presença/status." },
+    { "id": "medicos", "slug": "medicos", "title": "Médicos", "emoji": "👨‍⚕️", "tagline": "Profissionais e jornadas de trabalho.", "desc": "Cadastro de profissionais, dias/horários de trabalho e duração padrão de consulta para a agenda." },
+    { "id": "templates", "slug": "templates", "title": "Templates", "emoji": "📝", "tagline": "Modelos de documentos médicos.", "desc": "Modelos pré-definidos (receitas, atestados, anamnese) com variáveis interpoladas para agilizar o atendimento." },
+    { "id": "logs-acesso", "slug": "logs-acesso", "title": "Logs de Acesso", "emoji": "🔐", "tagline": "Auditoria e rastreabilidade LGPD.", "desc": "Registros append-only de ações sensíveis (visualização, edição, exclusão) para auditoria de segurança." },
+    { "id": "dashboard", "slug": "dashboard", "title": "Dashboard", "emoji": "📊", "tagline": "KPIs e atividade recente.", "desc": "Métricas-chave de pacientes, consultas, prescrições e agendamentos, com atalhos de ação rápida e busca global." },
+    { "id": "modo-offline", "slug": "modo-offline", "title": "Modo Offline", "emoji": "🔌", "tagline": "Runtime alternativo com mock + localStorage.", "desc": "Unit transversal que substitui o backend Base44 por um mock client persistido no navegador via VITE_OFFLINE=true." }
+  ]
+}
