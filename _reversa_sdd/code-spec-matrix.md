@@ -45,7 +45,7 @@ Esta matriz relaciona cada artefato de código-fonte e schema do projeto legado 
 | Promessa (spec) | Código que cumpre | Teste que prova | Veredito |
 | :--- | :--- | :--- | :---: |
 | **BR-P01** — só paciente com status `ativo` pode ser selecionado para novo agendamento ou consulta | `src/pages/NewConsultation.tsx`, `src/pages/NewAppointment.tsx` — consulta enviada com `{ status: 'ativo' }` | `src/pages/__tests__/ActivePatientSelection.test.tsx` (4 testes: contrato da consulta nos dois fluxos + lista oferecida + ausência do inativo) | 🟢 |
-| **BR-P02** — `blood_type` restrito ao enum ABO/Rh mais `desconhecido` | `src/pages/PatientForm.tsx` (`BLOOD_TYPES`), `src/types/Patient.ts` | **Nenhum teste de execução.** A prova existente é a verificação negativa do gate de tipos (T032, `_reversa_forward/001-migracao-typescript/progress.jsonl`) | 🟡 |
+| **BR-P02** — `blood_type` restrito ao enum ABO/Rh mais `desconhecido` | `src/pages/PatientForm.tsx` (`BLOOD_TYPES`), `src/types/Patient.ts` | `src/pages/__tests__/PatientForm.test.tsx` (execução) + `npm run prova:negativos`, caso `status-fora-do-conjunto` (compilação) | 🟢 |
 | **BR-P03** (cadastro) — `full_name`, `cpf`, `birth_date`, `phone` e `lgpd_consent` obrigatórios; o cadastro é recusado sem aceite | `src/pages/PatientForm.tsx` (`handleSubmit`) | `src/pages/__tests__/PatientForm.test.tsx` | 🟢 |
 | **BR-P03** (aceite) — no momento do aceite são gravados `lgpd_consent_date` e `lgpd_consent_ip` | `src/pages/PatientForm.tsx` (`handleLGPDAccept`) | `src/pages/__tests__/PatientForm.test.tsx` | 🟢 |
 | **BR-P03** (alteração) — editar não reexige consentimento e preserva o aceite original | `src/pages/PatientForm.tsx` | `src/pages/__tests__/PatientForm.test.tsx` | 🟢 |
@@ -66,30 +66,68 @@ Esta matriz relaciona cada artefato de código-fonte e schema do projeto legado 
 
 | Promessa (spec) | Código que cumpre | Teste que prova | Veredito |
 | :--- | :--- | :--- | :---: |
+| Verificações negativas do gate de tipos são reproduzíveis por comando | `src/test/verificacoes-negativas.mjs` | `npm run prova:negativos` — 9 casos, recusa conferida **pelo motivo** e sem resíduo | 🟢 |
+| Cadastro de paciente no modo offline aparece na listagem escopada (defeito DIV-01, watch W009) | `src/api/mockClient.ts`, `src/api/registry.ts`, `src/api/scopedRead.ts` | `src/api/__tests__/mockClient.test.ts` — cadastra pelo adaptador e relê por `listOwned` e `filterOwned` | 🟢 |
 | Contrato único de acesso a dados, honrado tanto pelo modo online quanto pelo offline | `src/api/contract.ts`, `src/api/base44Client.ts`, `src/api/mockClient.ts`, `src/api/registry.ts` | `src/api/__tests__/mockClient.test.ts` (execução) + `npm run typecheck` (compilação) | 🟢 |
 | Sessão autenticada convertida para o tipo de domínio; a ausência de papel no modo offline é explícita, não silenciosa | `src/lib/session.ts`, `src/lib/AuthContext.tsx`, `src/api/sessionScope.ts` | `src/lib/__tests__/AuthContext.test.tsx`, `src/api/__tests__/sessionScope.test.ts` | 🟢 |
 
 ### Como a prova é executada
 
 ```bash
-npm test            # 34 testes em 10 arquivos — 0 falhas
-npm run typecheck   # gate de tipos estrito — 0 erros
-npm run lint        # eslint --quiet — 0 erros
+npm test              # 36 verificações em 10 arquivos — 0 falhas, 32,5 s
+npm run typecheck     # gate de tipos estrito — 0 erros
+npm run lint          # eslint --quiet — 0 erros
+npm run prova:negativos   # 9 casos negativos recusados, sem resíduo
 ```
 
-Medição de 2026-09-19, sobre o código desta árvore de trabalho. A suíte exige acesso
-ampliado para subir neste ambiente: o esbuild do vitest abre pipe nomeado e falha com
-`spawn EPERM` em modo confinado (mesma restrição registrada no onboarding da feature
-001, §7).
+Medição de 2026-09-19, sobre o código desta árvore de trabalho. Os dois últimos comandos
+são gates independentes (RN-05): o segundo confere forma em tempo de compilação, o
+primeiro confere comportamento em tempo de execução. A suíte exige acesso ampliado para
+subir neste ambiente: o esbuild do vitest abre pipe nomeado e falha com `spawn EPERM` em
+modo confinado (mesma restrição registrada no onboarding da feature 001, §7).
+
+### Cenários de paridade do módulo Pacientes
+
+Os 5 cenários de paridade que pertencem a este módulo, com o destino de cada um
+(feature `002-prova-automatizada`, RF-08):
+
+| Cenário | Arquivo | Veredito | Prova ou razão |
+| :--- | :--- | :---: | :--- |
+| PT-001.1 — cadastro sem aceite LGPD é recusado | `parity_tests/01-cadastro-paciente-lgpd.feature` | 🟢 | `PatientForm.test.tsx` prova a recusa e a ausência de escrita. A metade "nenhum registro existe no repositório" é do servidor e **não** é provável no cliente |
+| PT-001.2 — aceite registra data e IP no save | `parity_tests/01-cadastro-paciente-lgpd.feature` | 🟢 | `PatientForm.test.tsx` |
+| PT-001.3 — CPF tratado como dado sensível | `parity_tests/01-cadastro-paciente-lgpd.feature` | 🔴 | **Desdobrado.** A marcação do campo sensível no contrato é provada pelo gate de tipos; a **criptografia em repouso acontece no backend** e não é provável no cliente — lacuna declarada |
+| PT-002.1 — paciente inativo não aparece na seleção | `parity_tests/02-selecao-paciente-ativo.feature` | 🟢 | `ActivePatientSelection.test.tsx` — o inativo não aparece nem por nome nem por CPF |
+| PT-002.2 — paciente ativo é selecionável | `parity_tests/02-selecao-paciente-ativo.feature` | 🟢 | `ActivePatientSelection.test.tsx` |
+
+### Destino dos cenários de paridade não cobertos nesta feature
+
+Decisão da sessão de esclarecimentos de 2026-09-19: a conversão é **fatiada por módulo**.
+Cada grupo abaixo vira feature própria; nenhum cenário fica sem destino.
+
+| Grupo | Cenários | Destino |
+| :--- | ---: | :--- |
+| Agendamentos (`03`, `04`) | 8 | Feature a criar — conversão dos cenários de fluxo de agendamentos |
+| Modo offline (`09`) | 6 | Feature a criar — conversão dos cenários de fluxo do modo offline |
+| Dashboard (`08`) | 5 | Feature a criar — depende de resolver a lacuna da Taxa de Atendimento (`confidence-report.md#Lacunas 🔴 pendentes`) |
+| Templates (`06`) | 4 | Feature a criar — conversão dos cenários de fluxo de documentos e modelos |
+| Logs de acesso (`07`) | 4 | Feature a criar — conversão dos cenários de fluxo da trilha de auditoria |
+| Contrato de dados (`10`) | 4 | Feature a criar — contrato único honrado pelos dois modos |
+| Consultas (`05`) | 3 | Feature a criar — máquina de estados da consulta |
+| Paridade visual (`screens/V01` a `V16`) | 16 | **Lacuna declarada.** A captura dourada de referência não existe no repositório (`present: false`); produzi-la é trabalho de outra natureza |
 
 ### Lacunas de prova
 
-Registradas de propósito: uma matriz que só mostra 🟢 não é honesta.
+Registradas de propósito: uma matriz que só mostra 🟢 não é honesta. O que esta feature
+fechou está marcado como fechado, e o que permanece aberto tem razão declarada.
 
-| Lacuna | O que existe hoje | O que falta |
-| :--- | :--- | :--- |
-| **BR-P02** (enum de tipo sanguíneo) | Verificação negativa do gate de tipos, executada uma vez em 2026-09-14 com arquivo temporário depois removido | Teste de execução: valor fora do enum não chega a ser gravado |
-| **Verificações negativas do gate de tipos** (T031–T036, T039, T045, T046) | Cada uma foi executada com um arquivo temporário que **foi removido em seguida**, por decisão de não deixar resíduo no projeto | Prova reproduzível por comando. Como está, os critérios de aceite "campo inexistente não compila" e "entidade inexistente não compila" **não são reexecutáveis** — dependem de repetir o procedimento manual |
-| **Paridade de comportamento** | 26 arquivos com 55 cenários Gherkin em `_reversa_sdd/migration/parity_tests/`, usados como **roteiro manual** de fumaça | Nenhum desses cenários é executado por comando. São especificação, não prova |
-| **Modo offline de ponta a ponta** | `mockClient.test.ts` cobre 2 comportamentos do adaptador; o fluxo real foi validado por fumaça manual (defeito DIV-01 encontrado ali) | Teste que suba o seed (`src/api/mockSeed.ts`), cadastre e leia de volta pelas consultas escopadas |
-| **Build de produção** | `npm run build` passou na máquina do responsável em 2026-09-17 | Nenhum teste automatizado cobre o empacotamento |
+| Lacuna | Situação após a feature `002-prova-automatizada` |
+| :--- | :--- |
+| **BR-P02** (enum de tipo sanguíneo) | ✅ **Fechada.** Prova de execução em `PatientForm.test.tsx` (o formulário oferece exatamente os 9 valores) e caso negativo `status-fora-do-conjunto` em `npm run prova:negativos` |
+| **Verificações negativas do gate de tipos** (T031–T036, T039, T045, T046) | ✅ **Fechada.** `npm run prova:negativos` reproduz 9 casos por comando, confere a recusa pelo motivo certo e não deixa resíduo |
+| **Paridade do módulo Pacientes** (5 cenários) | ✅ **Fechada**, com o desdobramento do PT-001.3 declarado |
+| **Paridade dos sete módulos restantes** (34 cenários) | 🟡 **Transferida**, com destino declarado por grupo na seção acima |
+| **Modo offline de ponta a ponta** (recorte DIV-01) | ✅ **Fechada** para o paciente: `mockClient.test.ts` cadastra pelo adaptador e relê pela leitura escopada. As limitações L1 a L7 do adaptador permanecem declaradas e não são provadas |
+| **Paridade visual** (16 cenários) | 🔴 **Declarada.** Depende de captura dourada inexistente |
+| **Criptografia do CPF em repouso** | 🔴 **Declarada.** Acontece no backend; o cliente prova apenas a marcação de campo sensível |
+| **Build de produção** | 🟡 **Declarada.** `npm run build` passou na máquina do responsável em 2026-09-17; nenhuma prova automatizada cobre o empacotamento |
+| **Concorrência entre abas no modo offline** | 🟡 **Declarada.** Limitação L2 herdada, registrada em `_reversa_sdd/code-analysis.md#10.5 Limitações funcionais` |

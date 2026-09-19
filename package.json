@@ -12,7 +12,8 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "prova:negativos": "node src/test/verificacoes-negativas.mjs"
   },
   "dependencies": {
     "@base44/sdk": "^0.8.43",

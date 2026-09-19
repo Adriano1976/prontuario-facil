@@ -121,8 +121,8 @@ prontuario-facil/
 
 ## CI/CD
 
-- Nenhum pipeline encontrado (sem `.github/workflows/`, `Jenkinsfile` ou `.gitlab-ci.yml`).
-- `.github/` contém apenas um skill de convenções de naming de commits.
+- Nenhum pipeline encontrado (sem `.github/workflows/`, `Jenkinsfile` ou `.gitlab-ci.yml`). **Ressalva acrescentada em 2026-09-19 (ação T011):** existe `.github/workflows/deploy-pages.yml`, mas ele não é integração contínua da aplicação — publica o mini-site de documentação em GitHub Pages, sem instalar dependências nem construir o artefato. A conclusão desta seção continua válida na prática; a frase que a sustentava não.
+- `.github/` contém skills de apoio (convenções de commit, documentação, auditoria de segurança) e o fluxo de publicação citado acima.
 
 ## Docker
 
@@ -140,8 +140,8 @@ prontuario-facil/
 
 ## Cobertura de testes
 
-- **Nenhum teste encontrado** (sem arquivos `*.test.*` / `*.spec.*`, sem framework de teste configurado).
-- Scripts disponíveis: `dev`, `build`, `lint`, `lint:fix`, `typecheck` (`tsc -p ./jsconfig.json`), `preview`.
+- ~~**Nenhum teste encontrado**~~ — **corrigido em 2026-09-19 pela feature `002-prova-automatizada` (ação T011).** Esta seção descrevia o legado e ficou defasada: há arcabouço de prova configurado e 10 arquivos de verificação, executáveis por `npm test`, além de `npm run prova:negativos` para reproduzir as verificações negativas do gate de tipos. Ver `_reversa_sdd/code-spec-matrix.md#Rastreabilidade Spec → Código → Teste`.
+- Scripts disponíveis no legado: `dev`, `build`, `lint`, `lint:fix`, `typecheck` (`tsc -p ./jsconfig.json`), `preview`. Aos quais se somam `test`, `test:watch`, `test:coverage` e `prova:negativos`.
 
 ## Histórico Git
 

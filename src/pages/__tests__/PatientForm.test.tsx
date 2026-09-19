@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import PatientForm from '../PatientForm';
+import type { ReactNode } from 'react';
 
 const { createPatient, updatePatient, mutate, navigate, toast, uploadFile } = vi.hoisted(() => ({
   createPatient: vi.fn(),
@@ -119,6 +120,41 @@ vi.mock('@/components/medical/AccessLogger', () => ({
 
 vi.mock('@/components/ui/use-toast', () => ({
   useToast: () => ({ toast }),
+}));
+
+/**
+ * Dublê do módulo de seleção, no mesmo padrão já usado em `Patients.test.tsx`.
+ *
+ * Motivo: o seletor real renderiza as opções num portal e exige eventos de ponteiro
+ * que o DOM simulado não reproduz — abrir o seletor real neste arquivo levava o
+ * `userEvent` a estourar o tempo limite. Com o dublê, as opções existem no documento
+ * e a verificação do conjunto fechado de tipo sanguíneo (BR-P02) passa a medir o que
+ * o formulário decide: exatamente quais valores ele oferece.
+ */
+vi.mock('@/components/ui/select', () => ({
+  Select: ({
+    value,
+    onValueChange,
+    children,
+  }: {
+    value: string;
+    onValueChange: (value: string) => void;
+    children: ReactNode;
+  }) => (
+    <select
+      aria-label="Seletor"
+      value={value}
+      onChange={(event) => onValueChange(event.target.value)}
+    >
+      {children}
+    </select>
+  ),
+  SelectContent: ({ children }: { children: ReactNode }) => <>{children}</>,
+  SelectItem: ({ value, children }: { value: string; children: ReactNode }) => (
+    <option value={value}>{children}</option>
+  ),
+  SelectTrigger: () => null,
+  SelectValue: () => null,
 }));
 
 vi.mock('@/components/medical/LGPDConsent', () => ({
@@ -358,5 +394,30 @@ describe('PatientForm', () => {
     expect(createPatient).not.toHaveBeenCalled();
     expect(navigate).not.toHaveBeenCalled();
     expect(screen.getByRole('heading', { name: 'Novo Paciente' })).toBeInTheDocument();
+  });
+
+  it('offers exactly the permitted blood types and nothing else (BR-P02)', () => {
+    renderForm();
+
+    // O campo nasce com `desconhecido`, que é o que o distingue do seletor de gênero.
+    const tipoSanguineo = screen
+      .getAllByRole('combobox')
+      .find((element) => (element as HTMLSelectElement).value === 'desconhecido');
+    expect(tipoSanguineo).toBeDefined();
+
+    const oferecidos = Array.from((tipoSanguineo as HTMLSelectElement).options).map(
+      (option) => option.value,
+    );
+    expect(oferecidos).toEqual([
+      'A+',
+      'A-',
+      'B+',
+      'B-',
+      'AB+',
+      'AB-',
+      'O+',
+      'O-',
+      'desconhecido',
+    ]);
   });
 });
