@@ -119,20 +119,71 @@ Não presuma cobertura onde não há. Fica declarado como lacuna, com a razão:
 | Concorrência entre abas no modo offline | Limitação L2 herdada, registrada em `_reversa_sdd/code-analysis.md#10.5 Limitações funcionais` |
 | Empacotamento de produção | Verificação de outra natureza |
 
-## 8. Registro de execução
+## 8. Integridade dos artefatos desta feature
+
+O Reversa **não assina** os artefatos do ciclo forward. A assinatura existe apenas para
+os arquivos da instalação (`.reversa/_config/files-manifest.json`, 260 entradas SHA-256
+cobrindo só o framework) e para os artefatos do time de migração
+(`_reversa_sdd/migration/*.md`, que trazem frontmatter com `hash` e `producedBy`). Nenhum
+skill do forward menciona hash, e nenhum template do ciclo tem campo de assinatura.
+
+`MANIFEST.sha256`, nesta pasta, cobre essa lacuna. Ele registra o SHA-256 de:
+
+- os **6 documentos** desta feature: `requirements.md`, `roadmap.md`, `investigation.md`, `data-delta.md`, `onboarding.md` e `actions.md`;
+- a **matriz de rastreabilidade** (`_reversa_sdd/code-spec-matrix.md`);
+- a **camada de prova** no estado atual: `vitest.config.ts`, `src/test/setup.ts` e os 10 arquivos de verificação.
+
+O que ele **não** cobre, e por quê:
+
+| Fora do manifesto | Razão |
+|-------------------|-------|
+| O próprio `MANIFEST.sha256` | Um hash não pode cobrir a linha que o contém |
+| `package.json` | A ação `T002` vai alterá-lo |
+| `_reversa_sdd/dependencies.md` e `_reversa_sdd/inventory.md` | As ações `T010` e `T011` vão corrigi-los |
+
+### Como conferir
+
+Git Bash, Linux ou macOS, a partir da raiz do projeto:
+
+```bash
+sha256sum -c _reversa_forward/002-prova-automatizada/MANIFEST.sha256
+```
+
+PowerShell, a partir da raiz do projeto:
+
+```powershell
+Get-Content _reversa_forward\002-prova-automatizada\MANIFEST.sha256 | ForEach-Object {
+  $h, $p = $_ -split '  ', 2
+  if ((Get-FileHash -Algorithm SHA256 $p).Hash.ToLower() -eq $h) { "OK    $p" }
+  else { "MUDOU $p" }
+}
+```
+
+### Ressalva honesta
+
+O hash é dos **bytes em disco**, não do conteúdo lógico. Se o Git normalizar fim de linha
+entre LF e CRLF em outro checkout, os hashes divergem sem que uma vírgula tenha mudado.
+O manifesto certifica o estado desta árvore de trabalho em 2026-09-19 — ele **não**
+substitui o histórico do Git, que continua sendo o registro durável de verdade.
+
+## 9. Registro de execução
 
 Ao executar o roteiro, registre conforme ou divergente por item. O registro alimenta o
 `legacy-impact.md` e o `regression-watch.md` da feature.
 
 | # | Item | Resultado |
 |---|------|-----------|
-| 1 | `npm ci` conclui sem erro | |
-| 2 | `npm test` passa por inteiro | |
-| 3 | `npm run typecheck` sem saída | |
-| 4 | `npm run lint` sem saída | |
-| 5 | `npm run prova:negativos` reporta cada caso e não deixa resíduo | |
-| 6 | Nenhum arquivo de aplicação sob `src/` modificado | |
-| 7 | `base44/entities/` sem diff | |
-| 8 | Três promessas sorteadas na matriz batem com os arquivos de prova | |
-| 9 | Nenhuma promessa do módulo Pacientes com veredito de lacuna | |
-| 10 | Suíte completa abaixo de 90 segundos | |
+| 1 | `npm ci` conclui sem erro | não executado — dependências já instaladas na árvore de trabalho |
+| 2 | `npm test` passa por inteiro | ✅ 36 verificações em 10 arquivos, 0 falhas |
+| 3 | `npm run typecheck` sem saída | ✅ código de retorno 0 |
+| 4 | `npm run lint` sem saída | ✅ código de retorno 0 |
+| 5 | `npm run prova:negativos` reporta cada caso e não deixa resíduo | ✅ 9 de 9 recusados pelo motivo esperado, resíduo nenhum, retorno 0 |
+| 6 | Nenhum arquivo de aplicação sob `src/` modificado | ✅ só arquivo de prova, o utilitário novo e `package.json` |
+| 7 | `base44/entities/` sem diff | ✅ nenhum |
+| 8 | Promessas da matriz batem com os arquivos de prova | ✅ todos os arquivos de prova citados na matriz existem e contêm a verificação |
+| 9 | Nenhuma promessa do módulo Pacientes com veredito de lacuna | ✅ a seção de lacunas não registra nenhuma aberta para Pacientes |
+| 10 | Suíte completa abaixo de 90 segundos | ✅ 32,5 s |
+
+> Execução registrada em 2026-09-19 pelo `/reversa-coding`. Os itens 1 e 8 são os únicos
+> com ressalva: o item 1 não foi reexecutado e o item 8 foi conferido por inspeção dos
+> arquivos citados, não por sorteio aleatório de três promessas.
