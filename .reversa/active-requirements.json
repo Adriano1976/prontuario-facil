@@ -1,9 +1,9 @@
 {
   "schema-version": 1,
-  "feature-dir": "_reversa_forward/002-prova-automatizada",
-  "feature-id": "002",
-  "short-name": "prova-automatizada",
-  "started-at": "2026-09-19T14:57:47-03:00",
+  "feature-dir": "_reversa_forward/003-prova-agendamentos",
+  "feature-id": "003",
+  "short-name": "prova-agendamentos",
+  "started-at": "2026-09-19T16:26:35-03:00",
   "current-stage": "requirements",
   "stages-completed": [],
   "paused-features": []
