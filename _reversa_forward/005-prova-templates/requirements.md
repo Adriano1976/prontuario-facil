@@ -13,7 +13,8 @@ sistema, tanto pelo módulo de Consultas quanto pelo de Pacientes. A feature fec
 🔴 que a extração deixou aberta em `code-analysis.md#5.3` (a variável `{DIAS_AFASTAMENTO}`
 é substituída?) e declara o limite estrutural de dois dos quatro cenários, que são
 predicados **do servidor**: neles o cliente só pode provar o pedido. Não altera código de
-aplicação, schema nem contrato.
+aplicação, schema nem contrato. A **administração** de modelos (`Templates.tsx`) fica fora do
+escopo por decisão de 2026-09-21 e vira feature própria.
 
 ## 2. Contexto a partir do legado
 
@@ -48,7 +49,7 @@ aplicação, schema nem contrato.
 |---------|----------|---------------|
 | Médico | Emitir receita, atestado ou solicitação já preenchidos, sem redigitar texto padrão | Abre "Novo Documento" na consulta, escolhe o tipo, escolhe um modelo da clínica e o conteúdo aparece pronto para revisão |
 | Médico | Emitir documento coerente com o tipo escolhido | Troca o tipo de documento e espera que a lista de modelos acompanhe o tipo |
-| Administrador da clínica | Manter o acervo de modelos | Cadastra/edita modelos e desativa os que não devem mais ser oferecidos — **superfície de administração, ver `D-01`** |
+| Administrador da clínica | Manter o acervo de modelos | Cadastra/edita modelos e desativa os que não devem mais ser oferecidos — **fora do escopo desta feature** (decisão `Q1` · `1a`); a administração vira feature própria, com seus próprios cenários |
 | Responsável pela qualidade | Saber o que o sistema garante e o que ele apenas pede | Consulta a matriz e encontra, por cenário, se a prova cobre a tela, o payload ou só a requisição |
 
 ## 4. Regras de negócio novas ou alteradas
@@ -84,7 +85,9 @@ leitura — a feature não altera o comportamento do sistema.
    - Tipo: nova
 6. **RN-06:** AMB-006 mantido: a substituição **não escapa marcação**, e a impressão injeta o
    conteúdo já substituído em um documento HTML via `window.open` + `document.write`. É
-   preservação deliberada do legado, não descuido — o próprio código registra a decisão.
+   preservação deliberada do legado, não descuido — o próprio código registra a decisão. As
+   duas metades passam a ter evidência: a marcação literal no payload (`RF-11`) e a marcação
+   literal no HTML impresso (`RF-18`, decisão `4b`).
    - Origem no legado: `code-analysis.md#4.5` e `#9` (módulo consultas); AMB-006
    - Tipo: alterada (confirmada como preservada, com veredito de prova)
 7. **RN-07:** `medications` é barrado na **montagem do payload**, não na tela. Ocultar a
@@ -123,14 +126,15 @@ leitura — a feature não altera o comportamento do sistema.
 | RF-15 | Provar que o enum de documentos do editor é **exatamente** o enum de `Prescription` | Must | O seletor oferece os 6 tipos do schema, sem `anamnese`; a comparação é feita contra o conjunto do schema | 🟢 |
 | RF-16 | Registrar na matriz o veredito dos 4 cenários de `PT-006`, o saldo dos módulos restantes e a colisão de `BR-T` | Must | `code-spec-matrix.md` recebe a seção de paridade do grupo `06`, com o saldo atualizado e `RN-08` citada | 🟢 |
 | RF-17 | Revalidar os comandos de gate e a integridade da árvore | Must | `npm test`, `npm run typecheck`, `npm run lint` e `npm run prova:negativos` passam; nenhum arquivo de aplicação é tocado | 🟢 |
+| RF-18 | Provar a **injeção de conteúdo na impressão**, com duplo de `window.open` (`RN-06`; decisão `Q4` · `4b`) | Must | Com `window.open` substituído por um duplo que captura o HTML escrito, o documento impresso contém a marcação do modelo **sem escape** — a terceira lacuna Alta deixa de ser só declarada e passa a ter evidência | 🟢 |
 
 ## 6. Requisitos Não Funcionais
 
 | Tipo | Requisito | Evidência ou justificativa | Confidência |
 |------|-----------|----------------------------|-------------|
 | Desempenho | A suíte completa não deve ultrapassar o teto de 90 segundos | Teto firmado nas features `002` a `004`; a rodada 004 fechou em 63,7 s | 🟢 |
-| Determinismo | A prova de `{DATA}` e `{DATA_EXTENSO}` exige relógio congelado e localidade fixa | `toLocaleDateString('pt-BR')` depende do relógio e do ICU do ambiente; sem congelamento o teste fica instável | 🟢 |
-| Isolamento | A prova não pode gravar em armazém real nem abrir janela de impressão | `handlePrint` chama `window.open` + `print()`; a prova de AMB-006 afirma o conteúdo no payload, sem exercitar a janela | 🟢 |
+| Determinismo | A prova de `{DATA}` e `{DATA_EXTENSO}` congela **apenas o `Date`**, como na feature `004`, e afirma a string exata em pt-BR (decisão `Q5` · `5a`) | `toLocaleDateString('pt-BR')` depende do relógio e do ICU do ambiente; o congelamento remove a dependência do relógio, e o Node 18+ traz ICU completo. Se a string se mostrar instável, a alternativa registrada é duplicar `toLocaleDateString` | 🟢 |
+| Isolamento | A prova não pode gravar em armazém real nem abrir **janela de impressão real** | `handlePrint` chama `window.open` + `print()`; por decisão `Q4` · `4b` a prova substitui `window.open` por um duplo que captura o HTML escrito — a janela real nunca é aberta e o `print()` real nunca é chamado | 🟢 |
 | Manutenibilidade | Massa de prova compartilhada para paciente, modelo e tipos | Padrão firmado na feature `004` (`consultationsFixtures.ts`); evita divergência de critério entre arquivos | 🟡 |
 | Rastreabilidade | Toda citação de `BR-T` qualifica o artefato de origem (`RN-08`) | Colisão confirmada entre `domain.md#2.3` e `code-analysis.md#6` | 🟢 |
 | Observabilidade | O limite servidor-cliente de `PT-006.2` e `PT-006.4` fica declarado na matriz, não escondido num verde | Sem a declaração, o veredito 🟢 sugeriria cobertura que a prova não tem | 🟢 |
@@ -210,34 +214,41 @@ Cenário: O editor de documento oferece exatamente os seis tipos do schema
 | RF-12, RF-15, RF-16, RF-17 | Must | Procedência, contrato de enum, convergência na matriz e gate |
 | RF-10, RF-13, RF-14 | Should | Achados laterais reais, mas não prometidos por `PT-006`; enriquecem a matriz sem inflar o escopo |
 | RNF de desempenho | Should | Teto já firmado; a feature acrescenta poucos arquivos |
-| D-01 (escopo da administração) | Could | Depende de decisão humana; ver `§10` |
+| RF-18 | Must | Decisão `Q4` · `4b`: a terceira lacuna Alta ganha evidência em vez de ficar apenas declarada |
+| Administração de modelos (`Templates.tsx`) | **Won't** | Decisão `Q1` · `1a`: fora do escopo desta feature. CRUD, agrupamento por tipo, `is_default` sem exclusividade, `insertVariable` e o campo `variables` órfão vão para feature própria |
 
 ## 9. Esclarecimentos
 
-> Nenhuma sessão de dúvidas registrada ainda. Rode `/reversa-clarify` quando houver `[DÚVIDA]` pendente.
+### Sessão 2026-09-21
+
+Cinco perguntas apresentadas, cinco respondidas. As três primeiras vinham dos `[DÚVIDA]`
+declarados; as duas últimas saíram do cruzamento com a taxonomia do `/reversa-clarify` —
+lacunas de cobertura que os marcadores não registravam.
+
+- **Q:** Até onde vai o escopo desta feature — só os 4 cenários de `PT-006` (emissão), ou também a administração de modelos em `Templates.tsx`?
+  **R:** `1a` — só os 4 cenários de `PT-006`. A administração fica **fora do escopo** e vira feature própria. Nenhum dos quatro cenários toca `Templates.tsx`; misturar as duas superfícies faria a feature crescer além do grupo `06` e perder o endereço de rastreabilidade na matriz.
+- **Q:** AMB-006 — provar as três lacunas Alta e declarar, corrigir as três, corrigir só `{DIAS_AFASTAMENTO}`, ou apenas declarar sem provar?
+  **R:** `2a` — provar as três e **declarar** o defeito, sem corrigir. Paridade preservada, no mesmo critério que a feature `004` aplicou à assimetria de auditoria; corrigir mudaria comportamento observável e sairia da paridade.
+- **Q:** O filtro por tipo e por atividade é predicado do servidor. Provar só o pedido basta?
+  **R:** `3a` — provar o **pedido** e declarar que o cliente não re-filtra. Veredito 🟢 **com ressalva declarada**. Não entra segunda linha de defesa no cliente: seria regra nova, não prova.
+- **Q:** A impressão (`handlePrint`, terceira lacuna Alta) entra na prova?
+  **R:** `4b` — entra, com duplo de `window.open` que captura o HTML escrito, afirmando que a marcação do modelo chega **sem escape**. O defeito fica declarado. **Emenda o RNF de isolamento**, que passa a admitir o duplo e continua proibindo janela real.
+- **Q:** Como congelar `{DATA}` e `{DATA_EXTENSO}`?
+  **R:** `5a` — congelar apenas o `Date`, como na feature `004`, afirmando a string exata em pt-BR. Se a string se mostrar instável, a alternativa registrada é duplicar `toLocaleDateString`.
+
+**Consequências no documento:** `RF-18` foi acrescentado (prova da injeção na impressão); o RNF
+de isolamento foi emendado; o RNF de determinismo registra a decisão; a administração de modelos
+passou a **Won't** no MoSCoW; e a seção `## 10` ficou sem lacunas em aberto.
 
 ## 10. Lacunas
 
-- 🔴 [DÚVIDA] **Escopo.** O grupo `Templates (06)` da matriz tem esse nome, mas seus 4
-  cenários provam a **emissão de documento com modelo**, cujo componente
-  (`PrescriptionEditor.tsx`) é analisado pela extração dentro do módulo **consultas**
-  (`code-analysis.md#4.4` e `#4.6`), não do módulo templates. A página de administração
-  `Templates.tsx` — CRUD, agrupamento por tipo, `is_default`, `insertVariable`, `variables`
-  órfão — **não é tocada por nenhum dos 4 cenários** e continua sem prova. Esta feature prova
-  só os 4 cenários e deixa a administração para uma feature própria, ou incorpora a
-  administração agora e cresce além do grupo `06`?
-- 🔴 [DÚVIDA] **AMB-006 — corrigir ou declarar.** `{DIAS_AFASTAMENTO}` sem substituidor e a
-  ausência de escape na substituição e na impressão são as três lacunas de severidade **Alta**
-  do módulo. A feature pode provar as três e **declarar** o defeito sem corrigir — mantendo a
-  paridade com o legado, como fez a feature `004` com a assimetria de auditoria — ou corrigir
-  junto, o que muda comportamento observável e sai da paridade. Qual?
-- 🔴 [DÚVIDA] **Filtro do servidor.** `PT-006.2` e `PT-006.4` dependem de predicado aplicado
-  no servidor. A prova honesta cobre o pedido e declara que o cliente não re-filtra
-  (`RF-04`, `RF-05`, `RF-06`). Isso basta como veredito, com ressalva declarada, ou o projeto
-  quer uma segunda linha de defesa no cliente — que seria **regra nova** e não prova?
+n/a — **nenhuma lacuna em aberto.** As três dúvidas declaradas foram resolvidas na sessão de
+2026-09-21 (ver `## 9`), e a administração de modelos saiu do escopo por decisão `1a`,
+registrada como **Won't** em `## 8`.
 
 ## 11. Histórico de alterações
 
 | Data | Alteração | Autor |
 |------|-----------|-------|
 | 2026-09-21 | Versão inicial gerada por `/reversa-requirements` | reversa |
+| 2026-09-21 | Sessão de esclarecimentos (5 perguntas): escopo fechado na emissão; AMB-006 provado e declarado; filtro do servidor com ressalva; impressão provada por duplo; `Date` congelado. `RF-18` acrescentado e RNF de isolamento emendado | `/reversa-clarify` |
