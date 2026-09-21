@@ -19,3 +19,6 @@ Funcionalidade: Paridade visual — Modal: Novo Médico
     E Escala com checkboxes de dias da semana, Horário Início/Fim e Duração (min)
     E switch "Médico ativo"
     E botões "Cancelar" e "Salvar"
+
+# ---
+# Gerado pelo Reversa-Inspector em 2026-09-09.

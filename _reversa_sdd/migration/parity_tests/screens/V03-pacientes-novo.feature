@@ -20,3 +20,6 @@ Funcionalidade: Paridade visual — Cadastro de Novo Paciente
     E botões "Cancelar" e "Salvar Paciente"
     Quando houver golden capturado (pacientes-novo.png)
     Então a renderização coincide com o golden dentro das normalizationRules do manifest
+
+# ---
+# Gerado pelo Reversa-Inspector em 2026-09-09.

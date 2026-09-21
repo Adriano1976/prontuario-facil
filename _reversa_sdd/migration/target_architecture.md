@@ -5,7 +5,7 @@ reversa:
   version: "1.3.2"
 kind: target_architecture
 producedBy: designer
-hash: "sha256:768887c35630e4d5fcf9af8166c0d33c6bd3d565bf6b64974802f277ea3e7db0"
+hash: "sha256:834285c492e82d337f35053a11fa582e5649e5dff53ec42379f869b1dfa613f2"
 ---
 
 # Target Architecture
@@ -150,3 +150,6 @@ flowchart LR
 - Nenhum componente novo de backend, fila ou worker: a arquitetura runtime do alvo é idêntica à do legado; o que muda é a camada de tipos e o contrato de API.
 - Libs efetivamente importadas em `src/` **permanecem** (`recharts`, `framer-motion`, `next-themes`, `sonner`, `lucide-react`, Radix etc. — confirmado por grep em 2026-09-10). **Não usadas** (14 deps de runtime sem import em `src/`: `@stripe/*`, `react-leaflet`, `jspdf`, `html2canvas`, `lodash`, `react-quill`, `three`, `react-markdown`, `canvas-confetti`, `@hello-pangea/dnd`, `@radix-ui/react-toast`, `zod`, `@hookform/resolvers`) são removidas na onda 1 (RISK-006) somente se o grep for reconfirmado e o usuário aprovar. ⚠️ `react-quill` **não** é exceção: não há import dela no legado.
 - A árvore final de pastas é a do híbrido (topologia opção 3): `src/pages/`, `src/components/`, `src/hooks/`, `src/lib/`, `src/utils/` preservados + **`src/types/` novo** + `src/api/` com `client.ts`/`sdkClient.ts`/`mockClient.ts`/`mockSeed.ts`.
+
+---
+*Gerado pelo Reversa-Designer em 2026-09-09.*

@@ -5,7 +5,7 @@ reversa:
   version: "1.3.2"
 kind: data_migration_plan
 producedBy: designer
-hash: "sha256:a2ed12aa2fc8f9f6dd5b8e82eba0d2299ef1ca9b4a1daf007da7cc94e0ef8a1c"
+hash: "sha256:abe130e0c6109c05dbfee04b96524caf6b25a3f3e810506b4d88387b3e67b17f"
 ---
 
 # Data Migration Plan
@@ -94,3 +94,6 @@ hash: "sha256:a2ed12aa2fc8f9f6dd5b8e82eba0d2299ef1ca9b4a1daf007da7cc94e0ef8a1c"
 
 - Este artefato é propositalmente **N/A em ETL/backfill/delta**: a natureza da migração (JS→TS na mesma stack com BaaS imutável) não move dados. O template clássico de migração de dados não se aplica; os campos foram preenchidos para documentar explicitamente o porquê, evitando que o agente de codificação invente uma migração de dados desnecessária.
 - Único "dado" que muda de lugar: `src/api/mockSeed.js` → `mockSeed.ts` (mesmo formato), e nenhuma persistência existente em `localStorage` de quem usa offline é migrada (P4 do legado: mudanças de formato exigem `localStorage.clear()` manual).
+
+---
+*Gerado pelo Reversa-Designer em 2026-09-09.*

@@ -5,7 +5,7 @@ reversa:
   version: "1.3.2"
 kind: migration_strategy
 producedBy: strategist
-hash: "sha256:e10d2717edb48b423dce1a3ea1de2a31c98b59252610206a2b5148cdaf32e284"
+hash: "sha256:ebea05c80265698d005ce52633872fbed2452cda79cdeb93ab5c6b6711ba5d5f"
 ---
 
 # Migration Strategy
@@ -83,3 +83,6 @@ hash: "sha256:e10d2717edb48b423dce1a3ea1de2a31c98b59252610206a2b5148cdaf32e284"
 - **Quem decidiu**: Product Owner/Developer (stakeholder único)
 - **Quando**: 2026-09-09T15:26:00-03:00
 - **Justificativa do decisor**: aceitou a recomendação do Strategist — ondas incrementais com build verde, PRs pequenos reversíveis e alinhamento ao brief (paridade comportamental verificada por smoke; rollback < 5 min; fases Setup→Migração→Testes).
+
+---
+*Gerado pelo Reversa-Strategist em 2026-09-09.*

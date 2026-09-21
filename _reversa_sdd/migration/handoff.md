@@ -5,7 +5,7 @@ reversa:
   version: "1.3.2"
 kind: handoff
 producedBy: orchestrator
-hash: "sha256:35e313f4ee397d89bcf0deb7a7467eb1c2fc9df905332450fe34736a19b44b77"
+hash: "sha256:58894a1a7fd61453e90b235a53862d5f73292d5f55b76f8f1f8438e4e9cba2e7"
 ---
 
 # Handoff para o Agente de Codificação
@@ -103,3 +103,6 @@ hash: "sha256:35e313f4ee397d89bcf0deb7a7467eb1c2fc9df905332450fe34736a19b44b77"
 - Modo offline: `OFFLINE_USER` deve ser **variante discriminada sem `role`/`created_by_id`** — componentes que dependem de role não podem compilar cegos em offline (BR-MIGRAR-039).
 - Sem framework de testes nesta migração; sem mudanças em `base44/entities/*.jsonc`; sem mudanças de infra/deploy.
 - Este handoff assume a **Estratégia A** (incremental por camadas, 7 ondas). Trabalhar em PRs pequenos; o gate de cada onda é `tsc --noEmit` sem erros + smoke do módulo migrado.
+
+---
+*Gerado pelo Reversa-Orchestrator em 2026-09-09.*

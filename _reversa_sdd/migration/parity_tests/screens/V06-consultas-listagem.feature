@@ -21,3 +21,6 @@ Funcionalidade: Paridade visual — Listagem de Consultas
     E contador "N consultas encontradas" e botão "+ Nova Consulta"
     Quando houver golden capturado (consultas-listagem.png)
     Então a renderização coincide com o golden dentro das normalizationRules do manifest
+
+# ---
+# Gerado pelo Reversa-Inspector em 2026-09-09.

@@ -131,3 +131,6 @@ fechou está marcado como fechado, e o que permanece aberto tem razão declarada
 | **Criptografia do CPF em repouso** | 🔴 **Declarada.** Acontece no backend; o cliente prova apenas a marcação de campo sensível |
 | **Build de produção** | 🟡 **Declarada.** `npm run build` passou na máquina do responsável em 2026-09-17; nenhuma prova automatizada cobre o empacotamento |
 | **Concorrência entre abas no modo offline** | 🟡 **Declarada.** Limitação L2 herdada, registrada em `_reversa_sdd/code-analysis.md#10.5 Limitações funcionais` |
+
+---
+*Gerado pelo Reversa-Writer em 2026-09-02.*

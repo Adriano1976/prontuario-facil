@@ -5,7 +5,7 @@ reversa:
   version: "1.3.2"
 kind: target_business_rules
 producedBy: curator
-hash: "sha256:1a3bc28e66b5769b107bec31585e68556d76121a9e6344afbd3b56e9cfc177b2"
+hash: "sha256:369762a52e35491850743fcdc8b5d6014a52a10774c6a6b2c1537b870cd97073"
 ---
 
 # Target Business Rules
@@ -424,3 +424,6 @@ hash: "sha256:1a3bc28e66b5769b107bec31585e68556d76121a9e6344afbd3b56e9cfc177b2"
 - **CPF sensível**: `cpf` é armazenado criptografado no BaaS; no frontend é tratado como dado sensível (formatação/máscara). Tipos devem marcar campos sensíveis (CPF, dados LGPD) — ver `_reversa_sdd/data-dictionary.md` (coluna de sensibilidade).
 - **Sem testes no legado**: nenhuma regra de teste migra (brief exclui framework de testes nesta migração); paridade será validada por `tsc --noEmit` + revisão (Inspector).
 - Itens consolidados no `ambiguity_log.md` pelo orquestrador ao fim do agente.
+
+---
+*Gerado pelo Reversa-Curator em 2026-09-09.*

@@ -53,3 +53,6 @@ Funcionalidade: Modo offline (VITE_OFFLINE=true) com paridade de contrato
     Quando filtro com condição de operador avançado (in/gte/lte)
     Então o comportamento permanece o do legado (sem suporte — somente ===), tipado como operadores indisponíveis
     E sort aceita apenas 1 campo ("field" asc ou "-field" desc)
+
+# ---
+# Gerado pelo Reversa-Inspector em 2026-09-09.

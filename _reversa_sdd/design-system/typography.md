@@ -16,3 +16,6 @@ Seguindo a base do Tailwind, estão disponíveis:
 - **Pesos (font-):** `light` (300), `normal` (400), `medium` (500), `semibold` (600), `bold` (700).
 
 *(Lacuna: Não há customizações de tipografia estabelecidas no arquivo CSS local ou no tailwind config. O estilo 'new-york' do Shadcn tende a favorecer tamanhos ligeiramente menores e visuais mais sóbrios e densos).*
+
+---
+*Gerado pelo Reversa-Design-System em 2026-08-27.*

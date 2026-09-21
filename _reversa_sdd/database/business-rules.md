@@ -27,3 +27,6 @@ A integridade de dados e máquina de estado depende estritamente das validaçõe
 - **`Prescription.type`**: Protege a integridade documental com valores fixos (simples, controlada, atestado, encaminhamento, solicitacao_exame, declaracao).
 
 *Nota*: Não foram detectadas Stored Procedures puras (PL/pgSQL) ou Triggers customizados, pois lógicas reativas (ex: notificar via email quando marcar Appointment) são tratadas por hooks do próprio Base44.
+
+---
+*Gerado pelo Reversa-Data-Master em 2026-08-27.*

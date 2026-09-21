@@ -23,3 +23,6 @@ Funcionalidade: Seleção de pacientes ativos para agendamento e consulta
     Dado um paciente com status "ativo"
     Quando abro o seletor de paciente
     Então o paciente aparece na lista de seleção
+
+# ---
+# Gerado pelo Reversa-Inspector em 2026-09-09.

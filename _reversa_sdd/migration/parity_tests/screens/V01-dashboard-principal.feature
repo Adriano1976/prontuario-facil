@@ -21,3 +21,6 @@ Funcionalidade: Paridade visual — Dashboard Principal
     E busca global via PatientSearch
     Quando houver golden capturado (dashboard-principal.png)
     Então a renderização coincide com o golden dentro das normalizationRules do manifest
+
+# ---
+# Gerado pelo Reversa-Inspector em 2026-09-09.

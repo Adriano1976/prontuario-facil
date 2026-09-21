@@ -21,3 +21,6 @@ Funcionalidade: Paridade visual — Visualização de Consulta
     E painéis de Sinais Vitais e Anamnese consolidados
     Quando houver golden capturado (consultas-visualizacao.png)
     Então a renderização coincide com o golden dentro das normalizationRules do manifest
+
+# ---
+# Gerado pelo Reversa-Inspector em 2026-09-09.

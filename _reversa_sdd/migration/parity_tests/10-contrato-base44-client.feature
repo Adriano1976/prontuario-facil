@@ -37,3 +37,6 @@ Funcionalidade: Contrato Base44Client e isolamento por created_by_id/RBAC
     Dado os tipos de status (Appointment/Consultation) e tipos documentais como unions
     Quando o código atribui um valor fora do union
     Então a compilação falha (paridade de contrato de domínio)
+
+# ---
+# Gerado pelo Reversa-Inspector em 2026-09-10.

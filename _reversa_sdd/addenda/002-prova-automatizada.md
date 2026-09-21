@@ -68,3 +68,6 @@ descartada e a dívida do localizador de elemento por classe de estilo.
 - `_reversa_forward/002-prova-automatizada/actions.md`
 - `_reversa_forward/002-prova-automatizada/progress.jsonl`
 - `_reversa_forward/002-prova-automatizada/onboarding.md`
+
+---
+*Gerado pelo Reversa-Sync em 2026-09-19.*

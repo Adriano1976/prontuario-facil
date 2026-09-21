@@ -792,3 +792,6 @@ Para qualquer `create(data)`:
 - `date` — se ausente, recebe o mesmo timestamp de `created_date`
 
 Esses campos **não vêm no seed** para nenhum registro; só passam a existir após a primeira mutação via UI.
+
+---
+*Gerado pelo Reversa-Archaeologist em 2026-08-22.*

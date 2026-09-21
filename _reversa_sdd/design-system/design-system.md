@@ -23,3 +23,6 @@ O "Prontuário Fácil" adota o padrão de UI do **Shadcn UI**, gerando component
 - [Tipografia (`typography.md`)](file:///d:/Projetos/prontuario-facil/_reversa_sdd/design-system/typography.md)
 - [Espaçamento e Layout (`spacing.md`)](file:///d:/Projetos/prontuario-facil/_reversa_sdd/design-system/spacing.md)
 - [Tabela de Tokens (`tokens.md`)](file:///d:/Projetos/prontuario-facil/_reversa_sdd/design-system/tokens.md)
+
+---
+*Gerado pelo Reversa-Design-System em 2026-08-27.*

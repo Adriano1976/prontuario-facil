@@ -1557,3 +1557,6 @@ O mock espelha a mesma forma do SDK real:
 4. **Substituir logAccess(LOGIN) por evento de auth real**
 5. **Otimizar join de especialidades** com Map<id, doctor>
 6. **Criar testes** — agregações do dashboard, janela móvel, filtro PatientSearch
+
+---
+*Gerado pelo Reversa-Archaeologist em 2026-08-22.*

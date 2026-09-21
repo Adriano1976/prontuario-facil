@@ -34,3 +34,6 @@ Funcionalidade: Agendamento respeita a jornada do médico
     Dado um médico com working_days [1,2,3,4,5], working_hours 08:00–18:00 e appointment_duration 30
     Quando agendo às 10:00 em um dia de trabalho
     Então o agendamento é criado com status "agendado"
+
+# ---
+# Gerado pelo Reversa-Inspector em 2026-09-09.

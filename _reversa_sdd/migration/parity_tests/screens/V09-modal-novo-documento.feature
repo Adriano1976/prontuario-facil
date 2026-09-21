@@ -21,3 +21,6 @@ Funcionalidade: Paridade visual — Modal: Novo Documento
     E botões "Imprimir" e "Salvar"
     Quando houver golden capturado (modal-novo-documento.png)
     Então a renderização coincide com o golden dentro das normalizationRules do manifest
+
+# ---
+# Gerado pelo Reversa-Inspector em 2026-09-09.

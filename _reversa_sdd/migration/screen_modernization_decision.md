@@ -10,7 +10,7 @@ decidedAt: 2026-09-09T15:50:00-03:00
 mode: literal
 sourcePlatform: react-hooks
 targetPlatform: web-spa
-hash: "sha256:84b6d891931d292dd4c27352820d578ac4e448eba83e7f8865de28494fef8aa4"
+hash: "sha256:dc78b18730547550dafa1e4559c1db29a0828cf69b25381df5ae65abf8579238"
 ---
 
 # Decisão de Modernização de Telas
@@ -100,3 +100,6 @@ hash: "sha256:84b6d891931d292dd4c27352820d578ac4e448eba83e7f8865de28494fef8aa4"
 - Este é o caso canônico "mesma plataforma": a tradução de telas se reduz a **tipar componentes sem mudar o que é renderizado**. Qualquer sugestão de redesenhar telas durante a migração deve ser recusada (mesma regra do `paradigm_decision.md` para o código).
 - Em modo literal com a mesma plataforma, RF-13 (screenshot obrigatório) é satisfeito **por construção**: o componente legado é o artefato-fonte a converter, não há re-expressão visual em outra biblioteca.
 - `Detalhe do Paciente` (`PatientDetail.jsx`) consta no inventário do agente mas não no `ui/inventory.md` (divergência 6,7% < 10%) — será especificado normalmente; o Visor pode adicioná-lo depois.
+
+---
+*Gerado pelo Reversa-Screen-Translator em 2026-09-09.*

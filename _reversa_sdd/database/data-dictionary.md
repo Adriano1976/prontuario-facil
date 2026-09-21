@@ -86,3 +86,6 @@ Registro de trilha de auditoria para fins de compliance LGPD (registro de acesso
 - **action**: `string` - Ação realizada (ex: "Visualizou prontuário").
 - **entity**: `string` - Entidade acessada (ex: "Patient").
 - **accessed_at**: `datetime` - Timestamp.
+
+---
+*Gerado pelo Reversa-Data-Master em 2026-08-27.*

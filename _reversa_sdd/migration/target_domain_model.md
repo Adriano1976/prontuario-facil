@@ -5,7 +5,7 @@ reversa:
   version: "1.3.2"
 kind: target_domain_model
 producedBy: designer
-hash: "sha256:0d71f94566d0e0ca8cb0472cfa045e43e68dc482ad466ea7bcaf92f6ee422577"
+hash: "sha256:cbeb8970fc58f382ec2ca19ab4e60b13aae864621e09bce2c9d8e09e04df7ce2"
 ---
 
 # Target Domain Model
@@ -183,3 +183,6 @@ hash: "sha256:0d71f94566d0e0ca8cb0472cfa045e43e68dc482ad466ea7bcaf92f6ee422577"
 - Máquinas de estado viram **discriminated unions** com funções de transição puras — estados inválidos não compilam (BR-MIGRAR-007/011).
 - Campos LGPD (cpf, consentimento) são marcados como sensíveis no tipo e exigidos condicionalmente (BR-MIGRAR-003/004).
 - Variações de regra duplicadas entre domínios (ex.: validação de horário citada em agendamentos e médicos) foram consolidadas em BR-MIGRAR-013 no AGG-Agendamento, consumindo dados do AGG-Medico.
+
+---
+*Gerado pelo Reversa-Designer em 2026-09-09.*

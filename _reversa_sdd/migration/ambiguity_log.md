@@ -5,7 +5,7 @@ reversa:
   version: "1.3.2"
 kind: ambiguity_log
 producedBy: orchestrator
-hash: "sha256:cbcf4b038896d2a4d4ba3bb85c3293d89e5ddf8a1984b4c2bdb7e148e3088a0a"
+hash: "sha256:b183179f8e568d370a99609689520f8b72082d65fc2eeb0bffbbbd1f78804b95"
 ---
 
 # Ambiguity Log
@@ -111,3 +111,6 @@ hash: "sha256:cbcf4b038896d2a4d4ba3bb85c3293d89e5ddf8a1984b4c2bdb7e148e3088a0a"
 - AMB-006/007 são referidos à codificação e estarão destacados no `handoff.md` para o agente de codificação.
 - **Revisão 2026-09-10** (pós-`_reversa_sdd/feedback.md`): AMB-007 reformulado para não prometer "detecção em compile-time"; a fonte canônica dos IDs F-* passou a ser `docs/security-audit/achados.json` (o brief apontava, incorretamente, para `gaps.md`/`code-analysis.md`). Nenhum status mudou: segue 0 PENDENTE, 5 resolvidos com decisão humana, 2 referidos à codificação.
 - Nenhum item `auto-decidido` (modo interativo, sem `--auto`).
+
+---
+*Gerado pelo Reversa-Orchestrator em 2026-09-09.*

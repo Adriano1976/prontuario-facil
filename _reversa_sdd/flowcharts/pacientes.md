@@ -201,3 +201,6 @@ flowchart TD
 | `A -->|Cond| B` | Transição condicional |
 | `{Cond?}` | Decisão |
 | `|Sim|` / `|Não|` | Ramificações |
+
+---
+*Gerado pelo Reversa-Archaeologist em 2026-08-22.*

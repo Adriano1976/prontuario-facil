@@ -86,3 +86,6 @@ erDiagram
     Patient ||--o{ Exam : "realiza"
     Patient ||--o{ Prescription : "recebe"
 ```
+
+---
+*Gerado pelo Reversa-Data-Master em 2026-08-27.*

@@ -20,3 +20,6 @@ Funcionalidade: Paridade visual — Modal: Upload de Exame
     E botões "Cancelar" e "Salvar Exame"
     Quando houver golden capturado (modal-upload-exame.png)
     Então a renderização coincide com o golden dentro das normalizationRules do manifest
+
+# ---
+# Gerado pelo Reversa-Inspector em 2026-09-09.

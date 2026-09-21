@@ -5,7 +5,7 @@ reversa:
   version: "1.3.2"
 kind: parity_specs
 producedBy: inspector
-hash: "sha256:74a75344c41a5dd285c3c6cd8e0a22966da0578b2bca3204c7c2dde2a2ca6e56"
+hash: "sha256:31f908b58a9370fed98baeeb08ab52b2d9f44cde846379a0ceafa310c4b4154d"
 ---
 
 # Parity Specs
@@ -56,3 +56,6 @@ hash: "sha256:74a75344c41a5dd285c3c6cd8e0a22966da0578b2bca3204c7c2dde2a2ca6e56"
 ## Notas
 - Como não há mudança de paradigma nem troca de plataforma, **não** há dimensões de paridade de evento/ordem/idempotência nem contrato semântico de modernização de telas.
 - Fluxos críticos cobertos em `.feature`: (1) cadastro de paciente com LGPD, (2) seleção de paciente ativo, (3) criação de agendamento validando jornada do médico, (4) ciclo de status manual do agendamento, (5) máquina de estados da consulta, (6) emissão de documento com interpolação de template (medicamentos só em receita), (7) auditoria de acesso (append-only), (8) KPIs do dashboard com critérios do legado (94% mock; divergência Consultas×Agendamentos preservada), (9) modo offline com usuário demo, (10) contrato Base44Client SDK×mock.
+
+---
+*Gerado pelo Reversa-Inspector em 2026-09-09.*

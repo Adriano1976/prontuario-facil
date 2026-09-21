@@ -28,3 +28,6 @@
 ## Observação
 
 Os gaps resolvidos não foram removidos silenciosamente: permanecem relacionados na tabela de resolução para rastreabilidade. Nenhum arquivo fora de `_reversa_sdd/` foi alterado.
+
+---
+*Gerado pelo Reversa-Reviewer em 2026-09-03.*

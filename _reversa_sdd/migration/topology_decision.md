@@ -5,7 +5,7 @@ reversa:
   version: "1.3.2"
 kind: topology_decision
 producedBy: designer
-hash: "sha256:5e448066b935907406929041267307d0c8d95cfe0c4b28e882a799a9ebdc7f9c"
+hash: "sha256:ed97484621c06c2148db93d68c1482732e19a1f32538d866a01768a11b205b19"
 ---
 
 # Topology Decision
@@ -115,3 +115,6 @@ hash: "sha256:5e448066b935907406929041267307d0c8d95cfe0c4b28e882a799a9ebdc7f9c"
 - Recomendação do Designer: **opção 3 (híbrido)** — preserva a árvore (alinhado ao brief "arquitetura 100% igual" e à estratégia A incremental) e captura os ganhos centrais da migração (tipos centralizados, contrato de API tipado, deduplicação pontual) sem o custo/risco de reorganizar pastas inteiras durante uma migração de tipos com 0 testes.
 - Se o usuário preferir opção 2, o prazo de 6–10 dias precisa ser revisto (reorganização + conversão), e a estratégia A muda de "conversão por camada" para "conversão por feature folder".
 - Para o agente de codificação: a árvore final de pastas depende desta decisão; `src/types/` e o contrato tipado do SDK existem em todas as opções.
+
+---
+*Gerado pelo Reversa-Designer em 2026-09-09.*

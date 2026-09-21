@@ -166,3 +166,6 @@ prontuario-facil/
 - `_reversa_sdd/modo-offline/` — feature transversal ativada por env var
 
 **Sem impacto em:** estrutura de pastas, dependências de `package.json`, rotas, schema de entidades Base44, build/deploy.
+
+---
+*Gerado pelo Reversa-Scout em 2026-08-22.*

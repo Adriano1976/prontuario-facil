@@ -56,3 +56,6 @@ Contagem literal dos marcadores 🟢/🟡/🔴 nos arquivos das units.
 - [ ] Definir paginação/limite da tabela de Logs de Acesso.
 - [x] Solicitar ao Writer `agendamentos/design.md` e `agendamentos/tasks.md`; ambos foram criados.
 - [ ] Implementar o badge/aviso visual do modo offline em etapa de código.
+
+---
+*Gerado pelo Reversa-Reviewer em 2026-09-03.*

@@ -5,7 +5,7 @@ reversa:
   version: "1.3.2"
 kind: paradigm_decision
 producedBy: paradigm_advisor
-hash: "sha256:f114b42ffbe9e7b797eafd036d3d7e08510ed85a98dab57cbca2f28a7fecd92e"
+hash: "sha256:ab4db47c6aaa6968cd44263bbeb9aa6350f43defe78aa9247226b35ad9f9b551"
 ---
 
 # Paradigm Decision
@@ -71,3 +71,6 @@ hash: "sha256:f114b42ffbe9e7b797eafd036d3d7e08510ed85a98dab57cbca2f28a7fecd92e"
 ## Notas
 - A decisão paradigmática desta migração é deliberadamente **conservadora quanto a paradigma** (nenhum gap) e **transformadora quanto a disciplina de tipos** (100% TS). O `derived_appetite` `balanced` reflete isso: tipos em todo o código, sem mudança de arquitetura ou padrões de runtime.
 - Leitura obrigatória para Curator, Strategist, Designer, Screen Translator, Inspector e para o agente de codificação: **nenhuma transformação de paradigma deve ser aplicada**; qualquer sugestão de reescrever módulos em estilo diferente do React funcional atual deve ser recusada.
+
+---
+*Gerado pelo Reversa-Paradigm-Advisor em 2026-09-09.*

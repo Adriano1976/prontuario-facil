@@ -20,3 +20,6 @@ Funcionalidade: Paridade visual — Listagem de Pacientes
     E cards com avatar/inicial, nome, badge status, idade, telefone, email, convênio e tipo sanguíneo
     Quando houver golden capturado (pacientes-listagem.png)
     Então a renderização coincide com o golden dentro das normalizationRules do manifest
+
+# ---
+# Gerado pelo Reversa-Inspector em 2026-09-09.

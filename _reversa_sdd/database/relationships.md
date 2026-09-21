@@ -32,3 +32,6 @@
 - O paciente é o dono dos resultados dos exames.
 - Cardinalidade: 1 Patient para N Exams.
 - Chave: `Exam.patient_id`.
+
+---
+*Gerado pelo Reversa-Data-Master em 2026-08-27.*

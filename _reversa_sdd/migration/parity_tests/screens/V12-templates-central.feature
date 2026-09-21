@@ -21,3 +21,6 @@ Funcionalidade: Paridade visual — Central de Templates
     E botão "+ Novo Template"
     Quando houver golden capturado (templates-central.png)
     Então a renderização coincide com o golden dentro das normalizationRules do manifest
+
+# ---
+# Gerado pelo Reversa-Inspector em 2026-09-09.

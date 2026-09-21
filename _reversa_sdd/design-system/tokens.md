@@ -12,3 +12,6 @@
 | **Colors** | `--destructive` | `0 84.2% 60.2%` | Tom de vermelho para ações deletérias |
 
 *(Para ver todas as cores em detalhe, consulte `color-palette.md`)*
+
+---
+*Gerado pelo Reversa-Design-System em 2026-08-27.*

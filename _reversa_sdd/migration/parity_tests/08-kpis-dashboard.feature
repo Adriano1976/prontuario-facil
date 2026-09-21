@@ -41,3 +41,6 @@ Funcionalidade: KPIs do Dashboard com critérios do legado (paridade)
     Quando a lista "Próximos Agendamentos" é montada
     Então exibe até 5 agendamentos com data futura e status diferente de "cancelado"
     E quando não há nenhum, exibe estado vazio "Nenhum agendamento" com botão "Agendar consulta"
+
+# ---
+# Gerado pelo Reversa-Inspector em 2026-09-09.

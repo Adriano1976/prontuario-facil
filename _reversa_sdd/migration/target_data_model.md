@@ -5,7 +5,7 @@ reversa:
   version: "1.3.2"
 kind: target_data_model
 producedBy: designer
-hash: "sha256:ac738ed15b7c8d931534f01907b736cdda89f9b0f8fae61b5b6984b7ef634d1d"
+hash: "sha256:95c57c95927b963957cf3853943a98bd7b506c968bbb4d1ce6b923f62b817ca3"
 ---
 
 # Target Data Model
@@ -119,3 +119,6 @@ export type Patient = LGPDConsent & {
 - **Não há migração de dados**: ver `data_migration_plan.md` — volume, ETL e cutover de dados são **N/A** (BaaS intocado).
 - Divergência seed offline conhecida: `Exam.file_url: ''` (string vazia vs opcional) e `AccessLog` offline sem `user_email` real — `modo-offline/requirements.md` e `data-dictionary.md` registram; os tipos devem tolerar o contrato mock (BR-MIGRAR-044).
 - Campos sensíveis LGPD a marcar no tipo: `cpf`, `lgpd_consent*`, `birth_date`, `patient_name` em AccessLog (dado copiado) — ver coluna de sensibilidade do `data-dictionary.md`.
+
+---
+*Gerado pelo Reversa-Designer em 2026-09-09.*

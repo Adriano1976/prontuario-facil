@@ -129,3 +129,6 @@ stateDiagram-v2
 5. **Join O(a×d)** em ReportsView: escala mal com volume; usar Map.
 6. **Cache keys colidem**: Dashboard usa `['patients']` com limite 100; Patients.jsx mesma chave sem limite — ordem de mount define o cache.
 7. **Sem teste** para nenhuma agregação.
+
+---
+*Gerado pelo Reversa-Archaeologist em 2026-08-26.*

@@ -24,3 +24,6 @@ A aplicação delega ao Tailwind as escalas de espaçamento (escala linear com b
 - `lg`: 1024px
 - `xl`: 1280px
 - `2xl`: 1536px
+
+---
+*Gerado pelo Reversa-Design-System em 2026-08-27.*

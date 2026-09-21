@@ -5,7 +5,7 @@ reversa:
   version: "1.3.2"
 kind: migration_brief
 producedBy: orchestrator
-hash: "sha256:a183db6030c37d400863d08325673f6b18cee8d763a6204374f907343123c065"
+hash: "sha256:0efb6f5c9c9286ac375275ba863c294ffbef15421253255299e012e1f5b6b208"
 ---
 
 # Migration Brief
@@ -136,3 +136,6 @@ Revisão do brief após 4 pareceres externos (Cursor/Grok 4.6, Copilot SDK no VS
 **Achados novos desta revisão (não apontados no feedback):** baseline de tipos de 677 erros; `npm run typecheck` sem `--noEmit` e `jsconfig.json` com `include`/`exclude` que deixam `src/api`, `src/lib` e `src/components/ui` fora do gate; premissa do achado F-02 desatualizada (`app-params.js:84` remove o token da URL); `react-quill` citada como lib viva em `target_architecture.md` sem qualquer import em `src/`; **14 deps de runtime sem import em `src/`** (não 6) e **Zod/`@hookform/resolvers` declarados como "validação type-safe" na stack alvo sem uso no legado**.
 
 **Escopo desta revisão:** somente `_reversa_sdd/`. Nenhum arquivo do legado, de `_reversa_sdd/` de descoberta, de `docs/security-audit/` ou de `.reversa/` foi alterado.
+
+---
+*Gerado pelo Reversa-Orchestrator em 2026-09-09.*

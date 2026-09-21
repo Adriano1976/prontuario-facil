@@ -6,7 +6,7 @@ reversa:
 kind: screen_deviation_log
 producedBy: screen-translator
 mode: append-only
-hash: "sha256:f97a137150b798ae79eddbf493c4265e122122e9dce8c61ebb6bac9a97676088"
+hash: "sha256:57174768157cbf9c3345dd1adf2626489d6e79f7d3d65e2d1229dbf634a38215"
 ---
 
 # Screen Deviation Log
@@ -47,3 +47,6 @@ hash: "sha256:f97a137150b798ae79eddbf493c4265e122122e9dce8c61ebb6bac9a97676088"
   - Divergência seed offline (`file_url: ''`, AccessLog sem user_email real) — tratada em `target_data_model.md`.
 - **EC-11 aplicado**: eventuais typos visuais do legado são **preservados** em modo literal (sem correção). Nenhum typo específico foi catalogado como deviation.
 - Caso o agente de codificação encontre divergência visual ao converter (ex.: componente shadcn indisponível), deve **abrir DEV-001** aqui e pausar — nunca improvisar layout.
+
+---
+*Gerado pelo Reversa-Screen-Translator em 2026-09-09.*

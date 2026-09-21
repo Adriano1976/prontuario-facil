@@ -5,7 +5,7 @@ reversa:
   version: "1.3.2"
 kind: cutover_plan
 producedBy: strategist
-hash: "sha256:2cc5c3f0fe50a8d71213e58a3705f0c68b37819acb20e7ca257bb297aea0fc6b"
+hash: "sha256:452fc9bc05f9a9d0baddc6a25ff927fc5fffae37f6d5e904b608acbaa6b35e4a"
 ---
 
 # Cutover Plan
@@ -76,3 +76,6 @@ hash: "sha256:2cc5c3f0fe50a8d71213e58a3705f0c68b37819acb20e7ca257bb297aea0fc6b"
 - Como a migração é de tipos na mesma stack, este cutover **não** congela escritas, não faz ETL e não muda DNS — os passos de cutover clássicos do template não se aplicam.
 - Cada onda anterior (1–6) já foi para produção incrementalmente; o "cutover" formal é a onda 7 + smoke.
 - Se o usuário escolher a Estratégia B (Big Bang), o cutover passa a ser um PR único com rollback via `git revert` — os critérios go/no-go permanecem os mesmos, mas o risco concentrado é tratado no RISK-001/010.
+
+---
+*Gerado pelo Reversa-Strategist em 2026-09-09.*

@@ -97,3 +97,6 @@ flowchart LR
 5. **IP fake**: `ip_address` sempre `'client-side'` — sem valor forense real.
 6. **LOGIN a cada visita ao dashboard**: `Dashboard.useEffect` dispara log de login a cada mount, não em autenticação real.
 7. **Sem rotação/limpeza**: crescimento ilimitado da coleção (sem política de retenção visível).
+
+---
+*Gerado pelo Reversa-Archaeologist em 2026-08-26.*

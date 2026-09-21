@@ -62,3 +62,6 @@ Esse `soul.md` é uma síntese, não substitui:
 - `architecture.md` (Architect) para visão geral arquitetural
 - `c4-context.md` / `c4-containers.md` / `c4-components.md` (Architect) para diagramas C4 (Níveis 1–3)
 - `erd-complete.md` (Architect) para o ERD completo
+
+---
+*Gerado pelo Reversa-Extract-Soul em 2026-08-27.*

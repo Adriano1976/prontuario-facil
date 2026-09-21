@@ -37,3 +37,6 @@ Funcionalidade: Auditoria de acesso (append-only, eventos específicos)
     Quando abro a tela de Logs de Acesso
     Então são carregados até 500 registros ordenados por -created_date
     E os filtrados são renderizados no cliente sem controles de paginação (paridade — AMB-004)
+
+# ---
+# Gerado pelo Reversa-Inspector em 2026-09-09.

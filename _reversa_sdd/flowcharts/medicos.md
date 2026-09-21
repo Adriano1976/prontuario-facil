@@ -133,3 +133,6 @@ flowchart LR
 4. **Sem validação start < end**: `working_hours.start` e `end` são inputs independentes; nada impede `start > end`.
 5. **Sem auditoria**: nenhuma chamada a `logAccess` ao criar/editar/excluir médicos.
 6. **RLS apenas no backend**: como `create` exige admin, usuário comum recebe erro do Base44 (não tratado com mensagem amigável na UI).
+
+---
+*Gerado pelo Reversa-Archaeologist em 2026-08-25.*

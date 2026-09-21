@@ -21,3 +21,6 @@ Funcionalidade: Paridade visual — Gerenciamento de Médicos
     E botão "+ Novo Médico"
     Quando houver golden capturado (medicos-listagem.png)
     Então a renderização coincide com o golden dentro das normalizationRules do manifest
+
+# ---
+# Gerado pelo Reversa-Inspector em 2026-09-09.

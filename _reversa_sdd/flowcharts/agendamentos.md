@@ -185,3 +185,6 @@ stateDiagram-v2
 | `{Cond?}` | Decisão |
 | `|Sim|` / `|Não|` | Ramificações |
 | `stateDiagram-v2` | Máquina de estados |
+
+---
+*Gerado pelo Reversa-Archaeologist em 2026-08-25.*

@@ -5,7 +5,7 @@ reversa:
   version: "1.3.2"
 kind: risk_register
 producedBy: strategist
-hash: "sha256:140578ae762c1d84c20c45ce5a552c2774b02262943abe24f32bad5fc24048a1"
+hash: "sha256:32d12330bbc6a3eeb6a5e5788e25772c07782d4c1023eb2abbfd6ea4caa2a8ad"
 ---
 
 # Risk Register
@@ -148,3 +148,6 @@ hash: "sha256:140578ae762c1d84c20c45ce5a552c2774b02262943abe24f32bad5fc24048a1"
 > Subseção dedicada quando há mudança de paradigma. Listar apenas riscos cuja origem direta é o gap registrado em `paradigm_decision.md`.
 
 - Nenhum. `paradigm_decision.md` registrou **gap nenhum** (mesma stack funcional/declarativa; TS como camada de tipos). Riscos de tipos (RISK-001/002/008) decorrem da **camada de tipos**, não de mudança de paradigma.
+
+---
+*Gerado pelo Reversa-Strategist em 2026-09-09.*

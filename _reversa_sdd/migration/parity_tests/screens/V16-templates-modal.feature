@@ -19,3 +19,6 @@ Funcionalidade: Paridade visual — Modal: Criar / Editar Template
     E painel de variáveis copiáveis ({PACIENTE_NOME}, {PACIENTE_CPF}, {DATA}, {DATA_EXTENSO}, {DIAS_AFASTAMENTO})
     E editor de Conteúdo* e toggles "Template padrão" e "Ativo"
     E botões "Cancelar" e "Salvar"
+
+# ---
+# Gerado pelo Reversa-Inspector em 2026-09-09.

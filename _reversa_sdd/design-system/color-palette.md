@@ -38,3 +38,6 @@ O projeto adota uma arquitetura de tokens baseada em **HSL** (`hsl(var(--token))
 ## Gráficos (Data Visualization)
 
 A escala de cores para gráficos (`--chart-1` a `--chart-5`) usa tons vibrantes no Light Mode (ex: Laranja, Turquesa, Azul Escuro) e tons análogos adaptados para leitura no Dark Mode.
+
+---
+*Gerado pelo Reversa-Design-System em 2026-08-27.*

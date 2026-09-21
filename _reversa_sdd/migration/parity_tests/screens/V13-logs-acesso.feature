@@ -20,3 +20,6 @@ Funcionalidade: Paridade visual — Logs de Acesso
     E tabela com Data/Hora, Usuário, Ação (badge colorida), Paciente e Detalhes
     Quando houver golden capturado (logs-acesso.png)
     Então a renderização coincide com o golden dentro das normalizationRules do manifest
+
+# ---
+# Gerado pelo Reversa-Inspector em 2026-09-09.

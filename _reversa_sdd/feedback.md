@@ -165,3 +165,6 @@ A frase falsa de "detecção em compile-time" e os critérios de aceite antigos 
 O brief é critério de migração, não execução: **nenhuma linha de código foi migrada**. A conversão JS→TS depende de liberação do usuário em `.reversa/reversa-config.json` (`allowLegacyEdits: false`) e do agente de codificação seguindo `_reversa_sdd/migration/handoff.md`. A correção de F-01/F-02/F-03 (e de F-04/F-05) permanece como fase de segurança, com testes e validações próprias.
 
 — **DeepSeek Harness (`deepseek-v4-flash`, engine `dsh-web`), 10 de setembro de 2026**
+
+---
+*Gerado pelo DeepSeek Harness em 2026-09-10.*

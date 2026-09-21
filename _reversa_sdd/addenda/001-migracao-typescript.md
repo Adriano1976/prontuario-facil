@@ -50,3 +50,6 @@ Watch items criados por esta feature — conteúdo em
 - `_reversa_forward/001-migracao-typescript/progress.jsonl`
 - `_reversa_forward/001-migracao-typescript/actions.md`
 - `_reversa_forward/001-migracao-typescript/questions.md`
+
+---
+*Gerado pelo Reversa-Sync em 2026-09-15.*

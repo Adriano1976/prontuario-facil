@@ -21,3 +21,6 @@ Funcionalidade: Paridade visual — Novo Agendamento
     E botões "Cancelar" e "Confirmar Agendamento"
     Quando houver golden capturado (agendamentos-novo.png)
     Então a renderização coincide com o golden dentro das normalizationRules do manifest
+
+# ---
+# Gerado pelo Reversa-Inspector em 2026-09-09.

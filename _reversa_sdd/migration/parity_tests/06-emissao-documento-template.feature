@@ -37,3 +37,6 @@ Funcionalidade: Emissão de documento com template e medicamentos
     Dado um template com is_active = false
     Quando abro o seletor de template na emissão de documento
     Então o template inativo não aparece na lista
+
+# ---
+# Gerado pelo Reversa-Inspector em 2026-09-09.

@@ -10,7 +10,7 @@ sourcePlatform: react-hooks
 targetPlatform: web-spa
 adapter: same-platform-literal (react-hooks → web-spa React+TS; sem re-expressão visual)
 screenCount: 16
-hash: "sha256:a658ca2b0b05421cab3c992c0568d95d3d5b4207d3f3450880426f9ea8d99c16"
+hash: "sha256:5a47a21dc539e687608f5f1c382b269d6a01c04e2b554f86666f38f73252b550"
 ---
 
 # Target Screens
@@ -574,3 +574,6 @@ spec.deviations: []
 | Modal: Criar / Editar Template | ui/inventory.md:20 | SCR-0014 |
 | Logs de Acesso | ui/inventory.md:21 | SCR-0015 |
 | Detalhe do Paciente (timeline clínica) | (ausente em ui/inventory.md — divergência 6,7%) | SCR-0016 |
+
+---
+*Gerado pelo Reversa-Screen-Translator em 2026-09-09.*

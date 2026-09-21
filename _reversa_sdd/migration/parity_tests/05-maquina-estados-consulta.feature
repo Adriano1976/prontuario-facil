@@ -29,3 +29,6 @@ Funcionalidade: Máquina de estados da consulta
     Dado o tipo ConsultationStatus como union fechada
     Então o código do alvo não permite atribuir um valor fora de {agendada, em_andamento, concluida, cancelada}
     E a interface de UI não oferece transição de "cancelada" para "concluida"
+
+# ---
+# Gerado pelo Reversa-Inspector em 2026-09-09.

@@ -126,3 +126,6 @@ stateDiagram-v2
 4. **Múltiplos padrões possíveis**: nada impede dois templates `is_default` do mesmo tipo.
 5. **Preview enganoso**: `substring(0,150)` + `"..."` aplicado mesmo a conteúdos curtos.
 6. **RLS create admin-only sem feedback**: usuário comum recebe erro cru do Base44 ao tentar criar.
+
+---
+*Gerado pelo Reversa-Archaeologist em 2026-08-26.*

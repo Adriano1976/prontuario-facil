@@ -5,7 +5,7 @@ reversa:
   version: "1.3.2"
 kind: discard_log
 producedBy: curator
-hash: "sha256:54375a036ffc76c07bb96b151a018156142982dcbe2e55e9ec0b02849fb22bb6"
+hash: "sha256:906633c78b169dc873d8d7a2c1032d321778994aab5d1c878fea67d16a279a99"
 ---
 
 # Discard Log
@@ -34,3 +34,6 @@ Nenhum item foi descartado nesta migração.
 - **RLS / schemas Base44**: não são "descartados". Permanecem **intactos no BaaS** (brief: "schemas não mudam", "backend imutável"). O frontend migra apenas o **espelho** (filtros `created_by_id`, validações) — ver BR-MIGRAR-034/036 em `target_business_rules.md`.
 - **Correção lógica F-01/F-02/F-03** (fonte: `docs/security-audit/achados.json`): fica para fase posterior (brief). A camada de tipos deve **exigir** os campos/parâmetros que essas não conformidades exploram (`role`, `created_by_id`, params de URL) — o que **não** é detectá-las em compile-time — e não reproduzi-las cegamente como comportamento desejado.
 - **Mudanças de comportamento sugeridas durante a curadoria** (unificar critérios de KPI, automatizar status, paginar logs, adicionar badge offline) foram **recusadas** por violarem a paridade 100% exigida no brief — registradas como DECISÃO HUMANA e/ou itens referidos à codificação.
+
+---
+*Gerado pelo Reversa-Curator em 2026-09-09.*

@@ -36,3 +36,6 @@ Funcionalidade: Ciclo de status do agendamento (transição manual)
     Dado um agendamento em status "agendado"
     Quando o usuário o transiciona para "cancelado" ou "faltou"
     Então o novo status é persistido
+
+# ---
+# Gerado pelo Reversa-Inspector em 2026-09-09.

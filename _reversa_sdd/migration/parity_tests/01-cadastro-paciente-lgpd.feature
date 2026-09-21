@@ -37,3 +37,6 @@ Funcionalidade: Cadastro de paciente com consentimento LGPD
     Quando o registro é persistido no Base44
     Então o cpf permanece criptografado no armazenamento (BaaS)
     E o tipo do campo cpf é marcado como sensível no contrato tipado
+
+# ---
+# Gerado pelo Reversa-Inspector em 2026-09-09.
