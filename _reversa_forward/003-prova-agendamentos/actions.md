@@ -34,9 +34,9 @@
 
 | ID | Descrição | Dependências | Paralelismo | Arquivo alvo | Confidência | Status |
 |----|-----------|--------------|-------------|--------------|-------------|--------|
-| T004 | Provar o ciclo de status pela tela de listagem: o agendamento nasce `agendado`, a transição para `confirmado` acontece pelo diálogo, e as transições de saída para `cancelado` e `faltou` são persistidas | T001 | [//] | `src/pages/__tests__/Appointments.test.tsx` | 🟢 | [ ] |
-| T005 | Provar a ausência de gatilho automático — concluir a consulta vinculada **não** transiciona o agendamento, afirmando o **valor** do status depois e não a ausência de chamadas — e que as flags de lembrete não alteram o status | T004 | - | `src/pages/__tests__/Appointments.test.tsx` | 🟢 | [ ] |
-| T006 | Provar a criação do agendamento, a **ausência de revalidação do horário no salvamento** — o botão de salvar exige apenas paciente, médico e data — e a ordem entre envio de e-mail de confirmação e confirmação de gravação, incluindo o desfecho quando o envio falha | T001 | [//] | `src/pages/__tests__/NewAppointment.test.tsx` | 🟢 | [ ] |
+| T004 | Provar o ciclo de status pela tela de listagem: o agendamento nasce `agendado`, a transição para `confirmado` acontece pelo diálogo, e as transições de saída para `cancelado` e `faltou` são persistidas | T001 | [//] | `src/pages/__tests__/Appointments.test.tsx` | 🟢 | [X] |
+| T005 | Provar a ausência de gatilho automático — concluir a consulta vinculada **não** transiciona o agendamento, afirmando o **valor** do status depois e não a ausência de chamadas — e que as flags de lembrete não alteram o status | T004 | - | `src/pages/__tests__/Appointments.test.tsx` | 🟢 | [X] |
+| T006 | Provar a criação do agendamento, a **ausência de revalidação do horário no salvamento** — o botão de salvar exige apenas paciente, médico e data — e a ordem entre envio de e-mail de confirmação e confirmação de gravação, incluindo o desfecho quando o envio falha | T001 | [//] | `src/pages/__tests__/NewAppointment.test.tsx` | 🟢 | [X] |
 
 ## Fase 4, Integração
 
