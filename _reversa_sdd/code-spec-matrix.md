@@ -250,6 +250,24 @@ Os 3 cenários de PT-005, com o destino de cada um. Acrescentado em 2026-09-21 p
 | PT-005.2 — a consulta em `em_andamento` é concluída | `parity_tests/05-maquina-estados-consulta.feature` | 🟢 | `NewConsultation.test.tsx` — escolher `concluida` e salvar grava o novo valor, afirmado no objeto da atualização |
 | PT-005.3 — transições inválidas não compilam e a interface não as oferece | `parity_tests/05-maquina-estados-consulta.feature` | 🟢 **metade** · 🔴 **metade** | A metade de **compilação** é verdadeira e provada por `npm run prova:negativos` (caso `status-fora-do-conjunto`). A metade de **interface** é **falsa**: o seletor oferece as quatro situações de qualquer situação atual, inclusive `cancelada` → `concluida`, e não há guarda nenhuma. Provado em `NewConsultation.test.tsx`; o `.feature` fica declarado impreciso |
 
+### Cenários de paridade do grupo 06
+
+Os 4 cenários de `PT-006`, com o destino de cada um. Acrescentado em 2026-09-21 pela feature
+`005-prova-templates` (RF-01 a RF-10).
+
+> **Nota de escopo, e ela importa.** O grupo se chama `Templates`, mas os quatro cenários
+> provam a **emissão de documento com modelo**, cujo componente (`PrescriptionEditor.tsx`) a
+> extração analisa dentro do módulo **consultas** (`code-analysis.md#4.4` e `#4.6`). A página
+> de administração de modelos (`Templates.tsx`) **não é tocada por nenhum dos quatro** e
+> segue sem prova — ver `#Registros declarados do grupo 06`.
+
+| Cenário | Arquivo | Veredito | Prova ou razão |
+| :--- | :--- | :---: | :--- |
+| PT-006.1 — medicamentos só aparecem em documentos do tipo receita | `parity_tests/06-emissao-documento-template.feature` | 🟢 | `PrescriptionEditor.test.tsx` — a seção aparece nos **dois** tipos que contêm "receita" e em **nenhum** dos quatro restantes, com os cinco campos do cenário. A metade que o cenário **não** enuncia também está provada: o portão de `medications` é a montagem do payload, e não a visibilidade da seção |
+| PT-006.2 — o template é filtrado pelo tipo do documento | `parity_tests/06-emissao-documento-template.feature` | 🟢 **com ressalva** | O **pedido** é provado nos argumentos exatos (`{ type, is_active: true }`), e a reemissão na troca de tipo também. O filtro em si é **predicado do servidor**: o cliente não re-filtra o resultado, e isso está provado em `#Registros declarados do grupo 06`. Sem a ressalva, o verde sugeriria cobertura que não existe |
+| PT-006.3 — as variáveis do template são interpoladas no save | `parity_tests/06-emissao-documento-template.feature` | 🟢 **com redação imprecisa** | A substituição acontece na **escolha do modelo**, e não no salvamento: provado que as quatro variáveis são resolvidas na aplicação e que o texto editado depois é o que se persiste. O `.feature` fica declarado impreciso (RN-02), na mesma família da `PT-005.1` |
+| PT-006.4 — template inativo não é oferecido | `parity_tests/06-emissao-documento-template.feature` | 🟢 **com ressalva** | `is_active: true` é parte do **mesmo** pedido de `PT-006.2`, provado nos argumentos exatos. Vale a mesma ressalva: o cliente pede certo e confia inteiramente no servidor |
+
 ### Destino dos cenários de paridade não cobertos nesta feature
 
 Decisão da sessão de esclarecimentos de 2026-09-19: a conversão é **fatiada por módulo**.
@@ -260,31 +278,39 @@ Cada grupo abaixo vira feature própria; nenhum cenário fica sem destino.
 | Agendamentos (`03`, `04`) | 8 | ✅ **Concluído** na feature `003-prova-agendamentos` — ver `#Cenários de paridade do módulo Agendamentos` |
 | Modo offline (`09`) | 6 | Feature a criar — conversão dos cenários de fluxo do modo offline |
 | Dashboard (`08`) | 5 | Feature a criar — depende de resolver a lacuna da Taxa de Atendimento (`confidence-report.md#Lacunas 🔴 pendentes`) |
-| Templates (`06`) | 4 | Feature a criar — conversão dos cenários de fluxo de documentos e modelos |
+| Templates (`06`) | 4 | ✅ **Concluído** na feature `005-prova-templates` — ver `#Cenários de paridade do grupo 06`. Prova a **emissão de documento com modelo**; a **administração** de modelos segue sem prova, com destino declarado |
 | Logs de acesso (`07`) | 4 | Feature a criar — conversão dos cenários de fluxo da trilha de auditoria |
 | Contrato de dados (`10`) | 4 | Feature a criar — contrato único honrado pelos dois modos |
 | Consultas (`05`) | 3 | ✅ **Concluído** na feature `004-prova-consultas` — ver `#Cenários de paridade do módulo Consultas` |
 | Paridade visual (`screens/V01` a `V16`) | 16 | **Lacuna declarada.** A captura dourada de referência não existe no repositório (`present: false`); produzi-la é trabalho de outra natureza |
 
-> **Saldo após a feature `004-prova-consultas` (2026-09-21).** Dos 50 cenários que a
-> feature 002 transferiu, **11 estão concluídos** (8 de Agendamentos na feature 003 e 3 de
-> Consultas na 004) e **23 permanecem transferidos** para features próprias. Os 16 de
-> paridade visual seguem declarados como lacuna, e não como trabalho transferido.
+> **Saldo após a feature `005-prova-templates` (2026-09-21).** Dos 50 cenários que a
+> feature 002 transferiu, **15 estão concluídos** (8 de Agendamentos na feature 003, 3 de
+> Consultas na 004 e 4 da emissão de documento com modelo na 005) e **19 permanecem
+> transferidos** para features próprias: modo offline (6), Dashboard (5), Logs de acesso (4),
+> Contrato de dados (4). Os 16 de paridade visual seguem declarados como lacuna, e não como
+> trabalho transferido. Acrescenta-se a esses 19 um grupo que **nunca esteve na tabela de
+> transferência**: a administração de modelos, que o rótulo do grupo `06` sugeria cobrir e
+> que nenhum dos quatro cenários toca.
 
 ### Lacunas de prova
 
 Registradas de propósito: uma matriz que só mostra 🟢 não é honesta. O que já foi fechado
 está marcado como fechado, e o que permanece aberto tem razão declarada.
 
-| Lacuna | Situação após a feature `004-prova-consultas` |
+| Lacuna | Situação após a feature `005-prova-templates` |
 | :--- | :--- |
 | **BR-P02** (enum de tipo sanguíneo) | ✅ **Fechada.** Prova de execução em `PatientForm.test.tsx` (o formulário oferece exatamente os 9 valores) e caso negativo `status-fora-do-conjunto` em `npm run prova:negativos` |
 | **Verificações negativas do gate de tipos** (T031–T036, T039, T045, T046) | ✅ **Fechada.** `npm run prova:negativos` reproduz 9 casos por comando, confere a recusa pelo motivo certo e não deixa resíduo |
 | **Paridade do módulo Pacientes** (5 cenários) | ✅ **Fechada**, com o desdobramento do PT-001.3 declarado |
 | **Paridade do módulo Agendamentos** (8 cenários) | ✅ **Fechada**, com três ressalvas declaradas: a redação imprecisa de PT-003.1 e PT-003.3 e a vacuidade de PT-004.2 |
 | **Paridade do módulo Consultas** (3 cenários) | ✅ **Fechada**, com duas ressalvas declaradas: a redação imprecisa de PT-005.1 e a metade de interface de PT-005.3, que é **falsa** |
-| **Paridade dos módulos restantes** (34 → 23 cenários) | 🟡 **Parcialmente concluída.** Agendamentos (8) saiu na feature 003 e Consultas (3) na 004; **23 permanecem transferidos**, com destino declarado por grupo na seção acima |
-| **As lacunas do módulo de Consultas** (`code-analysis.md#9`) | ⚠️ **Declaradas, não provadas** — decisão de 2026-09-21, incluindo as duas de severidade Alta. Detalhe linha a linha na seção abaixo |
+| **Paridade dos módulos restantes** (34 → 19 cenários) | 🟡 **Parcialmente concluída.** Agendamentos (8) saiu na feature 003, Consultas (3) na 004 e a emissão de documento com modelo (4) na 005; **19 permanecem transferidos**, com destino declarado por grupo na seção acima |
+| **As lacunas do módulo de Consultas** (`code-analysis.md#9`) | 🟡 **Quase todas declaradas, não provadas** — decisão de 2026-09-21. **Duas das três de severidade Alta deixaram de ser só declaração**: `applyTemplate` sem escape e a injeção na impressão ganharam evidência na feature 005 e continuam **abertas**. Detalhe linha a linha na seção abaixo |
+| **As três lacunas de severidade Alta de AMB-006** | 🟢 **Provadas e declaradas.** Substituição sem escape no payload, `{DIAS_AFASTAMENTO}` nunca resolvida e injeção sem escape na impressão — as três com evidência em `PrescriptionEditor.test.tsx`, e as três **abertas**, porque a decisão foi provar e declarar. Corrigir exige alterar a prova de propósito (decisão D-08 do roadmap da feature 005) |
+| **A colisão das famílias `BR-T`** | 🟡 **Contornada por citação qualificada.** `domain.md#2.3` usa `BR-T01`/`BR-T02` para *filtro por tipo* e *gate de medicamentos*; `code-analysis.md#6` (módulo templates) e `templates/requirements.md#2` usam os **mesmos IDs** para *campos obrigatórios* e *enum de 7 valores*. É o **mesmo identificador** com significados disjuntos — forma pior que a divergência de grafia de `BR-C`, porque qualificar só pelo ID não resolve |
+| **A RLS de `templates/requirements.md#4`** | 🔴 **Declarada imprecisa.** O documento diz que `Create/Update/Delete` são restritos a admin e que a leitura alcança apenas templates **ativos**. O schema diz outra coisa: `create` exige admin, mas `update` e `delete` são **criador ou** admin, e `read` é `null` — aberto a qualquer autenticado, sem filtro de atividade. É RLS de servidor: não é provável no cliente |
+| **A administração de modelos (`Templates.tsx`)** | 🔴 **Declarada, sem prova.** CRUD, agrupamento por tipo, `is_default` sem exclusividade por tipo, `insertVariable` no fim do texto e o campo `variables` órfão (`BR-T08`). Fora do escopo da feature 005 por decisão `1a`; vira feature própria |
 | **Trilha de auditoria da emissão de documento** | 🟢 **Provada e declarada.** Emitir documento não grava `AccessLog` e anexar exame grava; o defeito **permanece**, porque corrigir exige ligar a ação `create_prescription` ao fluxo |
 | **As três ações órfãs do catálogo de auditoria** | 🟡 **Declarada.** `create_prescription`, `logout` e `export_data` estão declaradas em `AccessLogger.ts:22-35` e nunca são invocadas |
 | **O recorte "última semana" inclui o futuro** | 🟢 **Provada e declarada.** O recorte é `>= hoje - 7 dias`, sem limite superior. A prova afirma as quatro do conjunto, futura inclusive |
@@ -353,8 +379,8 @@ comportamento atual** — nem mesmo elas.
 | # | Lacuna em `code-analysis.md#9` | Severidade | Veredito após a feature 004 |
 | ---: | :--- | :---: | :--- |
 | 1 | `STATUS_CONFIG` duplicado entre `Consultations.tsx:28` e `Consultation.tsx:36` | Baixa | 🔴 **Declarada, não provada.** São as **terceira e quarta** cópias do mapa de situação no projeto: somadas às duas do módulo de agendamentos, há **quatro** mapas paralelos. Unificá-los é trabalho de `/reversa-refactor` |
-| 2 | `applyTemplate` sem escape de marcação | **Alta** | 🔴 **Declarada, não provada.** É **preservação deliberada do legado** — o próprio código registra "sem escape de marcação, como no legado (AMB-006)" em `PrescriptionEditor.tsx:145`. Corrigir muda comportamento observável e sai do escopo |
-| 3 | `handlePrint` do editor por injeção em `window.open` | **Alta** | 🔴 **Declarada, não provada.** Mesma decisão da linha 2. O `handlePrint` do **detalhe** (`Consultation.tsx:132`) é `window.print()` simples e não tem o problema — são dois métodos distintos, e só o do editor injeta |
+| 2 | `applyTemplate` sem escape de marcação | **Alta** | 🟢 **Provada e declarada** na feature `005-prova-templates` (`RF-11`): a marcação do modelo chega **literal** ao campo de conteúdo e ao payload, e a forma escapada não aparece. O defeito **permanece** — é preservação deliberada do legado (AMB-006), e corrigir muda comportamento observável |
+| 3 | `handlePrint` do editor por injeção em `window.open` | **Alta** | 🟢 **Provada e declarada** na feature `005-prova-templates` (`RF-18`): com duplo de `window.open`, o HTML escrito recebe a marcação do modelo **sem escape**, e a verificação negativa do arranjo demonstra que sem o duplo nada seria escrito. O `handlePrint` do **detalhe** (`Consultation.tsx:132`) é `window.print()` simples e não tem o problema — são dois métodos distintos, e só o do editor injeta. O defeito **permanece** |
 | 4 | Filtro `upcoming` comparado com o instante completo | Baixa | 🟢 **Provada e declarada.** `Consultations.test.tsx` afirma que a consulta de hoje pela manhã **não** aparece em "próximas". O defeito permanece; a prova é o pré-requisito para decidir mudá-lo |
 | 5 | Impressão da página sem CSS dedicado | Média | 🔴 **Declarada, não provada** |
 | 6 | Upload sem validação de tamanho ou tipo | Média | 🔴 **Declarada, não provada.** O diálogo anuncia "máx. 10MB" no texto, e não há verificação — a prova do `RF-17` exercita o caminho de upload, mas não afirma o limite |
@@ -369,6 +395,32 @@ comportamento atual** — nem mesmo elas.
 > que é 🟢. Está **provada** (`RF-17`, medida no transporte) e **declarada**; o defeito não
 > foi corrigido.
 
+### Registros declarados do grupo 06
+
+Seis registros que a feature `005-prova-templates` acrescenta. Nenhum deles é conserto: são
+leituras que passam a ter veredito.
+
+| # | Registro | Situação |
+| ---: | :--- | :--- |
+| 1 | **O filtro de modelos é predicado do SERVIDOR** | 🟢 **Provado o pedido, com ressalva declarada.** `PT-006.2` e `PT-006.4` resolvem-se no mesmo pedido: o cliente envia `{ type, is_active: true }` nos argumentos exatos e reemite com o tipo novo. A verificação que prova o **cliente sem re-filtro** — o dublê devolve um modelo de tipo errado e um inativo, e os dois aparecem no seletor — é o que torna a ressalva obrigatória. Uma segunda linha de defesa no cliente seria **regra nova**, não prova |
+| 2 | **A substituição acontece na escolha do modelo, não no salvamento** | 🟢 **Provada.** `PT-006.3` diz "quando salvo o documento"; o código resolve as quatro variáveis na aplicação e persiste o campo como ele estiver, edição inclusive. Corrigida a redação do cenário, não o comportamento (`RN-02`) |
+| 3 | **`{DIAS_AFASTAMENTO}` nunca é resolvida** | 🟢 **Provada — e a lacuna 🔴 de `code-analysis.md#5.3` está fechada.** A extração registrava "não confirmado no código analisado"; o marcador chega **literal** ao payload. Com um agravante que a extração não tinha: o editor **coleta** os dias de afastamento e os envia em `valid_days`, e mesmo assim deixa o marcador no texto |
+| 4 | **Ausência de CPF resolve a variável para vazio, em silêncio** | 🟢 **Provada.** Sem erro, sem marcação e sem aviso ao médico — e as outras três variáveis seguem resolvidas, provando que a substituição não aborta. Achado que não constava de `code-analysis.md#9` |
+| 5 | **Trocar o tipo depois de aplicar um modelo deixa conteúdo obsoleto com procedência nula** | 🟢 **Provada.** O texto do modelo antigo permanece no campo e vai para o documento do tipo novo, enquanto `template_name` fica nulo. O schema **copia** o conteúdo em vez de referenciar o modelo, então o documento de atestado sai com texto de receita. Achado que não constava de `code-analysis.md#9` |
+| 6 | **A procedência não sobrevive a uma reedição** | 🟢 **Provada.** Não há campo de modelo nos dados iniciais do editor, então reabrir um documento perde o vínculo com o modelo que o originou |
+
+> **Duas notas de leitura para quem for usar os vereditos do grupo `06`.**
+>
+> A primeira: eles valem para o **componente** `PrescriptionEditor`. A prova ancora ali
+> (decisão D-01), e não nas telas que o montam — o encanamento a partir de
+> `PatientDetail.tsx` **não** está coberto. O caminho a partir de `Consultation.tsx` tem
+> prova parcial na feature 004.
+>
+> A segunda: as três asserções de marcação literal **travam a paridade** de AMB-006. No dia em
+> que alguém corrigir a substituição ou a impressão, estas verificações falham — por desenho.
+> Quem corrigir precisa alterar a prova **de propósito** (decisão D-08), e a decisão fica
+> visível no diff em vez de escorregar.
+
 ---
 *Gerado pelo Reversa-Writer em 2026-09-02.*
-*Seção de rastreabilidade acrescentada em 2026-09-19; módulos de Agendamentos e Consultas e suas lacunas em 2026-09-21.*
+*Seção de rastreabilidade acrescentada em 2026-09-19; módulos de Agendamentos e Consultas e suas lacunas em 2026-09-21; cenários e registros do grupo 06 (emissão de documento com modelo) em 2026-09-21.*

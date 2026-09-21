@@ -140,8 +140,8 @@ prontuario-facil/
 
 ## Cobertura de testes
 
-- ~~**Nenhum teste encontrado**~~ — **corrigido em 2026-09-19 pela feature `002-prova-automatizada` (ação T011).** Esta seção descrevia o legado e ficou defasada: há arcabouço de prova configurado e 10 arquivos de verificação, executáveis por `npm test`, além de `npm run prova:negativos` para reproduzir as verificações negativas do gate de tipos. Ver `_reversa_sdd/code-spec-matrix.md#Rastreabilidade Spec → Código → Teste`.
-- Scripts disponíveis no legado: `dev`, `build`, `lint`, `lint:fix`, `typecheck` (`tsc -p ./jsconfig.json`), `preview`. Aos quais se somam `test`, `test:watch`, `test:coverage` e `prova:negativos`.
+- ~~**Nenhum teste encontrado**~~ — **corrigido em 2026-09-19 pela feature `002-prova-automatizada` (ação T011), e atualizado em 2026-09-21 pelas features `003`, `004` e `005`.** Esta seção descrevia o legado e ficou defasada: há arcabouço de prova configurado e, na medição de 2026-09-21, **18 arquivos de verificação com 109 verificações**, executáveis por `npm test` em 67,42 s. Somam-se `npm run prova:negativos`, que reproduz as verificações negativas do gate de tipos, e `npm run prova:encoding`, a guarda de codificação. Ver `_reversa_sdd/code-spec-matrix.md#Rastreabilidade Spec → Código → Teste`.
+- Scripts disponíveis no legado: `dev`, `build`, `lint`, `lint:fix`, `typecheck`, `preview`. Aos quais se somam `test`, `test:watch`, `test:coverage`, `prova:negativos` e `prova:encoding`. O `typecheck` aponta para `tsconfig.json` desde a migração da feature 001 — a extração citava `jsconfig.json`, que era o arquivo do legado.
 
 ## Histórico Git
 
