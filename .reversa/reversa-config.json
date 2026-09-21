@@ -6,6 +6,7 @@
     "package.json",
     "tsconfig.json",
     "docs/**",
-    "index.html"
+    "index.html",
+    ".github/**"
   ]
 }
