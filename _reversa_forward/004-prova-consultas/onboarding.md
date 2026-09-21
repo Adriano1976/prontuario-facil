@@ -105,27 +105,45 @@ tudo passa.
 
 ## 7. Registro de execução
 
-A ser preenchido pelo `/reversa-coding`.
+Rodada de fechamento em **2026-09-21**, sobre a árvore de trabalho com as provas do módulo
+acrescidas.
 
 | # | Item | Resultado |
 |---|------|-----------|
-| 1 | `npm test` passa por inteiro | |
-| 2 | `npm run typecheck` sem saída | |
-| 3 | `npm run lint` sem saída | |
-| 4 | `npm run prova:negativos` reporta cada caso e não deixa resíduo | |
-| 5 | Nenhum arquivo de aplicação do módulo modificado | |
-| 6 | `base44/entities/` sem diff | |
-| 7 | A situação inicial é provada pelos dois caminhos observáveis | |
-| 8 | A assimetria de auditoria é provada no transporte, com a mesma espiã nos dois fluxos | |
-| 9 | As oito lacunas aparecem na matriz com razão | |
-| 10 | Suíte completa abaixo de 90 segundos | |
+| 1 | `npm test` passa por inteiro | ✅ **17 arquivos, 90 verificações, 0 falhas** — código de retorno 0 |
+| 2 | `npm run typecheck` sem saída | ✅ **0 erros** |
+| 3 | `npm run lint` sem saída | ✅ **0 erros** (`eslint . --quiet`) |
+| 4 | `npm run prova:negativos` reporta cada caso e não deixa resíduo | ✅ **9 casos, 9 recusados** — entre eles `status-fora-do-conjunto`, que é a prova do `RF-03` —, e `src/__negative_checks__/` **não** ficou no repositório |
+| 5 | Nenhum arquivo de aplicação do módulo modificado | ✅ `git status --porcelain` lista **apenas** os quatro arquivos de prova, o `actions.md` e o `progress.jsonl`. Nenhum `Consultations.tsx`, `Consultation.tsx`, `NewConsultation.tsx` nem arquivo de `src/components/medical/` |
+| 6 | `base44/entities/` sem diff | ✅ Nenhuma saída em `git status --porcelain -- base44/entities` |
+| 7 | A situação inicial é provada pelos dois caminhos observáveis | ✅ `NewConsultation.test.tsx` — o formulário grava `em_andamento` e o modo edição cai em `em_andamento` quando o registro não tem situação. A metade do schema é **declarada** (D-06) |
+| 8 | A assimetria de auditoria é provada no transporte, com a mesma espiã nos dois fluxos | ✅ `Consultation.test.tsx` — o módulo `AccessLogger` corre de verdade e o dublê fica em `AccessLog`. Uma verificação separada prova que a espiã dispara no carregamento antes de as demais medirem |
+| 9 | As oito lacunas aparecem na matriz com razão | ✅ As oito de `code-analysis.md#9`, cada uma com severidade e veredito, incluindo as duas de severidade Alta. O achado de auditoria entrou como nona, por não constar do artefato |
+| 10 | Suíte completa abaixo de 90 segundos | ✅ **63,7 s** medidos pelo vitest (66,1 s de relógio) — **26 s de folga** |
 
 ### 7.1 Medição de tempo
 
 | Medição | Verificações | Arquivos | Tempo | Teto | Folga |
 |---------|-------------:|---------:|------:|-----:|------:|
 | 2026-09-21, antes desta feature | 66 | 14 | 57,9 s | 90 s | 32,1 s |
-| A preencher após esta feature | | | | 90 s | |
+| 2026-09-21, após esta feature | 90 | 17 | 63,7 s | 90 s | **26,3 s** |
+
+O acréscimo foi de **24 verificações em 3 arquivos** — listagem (9), detalhe (8) e
+formulário (7) —, com o tempo ainda bem abaixo do teto. O teto foi **revalidado**, e não
+renegociado (D-11).
+
+### 7.2 Comandos além dos quatro
+
+| Comando | Resultado |
+|---------|-----------|
+| `git status --porcelain` | Apenas os quatro arquivos de prova, o `actions.md` e o `progress.jsonl` — nenhuma alteração acidental em arquivo de aplicação |
+| `npm run prova:encoding` | ✅ Árvore íntegra, nenhum mojibake |
+
+> **Ressalva de ambiente.** Os comandos de prova **não** sobem nos modos confinados de
+> sandbox: o esbuild do vitest abre pipe nomeado e falha com `spawn EPERM`, e o
+> `prova:negativos` falha ao criar `src/__negative_checks__/`. Exigem acesso ampliado —
+> mesma restrição registrada no onboarding da feature 001, §7.
 
 ---
 *Gerado pelo Reversa-Plan em 2026-09-21.*
+*Registro de execução preenchido pelo Reversa-Coding em 2026-09-21.*

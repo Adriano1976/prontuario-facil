@@ -21,40 +21,40 @@
 
 | ID | Descrição | Dependências | Paralelismo | Arquivo alvo | Confidência | Status |
 |----|-----------|--------------|-------------|--------------|-------------|--------|
-| T001 | Criar a massa de prova compartilhada do módulo — paciente ativo, consulta parametrizável por situação, consulta **sem** situação, as quatro situações como constantes nomeadas, derivadores de data a partir do **dia congelado** com construtor local, e as cargas de documento e de exame — para que os três arquivos de verificação usem a mesma massa e o mesmo critério temporal | - | - | `src/test/consultationsFixtures.ts` | 🟢 | [ ] |
+| T001 | Criar a massa de prova compartilhada do módulo — paciente ativo, consulta parametrizável por situação, consulta **sem** situação, as quatro situações como constantes nomeadas, derivadores de data a partir do **dia congelado** com construtor local, e as cargas de documento e de exame — para que os três arquivos de verificação usem a mesma massa e o mesmo critério temporal | - | - | `src/test/consultationsFixtures.ts` | 🟢 | [X] |
 
 ## Fase 2, Testes
 
 | ID | Descrição | Dependências | Paralelismo | Arquivo alvo | Confidência | Status |
 |----|-----------|--------------|-------------|--------------|-------------|--------|
-| T002 | Provar o filtro por situação da listagem: cada situação exibe apenas os seus registros, e um registro **sem** situação não aparece em filtro específico nenhum — afirmando o conjunto exibido, e não a chamada do filtro | T001 | [//] | `src/pages/__tests__/Consultations.test.tsx` | 🟢 | [ ] |
-| T003 | Provar os quatro recortes de intervalo de data da listagem, com o `Date` congelado e temporizadores reais (D-04), registrando que `upcoming` compara o **instante completo** | T002 | - | `src/pages/__tests__/Consultations.test.tsx` | 🟡 | [ ] |
+| T002 | Provar o filtro por situação da listagem: cada situação exibe apenas os seus registros, e um registro **sem** situação não aparece em filtro específico nenhum — afirmando o conjunto exibido, e não a chamada do filtro | T001 | [//] | `src/pages/__tests__/Consultations.test.tsx` | 🟢 | [X] |
+| T003 | Provar os quatro recortes de intervalo de data da listagem, com o `Date` congelado e temporizadores reais (D-04), registrando que `upcoming` compara o **instante completo** | T002 | - | `src/pages/__tests__/Consultations.test.tsx` | 🟡 | [X] |
 
 ## Fase 3, Núcleo
 
 | ID | Descrição | Dependências | Paralelismo | Arquivo alvo | Confidência | Status |
 |----|-----------|--------------|-------------|--------------|-------------|--------|
-| T004 | Provar a legenda de situação no detalhe, **incluindo a ausência**: o registro com situação exibe o rótulo correspondente e o registro sem situação não exibe legenda nenhuma, sem quebrar a tela | T001 | [//] | `src/pages/__tests__/Consultation.test.tsx` | 🟢 | [ ] |
-| T005 | Provar a **ausência de transição automática**: emitir documento e anexar exame não movem a situação, afirmando o **valor** exibido depois de cada operação e não a ausência de chamadas (D-12) | T004 | - | `src/pages/__tests__/Consultation.test.tsx` | 🟢 | [ ] |
-| T006 | Provar a **assimetria de auditoria no transporte** (D-02): com o mesmo observador, emitir documento **não** grava registro e anexar exame **grava**; a mesma verificação prova que o observador dispara, para que a ausência não seja confundida com arnês quebrado | T005 | - | `src/pages/__tests__/Consultation.test.tsx` | 🟢 | [ ] |
-| T007 | Provar a situação inicial pelos **dois caminhos observáveis** — o formulário grava `em_andamento` e o modo edição cai em `em_andamento` quando o registro não tem situação (D-06) — e que o seletor oferece as **quatro** situações, inclusive de `cancelada` para `concluida` | T001 | [//] | `src/pages/__tests__/NewConsultation.test.tsx` | 🟢 | [ ] |
-| T008 | Provar a troca de situação persistida: escolher `concluida` e salvar grava o novo valor, com releitura do armazém — afirmando o valor, não o formato da chamada | T007 | - | `src/pages/__tests__/NewConsultation.test.tsx` | 🟢 | [ ] |
-| T009 | Provar o portão do salvamento — exige paciente e **não** exige data — e a ausência de envio acidental, com a contagem de gravações afirmada **antes** e **depois** do salvamento deliberado (D-09) | T008 | - | `src/pages/__tests__/NewConsultation.test.tsx` | 🟢 | [ ] |
+| T004 | Provar a legenda de situação no detalhe, **incluindo a ausência**: o registro com situação exibe o rótulo correspondente e o registro sem situação não exibe legenda nenhuma, sem quebrar a tela | T001 | [//] | `src/pages/__tests__/Consultation.test.tsx` | 🟢 | [X] |
+| T005 | Provar a **ausência de transição automática**: emitir documento e anexar exame não movem a situação, afirmando o **valor** exibido depois de cada operação e não a ausência de chamadas (D-12) | T004 | - | `src/pages/__tests__/Consultation.test.tsx` | 🟢 | [X] |
+| T006 | Provar a **assimetria de auditoria no transporte** (D-02): com o mesmo observador, emitir documento **não** grava registro e anexar exame **grava**; a mesma verificação prova que o observador dispara, para que a ausência não seja confundida com arnês quebrado | T005 | - | `src/pages/__tests__/Consultation.test.tsx` | 🟢 | [X] |
+| T007 | Provar a situação inicial pelos **dois caminhos observáveis** — o formulário grava `em_andamento` e o modo edição cai em `em_andamento` quando o registro não tem situação (D-06) — e que o seletor oferece as **quatro** situações, inclusive de `cancelada` para `concluida` | T001 | [//] | `src/pages/__tests__/NewConsultation.test.tsx` | 🟢 | [X] |
+| T008 | Provar a troca de situação persistida: escolher `concluida` e salvar grava o novo valor, com releitura do armazém — afirmando o valor, não o formato da chamada | T007 | - | `src/pages/__tests__/NewConsultation.test.tsx` | 🟢 | [X] |
+| T009 | Provar o portão do salvamento — exige paciente e **não** exige data — e a ausência de envio acidental, com a contagem de gravações afirmada **antes** e **depois** do salvamento deliberado (D-09) | T008 | - | `src/pages/__tests__/NewConsultation.test.tsx` | 🟢 | [X] |
 
 ## Fase 4, Integração
 
 | ID | Descrição | Dependências | Paralelismo | Arquivo alvo | Confidência | Status |
 |----|-----------|--------------|-------------|--------------|-------------|--------|
-| T010 | Estender a matriz com o veredito de prova de cada promessa do módulo de Consultas, citando **todo identificador de regra com o artefato de origem qualificado** — por causa das duas grafias de `BR-C` — e citando o caso `status-fora-do-conjunto` existente como prova do `RF-03`, sem duplicá-lo (D-05) | T006, T009 | - | `_reversa_sdd/code-spec-matrix.md` | 🟢 | [ ] |
-| T011 | Registrar na matriz o destino dos 3 cenários de paridade do módulo, o saldo dos módulos restantes (26 → 23) e as **oito lacunas declaradas** com severidade e razão, incluindo as duas de severidade Alta e o achado de auditoria do `RF-17` | T010 | - | `_reversa_sdd/code-spec-matrix.md` | 🟢 | [ ] |
+| T010 | Estender a matriz com o veredito de prova de cada promessa do módulo de Consultas, citando **todo identificador de regra com o artefato de origem qualificado** — por causa das duas grafias de `BR-C` — e citando o caso `status-fora-do-conjunto` existente como prova do `RF-03`, sem duplicá-lo (D-05) | T006, T009 | - | `_reversa_sdd/code-spec-matrix.md` | 🟢 | [X] |
+| T011 | Registrar na matriz o destino dos 3 cenários de paridade do módulo, o saldo dos módulos restantes (26 → 23) e as **oito lacunas declaradas** com severidade e razão, incluindo as duas de severidade Alta e o achado de auditoria do `RF-17` | T010 | - | `_reversa_sdd/code-spec-matrix.md` | 🟢 | [X] |
 
 ## Fase 5, Polimento
 
 | ID | Descrição | Dependências | Paralelismo | Arquivo alvo | Confidência | Status |
 |----|-----------|--------------|-------------|--------------|-------------|--------|
-| T012 | Revalidar os quatro comandos de gate com o módulo provado e conferir que nenhum arquivo de aplicação do módulo nem schema de entidade foi tocado | T006, T009 | - | `_reversa_forward/004-prova-consultas/onboarding.md` | 🟢 | [ ] |
-| T013 | Medir o tempo da suíte completa com o módulo provado e registrar o valor no roteiro, verificando o teto de 90 segundos | T012 | - | `_reversa_forward/004-prova-consultas/onboarding.md` | 🟢 | [ ] |
-| T014 | Produzir o `regression-watch.md` da feature, cobrindo os pontos que passam a ser vigiados | T011, T012 | - | `_reversa_forward/004-prova-consultas/regression-watch.md` | 🟢 | [ ] |
+| T012 | Revalidar os quatro comandos de gate com o módulo provado e conferir que nenhum arquivo de aplicação do módulo nem schema de entidade foi tocado | T006, T009 | - | `_reversa_forward/004-prova-consultas/onboarding.md` | 🟢 | [X] |
+| T013 | Medir o tempo da suíte completa com o módulo provado e registrar o valor no roteiro, verificando o teto de 90 segundos | T012 | - | `_reversa_forward/004-prova-consultas/onboarding.md` | 🟢 | [X] |
+| T014 | Produzir o `regression-watch.md` da feature, cobrindo os pontos que passam a ser vigiados | T011, T012 | - | `_reversa_forward/004-prova-consultas/regression-watch.md` | 🟢 | [X] |
 
 ## Notas de execução
 

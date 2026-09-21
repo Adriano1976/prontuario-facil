@@ -108,6 +108,61 @@ Esta matriz relaciona cada artefato de código-fonte e schema do projeto legado 
 > nenhum**: ela é guarda de regressão para o dia em que o auto-vínculo existir, não prova
 > de um fluxo exercitado. Está declarada como tal — ver `#Lacunas de prova`.
 
+### Módulo Consultas
+
+> Acrescentado em 2026-09-21 pela feature `004-prova-consultas` (RF-11).
+>
+> ⚠️ **A citação qualificada é obrigatória aqui (RN-09).** Este módulo tem **duas famílias
+> de códigos `BR-C` com grafia quase idêntica**: `_reversa_sdd/consultas/requirements.md#2`
+> escreve `BR-C01`, `BR-C02`, `BR-C03` (**sem** hífen), enquanto
+> `_reversa_sdd/code-analysis.md#6` escreve `BR-C-01` a `BR-C-12` (**com** hífen). São
+> conjuntos **diferentes** de regras sobre o mesmo módulo, e a diferença de um caractere
+> não é visível numa leitura rápida. Toda linha abaixo nomeia o artefato de origem.
+>
+> ⚠️ **`_reversa_sdd/domain.md#2` não tem família `BR-C` nenhuma.** As regras do módulo
+> vivem nos dois artefatos acima; o `domain.md` só o alcança por `#2.4 Segurança e
+> Auditoria` (BR-S01, BR-S02) e por `#3 Lacunas e Inconsistências`.
+
+| Promessa (spec) | Código que cumpre | Teste que prova | Veredito |
+| :--- | :--- | :--- | :---: |
+| **BR-C01** de `consultas/requirements.md#2` — a consulta é vinculada a um `patient_id` válido | `src/pages/NewConsultation.tsx` (seleção de paciente) | `src/pages/__tests__/NewConsultation.test.tsx` — a criação é afirmada com o `patient_id` escolhido no objeto gravado, e o portão do salvamento não libera sem paciente | 🟢 para o que o cliente grava · 🔴 para a obrigatoriedade no schema, que é do servidor (D-06) |
+| **BR-C02** de `consultas/requirements.md#2` — ciclo `agendada` → `em_andamento` → `concluida` (ou `cancelada`) | `src/pages/NewConsultation.tsx` (seletor), `src/pages/Consultations.tsx` (filtro), `src/pages/Consultation.tsx` (legenda) | Os três arquivos de verificação da feature: situação inicial, troca persistida, as quatro situações oferecidas, filtro por situação e legenda no detalhe | 🟢 |
+| **BR-C03** de `consultas/requirements.md#2` — `medications` só em prescrições do tipo receita | `src/components/medical/PrescriptionEditor.tsx` (`type.includes('receita')`) | **Nenhum.** Fora do escopo desta feature | 🔴 **Declarada, não provada** |
+| **BR-C-02** de `code-analysis.md#6` — o status é enum fechado de quatro valores | `src/types/Consultation.ts` (`ConsultationStatus`) | `npm run prova:negativos`, caso `status-fora-do-conjunto` — recusa `'finalizada'` citando a violação. O caso **já existia** desde a feature 001 (D-05) e não foi duplicado | 🟢 |
+| **BR-C-03** de `code-analysis.md#6` — a criação exige paciente selecionado | `src/pages/NewConsultation.tsx:442` (`disabled={!selectedPatient \|\| isPending}`) | `NewConsultation.test.tsx` — "o portão exige paciente, e o campo de data é obrigatório no próprio controle", percorrendo o portão do desabilitado ao habilitado | 🟢 |
+| **BR-C-04** de `code-analysis.md#6` — pacientes elegíveis para consulta têm status `ativo` | `src/pages/NewConsultation.tsx:92-95` (consulta com `{ status: 'ativo' }`) | `src/pages/__tests__/ActivePatientSelection.test.tsx` — 4 verificações, uma delas a de novo agendamento; o inativo não aparece nem por nome nem por CPF | 🟢 |
+| **RN-03** da feature 004 — a situação inicial depende do **caminho de criação** | `src/pages/NewConsultation.tsx:72` e `:127` | `NewConsultation.test.tsx` — os **dois caminhos observáveis no cliente**: o formulário grava `em_andamento`, e o modo edição cai em `em_andamento` quando o registro não tem situação | 🟢 **com a ressalva do schema** — ver a nota abaixo da tabela |
+| **RN-04** da feature 004 — o seletor oferece as **quatro** situações sem guarda de transição | `src/pages/NewConsultation.tsx:305-313` | `NewConsultation.test.tsx` — com o registro em `cancelada`, as quatro situações são oferecidas e `concluida` consta entre elas; a verificação percorre valores **e** rótulos | 🟢 |
+| **RN-05** da feature 004 — nenhuma transição de situação é **automática** | `src/pages/Consultation.tsx` (mutações de documento e exame) | `Consultation.test.tsx` — duas verificações afirmam o **valor** exibido depois de emitir documento e depois de anexar exame | 🟢 |
+| **RN-06** da feature 004 — `ConsultationStatus` é união fechada, verificada em compilação | `src/types/Consultation.ts` | `npm run prova:negativos`, caso `status-fora-do-conjunto` | 🟢 |
+| **RN-07** da feature 004 — o salvamento exige paciente; a data é obrigatória **no controle**, e não no portão | `src/pages/NewConsultation.tsx:296-301` e `:442` | `NewConsultation.test.tsx` — o portão olha só o paciente, e o campo de data carrega `required`. As duas afirmações convivem, e a prova registra as duas | 🟢 |
+| A ausência do **defeito de envio acidental** no formulário de consulta | `src/pages/NewConsultation.tsx` — todos os botões dentro do `<form>` declaram `type` | `NewConsultation.test.tsx` — nenhum controle interno grava, e o salvamento deliberado grava **exatamente uma vez** | 🟢 |
+| O filtro por situação da listagem e a tolerância ao registro **sem** situação | `src/pages/Consultations.tsx:88` e `:115-116` | `Consultations.test.tsx` — filtro por cada situação, o registro sem situação ausente em todos os filtros específicos, e o estado vazio | 🟢 |
+| Os quatro recortes de intervalo de data da listagem | `src/pages/Consultations.tsx:90-109` | `Consultations.test.tsx` — `today`, `week`, `month` e `upcoming`, com o `Date` congelado (D-04) | 🟢 **com o achado do recorte "semana"** — ver a nota abaixo da tabela |
+| **RN-10** da feature 004 — a emissão de documento **não** gera trilha de auditoria | `src/pages/Consultation.tsx:120-124` (mutação de prescrição, sem auditoria) contra `src/components/medical/ExamUploader.tsx:143-149` (auditoria interna) | `Consultation.test.tsx` — medido no **transporte** (`AccessLog`), com `AccessLogger` real: emitir documento não grava, anexar exame grava `upload_exam` | 🟢 |
+| **BR-S01** de `domain.md#2.4` — todo acesso ou alteração de dado sensível gera log | ⚠️ **Nenhum código cumpre esta redação no fluxo de prescrição** | `Consultation.test.tsx` prova a assimetria; nenhum código liga a ação `create_prescription` ao fluxo | 🔴 **Divergência provada** — ver a nota abaixo da tabela |
+| **BR-C-12** de `code-analysis.md#6` — ao salvar, redireciona para o detalhe do paciente | `src/pages/NewConsultation.tsx:162-169` | `NewConsultation.test.tsx` cobre a navegação no cancelamento; o **destino** do sucesso não é afirmado | 🟡 **Parcial** |
+
+> **Ressalva da RN-03 — a metade que não é provável.** O default `agendada` é aplicado pelo
+> servidor e **não é observável no cliente**. O que o cliente mostra é o oposto: o
+> formulário grava `em_andamento` e o fallback para registro sem situação também é
+> `em_andamento`. Provar o texto de `Consultation.jsonc` provaria o conteúdo de um arquivo,
+> não o comportamento do sistema (decisão D-06). O cenário Gherkin *"Consulta sem situação
+> informada cai no default do schema"* é, portanto, **declarado** — e marcá-lo 🟢 sem esta
+> ressalva seria mentira.
+>
+> **Achado do recorte "última semana".** O recorte é `consultDate >= hoje - 7 dias`, **sem
+> limite superior**. Ele não é "última semana" no sentido de passado: **inclui consultas
+> futuras**. A prova registra isso como comportamento real, e a verificação afirma as quatro
+> do conjunto — duas de hoje, uma de três dias atrás e uma de três dias à frente.
+>
+> **Divergência provada na BR-S01.** `ACCESS_ACTIONS` declara **doze** ações auditáveis
+> (`src/components/medical/AccessLogger.ts:22-35`) e apenas **nove** são invocadas. As três
+> órfãs são `create_prescription`, `logout` e `export_data`. A primeira é a que importa: o
+> fluxo de emissão existe, a ação existe, e **nada liga os dois** — emitir uma receita, que
+> é documento derivado de diagnóstico, não deixa rastro. O exame, em contraste, audita por
+> dentro do componente. O comportamento está provado; o defeito **não** foi corrigido.
+
 ### Contrato de dados e sessão (transversal)
 
 | Promessa (spec) | Código que cumpre | Teste que prova | Veredito |
@@ -134,10 +189,11 @@ Medições, sobre o código desta árvore de trabalho (teto declarado: **90 segu
 | :--- | ---: | ---: | ---: | ---: |
 | 2026-09-19, após a feature `002-prova-automatizada` | 36 | 10 | 32,5 s | 0 |
 | 2026-09-21, após a feature `003-prova-agendamentos` | 66 | 14 | 57,9 s | 0 |
+| 2026-09-21, após a feature `004-prova-consultas` | 90 | 17 | 63,7 s | 0 |
 
-O acréscimo da feature 003 foi de **30 verificações em 4 arquivos** — 22 nas três provas do
-módulo de Agendamentos e 8 na guarda de encoding —, com o tempo ainda **32 segundos abaixo
-do teto**.
+O acréscimo da feature 004 foi de **24 verificações em 3 arquivos** — listagem, detalhe e
+formulário do módulo de Consultas —, com o tempo ainda **26 segundos abaixo do teto**. O
+teto foi revalidado e **não** renegociado (D-11).
 
 `typecheck` e `lint` são gates independentes (**RN-05 da feature `002-prova-automatizada`**):
 o primeiro confere forma em tempo de compilação, o segundo confere estilo e imports mortos.
@@ -183,6 +239,17 @@ Acrescentado em 2026-09-21 pela feature `003-prova-agendamentos` (RF-01, RF-02 e
 | PT-004.3 — as flags de lembrete não alteram o status | `parity_tests/04-ciclo-status-agendamento.feature` | 🟢 | `Appointments.test.tsx` — com `reminder_sent = true` e `reminder_sent_date` preenchida, a lista segue mostrando "Agendado" e o seletor do diálogo vale `agendado` |
 | PT-004.4 — cancelar e marcar falta são transições válidas | `parity_tests/04-ciclo-status-agendamento.feature` | 🟢 | `Appointments.test.tsx` — duas verificações: `cancelado` é persistido e o registro **sai** da lista de próximos; `faltou` é persistido pelo seletor e o registro **permanece** na lista, com a situação nova escrita na tela |
 
+### Cenários de paridade do módulo Consultas
+
+Os 3 cenários de PT-005, com o destino de cada um. Acrescentado em 2026-09-21 pela feature
+`004-prova-consultas` (RF-01 a RF-04).
+
+| Cenário | Arquivo | Veredito | Prova ou razão |
+| :--- | :--- | :---: | :--- |
+| PT-005.1 — a consulta nasce `agendada` e avança para `em_andamento` | `parity_tests/05-maquina-estados-consulta.feature` | 🟢 **com redação imprecisa** | `NewConsultation.test.tsx` prova o que de fato acontece: criada pelo **formulário**, a consulta nasce `em_andamento` — o schema diz `agendada`, e essa metade é declarada (D-06). O avanço para `em_andamento` é o estado inicial, não uma transição |
+| PT-005.2 — a consulta em `em_andamento` é concluída | `parity_tests/05-maquina-estados-consulta.feature` | 🟢 | `NewConsultation.test.tsx` — escolher `concluida` e salvar grava o novo valor, afirmado no objeto da atualização |
+| PT-005.3 — transições inválidas não compilam e a interface não as oferece | `parity_tests/05-maquina-estados-consulta.feature` | 🟢 **metade** · 🔴 **metade** | A metade de **compilação** é verdadeira e provada por `npm run prova:negativos` (caso `status-fora-do-conjunto`). A metade de **interface** é **falsa**: o seletor oferece as quatro situações de qualquer situação atual, inclusive `cancelada` → `concluida`, e não há guarda nenhuma. Provado em `NewConsultation.test.tsx`; o `.feature` fica declarado impreciso |
+
 ### Destino dos cenários de paridade não cobertos nesta feature
 
 Decisão da sessão de esclarecimentos de 2026-09-19: a conversão é **fatiada por módulo**.
@@ -196,26 +263,36 @@ Cada grupo abaixo vira feature própria; nenhum cenário fica sem destino.
 | Templates (`06`) | 4 | Feature a criar — conversão dos cenários de fluxo de documentos e modelos |
 | Logs de acesso (`07`) | 4 | Feature a criar — conversão dos cenários de fluxo da trilha de auditoria |
 | Contrato de dados (`10`) | 4 | Feature a criar — contrato único honrado pelos dois modos |
-| Consultas (`05`) | 3 | Feature a criar — máquina de estados da consulta |
+| Consultas (`05`) | 3 | ✅ **Concluído** na feature `004-prova-consultas` — ver `#Cenários de paridade do módulo Consultas` |
 | Paridade visual (`screens/V01` a `V16`) | 16 | **Lacuna declarada.** A captura dourada de referência não existe no repositório (`present: false`); produzi-la é trabalho de outra natureza |
 
-> **Saldo após a feature `003-prova-agendamentos` (2026-09-21).** Dos 50 cenários que a
-> feature 002 transferiu, **8 estão concluídos** (Agendamentos) e **26 permanecem
-> transferidos** para features próprias. Os 16 de paridade visual seguem declarados como
-> lacuna, e não como trabalho transferido.
+> **Saldo após a feature `004-prova-consultas` (2026-09-21).** Dos 50 cenários que a
+> feature 002 transferiu, **11 estão concluídos** (8 de Agendamentos na feature 003 e 3 de
+> Consultas na 004) e **23 permanecem transferidos** para features próprias. Os 16 de
+> paridade visual seguem declarados como lacuna, e não como trabalho transferido.
 
 ### Lacunas de prova
 
 Registradas de propósito: uma matriz que só mostra 🟢 não é honesta. O que já foi fechado
 está marcado como fechado, e o que permanece aberto tem razão declarada.
 
-| Lacuna | Situação após a feature `003-prova-agendamentos` |
+| Lacuna | Situação após a feature `004-prova-consultas` |
 | :--- | :--- |
 | **BR-P02** (enum de tipo sanguíneo) | ✅ **Fechada.** Prova de execução em `PatientForm.test.tsx` (o formulário oferece exatamente os 9 valores) e caso negativo `status-fora-do-conjunto` em `npm run prova:negativos` |
 | **Verificações negativas do gate de tipos** (T031–T036, T039, T045, T046) | ✅ **Fechada.** `npm run prova:negativos` reproduz 9 casos por comando, confere a recusa pelo motivo certo e não deixa resíduo |
 | **Paridade do módulo Pacientes** (5 cenários) | ✅ **Fechada**, com o desdobramento do PT-001.3 declarado |
 | **Paridade do módulo Agendamentos** (8 cenários) | ✅ **Fechada**, com três ressalvas declaradas: a redação imprecisa de PT-003.1 e PT-003.3 e a vacuidade de PT-004.2 |
-| **Paridade dos módulos restantes** (34 → 26 cenários) | 🟡 **Parcialmente concluída.** Agendamentos (8) saiu do grupo nesta feature; **26 permanecem transferidos**, com destino declarado por grupo na seção acima |
+| **Paridade do módulo Consultas** (3 cenários) | ✅ **Fechada**, com duas ressalvas declaradas: a redação imprecisa de PT-005.1 e a metade de interface de PT-005.3, que é **falsa** |
+| **Paridade dos módulos restantes** (34 → 23 cenários) | 🟡 **Parcialmente concluída.** Agendamentos (8) saiu na feature 003 e Consultas (3) na 004; **23 permanecem transferidos**, com destino declarado por grupo na seção acima |
+| **As lacunas do módulo de Consultas** (`code-analysis.md#9`) | ⚠️ **Declaradas, não provadas** — decisão de 2026-09-21, incluindo as duas de severidade Alta. Detalhe linha a linha na seção abaixo |
+| **Trilha de auditoria da emissão de documento** | 🟢 **Provada e declarada.** Emitir documento não grava `AccessLog` e anexar exame grava; o defeito **permanece**, porque corrigir exige ligar a ação `create_prescription` ao fluxo |
+| **As três ações órfãs do catálogo de auditoria** | 🟡 **Declarada.** `create_prescription`, `logout` e `export_data` estão declaradas em `AccessLogger.ts:22-35` e nunca são invocadas |
+| **O recorte "última semana" inclui o futuro** | 🟢 **Provada e declarada.** O recorte é `>= hoje - 7 dias`, sem limite superior. A prova afirma as quatro do conjunto, futura inclusive |
+| **O default do formulário divergente do schema** | 🟡 **Provada e declarada.** O formulário grava `em_andamento` e o schema documenta `agendada`; alinhar os dois é decisão de produto |
+| **A matriz de transições da consulta não existe na extração** | 🟡 **Declarada.** `state-machines.md#4` é 🟡 e cobre apenas o agendamento; a máquina da consulta está descrita só como diagrama |
+| **As duas grafias de `BR-C`** | 🟡 **Contornada por citação qualificada.** `consultas/requirements.md#2` usa `BR-C01` e `code-analysis.md#6` usa `BR-C-01` para regras diferentes. A raiz é defeito documental da extração |
+| **A metade de schema do status inicial** | 🔴 **Declarada.** O default `agendada` é do servidor e não é observável no cliente (D-06) |
+| **A obrigatoriedade de `date` no schema** | 🟡 **Parcial.** O formulário marca o campo como `required` no controle, mas o portão em JavaScript não confere a data; a validação do navegador não é exercitável no DOM simulado |
 | **Modo offline de ponta a ponta** (recorte DIV-01) | ✅ **Fechada** para o paciente: `mockClient.test.ts` cadastra pelo adaptador e relê pela leitura escopada. As limitações L1 a L7 do adaptador permanecem declaradas e não são provadas |
 | **Paridade visual** (16 cenários) | 🔴 **Declarada.** Depende de captura dourada inexistente |
 | **Criptografia do CPF em repouso** | 🔴 **Declarada.** Acontece no backend; o cliente prova apenas a marcação de campo sensível |
@@ -266,6 +343,32 @@ divergência de contagem seria esconder uma lacuna atrás de um erro aritmético
 > (#5) e concorrência (#9) —, a própria linha "sem testes" (#11) também é Alta. Ela é a
 > única das três que esta feature fecha, e apenas para este módulo.
 
+### Lacunas declaradas do módulo de Consultas
+
+`_reversa_sdd/code-analysis.md#9. Pontos de Atenção / Lacunas` traz **oito** linhas para
+este módulo, e o `requirements.md` da feature 004 confirma a contagem. Duas são de
+severidade **Alta** e, por decisão da sessão de 2026-09-21, **nenhuma ganha prova de
+comportamento atual** — nem mesmo elas.
+
+| # | Lacuna em `code-analysis.md#9` | Severidade | Veredito após a feature 004 |
+| ---: | :--- | :---: | :--- |
+| 1 | `STATUS_CONFIG` duplicado entre `Consultations.tsx:28` e `Consultation.tsx:36` | Baixa | 🔴 **Declarada, não provada.** São as **terceira e quarta** cópias do mapa de situação no projeto: somadas às duas do módulo de agendamentos, há **quatro** mapas paralelos. Unificá-los é trabalho de `/reversa-refactor` |
+| 2 | `applyTemplate` sem escape de marcação | **Alta** | 🔴 **Declarada, não provada.** É **preservação deliberada do legado** — o próprio código registra "sem escape de marcação, como no legado (AMB-006)" em `PrescriptionEditor.tsx:145`. Corrigir muda comportamento observável e sai do escopo |
+| 3 | `handlePrint` do editor por injeção em `window.open` | **Alta** | 🔴 **Declarada, não provada.** Mesma decisão da linha 2. O `handlePrint` do **detalhe** (`Consultation.tsx:132`) é `window.print()` simples e não tem o problema — são dois métodos distintos, e só o do editor injeta |
+| 4 | Filtro `upcoming` comparado com o instante completo | Baixa | 🟢 **Provada e declarada.** `Consultations.test.tsx` afirma que a consulta de hoje pela manhã **não** aparece em "próximas". O defeito permanece; a prova é o pré-requisito para decidir mudá-lo |
+| 5 | Impressão da página sem CSS dedicado | Média | 🔴 **Declarada, não provada** |
+| 6 | Upload sem validação de tamanho ou tipo | Média | 🔴 **Declarada, não provada.** O diálogo anuncia "máx. 10MB" no texto, e não há verificação — a prova do `RF-17` exercita o caminho de upload, mas não afirma o limite |
+| 7 | Busca de paciente limitada a cinco resultados | Baixa | 🔴 **Declarada, não provada** nesta feature — a mesma busca já é coberta por `PatientSearch.test.tsx` no módulo de pacientes, que prova o limite de cinco |
+| 8 | Sem testes | **Alta** | ✅ **Fechada para este módulo.** O módulo tinha prova de componentes auxiliares e **nenhuma** da máquina de estados; hoje tem 24 verificações em 3 arquivos. Permanece aberta como afirmação sobre o projeto inteiro — cinco módulos seguem sem prova |
+
+> **Achado que não estava em `code-analysis.md#9`, e que esta feature acrescenta.** O
+> catálogo `ACCESS_ACTIONS` declara doze ações auditáveis e **três nunca são invocadas** —
+> `create_prescription`, `logout` e `export_data`. O fluxo de emissão de documento existe e
+> a ação existe, mas **nada liga os dois**: emitir uma receita não deixa rastro na trilha,
+> enquanto anexar um exame deixa. A assimetria confronta a **BR-S01** de `domain.md#2.4`,
+> que é 🟢. Está **provada** (`RF-17`, medida no transporte) e **declarada**; o defeito não
+> foi corrigido.
+
 ---
 *Gerado pelo Reversa-Writer em 2026-09-02.*
-*Seção de rastreabilidade acrescentada em 2026-09-19; módulo de Agendamentos e lacunas em 2026-09-21.*
+*Seção de rastreabilidade acrescentada em 2026-09-19; módulos de Agendamentos e Consultas e suas lacunas em 2026-09-21.*
