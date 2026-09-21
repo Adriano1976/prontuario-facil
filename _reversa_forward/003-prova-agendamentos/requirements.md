@@ -313,3 +313,6 @@ encontrados na varredura foram decididos na mesma sessão.
 |------|-----------|-------|
 | 2026-09-19 | Versão inicial gerada por `/reversa-requirements` | reversa |
 | 2026-09-19 | Sessão de esclarecimentos: 5 respostas. A prova segue o comportamento do código e o cenário PT-003 fica declarado impreciso (RF-01 e RF-04 reescritos, RN-03 distinguindo os três comportamentos, cenário do conflito corrigido); as dez lacunas do módulo entram só como veredito declarado; a divergência entre calendário e seleção de horário fica declarada; a colisão `BR-A0x` é contornada por citação qualificada; e o teto de 90 segundos é mantido, com o RNF passando a 🟢 | reversa-clarify |
+
+---
+*Gerado pelo Reversa-Requirements em 2026-09-19.*

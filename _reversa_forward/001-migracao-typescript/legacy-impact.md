@@ -110,3 +110,6 @@ Regras 🟢 de `_reversa_sdd/domain.md` que continuam intactas:
   no tipo (`role?: never`), tornando a ausência explícita em compile-time.
 - **Contrato de acesso a dados** — estendido com a entidade embutida `User` do BaaS
   (tipo `AppUser`), restaurada por paridade com o legado (exclusão de conta).
+
+---
+*Gerado pelo Reversa-Coding em 2026-09-17.*

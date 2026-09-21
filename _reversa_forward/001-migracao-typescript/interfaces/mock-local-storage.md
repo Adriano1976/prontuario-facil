@@ -65,3 +65,6 @@ servidor. O que a feature faz é tornar a ausência de papel
 | Mecanismo de carga e gravação | **sim, em um ponto**: o `create` do adaptador passou a preencher `created_by_id`, espelhando o servidor |
 | Conteúdo dos dados de exemplo | **sim** — alinhado ao contrato das entidades (etapa 6) |
 | Necessidade de limpar o armazenamento após a mudança | sim, no ambiente de demonstração, para os exemplos serem regravados |
+
+---
+*Gerado pelo Reversa-Plan em 2026-09-17.*

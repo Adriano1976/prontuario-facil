@@ -77,3 +77,6 @@ registrados para contexto:
   **anterior à migração**, preservado de propósito (a feature converte linguagem, não
   corrige comportamento). Fica como pendência para uma alteração própria — corrigir
   muda comportamento e sai do escopo desta feature.
+
+---
+*Gerado pelo Reversa-Coding em 2026-09-17.*

@@ -173,3 +173,6 @@ Documentação de referência do executor: https://vitest.dev/guide/
 | `_reversa_forward/001-migracao-typescript/progress.jsonl` | as verificações negativas executadas e removidas |
 | `_reversa_forward/001-migracao-typescript/regression-watch.md` | W009, o defeito DIV-01 |
 | `_reversa_sdd/code-spec-matrix.md` | as cinco lacunas declaradas em 2026-09-19 |
+
+---
+*Gerado pelo Reversa-Plan em 2026-09-19.*

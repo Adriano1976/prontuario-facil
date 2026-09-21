@@ -74,3 +74,6 @@ O que existe é um **delta de documentação**, que não é migração de dados:
   corrigir mudaria comportamento observável.
 - **Edição de agendamento** — não existe; permanece fora do escopo.
 - **Paridade visual das telas do módulo** — depende de captura dourada inexistente.
+
+---
+*Gerado pelo Reversa-Plan em 2026-09-20.*

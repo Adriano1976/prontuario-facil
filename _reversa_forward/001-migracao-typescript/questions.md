@@ -303,3 +303,6 @@ Percorra o mesmo menu e responda: **a tela carrega e se comporta igual?**
 | Data | 15/09/2026 |
 | Ambiente (navegador/SO) | Opera no Windows 11 |
 | Resultado geral | ⬜ tudo conforme · ✅ com divergências |
+
+---
+*Gerado pelo Reversa-Coding em 2026-09-15.*

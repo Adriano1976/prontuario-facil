@@ -175,3 +175,6 @@ do escopo desta feature — lembrando que a única pendência declarada em `requ
 toca código é a remoção das 14 dependências não utilizadas, que exige reconfirmação por busca e
 aprovação explícita antes de qualquer remoção (`RISK-006`). A re-extração reversa segue
 recomendada, não obrigatória.
+
+---
+*Gerado pelo Reversa-Audit em 2026-09-17.*

@@ -170,3 +170,6 @@ caminho.
 | `2026-09-17` | Aplicado o Apêndice A.2 do `audit/cross-check.md`: §8 e §10 sincronizados com a entrega (A001); delta arquitetural com os quatro artefatos novos e os nomes `.ts` (A004, A015); D-02 alinhado ao registro real de entidades (A010); D-12 de congelamento (A006, A016) e §3.1 de rastreabilidade requisito↔decisão (A005) criados; §7 com o envio de e-mail transacional (A015) | revisão manual pós-auditoria |
 | `2026-09-17` | Resolvidos A020–A022 da auditoria cruzada (revisão 5): D-13 registra o desligamento de `allowJs`/`checkJs`; §8 passa a registrar o estado de 17/09 (46 de 46); §5 corrige a contagem do delta (38 arquivos legados convertidos, não ~87) | revisão manual pós-auditoria |
 | `2026-09-17` | Critério de pronto: caixa de `cross-check.md` sem CRITICAL nem HIGH marcada, com base na revisão 6 da auditoria (0 achados), que é posterior à correção de A020–A022 | revisão manual pós-auditoria |
+
+---
+*Gerado pelo Reversa-Plan em 2026-09-14.*

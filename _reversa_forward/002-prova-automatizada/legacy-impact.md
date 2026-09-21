@@ -69,3 +69,6 @@ automatizada passam a descrevê-lo como ele é.
 > Consequência para o `regression-watch.md`: como não houve regra alterada nem removida,
 > os itens de vigilância desta feature não são regressões a evitar, e sim **propriedades
 > novas que precisam continuar verdadeiras** — a prova que acabou de nascer.
+
+---
+*Gerado pelo Reversa-Coding em 2026-09-19.*

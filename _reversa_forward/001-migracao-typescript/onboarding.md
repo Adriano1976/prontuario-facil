@@ -211,3 +211,6 @@ do código. A verificação de tipos funciona normalmente.
 > ambiente do agente — mas o build só roda com **acesso ampliado**; no modo confinado o
 > subprocesso do empacotador segue falhando com `spawn EPERM`. A verificação de tipos
 > funciona nos dois modos.
+
+---
+*Gerado pelo Reversa-Plan em 2026-09-17.*

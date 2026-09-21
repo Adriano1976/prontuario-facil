@@ -127,3 +127,6 @@ anterior na tela, que é o que um usuário veria. Risco **R-03** do roadmap.
 | `src/components/appointments/TimeSlotPicker.tsx` | A API real do componente que concentra a regra |
 | `src/pages/NewAppointment.tsx` | A ordem entre criação e envio de e-mail, e a ausência de validação no salvamento |
 | `src/pages/Appointments.tsx` | O diálogo de transição de status e o filtro de próximos agendamentos |
+
+---
+*Gerado pelo Reversa-Plan em 2026-09-20.*

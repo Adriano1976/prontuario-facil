@@ -75,3 +75,6 @@ Registradas pelo `/reversa-plan` para orientar o `/reversa-coding`:
 | Data | Alteração | Autor |
 |------|-----------|-------|
 | `2026-09-19` | Versão inicial gerada por `/reversa-to-do` | reversa |
+
+---
+*Gerado pelo Reversa-To-Do em 2026-09-19.*

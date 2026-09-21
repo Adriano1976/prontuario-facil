@@ -143,3 +143,6 @@ Específicos desta feature:
 | Data | Alteração | Autor |
 |------|-----------|-------|
 | 2026-09-19 | Versão inicial gerada por `/reversa-plan` | reversa |
+
+---
+*Gerado pelo Reversa-Plan em 2026-09-19.*

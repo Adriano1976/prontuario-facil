@@ -125,3 +125,6 @@ caso de uso incorreto de propósito. Corrigido separando leitura de escrita.
 
 Nenhuma bloqueante. A pendência das 14 dependências não utilizadas foi transferida
 para fora desta feature por decisão humana e está registrada no `requirements.md`.
+
+---
+*Gerado pelo Reversa-Plan em 2026-09-17.*

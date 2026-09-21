@@ -54,3 +54,6 @@ biblioteca inteira não protege nada, porque nada nele é específico do domíni
 - Atualização da versão da biblioteca.
 - Adoção de operações não usadas hoje.
 - Qualquer mudança no comportamento de autorização, que é do servidor.
+
+---
+*Gerado pelo Reversa-Plan em 2026-09-14.*

@@ -54,3 +54,6 @@ registradas para contexto:
 - **Cenários de paridade dos sete módulos restantes (34) e paridade visual (16).**
   Transferidos com destino declarado em `_reversa_sdd/code-spec-matrix.md#Destino dos
   cenários de paridade não cobertos nesta feature`.
+
+---
+*Gerado pelo Reversa-Coding em 2026-09-19.*

@@ -74,3 +74,6 @@ precisa de registro:
 - **Limitações L1 a L7 do modo offline** — inclusive L7 (dado de paciente em
   armazenamento local do navegador) e L3 (arquivo enviado não persiste). Nenhuma é
   corrigida nem provada.
+
+---
+*Gerado pelo Reversa-Plan em 2026-09-19.*

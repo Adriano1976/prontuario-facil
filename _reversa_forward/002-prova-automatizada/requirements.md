@@ -287,3 +287,6 @@ encontrados na varredura foram decididos na mesma sessão.
 |------|-----------|-------|
 | 2026-09-19 | Versão inicial gerada por `/reversa-requirements` | reversa |
 | 2026-09-19 | Sessão de esclarecimentos: 5 respostas. Paridade visual fora do escopo (RF-09 reescrito); conversão de paridade fatiada por módulo (RF-08 reescrito e RN-06 com terceiro destino); verificação negativa sem rastro versionado (RF-04 explicitado); RNF de determinismo reescrito para o valor do relógio; critério de pronto criado (RF-13) com o RF-07 estreitado ao fluxo DIV-01 e promovido a Must | reversa-clarify |
+
+---
+*Gerado pelo Reversa-Requirements em 2026-09-19.*

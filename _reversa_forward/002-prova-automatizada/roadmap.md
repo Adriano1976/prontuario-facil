@@ -147,3 +147,6 @@ Específicos desta feature, derivados do RF-13:
 | Data | Alteração | Autor |
 |------|-----------|-------|
 | 2026-09-19 | Versão inicial gerada por `/reversa-plan` | reversa |
+
+---
+*Gerado pelo Reversa-Plan em 2026-09-19.*

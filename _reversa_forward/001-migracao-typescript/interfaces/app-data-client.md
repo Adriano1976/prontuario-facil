@@ -116,3 +116,6 @@ Uma implementação está em conformidade quando:
 
 A conformidade é verificada em tempo de compilação, não por teste em tempo de
 execução.
+
+---
+*Gerado pelo Reversa-Plan em 2026-09-17.*

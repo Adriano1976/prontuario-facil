@@ -121,3 +121,6 @@
 | `2026-09-14` | Versão inicial gerada por `/reversa-to-do` | reversa |
 | `2026-09-15` | Feature concluída: 44 de 44 ações; T045/T046 acrescentadas pela auditoria cruzada | reversa |
 | `2026-09-17` | T045/T046 executadas (nome de campo inexistente recusado; mensagem de entidade inexistente sugere o nome correto): as 46 ações ficam concluídas, com o gate de tipos de volta a 0 erros | revisão manual pós-auditoria |
+
+---
+*Gerado pelo Reversa-To-Do em 2026-09-14.*

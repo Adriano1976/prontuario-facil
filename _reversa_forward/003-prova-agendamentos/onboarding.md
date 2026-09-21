@@ -94,3 +94,6 @@ tudo passa.
 | 8 | A ausência de gatilho automático é afirmada pelo valor do status | |
 | 9 | As dez lacunas aparecem na matriz com razão | |
 | 10 | Suíte completa abaixo de 90 segundos | |
+
+---
+*Gerado pelo Reversa-Plan em 2026-09-20.*

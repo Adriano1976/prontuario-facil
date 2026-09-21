@@ -88,3 +88,6 @@ que é o comportamento atual. 🟢
 | Isolamento por dono | Inalterado no servidor; passa a ser **exigido** na fronteira de tipos |
 | Proteção de campo sensível | Inalterada no servidor; o contrato apenas marca o campo como sensível |
 | Trilha de auditoria | Inalterada; permanece somente inserção, leitura restrita a administrador |
+
+---
+*Gerado pelo Reversa-Plan em 2026-09-14.*

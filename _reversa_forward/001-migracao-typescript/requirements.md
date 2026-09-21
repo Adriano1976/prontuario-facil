@@ -268,3 +268,6 @@ As três dúvidas do documento inicial foram resolvidas na sessão de esclarecim
 | 2026-09-17 | Aplicado o Apêndice A.1 do `audit/cross-check.md`: RF-10 e §8 estreitados aos componentes da aplicação (A005), RN-03 com o congelamento declarado (A006), §10 com a pendência de `{DIAS_AFASTAMENTO}` (A007), contagem de cenários corrigida para 26 arquivos/55 cenários (A011) e razão da permanência de RF-13 (A019) | reversa-clarify |
 | 2026-09-17 | Resolvido A020 da revisão 5: RF-09 passa a declarar que nenhum arquivo `.js`/`.jsx` entra no programa (D-13, admissão de JavaScript desligada); a sessão de esclarecimentos deixa de citar identificadores internos do relatório de auditoria | revisão manual pós-auditoria |
 | 2026-09-18 | Pendência das 14 dependências: reconfirmação por busca registrada (zero imports em `src/`, com controle positivo de 64 ocorrências em pacotes em uso e três ressalvas anotadas); aprovação explícita segue pendente e a remoção continua fora desta feature (`RF-13` `Won't`, D-09) | revisão manual pós-auditoria |
+
+---
+*Gerado pelo Reversa-Requirements em 2026-09-14.*

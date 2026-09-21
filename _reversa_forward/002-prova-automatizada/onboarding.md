@@ -187,3 +187,6 @@ Ao executar o roteiro, registre conforme ou divergente por item. O registro alim
 > Execução registrada em 2026-09-19 pelo `/reversa-coding`. Os itens 1 e 8 são os únicos
 > com ressalva: o item 1 não foi reexecutado e o item 8 foi conferido por inspeção dos
 > arquivos citados, não por sorteio aleatório de três promessas.
+
+---
+*Gerado pelo Reversa-Plan em 2026-09-19.*
