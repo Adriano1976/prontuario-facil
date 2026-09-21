@@ -1,9 +1,9 @@
 {
   "schema-version": 1,
-  "feature-dir": "_reversa_forward/003-prova-agendamentos",
-  "feature-id": "003",
-  "short-name": "prova-agendamentos",
-  "started-at": "2026-09-19T16:26:35-03:00",
+  "feature-dir": "_reversa_forward/004-prova-consultas",
+  "feature-id": "004",
+  "short-name": "prova-consultas",
+  "started-at": "2026-09-21T12:13:51-03:00",
   "current-stage": "requirements",
   "stages-completed": [],
   "paused-features": []
