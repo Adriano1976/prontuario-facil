@@ -1,0 +1,46 @@
+name: Guarda de encoding
+
+# POR QUE ESTE WORKFLOW EXISTE
+# Quatro arquivos do projeto chegaram corrompidos por leitura em encoding legado — os
+# bytes UTF-8 foram interpretados como cp1252/latin-1 e regravados como UTF-8 — e três
+# deles já estavam versionados. `actions.md` das features 002 e 003, `src/api/registry.ts`
+# e `src/components/medical/AccessLogger.ts`. A guarda em `src/test/mojibake.mjs` acusa
+# esse defeito; este workflow é o portão que impede um novo caso de entrar na branch.
+#
+# O QUE ELE RODA
+# `npm run prova:encoding`, que varre `src/` e todas as pastas `_reversa_*`. A guarda usa
+# apenas `node:fs`, então NÃO precisa de `npm ci`: o job termina em segundos, sem instalar
+# dependência nenhuma.
+#
+# ALCANCE
+# Isto barra a integração, não o commit. Quem impede o commit é rodar a guarda localmente
+# antes de commitar (`npm run prova:encoding`).
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: "encoding-${{ github.ref }}"
+  cancel-in-progress: true
+
+jobs:
+  guarda-encoding:
+    name: Verificar mojibake
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Verificar mojibake em src/ e _reversa_*
+        run: npm run prova:encoding

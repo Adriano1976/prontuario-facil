@@ -13,7 +13,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "prova:negativos": "node src/test/verificacoes-negativas.mjs"
+    "prova:negativos": "node src/test/verificacoes-negativas.mjs",
+    "prova:encoding": "node src/test/mojibake.mjs"
   },
   "dependencies": {
     "@base44/sdk": "^0.8.43",
