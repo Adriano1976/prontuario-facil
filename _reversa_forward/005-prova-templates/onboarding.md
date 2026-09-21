@@ -89,21 +89,38 @@ git status --porcelain -- src/pages/Templates.tsx   # precisa sair vazio
 
 | Ordem | Comando | Resultado | Data |
 | :---: | :--- | :--- | :--- |
-| 1 | `npm test` | *(a preencher)* | — |
-| 2 | `npm run typecheck` | *(a preencher)* | — |
-| 3 | `npm run lint` | *(a preencher)* | — |
-| 4 | `npm run prova:negativos` | *(a preencher)* | — |
-| 5 | `npm run prova:encoding` | *(a preencher)* | — |
+| 1 | `npm test` | ✅ **18 arquivos, 109 verificações, 0 falhas** — `Duration 67,42 s`, parede de 69,54 s | 2026-09-21 |
+| 2 | `npm run typecheck` | ✅ 0 erros | 2026-09-21 |
+| 3 | `npm run lint` | ✅ 0 avisos e 0 erros | 2026-09-21 |
+| 4 | `npm run prova:negativos` | ✅ 9 casos, 9 recusados pelo motivo certo, sem resíduo | 2026-09-21 |
+| 5 | `npm run prova:encoding` | ✅ 397 arquivos de texto, nenhum mojibake | 2026-09-21 |
+
+**Conferência de escopo, na mesma rodada:** `git status --porcelain` mostrou apenas os arquivos
+de prova criados, `actions.md`, `progress.jsonl` e `code-spec-matrix.md`. `PrescriptionEditor.tsx`,
+`Templates.tsx` e `base44/entities/` **sem nenhum diff**.
+
+> **Registro de um incidente de codificação, porque custou tempo e pode repetir.** A marcação
+> em massa das ações foi feita com `Get-Content` e `Set-Content`, e no PowerShell 5.1 esses
+> cmdlets decodificam arquivo sem BOM pela página ANSI: o `actions.md` foi lido como Latin-1 e
+> regravado, deixando **330 sequências corrompidas**. A `prova:encoding` **pegou** — o gate fez
+> exatamente o trabalho para o qual existe. O arquivo foi reescrito íntegro.
+>
+> E a primeira tentativa de documentar o incidente **reproduziu o defeito**, ao citar o par de
+> caracteres como exemplo literal: a guarda acusou o próprio registro, porque varre bytes e não
+> intenção. Lição para as próximas rodadas: nunca fazer round-trip de arquivo do projeto por
+> cmdlet de texto do PowerShell — usar a ferramenta de edição, ou
+> `[System.IO.File]::ReadAllText`/`WriteAllText` com `UTF8Encoding($false)` explícito.
 
 ### 7.1 Medição de tempo
 
 | Momento | Arquivos | Verificações | Tempo |
 | :--- | ---: | ---: | ---: |
 | Antes da feature 005 (fecho da 004, 2026-09-21) | 17 | 90 | 63,66 s |
-| Depois da feature 005 | *(a preencher)* | *(a preencher)* | *(a preencher)* |
+| Depois da feature 005 (2026-09-21) | **18** | **109** | **67,42 s** |
 
-Teto: **90 segundos**. A folga atual é de 26,3 s, e ela será **medida** ao final, não
-presumida (D-11).
+Teto: **90 segundos**. A folga caiu para **22,58 s**. O arquivo novo acrescenta 19 verificações
+e 3,76 s — o custo por verificação é baixo porque a prova ancora em um único componente, sem
+montar tela de página inteira.
 
 ### 7.2 Comandos além dos quatro
 

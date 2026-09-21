@@ -26,44 +26,44 @@
 
 | ID | Descrição | Dependências | Paralelismo | Arquivo alvo | Confidência | Status |
 |----|-----------|--------------|-------------|--------------|-------------|--------|
-| T001 | Criar a massa de prova compartilhada — paciente com e sem CPF, modelo parametrizável por tipo e conteúdo, os modelos de borda (receita, atestado, inativo, com as quatro variáveis, com `{DIAS_AFASTAMENTO}` e com marcação HTML), os **seis** tipos de documento, e o dia de prova com derivadores por **construtor local**, devolvendo **arrays de identidade estável** | - | [//] | `src/test/templateFixtures.ts` | 🟢 | [ ] |
-| T002 | Abrir o arquivo de verificação do editor com o arranjo de dublês reutilizável — consulta de modelos, seletor de tipo e seletor de modelo — e uma verificação de fumaça que monta o diálogo e confirma que o editor abre com o tipo inicial de receita simples | - | [//] | `src/components/medical/__tests__/PrescriptionEditor.test.tsx` | 🟢 | [ ] |
+| T001 | Criar a massa de prova compartilhada — paciente com e sem CPF, modelo parametrizável por tipo e conteúdo, os modelos de borda (receita, atestado, inativo, com as quatro variáveis, com `{DIAS_AFASTAMENTO}` e com marcação HTML), os **seis** tipos de documento, e o dia de prova com derivadores por **construtor local**, devolvendo **arrays de identidade estável** | - | [//] | `src/test/templateFixtures.ts` | 🟢 | [X] |
+| T002 | Abrir o arquivo de verificação do editor com o arranjo de dublês reutilizável — consulta de modelos, seletor de tipo e seletor de modelo — e uma verificação de fumaça que monta o diálogo e confirma que o editor abre com o tipo inicial de receita simples | - | [//] | `src/components/medical/__tests__/PrescriptionEditor.test.tsx` | 🟢 | [X] |
 
 ## Fase 2, Testes
 
 | ID | Descrição | Dependências | Paralelismo | Arquivo alvo | Confidência | Status |
 |----|-----------|--------------|-------------|--------------|-------------|--------|
-| T003 | Provar a seção de Medicamentos nos **seis** tipos de documento: presente em `receita_simples` e `receita_controlada` com os **cinco** campos do cenário, ausente em `atestado`, `solicitacao_exame`, `encaminhamento` e `declaracao` — afirmando o que aparece na tela, não a expressão que decide | T001, T002 | - | `src/components/medical/__tests__/PrescriptionEditor.test.tsx` | 🟢 | [ ] |
-| T004 | Provar o **portão de `medications` no payload**, independente da visibilidade: com um medicamento preenchido em receita, trocar para atestado e salvar entrega `medications: []` ao salvamento | T003 | - | `src/components/medical/__tests__/PrescriptionEditor.test.tsx` | 🟢 | [ ] |
+| T003 | Provar a seção de Medicamentos nos **seis** tipos de documento: presente em `receita_simples` e `receita_controlada` com os **cinco** campos do cenário, ausente em `atestado`, `solicitacao_exame`, `encaminhamento` e `declaracao` — afirmando o que aparece na tela, não a expressão que decide | T001, T002 | - | `src/components/medical/__tests__/PrescriptionEditor.test.tsx` | 🟢 | [X] |
+| T004 | Provar o **portão de `medications` no payload**, independente da visibilidade: com um medicamento preenchido em receita, trocar para atestado e salvar entrega `medications: []` ao salvamento | T003 | - | `src/components/medical/__tests__/PrescriptionEditor.test.tsx` | 🟢 | [X] |
 
 ## Fase 3, Núcleo
 
 | ID | Descrição | Dependências | Paralelismo | Arquivo alvo | Confidência | Status |
 |----|-----------|--------------|-------------|--------------|-------------|--------|
-| T005 | Provar o **pedido de modelos no transporte** (D-02): a consulta é emitida com o `type` corrente e com `is_active: true`, afirmando os **argumentos exatos**, e é reemitida com o tipo novo quando o tipo muda | T002 | - | `src/components/medical/__tests__/PrescriptionEditor.test.tsx` | 🟢 | [ ] |
-| T006 | Provar que o cliente **não re-filtra** o resultado (D-06): o mesmo dublê devolve, na mesma verificação, um modelo de tipo errado e um modelo inativo, e ambos são oferecidos pelo seletor | T005 | - | `src/components/medical/__tests__/PrescriptionEditor.test.tsx` | 🟢 | [ ] |
-| T007 | Provar a substituição das **quatro** variáveis na escolha do modelo, com o `Date` congelado e a string em pt-BR afirmada por extenso (D-04) — `{PACIENTE_NOME}`, `{PACIENTE_CPF}`, `{DATA}` e `{DATA_EXTENSO}` | T003 | - | `src/components/medical/__tests__/PrescriptionEditor.test.tsx` | 🟡 | [ ] |
-| T008 | Provar que o texto é **editável após a aplicação** e que o salvamento persiste a edição, e não o texto do modelo — a metade que corrige a redação imprecisa de `PT-006.3` (RN-02) | T007 | - | `src/components/medical/__tests__/PrescriptionEditor.test.tsx` | 🟢 | [ ] |
-| T009 | Provar as **bordas da substituição** por asserção positiva (D-03): um modelo com `{DIAS_AFASTAMENTO}` chega ao payload com o marcador **literal**, e um paciente sem CPF resolve `{PACIENTE_CPF}` para string vazia sem quebrar a tela | T007 | - | `src/components/medical/__tests__/PrescriptionEditor.test.tsx` | 🟢 | [ ] |
-| T010 | Provar que a **marcação HTML não é escapada** na substituição: o modelo com marcação chega literal ao campo de conteúdo e ao payload entregue ao salvamento | T007 | - | `src/components/medical/__tests__/PrescriptionEditor.test.tsx` | 🟢 | [ ] |
-| T011 | Provar a **injeção na impressão** com duplo de `window.open` que captura o HTML escrito (D-05): o documento impresso contém a marcação do modelo sem escape — e a verificação **falha** se o duplo não capturar nada, para que o caminho inalcançável do `jsdom` não passe por verde | T002, T007 | - | `src/components/medical/__tests__/PrescriptionEditor.test.tsx` | 🟢 | [ ] |
-| T012 | Provar a **procedência** do modelo gravado — `template_name` recebe o nome do modelo escolhido e `null` quando nenhum foi aplicado — e o achado da troca de tipo após a aplicação: conteúdo obsoleto permanece e a procedência vira nula (RF-12, RF-13) | T007 | - | `src/components/medical/__tests__/PrescriptionEditor.test.tsx` | 🟢 | [ ] |
-| T013 | Provar que a reedição **não** recupera o modelo de origem, deixando o seletor vazio ao abrir com dados iniciais (RF-14), e que o seletor de tipo oferece **exatamente** os seis tipos de `Prescription`, sem `anamnese`, confrontados com o conjunto do schema (RF-15) | T002 | - | `src/components/medical/__tests__/PrescriptionEditor.test.tsx` | 🟢 | [ ] |
+| T005 | Provar o **pedido de modelos no transporte** (D-02): a consulta é emitida com o `type` corrente e com `is_active: true`, afirmando os **argumentos exatos**, e é reemitida com o tipo novo quando o tipo muda | T002 | - | `src/components/medical/__tests__/PrescriptionEditor.test.tsx` | 🟢 | [X] |
+| T006 | Provar que o cliente **não re-filtra** o resultado (D-06): o mesmo dublê devolve, na mesma verificação, um modelo de tipo errado e um modelo inativo, e ambos são oferecidos pelo seletor | T005 | - | `src/components/medical/__tests__/PrescriptionEditor.test.tsx` | 🟢 | [X] |
+| T007 | Provar a substituição das **quatro** variáveis na escolha do modelo, com o `Date` congelado e a string em pt-BR afirmada por extenso (D-04) — `{PACIENTE_NOME}`, `{PACIENTE_CPF}`, `{DATA}` e `{DATA_EXTENSO}` | T003 | - | `src/components/medical/__tests__/PrescriptionEditor.test.tsx` | 🟡 | [X] |
+| T008 | Provar que o texto é **editável após a aplicação** e que o salvamento persiste a edição, e não o texto do modelo — a metade que corrige a redação imprecisa de `PT-006.3` (RN-02) | T007 | - | `src/components/medical/__tests__/PrescriptionEditor.test.tsx` | 🟢 | [X] |
+| T009 | Provar as **bordas da substituição** por asserção positiva (D-03): um modelo com `{DIAS_AFASTAMENTO}` chega ao payload com o marcador **literal**, e um paciente sem CPF resolve `{PACIENTE_CPF}` para string vazia sem quebrar a tela | T007 | - | `src/components/medical/__tests__/PrescriptionEditor.test.tsx` | 🟢 | [X] |
+| T010 | Provar que a **marcação HTML não é escapada** na substituição: o modelo com marcação chega literal ao campo de conteúdo e ao payload entregue ao salvamento | T007 | - | `src/components/medical/__tests__/PrescriptionEditor.test.tsx` | 🟢 | [X] |
+| T011 | Provar a **injeção na impressão** com duplo de `window.open` que captura o HTML escrito (D-05): o documento impresso contém a marcação do modelo sem escape — e a verificação **falha** se o duplo não capturar nada, para que o caminho inalcançável do `jsdom` não passe por verde | T002, T007 | - | `src/components/medical/__tests__/PrescriptionEditor.test.tsx` | 🟢 | [X] |
+| T012 | Provar a **procedência** do modelo gravado — `template_name` recebe o nome do modelo escolhido e `null` quando nenhum foi aplicado — e o achado da troca de tipo após a aplicação: conteúdo obsoleto permanece e a procedência vira nula (RF-12, RF-13) | T007 | - | `src/components/medical/__tests__/PrescriptionEditor.test.tsx` | 🟢 | [X] |
+| T013 | Provar que a reedição **não** recupera o modelo de origem, deixando o seletor vazio ao abrir com dados iniciais (RF-14), e que o seletor de tipo oferece **exatamente** os seis tipos de `Prescription`, sem `anamnese`, confrontados com o conjunto do schema (RF-15) | T002 | - | `src/components/medical/__tests__/PrescriptionEditor.test.tsx` | 🟢 | [X] |
 
 ## Fase 4, Integração
 
 | ID | Descrição | Dependências | Paralelismo | Arquivo alvo | Confidência | Status |
 |----|-----------|--------------|-------------|--------------|-------------|--------|
-| T014 | Estender a matriz com o veredito dos **quatro** cenários de `PT-006`, citando todo identificador de regra com o **artefato de origem qualificado** (D-12), e registrar as **três lacunas de severidade Alta** com a evidência que cada uma ganhou — deixando explícito que seguem **abertas** | T004, T006, T011, T013 | - | `_reversa_sdd/code-spec-matrix.md` | 🟢 | [ ] |
-| T015 | Registrar na matriz o destino do grupo `Templates (06)`, o saldo dos módulos restantes (**23 → 19**), a colisão de `BR-T` como lacuna documental, a imprecisão de `templates/requirements.md#4` sobre a RLS e a redação corrigida de `PT-006.3` | T014 | - | `_reversa_sdd/code-spec-matrix.md` | 🟢 | [ ] |
+| T014 | Estender a matriz com o veredito dos **quatro** cenários de `PT-006`, citando todo identificador de regra com o **artefato de origem qualificado** (D-12), e registrar as **três lacunas de severidade Alta** com a evidência que cada uma ganhou — deixando explícito que seguem **abertas** | T004, T006, T011, T013 | - | `_reversa_sdd/code-spec-matrix.md` | 🟢 | [X] |
+| T015 | Registrar na matriz o destino do grupo `Templates (06)`, o saldo dos módulos restantes (**23 → 19**), a colisão de `BR-T` como lacuna documental, a imprecisão de `templates/requirements.md#4` sobre a RLS e a redação corrigida de `PT-006.3` | T014 | - | `_reversa_sdd/code-spec-matrix.md` | 🟢 | [X] |
 
 ## Fase 5, Polimento
 
 | ID | Descrição | Dependências | Paralelismo | Arquivo alvo | Confidência | Status |
 |----|-----------|--------------|-------------|--------------|-------------|--------|
-| T016 | Revalidar os cinco comandos de gate com a prova no lugar e conferir que nenhum arquivo de aplicação foi tocado, incluindo `Templates.tsx` e os schemas de entidade | T011, T013 | - | `_reversa_forward/005-prova-templates/onboarding.md` | 🟢 | [ ] |
-| T017 | Medir o tempo da suíte completa com o arquivo novo e registrar o valor no roteiro, verificando o teto de 90 segundos | T016 | - | `_reversa_forward/005-prova-templates/onboarding.md` | 🟢 | [ ] |
-| T018 | Produzir o `regression-watch.md` da feature, cobrindo os pontos que passam a ser vigiados — incluindo a trava de paridade de AMB-006 e a dependência do filtro no servidor | T015, T016 | - | `_reversa_forward/005-prova-templates/regression-watch.md` | 🟢 | [ ] |
+| T016 | Revalidar os cinco comandos de gate com a prova no lugar e conferir que nenhum arquivo de aplicação foi tocado, incluindo `Templates.tsx` e os schemas de entidade | T011, T013 | - | `_reversa_forward/005-prova-templates/onboarding.md` | 🟢 | [X] |
+| T017 | Medir o tempo da suíte completa com o arquivo novo e registrar o valor no roteiro, verificando o teto de 90 segundos | T016 | - | `_reversa_forward/005-prova-templates/onboarding.md` | 🟢 | [X] |
+| T018 | Produzir o `regression-watch.md` da feature, cobrindo os pontos que passam a ser vigiados — incluindo a trava de paridade de AMB-006 e a dependência do filtro no servidor | T015, T016 | - | `_reversa_forward/005-prova-templates/regression-watch.md` | 🟢 | [X] |
 
 ## Notas de execução
 
@@ -86,12 +86,15 @@ Registradas pelo `/reversa-plan` para orientar o `/reversa-coding`:
 15. **Formato do marcador de status — sem crase, deliberadamente.** O template do `actions.md` envolve o status em crase, mas a tabela de detecção de estágio do Reversa procura a linha terminando em `| [ ] |` ou `| [X] |`, sem crase. Mesma divergência consciente registrada nas features 002, 003 e 004.
 16. **Marcador `[//]` só onde existe par.** T001 e T002 são os dois únicos casos: arquivos diferentes, sem dependência entre si. Contagem conferida: **2 declarados, 2 marcados**.
 17. **Duas correções feitas na conferência, antes de fechar, e o registro delas.** Primeira: o T011 nasceu dependendo apenas de `T002` (o arranjo de dublês), mas a verificação afirma que a marcação **do modelo** chega ao HTML impresso — e isso exige um modelo aplicado, provado em `T007`. A dependência foi corrigida para `T002, T007`. Segunda, e mais séria: o resumo declarava **8 elos** de cadeia, e o cálculo correto dá **7**. O erro foi encadear `T001 → T002`, que **não** é aresta — as duas ações são independentes, e é por isso que recebem `[//]`. A cadeia mais longa é `T001 → T003 → T007 → T011 → T014 → T015 → T018`, com 7 elos, e o resumo foi corrigido. Registrado porque a contagem de elos é exatamente o tipo de número que ninguém reconfere depois.
+18. **Anotação de 2026-09-21, no fecho da execução: este arquivo foi corrompido e recuperado.** A marcação em massa das ações T001 a T013 foi feita com `Get-Content` e `Set-Content`, e no PowerShell 5.1 esses cmdlets decodificam arquivo sem BOM pela **página ANSI**: leram o UTF-8 como Latin-1 e gravaram de volta, deixando **330 sequências** corrompidas — o acento de `ã` foi gravado como o par de caracteres que a leitura em Latin-1 produz. A **guarda de encoding do projeto pegou**, e o arquivo foi reescrito íntegro. Lição para as próximas rodadas: **nunca** fazer round-trip de arquivo do projeto por cmdlet de texto do PowerShell — usar a ferramenta de edição, ou `[System.IO.File]::ReadAllText`/`WriteAllText` com `UTF8Encoding($false)` explícito.
+19. **A guarda de encoding não distingue texto corrompido de texto que CITA a corrupção.** A primeira versão desta nota trazia o par de caracteres defeituoso como exemplo literal, e a guarda acusou **este próprio arquivo** — a documentação do incidente virou o incidente. O registro foi reescrito para descrever o defeito sem reproduzi-lo. Fica como limitação conhecida da guarda: ela varre bytes, não intenção, e por isso nenhum artefato do projeto pode conter um exemplo literal de mojibake.
 
 ## Histórico de alterações
 
 | Data | Alteração | Autor |
 |------|-----------|-------|
 | `2026-09-21` | Versão inicial gerada por `/reversa-to-do` | reversa |
+| `2026-09-21` | T001 a T013 marcadas como concluídas; dependência de T011 corrigida; arquivo reescrito após corrupção de codificação detectada pela guarda | `/reversa-coding` |
 
 ---
 *Gerado pelo Reversa-To-Do em 2026-09-21.*
