@@ -42,16 +42,16 @@
 
 | ID | Descrição | Dependências | Paralelismo | Arquivo alvo | Confidência | Status |
 |----|-----------|--------------|-------------|--------------|-------------|--------|
-| T007 | Estender a matriz de rastreabilidade com o veredito de prova de cada promessa do módulo de Agendamentos, citando **todo identificador de regra com o artefato de origem qualificado**, por causa da colisão das famílias `BR-A0x` | T003, T005, T006 | - | `_reversa_sdd/code-spec-matrix.md` | 🟢 | [ ] |
-| T008 | Registrar na matriz o destino dos 8 cenários de paridade do módulo e as dez lacunas declaradas, cada uma com a razão — em especial as duas de severidade Alta, que **não** ganham prova nesta feature | T007 | - | `_reversa_sdd/code-spec-matrix.md` | 🟢 | [ ] |
+| T007 | Estender a matriz de rastreabilidade com o veredito de prova de cada promessa do módulo de Agendamentos, citando **todo identificador de regra com o artefato de origem qualificado**, por causa da colisão das famílias `BR-A0x` | T003, T005, T006 | - | `_reversa_sdd/code-spec-matrix.md` | 🟢 | [X] |
+| T008 | Registrar na matriz o destino dos 8 cenários de paridade do módulo e as dez lacunas declaradas, cada uma com a razão — em especial as duas de severidade Alta, que **não** ganham prova nesta feature | T007 | - | `_reversa_sdd/code-spec-matrix.md` | 🟢 | [X] |
 
 ## Fase 5, Polimento
 
 | ID | Descrição | Dependências | Paralelismo | Arquivo alvo | Confidência | Status |
 |----|-----------|--------------|-------------|--------------|-------------|--------|
-| T009 | Revalidar os quatro comandos de gate com o módulo provado e conferir que nenhum arquivo de aplicação do módulo nem schema de entidade foi tocado | T003, T005, T006 | [//] | `_reversa_forward/003-prova-agendamentos/onboarding.md` | 🟢 | [ ] |
-| T010 | Medir o tempo da suíte completa com o módulo provado e registrar o valor no roteiro, verificando o teto de 90 segundos | T009 | - | `_reversa_forward/003-prova-agendamentos/onboarding.md` | 🟢 | [ ] |
-| T011 | Produzir o `regression-watch.md` da feature, cobrindo os pontos que passam a ser vigiados | T008, T009 | - | `_reversa_forward/003-prova-agendamentos/regression-watch.md` | 🟢 | [ ] |
+| T009 | Revalidar os quatro comandos de gate com o módulo provado e conferir que nenhum arquivo de aplicação do módulo nem schema de entidade foi tocado | T003, T005, T006 | [//] | `_reversa_forward/003-prova-agendamentos/onboarding.md` | 🟢 | [X] |
+| T010 | Medir o tempo da suíte completa com o módulo provado e registrar o valor no roteiro, verificando o teto de 90 segundos | T009 | - | `_reversa_forward/003-prova-agendamentos/onboarding.md` | 🟢 | [X] |
+| T011 | Produzir o `regression-watch.md` da feature, cobrindo os pontos que passam a ser vigiados | T008, T009 | - | `_reversa_forward/003-prova-agendamentos/regression-watch.md` | 🟢 | [X] |
 
 ## Notas de execução
 
@@ -71,6 +71,8 @@ Registradas pelo `/reversa-plan` para orientar o `/reversa-coding`:
 | Data | Alteração | Autor |
 |------|-----------|-------|
 | `2026-09-19` | Versão inicial gerada por `/reversa-to-do` | reversa |
+| `2026-09-21` | T007 a T011 fechadas pelo `/reversa-coding`. Matriz estendida com o veredito do módulo de Agendamentos e as onze lacunas declaradas; `onboarding.md` com os quatro gates revalidados e o tempo medido; `regression-watch.md` e `legacy-impact.md` criados | reversa-coding |
 
 ---
 *Gerado pelo Reversa-To-Do em 2026-09-19.*
+*Última atualização pelo Reversa-Coding em 2026-09-21.*

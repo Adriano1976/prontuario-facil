@@ -82,18 +82,48 @@ tudo passa.
 
 ## 7. Registro de execução
 
+Rodada de fechamento em **2026-09-21**, sobre a árvore de trabalho limpa (nenhum arquivo
+modificado em relação ao commit `9b5dfdb`).
+
 | # | Item | Resultado |
 |---|------|-----------|
-| 1 | `npm test` passa por inteiro | |
-| 2 | `npm run typecheck` sem saída | |
-| 3 | `npm run lint` sem saída | |
-| 4 | `npm run prova:negativos` reporta cada caso e não deixa resíduo | |
-| 5 | Nenhum arquivo de aplicação do módulo modificado | |
-| 6 | `base44/entities/` sem diff | |
-| 7 | Os três comportamentos de disponibilidade estão distinguidos na prova | |
-| 8 | A ausência de gatilho automático é afirmada pelo valor do status | |
-| 9 | As dez lacunas aparecem na matriz com razão | |
-| 10 | Suíte completa abaixo de 90 segundos | |
+| 1 | `npm test` passa por inteiro | ✅ **14 arquivos, 66 verificações, 0 falhas** — código de retorno 0 |
+| 2 | `npm run typecheck` sem saída | ✅ **0 erros** |
+| 3 | `npm run lint` sem saída | ✅ **0 erros** (`eslint . --quiet`) |
+| 4 | `npm run prova:negativos` reporta cada caso e não deixa resíduo | ✅ **9 casos, 9 recusados como esperado**, e `src/__negative_checks__/` **não** ficou no repositório |
+| 5 | Nenhum arquivo de aplicação do módulo modificado | ✅ Conferido **por histórico**: o último commit que tocou `Appointments.tsx` e `NewAppointment.tsx` é `4c31d76`, de 2026-09-14 — cinco dias antes desta feature. O commit que trouxe as provas do módulo, `b6d2fce`, adiciona 4 arquivos e **todos** são de prova |
+| 6 | `base44/entities/` sem diff | ✅ Último commit nesse caminho: `19ed662`, de 2026-08-18 |
+| 7 | Os três comportamentos de disponibilidade estão distinguidos na prova | ✅ `TimeSlotPicker.test.tsx` — seis verificações separam "não gerado", "gerado e desabilitado" e "mensagem de dia sem atendimento" |
+| 8 | A ausência de gatilho automático é afirmada pelo valor do status | ✅ `Appointments.test.tsx` afirma o **valor** depois, e não a ausência de chamadas — **com vacuidade declarada**: nada liga consulta a agendamento, então a verificação é guarda de regressão |
+| 9 | As lacunas do módulo aparecem na matriz com razão | ✅ **Onze**, e não dez — a contagem do artefato diverge da do `requirements.md`, e a divergência está declarada na matriz em vez de silenciada |
+| 10 | Suíte completa abaixo de 90 segundos | ✅ **57,9 s** medidos pelo vitest (60,9 s de relógio) — **32 s de folga** |
+
+### 7.1 Medição de tempo (T010)
+
+| Medição | Verificações | Arquivos | Tempo | Teto | Folga |
+|---------|-------------:|---------:|------:|-----:|------:|
+| 2026-09-19, antes desta feature | 36 | 10 | 32,5 s | 90 s | 57,5 s |
+| 2026-09-21, após esta feature | 66 | 14 | 57,9 s | 90 s | **32,1 s** |
+
+O acréscimo foi de **30 verificações em 4 arquivos** — 22 nas três provas do módulo de
+Agendamentos e 8 na guarda de encoding. O teto de 90 segundos **não** foi atingido, e a
+decisão de mantê-lo (sessão de 2026-09-19) segue válida.
+
+### 7.2 Gates além dos quatro (T009)
+
+Dois comandos foram executados por completude, e **nenhum** faz parte dos quatro gates
+desta feature:
+
+| Comando | Resultado |
+|---------|-----------|
+| `npm run prova:encoding` | ✅ **373 arquivos de texto** em `src/`, `_reversa_docs/`, `_reversa_forward/` e `_reversa_sdd/` — nenhum mojibake, todo texto UTF-8 íntegro |
+| `git status --porcelain` | ✅ Vazio no início da rodada: nenhuma alteração pendente, e portanto nenhum diff acidental em arquivo de aplicação |
+
+> **Ressalva de ambiente.** Os comandos de prova **não** sobem nos modos confinados de
+> sandbox: o esbuild do vitest abre pipe nomeado e falha com `spawn EPERM`, e o
+> `prova:negativos` falha ao criar `src/__negative_checks__/`. Exigem acesso ampliado —
+> mesma restrição registrada no onboarding da feature 001, §7. Não é defeito do projeto.
 
 ---
 *Gerado pelo Reversa-Plan em 2026-09-20.*
+*Registro de execução preenchido pelo Reversa-Coding em 2026-09-21.*
