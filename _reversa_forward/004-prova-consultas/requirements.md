@@ -76,6 +76,29 @@ divergência em `code-analysis.md#5.4` e a máquina de estados já previa as dua
 metade do mesmo cenário — a união fechada do tipo `ConsultationStatus` — é verdadeira e
 verificável em tempo de compilação. Confidência: 🟢.
 
+### 2.2 Um terceiro achado, verificado na sessão de esclarecimentos
+
+Ao responder à pergunta 4 da sessão de 2026-09-21, o código foi lido até o fim e o achado
+deixou de ser suspeita. `ACCESS_ACTIONS` declara **doze** ações auditáveis
+(`src/components/medical/AccessLogger.ts:22-35`), entre elas
+`CREATE_PRESCRIPTION: 'create_prescription'`. **Nove** são invocadas em algum lugar do
+sistema. Três nunca são:
+
+| Ação declarada | Invocada? | Situação |
+| :--- | :---: | :--- |
+| `create_prescription` | ❌ **nunca** | O fluxo existe — `src/pages/Consultation.tsx:120-124` cria a prescrição — e o catálogo tem a ação. **Nada liga os dois** |
+| `logout` | ❌ nunca | Não há auditoria de saída no sistema |
+| `export_data` | ❌ nunca | Não há funcionalidade de exportação correspondente |
+
+A consequência relevante é a primeira: **emitir um documento a partir da consulta não gera
+trilha de auditoria**, enquanto anexar um exame gera — o `ExamUploader` audita por dentro,
+na linha 144, depois de a gravação ser aceita. A assimetria confronta a **BR-S01** de
+`_reversa_sdd/domain.md#2.4` ("todo acesso ou alteração de dados sensíveis deve gerar um
+log em `AccessLogs`"), que é 🟢, e uma prescrição é dado sensível. Confidência: 🟢.
+
+Isto **não** é defeito a corrigir nesta feature: é comportamento provado e lacuna
+declarada, pela mesma razão que as demais. Ver o `RF-17`.
+
 ## 3. Personas e cenários de uso
 
 | Persona | Objetivo | Cenário-chave |
@@ -113,6 +136,9 @@ verificável em tempo de compilação. Confidência: 🟢.
 9. **RN-09:** Toda citação de regra desta feature qualifica o artefato de origem, por causa das duas grafias de `BR-C`. 🟢
    - Origem no legado: `_reversa_sdd/consultas/requirements.md#2` e `_reversa_sdd/code-analysis.md#6`
    - Tipo: nova
+10. **RN-10:** A emissão de documento **não** gera trilha de auditoria hoje, embora a ação exista no catálogo e o fluxo exista no código. O comportamento é preservado, provado como está e declarado como lacuna — **não** é corrigido nesta feature. 🟢
+   - Origem no legado: `src/components/medical/AccessLogger.ts:22-35`, `src/pages/Consultation.tsx:120-124` e `_reversa_sdd/domain.md#2.4` (BR-S01)
+   - Tipo: nova (o achado nasceu da leitura do código nesta sessão, não da extração)
 
 ## 5. Requisitos Funcionais
 
@@ -134,6 +160,7 @@ verificável em tempo de compilação. Confidência: 🟢.
 | RF-14 | A prova não depende de backend real, de rede nem do **valor** do relógio do sistema para decidir resultado | Must | A suíte roda sem backend e sem dublê de rede para o que é puro; onde o valor da data decide, o relógio é controlado | 🟢 |
 | RF-15 | Nenhum arquivo de aplicação do módulo é alterado | Must | Não há diff em `src/pages/Consultation*`, `src/pages/NewConsultation*`, `src/components/medical/*` nem em `base44/entities/` | 🟢 |
 | RF-16 | O adendo da entrega converge o delta na extração | Must | Existe adendo vigente para a feature, produzido ao final do ciclo | 🟢 |
+| RF-17 | A assimetria de auditoria da emissão de documento tem prova | Must | Emitir um documento **não** grava registro de auditoria e anexar um exame **grava**; a prova afirma o **valor** da trilha depois de cada operação, e registra que a ação `create_prescription` existe no catálogo sem nenhuma invocação no sistema | 🟢 |
 
 ## 6. Requisitos Não Funcionais
 
@@ -151,8 +178,8 @@ verificável em tempo de compilação. Confidência: 🟢.
 ### 6.1 Limites explícitos de alcance
 
 - A prova **não** corrige nenhuma das oito lacunas de `_reversa_sdd/code-analysis.md#9`. Elas passam a ter veredito, não conserto — em particular as duas de severidade Alta. 🟢
-- A prova **não** cobre as duas lacunas Alta de segurança do cliente (`applyTemplate` sem escape e `handlePrint` por `window.open`), salvo decisão em contrário de `/reversa-clarify`. O comportamento está **registrado como preservação deliberada do legado**: `src/components/medical/PrescriptionEditor.tsx:145` traz o comentário "sem escape de marcação, como no legado (AMB-006)". 🟢
-- A prova **não** cobre emissão de documento nem upload de exame além do necessário para afirmar que não movem o status. São superfícies próprias, com cenários de paridade de outros módulos (Templates e Contrato de dados). 🟢
+- **Decidido na sessão de 2026-09-21 (Q3):** a prova **não** cobre as duas lacunas Alta de segurança do cliente (`applyTemplate` sem escape e `handlePrint` por `window.open`). Elas ficam **declaradas, sem prova**. O comportamento está registrado como **preservação deliberada do legado**: `src/components/medical/PrescriptionEditor.tsx:145` traz o comentário "sem escape de marcação, como no legado (AMB-006)". 🟢
+- **Decidido na sessão de 2026-09-21 (Q4):** a prova **cobre** a assimetria de auditoria da emissão de documento (`RF-17`) — o suficiente para afirmar o valor da trilha depois de emitir e depois de anexar. A prova **não** cobre as demais superfícies de documento e exame, que têm cenários de paridade de outros módulos (Templates e Contrato de dados). 🟢
 - A prova **não** valida autorização real. A regra de acesso permanece no servidor; a suíte verifica que o escopo foi declarado e aplicado. 🟢
 - A **paridade visual** das telas do módulo permanece fora: a captura dourada de referência não existe no repositório. 🟢
 - Os cenários de paridade dos **demais módulos** não pertencem a esta feature. 🟢
@@ -196,6 +223,17 @@ Cenário: Subir exame não transiciona a consulta
   Dado uma consulta em situação "em_andamento"
   Quando um exame é anexado a ela
   Então a situação permanece "em_andamento"
+
+Cenário: Emitir documento não gera trilha de auditoria
+  Dado uma consulta aberta em detalhe
+  Quando um documento é emitido a partir dela
+  Então nenhum registro de auditoria é gravado
+  E a ação "create_prescription" do catálogo permanece sem invocação
+
+Cenário: Anexar exame gera trilha de auditoria
+  Dado uma consulta aberta em detalhe
+  Quando um exame é anexado a ela
+  Então um registro de auditoria é gravado com a ação "upload_exam"
 
 Cenário: O salvamento exige apenas paciente selecionado
   Dado o formulário de nova consulta sem paciente
@@ -274,6 +312,7 @@ Cenário: A entrega é convergida na extração
 | RF-14 | Must | Prova dependente de rede ou do relógio real não é reprodutível |
 | RF-15 | Must | É a regra de ouro: esta feature prova, não conserta |
 | RF-16 | Must | Sem o adendo a extração volta a descrever um sistema sem prova |
+| RF-17 | Must | Emitir documento é ato clínico sobre dado sensível e hoje não deixa rastro nenhum; a ação existe no catálogo e o fluxo existe no código — falta só a ligação. Provar a assimetria é o que a torna visível em vez de suspeita |
 | RF-07 | Should | A ausência de legenda é comportamento deliberado do código, mas de impacto menor |
 | RF-09 | Should | A assimetria com os agendamentos é valiosa como contraste, e barata |
 | RF-10 | Should | O recorte de data tem defeito documentado em `upcoming`; provar o comportamento atual é pré-requisito para decidir mudar |
@@ -283,20 +322,37 @@ Cenário: A entrega é convergida na extração
 
 ## 9. Esclarecimentos
 
-> Nenhuma sessão de dúvidas registrada ainda. Rode `/reversa-clarify` quando houver `[DÚVIDA]` pendente.
+### Sessão 2026-09-21
+
+Sessão dedicada às três dúvidas do documento inicial e a duas lacunas encontradas na
+varredura do código. Uma das perguntas exigiu verificação antes da resposta; as cinco
+recomendações foram aceitas.
+
+- **Q:** Qual status inicial a feature promete? O formulário grava `em_andamento` e o schema diz `agendada`; o PT-005.1 afirma `agendada`.
+  **R:** Provar o comportamento **fiel ao código** e declarar o cenário impreciso — o precedente da feature 003. Os dois caminhos ficam provados: pelo formulário, `em_andamento`; sem informação, o default do schema, `agendada`. Consequências: RF-01 mantido com a redação dupla; RN-03 confirma o comportamento como preservado; nenhuma linha de código é tocada. Fica registrado que o default do formulário é **escolha de produto a revisitar**, não defeito que esta feature conserte.
+- **Q:** A metade de interface do PT-005.3 vira promessa ou defeito?
+  **R:** Provar como comportamento atual e declarar o `.feature` impreciso. O seletor oferece as quatro situações de qualquer situação atual, inclusive `cancelada` → `concluida`; nada é impedido pela interface. Consequências: RF-04 mantido; RN-04 fixa o comportamento como preservado; a imposição de transições válidas **sai do escopo** e fica como candidata a feature própria, se algum dia for desejada. A metade de compilação (RF-03) segue provada pelo gate de tipos.
+- **Q:** As duas lacunas de severidade Alta entram como prova ou como veredito declarado?
+  **R:** Veredito **declarado, sem prova** — mantido o precedente de 2026-09-19. `applyTemplate` sem escape e `handlePrint` por `window.open` são preservação deliberada do legado (AMB-006) e continuam fora da suíte. Consequências: RF-12 inalterado em escopo; §6.1 passa a registrar a decisão nominalmente; as duas entram na matriz com razão e destino.
+- **Q:** A assimetria de auditoria na emissão de documento entra como prova?
+  **R:** Verificar antes de decidir. Verificado no código, o achado **confirmou-se e ficou maior** que a suspeita: das **doze** ações do catálogo `ACCESS_ACTIONS`, **nove** são invocadas e **três nunca são** — `create_prescription`, `logout` e `export_data`. O fluxo de emissão existe (`Consultation.tsx:120-124`), a ação existe (`AccessLogger.ts:31`), e **nada liga os dois**; anexar exame, em contraste, audita por dentro do `ExamUploader`. Consequências: criado o **RF-17**, para provar a assimetria pelo **valor** da trilha; criada a **RN-10**; §2.2 registra o achado; e a lacuna deixa de ser "não provada" para ser **provada e declarada**. A ligação em si **não** é feita aqui.
+- **Q:** O `vitest.config.ts` e o limite de tempo por verificação devem ser ajustados nesta feature?
+  **R:** Deixar como está. A instabilidade de `PatientForm.test.tsx` **não** se reproduziu nas medições de 2026-09-20 nem na de 2026-09-21, e o caminho está fora de `allowedPaths`. Consequências: nenhuma alteração de infraestrutura de prova nesta feature; a decisão reabre com dado novo se a instabilidade voltar.
 
 ## 10. Lacunas
 
-- 🔴 [DÚVIDA] **Qual status inicial a feature promete?** O formulário grava `em_andamento` e o schema diz `agendada`; o PT-005.1 afirma `agendada`. Provar o comportamento fiel ao código e declarar o cenário impreciso — o precedente da feature 003 —, ou tratar `em_andamento` como defeito a corrigir numa feature própria? A escolha muda o RF-01.
-- 🔴 [DÚVIDA] **A metade de interface do PT-005.3 vira promessa ou defeito?** O seletor oferece as quatro situações sem guarda, inclusive `cancelada` → `concluida`. Provar como comportamento atual e declarar (recomendado: é o mesmo padrão do RF-04), ou incluir no escopo a imposição das transições válidas?
-- 🔴 [DÚVIDA] **As duas lacunas de severidade Alta entram como prova ou como veredito declarado?** `applyTemplate` sem escape e `handlePrint` por `window.open` são prováveis no cliente e são preservação deliberada do legado (AMB-006). A decisão de 2026-09-19 na feature 003 foi declarar sem provar; esta feature mantém ou abre exceção?
+Nenhuma lacuna em aberto nesta feature. As três dúvidas do documento inicial foram
+resolvidas na sessão de 2026-09-21, e as duas lacunas encontradas na varredura do código
+foram decididas na mesma sessão.
 
 ### Pendências transferidas para fora desta feature
 
-- 🟢 **As oito lacunas do módulo** — `_reversa_sdd/code-analysis.md#9. Pontos de Atenção / Lacunas`: `STATUS_CONFIG` duplicado (Baixa), `applyTemplate` sem escape (Alta), `handlePrint` por injeção (Alta), filtro `upcoming` por instante completo (Baixa), impressão sem CSS dedicado (Média), upload sem validação de tamanho e tipo (Média), busca de paciente limitada a 5 (Baixa) e "sem testes" (Alta). Decisão provisória: **veredito declarado, sem prova**.
+- 🟢 **As oito lacunas do módulo** — `_reversa_sdd/code-analysis.md#9. Pontos de Atenção / Lacunas`: `STATUS_CONFIG` duplicado (Baixa), `applyTemplate` sem escape (Alta), `handlePrint` por injeção (Alta), filtro `upcoming` por instante completo (Baixa), impressão sem CSS dedicado (Média), upload sem validação de tamanho e tipo (Média), busca de paciente limitada a 5 (Baixa) e "sem testes" (Alta). Decisão de 2026-09-21: **veredito declarado, sem prova** — inclusive as duas de severidade Alta.
+- 🟢 **Emissão de documento não gera trilha de auditoria** — **provada** nesta feature (RF-17) e declarada: emitir documento não grava `AccessLog` e anexar exame grava. Confronta a BR-S01 de `_reversa_sdd/domain.md#2.4`, que é 🟢. O defeito **permanece**; corrigir exige ligar a ação `create_prescription` ao fluxo, o que muda comportamento observável e sai do escopo desta feature.
+- 🟡 **Três ações do catálogo de auditoria nunca são invocadas** — `create_prescription`, `logout` e `export_data` estão declaradas em `src/components/medical/AccessLogger.ts:22-35` e não têm nenhuma chamada no sistema. As duas últimas não têm sequer fluxo correspondente. Revisar o catálogo é trabalho de `/reversa-refactor`.
+- 🟡 **Default do formulário divergente do schema** — o formulário de criação grava `em_andamento` e o schema e o tipo documentam `agendada`. Provado nesta feature como comportamento atual; alinhar os dois é decisão de produto, candidata a feature própria.
 - 🟡 **A matriz de transições da consulta não existe na extração** — `_reversa_sdd/state-machines.md#4` é 🟡 e cobre apenas o agendamento. A máquina da consulta está descrita só como diagrama, em `#2`. Produzir a matriz é trabalho da extração, não desta feature.
 - 🟡 **Terceira e quarta cópias do mapa de situação** — `STATUS_CONFIG` está definido em `src/pages/Consultations.tsx:28` e em `src/pages/Consultation.tsx:36`, com as mesmas quatro entradas. Somados aos dois mapas do módulo de agendamentos, o projeto tem **quatro** mapas paralelos de situação. Unificá-los é trabalho de `/reversa-refactor`.
-- 🟡 **Emissão de documento não gera trilha de auditoria** — `src/pages/Consultation.tsx` grava `VIEW_CONSULTATION` (linha 116) e as mutações de criação de prescrição e de exame (linhas 120 e 126) **não** chamam auditoria; o upload de exame audita por dentro do componente (`ExamUploader.tsx:143`). A assimetria precisa ser confirmada e, se real, confrontada com a BR-S01 de `_reversa_sdd/domain.md#2.4`. Registrada como lacuna de leitura, **não provada** nesta feature.
 - 🟡 **Imprecisão do cenário PT-005.1 e do PT-005.3** — as duas redações não correspondem ao comportamento observado. Corrigir os `.feature` é trabalho da extração.
 - 🔴 **Paridade visual das telas do módulo** — os cenários de tela permanecem sem prova enquanto a captura dourada de referência não existir no repositório.
 - 🟡 **Cenários de paridade dos demais módulos** — pertencem a features próprias, com destino já declarado na matriz de rastreabilidade.
@@ -306,6 +362,7 @@ Cenário: A entrega é convergida na extração
 | Data | Alteração | Autor |
 |------|-----------|-------|
 | 2026-09-21 | Versão inicial gerada por `/reversa-requirements` | reversa |
+| 2026-09-21 | Sessão de esclarecimentos: 5 respostas. A prova segue o comportamento do código no status inicial (RF-01) e declara o PT-005.1 impreciso; a metade de interface do PT-005.3 é provada como falsa e declarada (RF-04); as duas lacunas de severidade Alta ficam declaradas sem prova; a assimetria de auditoria é **verificada, confirmada e provada** (novo RF-17 e nova RN-10, com o achado das três ações de catálogo nunca invocadas); e o `vitest.config.ts` não é tocado | reversa-clarify |
 
 ---
 *Gerado pelo Reversa-Requirements em 2026-09-21.*
