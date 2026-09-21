@@ -36,3 +36,6 @@
 - 2026-09-17 — Endurecimento final: allowJs desligado e decisão D-13 registrada (A020 a A022)
 - 2026-09-18 — Documentada a unit Migração TypeScript no mini-site e ampliado o glossário
 - 2026-09-18 — Mini-site Reversa Docs regenerado: 136 arquivos, 346 importações e 1 ciclo
+
+---
+*Gerado pelo Reversa em 2026-09-10.*
