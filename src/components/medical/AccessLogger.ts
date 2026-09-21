@@ -6,19 +6,19 @@ import type { AccessLogAction } from '@/types';
 /**
  * Registro de acesso para auditoria.
  *
- * PARIDADE: comportamento idÃªntico ao anterior. A gravaÃ§Ã£o continua sendo disparada
+ * PARIDADE: comportamento idêntico ao anterior. A gravação continua sendo disparada
  * sem bloquear quem chama, e qualquer falha continua sendo apenas registrada no
- * console â€” nunca propagada, para nÃ£o derrubar a operaÃ§Ã£o principal.
+ * console — nunca propagada, para não derrubar a operação principal.
  *
  * Notas de contrato:
- * - O endereÃ§o de rede Ã© gravado como `'client-side'` porque o navegador nÃ£o tem
- *   acesso ao endereÃ§o real do cliente; Ã© o valor que o sistema jÃ¡ usava.
- * - `details` Ã© TEXTO. A documentaÃ§Ã£o anterior dizia "objeto", mas as duas chamadas
- *   existentes passam texto â€” o tipo agora reflete o uso real.
- * - A trilha Ã© somente inserÃ§Ã£o: este mÃ³dulo nunca lÃª nem altera registros.
+ * - O endereço de rede é gravado como `'client-side'` porque o navegador não tem
+ *   acesso ao endereço real do cliente; é o valor que o sistema já usava.
+ * - `details` é TEXTO. A documentação anterior dizia "objeto", mas as duas chamadas
+ *   existentes passam texto — o tipo agora reflete o uso real.
+ * - A trilha é somente inserção: este módulo nunca lê nem altera registros.
  */
 
-/** AÃ§Ãµes auditÃ¡veis, indexadas por nome legÃ­vel. */
+/** Ações auditáveis, indexadas por nome legível. */
 export const ACCESS_ACTIONS = {
   LOGIN: 'login',
   LOGOUT: 'logout',
@@ -37,10 +37,10 @@ export const ACCESS_ACTIONS = {
 /**
  * Grava um registro de auditoria.
  *
- * @param action AÃ§Ã£o executada.
+ * @param action Ação executada.
  * @param entityType Tipo da entidade acessada.
  * @param entityId Identificador da entidade acessada.
- * @param patientName Nome do paciente associado; Ã© cÃ³pia para auditoria, nÃ£o vÃ­nculo.
+ * @param patientName Nome do paciente associado; é cópia para auditoria, não vínculo.
  * @param details Texto livre com detalhes adicionais.
  */
 export async function logAccess(
@@ -54,9 +54,9 @@ export async function logAccess(
     const user = toSessionUser(await base44.auth.me());
     if (!user) return;
 
-    // A trilha de auditoria recebe inserÃ§Ã£o de QUALQUER usuÃ¡rio autenticado; apenas a
-    // LEITURA Ã© restrita a administrador (BR-MIGRAR-024). Por isso a gravaÃ§Ã£o usa o
-    // escopo do prÃ³prio usuÃ¡rio, e nÃ£o o acesso administrativo.
+    // A trilha de auditoria recebe inserção de QUALQUER usuário autenticado; apenas a
+    // LEITURA é restrita a administrador (BR-MIGRAR-024). Por isso a gravação usa o
+    // escopo do próprio usuário, e não o acesso administrativo.
     await base44.entities.AccessLog.asUser(asUserScope(user)).create({
       user_email: user.email,
       action,

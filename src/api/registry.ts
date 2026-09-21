@@ -19,42 +19,42 @@ import type {
 import { createOwnedEntity, type OwnedEntity } from './scopedRead';
 
 /**
- * Registry FECHADO de entidades do domÃ­nio.
+ * Registry FECHADO de entidades do domínio.
  *
- * DECISÃƒO DE DESIGN (Onda 3): `entities` Ã© tipado com as entidades conhecidas, em
- * vez de um Ã­ndice aberto que aceitaria qualquer nome. Motivo: com Ã­ndice aberto,
- * um erro de digitaÃ§Ã£o em `entities.Pacient.list()` continuaria compilando e sÃ³
- * falharia em runtime â€” exatamente o risco nÂº 5 do brief ("desacoplamento
- * silencioso"). O `Proxy` dinÃ¢mico do mock continua existindo, mas como detalhe de
- * implementaÃ§Ã£o em runtime, nÃ£o como contrato de tipo.
+ * DECISÃO DE DESIGN (Onda 3): `entities` é tipado com as entidades conhecidas, em
+ * vez de um índice aberto que aceitaria qualquer nome. Motivo: com índice aberto,
+ * um erro de digitação em `entities.Pacient.list()` continuaria compilando e só
+ * falharia em runtime — exatamente o risco nº 5 do brief ("desacoplamento
+ * silencioso"). O `Proxy` dinâmico do mock continua existindo, mas como detalhe de
+ * implementação em runtime, não como contrato de tipo.
  */
 
 /**
  * Campos injetados pelo servidor em todo registro (espelha `ServerEntityFields` do
- * SDK). A escrita nÃ£o os exige: o `create` os preenche (BR-MIGRAR-042).
+ * SDK). A escrita não os exige: o `create` os preenche (BR-MIGRAR-042).
  */
 export type ServerFields = 'id' | 'created_date' | 'updated_date' | 'created_by_id';
 
 /**
- * `Omit` que DISTRIBUI sobre uniÃ£o.
+ * `Omit` que DISTRIBUI sobre união.
  *
- * âš ï¸ ARMADILHA REAL (encontrada por teste, Onda 3): o `Omit` nativo NÃƒO distribui
- * sobre uniÃ£o de tipos â€” ele colapsa as variantes numa Ãºnica chave. Como
- * `Patient = BaseEntity & LGPDConsent` e `LGPDConsent` Ã© uma uniÃ£o discriminada,
+ * ⚠️ ARMADILHA REAL (encontrada por teste, Onda 3): o `Omit` nativo NÃO distribui
+ * sobre união de tipos — ele colapsa as variantes numa única chave. Como
+ * `Patient = BaseEntity & LGPDConsent` e `LGPDConsent` é uma união discriminada,
  * o `Omit` direto fazia o invariante do consentimento LGPD SUMIR: passava a
- * compilar `lgpd_consent: true` sem `lgpd_consent_date`/`lgpd_consent_ip`, que Ã©
+ * compilar `lgpd_consent: true` sem `lgpd_consent_date`/`lgpd_consent_ip`, que é
  * exatamente o que a BR-MIGRAR-004 existe para impedir.
  *
- * Este utilitÃ¡rio aplica o `Omit` variante a variante, preservando a discriminaÃ§Ã£o.
+ * Este utilitário aplica o `Omit` variante a variante, preservando a discriminação.
  */
 type DistributiveOmit<T, K extends PropertyKey> = T extends unknown ? Omit<T, K> : never;
 
 /**
  * Payload de escrita de uma entidade.
  *
- * Os campos de servidor ficam de fora. Os demais seguem o schema â€” inclusive os
- * enums fechados e o tipo condicional de LGPD, que Ã© o que faz os cenÃ¡rios
- * "enums nÃ£o aceitam valores fora do conjunto" e "LGPD exige data e IP" valerem.
+ * Os campos de servidor ficam de fora. Os demais seguem o schema — inclusive os
+ * enums fechados e o tipo condicional de LGPD, que é o que faz os cenários
+ * "enums não aceitam valores fora do conjunto" e "LGPD exige data e IP" valerem.
  */
 export type WriteInput<T> = DistributiveOmit<T, ServerFields>;
 
@@ -63,22 +63,22 @@ export type EntityRead<T> = EntityRepository<T, WriteInput<T>>;
 
 /**
  * Entidade de LEITURA ABERTA para autenticados: `Doctor` e `Template`
- * (BR-MIGRAR-017/020) e a trilha de auditoria `AccessLog`, cuja leitura Ã©
+ * (BR-MIGRAR-017/020) e a trilha de auditoria `AccessLog`, cuja leitura é
  * restrita a admin pela RLS (BR-MIGRAR-024).
  *
  * As duas formas de acesso existem porque a regra de ESCRITA difere entre elas: a
- * inserÃ§Ã£o na trilha de auditoria Ã© feita por qualquer usuÃ¡rio autenticado, e usar o
- * acesso administrativo para gravar seria declarar um escopo que nÃ£o corresponde ao
+ * inserção na trilha de auditoria é feita por qualquer usuário autenticado, e usar o
+ * acesso administrativo para gravar seria declarar um escopo que não corresponde ao
  * de quem grava.
  */
 export interface OpenReadEntity<T> extends EntityRead<T> {
-  /** Acesso na condiÃ§Ã£o do prÃ³prio usuÃ¡rio. */
+  /** Acesso na condição do próprio usuário. */
   asUser(scope: UserScope): EntityRead<T>;
-  /** Acesso administrativo explÃ­cito, para leitura sem filtro de dono. */
+  /** Acesso administrativo explícito, para leitura sem filtro de dono. */
   asAdmin(scope: AdminScope): EntityRead<T>;
 }
 
-/** VisÃ£o administrativa do cliente: leitura sem escopo de dono. */
+/** Visão administrativa do cliente: leitura sem escopo de dono. */
 export interface AdminEntities {
   Patient: EntityRead<Patient>;
   Consultation: EntityRead<Consultation>;
@@ -88,13 +88,13 @@ export interface AdminEntities {
   Doctor: EntityRead<Doctor>;
   Template: EntityRead<Template>;
   AccessLog: EntityRead<AccessLog>;
-  /** Entidade embutida do BaaS, usada apenas pela exclusÃ£o de conta (Layout). */
+  /** Entidade embutida do BaaS, usada apenas pela exclusão de conta (Layout). */
   User: EntityRead<AppUser>;
 }
 
 /**
- * VisÃ£o padrÃ£o do cliente: as 5 entidades sob RLS expÃµem leitura ESCOPADA
- * (`OwnedEntity`, que nÃ£o tem `list`/`filter` crus) e as demais tÃªm leitura livre.
+ * Visão padrão do cliente: as 5 entidades sob RLS expõem leitura ESCOPADA
+ * (`OwnedEntity`, que não tem `list`/`filter` crus) e as demais têm leitura livre.
  */
 export interface AppEntities {
   Patient: OwnedEntity<Patient>;
@@ -106,13 +106,13 @@ export interface AppEntities {
   Template: OpenReadEntity<Template>;
   AccessLog: OpenReadEntity<AccessLog>;
   /**
-   * Entidade embutida do BaaS. Leitura crua, sem escopo de dono: nÃ£o hÃ¡ RLS de
-   * entidade clÃ­nica aqui â€” o SDK aplica as regras prÃ³prias da entidade User.
+   * Entidade embutida do BaaS. Leitura crua, sem escopo de dono: não há RLS de
+   * entidade clínica aqui — o SDK aplica as regras próprias da entidade User.
    */
   User: EntityRead<AppUser>;
 }
 
-/** Contrato completo de acesso a dados, jÃ¡ com o registry fechado. */
+/** Contrato completo de acesso a dados, já com o registry fechado. */
 export interface AppDataClient extends DataClientBase {
   entities: AppEntities;
 }
@@ -120,19 +120,19 @@ export interface AppDataClient extends DataClientBase {
 /** Nomes das entidades conhecidas. */
 export type EntityName = keyof AppEntities;
 
-/** Acrescenta as duas formas de acesso a um repositÃ³rio de leitura aberta. */
+/** Acrescenta as duas formas de acesso a um repositório de leitura aberta. */
 function withAccess<T>(repo: EntityRead<T>): OpenReadEntity<T> {
   return { ...repo, asUser: () => repo, asAdmin: () => repo };
 }
 
 /**
- * Liga os repositÃ³rios crus de um adaptador ao contrato tipado, verificando em
+ * Liga os repositórios crus de um adaptador ao contrato tipado, verificando em
  * COMPILE-TIME que cada entidade implementa `EntityRepository` com os tipos certos.
  *
- * Ã‰ esta funÃ§Ã£o que materializa o cenÃ¡rio "SDK e mock implementam a mesma
+ * É esta função que materializa o cenário "SDK e mock implementam a mesma
  * interface (tsc sem erro)": se o adapter do SDK ou o mock divergirem do contrato,
- * a chamada nÃ£o compila. O acesso administrativo e a leitura escopada sÃ£o
- * acrescentados aqui, uma Ãºnica vez, em vez de duplicÃ¡-los nos dois adaptadores.
+ * a chamada não compila. O acesso administrativo e a leitura escopada são
+ * acrescentados aqui, uma única vez, em vez de duplicá-los nos dois adaptadores.
  */
 export function createAppDataClient(
   raw: RawEntities,
