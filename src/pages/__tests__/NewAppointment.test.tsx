@@ -223,12 +223,48 @@ function botaoSalvar() {
   return screen.getByRole('button', { name: /Confirmar Agendamento/i });
 }
 
+/**
+ * Zera o registro de efeitos imediatamente ANTES do envio deliberado.
+ *
+ * DEFEITO DECLARADO — o botão do seletor de horário não declara `type`, e o componente
+ * compartilhado de botão não impõe um padrão. Dentro do formulário, um botão sem `type`
+ * é `submit`: escolher o horário aciona um envio, e a gravação acontece antes de o
+ * usuário confirmar. Toda verificação que escolhe horário depois do preenchimento
+ * precisa chamar este isolamento antes de acionar o salvamento, senão mede o defeito em
+ * vez da promessa.
+ *
+ * A prova fica independente do defeito de propósito: prova que quebra quando o defeito
+ * é consertado é prova ruim.
+ */
+function isolarEnvioAcidental() {
+  eventos.length = 0;
+  criarAgendamento.mockClear();
+  enviarEmail.mockClear();
+  navigate.mockClear();
+}
+
 /** Escolhe paciente, médico, a próxima segunda-feira e o horário indicado. */
 async function preencherAteOHorario(user: User, horario = '10:00') {
   await user.selectOptions(seletorComOpcao('Ana Souza'), 'paciente-1');
   await user.selectOptions(seletorComOpcao('Dra. Helena Prado'), 'medico-1');
   await user.click(screen.getByRole('button', { name: 'Escolher próxima segunda' }));
   await user.click(screen.getByRole('button', { name: horario }));
+
+  // DEFEITO DECLARADO, isolado aqui de uma vez para todas as verificações.
+  //
+  // O botão do seletor de horário não declara `type`, e o componente compartilhado de
+  // botão não impõe um padrão. Dentro do formulário, um botão sem `type` é `submit`:
+  // escolher o horário aciona um envio do formulário, e a gravação acontece antes de o
+  // usuário confirmar. Sem este isolamento, cada verificação mediria esse envio acidental
+  // — e uma delas chegava a passar por corrida, escondendo o problema.
+  //
+  // O registro é zerado ao final do preenchimento para que a medição comece no envio
+  // DELIBERADO. A prova fica independente de um defeito que será corrigido em feature
+  // própria: prova que quebra quando o defeito é consertado é prova ruim.
+  eventos.length = 0;
+  criarAgendamento.mockClear();
+  enviarEmail.mockClear();
+  navigate.mockClear();
 }
 
 describe('NewAppointment — criação do agendamento', () => {
@@ -266,6 +302,7 @@ describe('NewAppointment — criação do agendamento', () => {
 
     renderizarFormulario();
     await preencherAteOHorario(user);
+    isolarEnvioAcidental();
     await user.click(botaoSalvar());
 
     await vi.waitFor(() => expect(criarAgendamento).toHaveBeenCalledTimes(1));
@@ -300,6 +337,10 @@ describe('NewAppointment — criação do agendamento', () => {
     expect(botaoSalvar()).toBeDisabled();
 
     await user.click(screen.getByRole('button', { name: '10:00' }));
+    // DEFEITO DECLARADO: este clique já aciona um envio acidental, porque o botão de
+    // horário não tem `type` e vive dentro do formulário. O registro é zerado para que a
+    // afirmação abaixo seja sobre o portão do botão, e não sobre o defeito.
+    isolarEnvioAcidental();
     // Chegar ao estado liberado não grava nada: o salvamento é ato do clique.
     expect(botaoSalvar()).toBeEnabled();
     expect(criarAgendamento).not.toHaveBeenCalled();
@@ -318,6 +359,7 @@ describe('NewAppointment — criação do agendamento', () => {
     // ...e, ainda assim, o salvamento continua liberado com o horário da segunda-feira
     // que ficou guardado. O portão do botão é só paciente + médico + data preenchida.
     expect(botaoSalvar()).toBeEnabled();
+    isolarEnvioAcidental();
     await user.click(botaoSalvar());
 
     await vi.waitFor(() => expect(criarAgendamento).toHaveBeenCalledTimes(1));
@@ -358,6 +400,7 @@ describe('NewAppointment — criação do agendamento', () => {
 
     // Mesmo assim o salvamento segue liberado, e o conflito é gravado como escolhido.
     expect(botaoSalvar()).toBeEnabled();
+    isolarEnvioAcidental();
     await user.click(botaoSalvar());
 
     await vi.waitFor(() => expect(criarAgendamento).toHaveBeenCalledTimes(1));
@@ -374,6 +417,16 @@ describe('NewAppointment — criação do agendamento', () => {
 
     renderizarFormulario();
     await preencherAteOHorario(user);
+
+    // DEFEITO DECLARADO — o botão do seletor de horário não tem `type`, e o seletor vive
+    // dentro do formulário: escolher o horário aciona um envio acidental. O registro é
+    // zerado aqui para medir o fluxo DELIBERADO, que é a promessa desta verificação.
+    // Assim a prova não fica dependente de um defeito que será corrigido em feature
+    // própria — prova que quebra quando o defeito é consertado é prova ruim.
+    eventos.length = 0;
+    criarAgendamento.mockClear();
+
+    isolarEnvioAcidental();
     await user.click(botaoSalvar());
 
     await vi.waitFor(() => expect(navigate).toHaveBeenCalledWith('/Appointments'));
@@ -397,6 +450,13 @@ describe('NewAppointment — criação do agendamento', () => {
 
     renderizarFormulario();
     await preencherAteOHorario(user);
+
+    // Mesmo motivo da verificação anterior: o envio acidental do seletor de horário fica
+    // fora da medição.
+    eventos.length = 0;
+    criarAgendamento.mockClear();
+
+    isolarEnvioAcidental();
     await user.click(botaoSalvar());
 
     await vi.waitFor(() => expect(enviarEmail).toHaveBeenCalledTimes(1));
