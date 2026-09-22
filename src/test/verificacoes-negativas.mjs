@@ -45,6 +45,11 @@ const tsconfig = join(raiz, 'tsconfig.json');
  *
  * `espera` é um trecho que deve aparecer na mensagem do erro.
  * `codigo` é o código do erro, usado quando a mensagem não nomeia a violação.
+ *
+ * `positivo: true` INVERTE a expectativa: o caso **deve compilar**, e o comando
+ * acusa falha se o gate o recusar. Existe para MEDIR um buraco do contrato em vez
+ * de apenas registrá-lo — o primeiro é o achado F-03, que diz que o compilador
+ * confere a forma e nunca a autorização.
  */
 const casos = [
   {
@@ -165,6 +170,113 @@ export function caso(pacientes: OwnedEntity<Patient>) {
 }
 `,
   },
+  {
+    id: 'leitura-crua-em-entidade-escopada',
+    violacao:
+      'Leitura crua sobre entidade sob RLS, que só expõe os métodos com escopo (PT-010.1, feature 008)',
+    espera: "'list'",
+    fonte: `import type { OwnedEntity } from '@/api/scopedRead';
+import type { Patient } from '@/types';
+
+export function caso(pacientes: OwnedEntity<Patient>) {
+  return pacientes.list();
+}
+`,
+  },
+  {
+    id: 'papel-atribuido-ao-usuario-offline',
+    violacao:
+      'Papel atribuído à variante offline, cuja ausência é ESTRUTURAL (PT-010.2, achado F-01, feature 008)',
+    codigo: 'TS2322',
+    fonte: `import type { OfflineUser } from '@/types';
+
+export const caso: OfflineUser = {
+  id: 'demo-user-001',
+  email: 'demo@medrecord.local',
+  full_name: 'Dra. Demo',
+  role: 'admin',
+};
+`,
+  },
+  {
+    id: 'papel-extraido-do-usuario-offline',
+    violacao:
+      'Papel extraído da variante offline, cuja ausência é ESTRUTURAL e obriga tratamento (PT-010.2, achado F-01, feature 008)',
+    codigo: 'TS2322',
+    fonte: `import type { OfflineUser, UserRole } from '@/types';
+
+/**
+ * A COMPARAÇÃO com um literal NÃO é recusada: o TypeScript permite comparar
+ * \\\`undefined\\\` com string, e foi o que esta verificação tentou primeiro. O que o
+ * tipo recusa é EXTRAIR o papel — a ausência é estrutural, então o valor não pode
+ * ser usado onde um papel é exigido.
+ */
+export function caso(usuario: OfflineUser): UserRole {
+  return usuario.role;
+}
+`,
+  },
+  {
+    id: 'adaptador-incompleto',
+    violacao:
+      'Adaptador que omite um dos gateways exigidos pelo contrato (PT-010.3, feature 008)',
+    espera: 'getPublicSettings',
+    fonte: `import type { AdapterGateways } from '@/api/entities';
+
+export const caso: AdapterGateways = {
+  auth: {
+    me: async () => null,
+    logout: async () => {},
+    redirectToLogin: () => {},
+  },
+  integrations: {
+    Core: {
+      UploadFile: async () => ({ file_url: '' }),
+      SendEmail: async () => ({}),
+    },
+  },
+  appLogs: { logUserInApp: async () => {} },
+};
+`,
+  },
+  {
+    id: 'situacao-de-agendamento-fora-do-conjunto',
+    violacao:
+      'Situação de agendamento fora do conjunto fechado (PT-010.4, feature 008)',
+    espera: 'finalizado',
+    fonte: `import type { AppointmentStatus } from '@/types';
+
+export const caso: AppointmentStatus = 'finalizado';
+`,
+  },
+  {
+    id: 'tipo-documental-fora-do-conjunto',
+    violacao:
+      'Tipo documental fora do conjunto fechado (PT-010.4, feature 008)',
+    espera: 'receita_especial',
+    fonte: `import type { PrescriptionType } from '@/types';
+
+export const caso: PrescriptionType = 'receita_especial';
+`,
+  },
+  {
+    id: 'escopo-administrativo-declarado-por-qualquer-um',
+    violacao:
+      'CASO POSITIVO: o compilador confere a FORMA e nunca a AUTORIZAÇÃO — qualquer código declara escopo administrativo e compila (achado F-03, feature 008)',
+    positivo: true,
+    fonte: `import type { OwnedEntity } from '@/api/scopedRead';
+import type { Patient } from '@/types';
+
+/**
+ * O par deste caso é \`escopo-admin-em-metodo-de-dono\`, que entrega o MESMO
+ * \`{ kind: 'admin' }\` a \`filterOwned\` e é recusado. Aqui ele é aceito, porque
+ * \`filterAsAdmin\` o exige — e nada no tipo pergunta quem está chamando.
+ */
+export function caso(pacientes: OwnedEntity<Patient>) {
+  return pacientes.filterAsAdmin({ kind: 'admin' }, {});
+}
+`,
+  },
 ];
 
 /** Roda o gate de tipos e devolve a saída combinada. */
@@ -241,6 +353,20 @@ function main() {
     const chave = [...porArquivo.keys()].find((caminho) => caminho.endsWith(`/${nome}`));
     const erros = chave ? porArquivo.get(chave) : [];
 
+    // Caso POSITIVO: a expectativa é invertida — ele DEVE compilar, e a falha é o gate
+    // recusá-lo. É o que permite medir um buraco do contrato em vez de só declará-lo.
+    if (caso.positivo) {
+      if (erros.length === 0) {
+        console.log(`  COMPILOU? sim   ${caso.id}`);
+      } else {
+        falhas.push(`${caso.id}: era caso POSITIVO e o gate o recusou`);
+        console.log(`  COMPILOU? não   ${caso.id}  (${erros[0].codigo})`);
+        console.log(`                 esperado: compilar sem erro`);
+        console.log(`                 veio: ${erros[0].mensagem}`);
+      }
+      return;
+    }
+
     if (erros.length === 0) {
       falhas.push(`${caso.id}: NÃO foi recusado pelo gate`);
       console.log(`  RECUSOU? não   ${caso.id}`);
@@ -268,7 +394,11 @@ function main() {
   const residuo = errosFinais.length > 0;
 
   console.log('-'.repeat(72));
-  console.log(`casos: ${casos.length}   recusados como esperado: ${casos.length - falhas.length}`);
+  const positivos = casos.filter((caso) => caso.positivo).length;
+  console.log(
+    `casos: ${casos.length}   negativos: ${casos.length - positivos}   positivos: ${positivos}`,
+  );
+  console.log(`atenderam ao esperado: ${casos.length - falhas.length}`);
   console.log(
     residuo
       ? `RESÍDUO: o gate voltou com ${errosFinais.length} erro(s) após a limpeza`
