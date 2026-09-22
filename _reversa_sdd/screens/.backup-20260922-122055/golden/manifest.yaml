@@ -1,0 +1,237 @@
+# golden/manifest.yaml
+#
+# Manifesto dos golden files emitidos pelo Screen Translator. O Inspector consome
+# este arquivo para construir parity tests construtivos quando o oráculo legado
+# está disponível e a captura foi possível.
+#
+# Nesta migração: origem ≡ alvo em plataforma (React → React+TS). O "oráculo" é a
+# própria SPA legada rodando em modo offline (VITE_OFFLINE=true), executável via
+# `npm run dev`. Captura automatizada é OQ-02 (v2); aqui ficam comandos sugeridos
+# para captura manual de screenshots. present: false para todos — o Inspector não
+# depende de golden files nesta migração (paridade visual é por construção).
+
+schemaVersion: 1
+generatedAt: 2026-09-09T15:52:00-03:00
+reversa:
+  version: "1.3.2"
+producedBy: screen-translator
+sourcePlatform: react-hooks
+targetPlatform: web-spa
+oracleAvailable: true
+oracleHash: null
+oracleCommand: "npm run dev (VITE_OFFLINE=true) e abrir a SPA no navegador"
+
+normalizationRules:
+  - lineEndings: "\n"
+  - trimTrailingSpaces: false
+  - stripAnsiColors: false
+  - normalizeUtf8: true
+  - injectClock: null        # SPA com dados dinâmicos; captura manual por tela
+  - seedRandom: null
+
+screens:
+  - name: "Dashboard Principal"
+    legacyOrigin: "src/pages/Dashboard.jsx"
+    capture:
+      command: "npm run dev (VITE_OFFLINE=true); abrir / e capturar screenshot full-page"
+      expectedExitCode: 0
+      determinismStrategy: "manual"
+    file: "dashboard-principal.png"
+    format: "png"
+    present: false
+    captureBy: null
+    capturedAt: null
+    sha256: null
+    deviations: []
+    notes: "Golden opcional — paridade visual por construção (mesma plataforma). Captura manual recomendada antes do merge da onda das pages."
+
+  - name: "Listagem de Pacientes"
+    legacyOrigin: "src/pages/Patients.jsx"
+    capture:
+      command: "npm run dev (VITE_OFFLINE=true); abrir /pacientes e capturar screenshot"
+      expectedExitCode: 0
+      determinismStrategy: "manual"
+    file: "pacientes-listagem.png"
+    format: "png"
+    present: false
+    captureBy: null
+    capturedAt: null
+    sha256: null
+    deviations: []
+    notes: "Golden opcional."
+
+  - name: "Cadastro de Novo Paciente"
+    legacyOrigin: "src/pages/PatientForm.jsx"
+    capture:
+      command: "npm run dev (VITE_OFFLINE=true); abrir /pacientes/novo e capturar screenshot"
+      expectedExitCode: 0
+      determinismStrategy: "manual"
+    file: "pacientes-novo.png"
+    format: "png"
+    present: false
+    captureBy: null
+    capturedAt: null
+    sha256: null
+    deviations: []
+    notes: "Golden opcional."
+
+  - name: "Calendário de Agendamentos"
+    legacyOrigin: "src/pages/Appointments.jsx"
+    capture:
+      command: "npm run dev (VITE_OFFLINE=true); abrir /agendamentos e capturar screenshot"
+      expectedExitCode: 0
+      determinismStrategy: "manual"
+    file: "agendamentos-calendario.png"
+    format: "png"
+    present: false
+    captureBy: null
+    capturedAt: null
+    sha256: null
+    deviations: []
+    notes: "Golden opcional."
+
+  - name: "Novo Agendamento"
+    legacyOrigin: "src/pages/NewAppointment.jsx"
+    capture:
+      command: "npm run dev (VITE_OFFLINE=true); abrir /agendamentos/novo e capturar screenshot"
+      expectedExitCode: 0
+      determinismStrategy: "manual"
+    file: "agendamentos-novo.png"
+    format: "png"
+    present: false
+    captureBy: null
+    capturedAt: null
+    sha256: null
+    deviations: []
+    notes: "Golden opcional."
+
+  - name: "Listagem de Consultas"
+    legacyOrigin: "src/pages/Consultations.jsx"
+    capture:
+      command: "npm run dev (VITE_OFFLINE=true); abrir /consultas e capturar screenshot"
+      expectedExitCode: 0
+      determinismStrategy: "manual"
+    file: "consultas-listagem.png"
+    format: "png"
+    present: false
+    captureBy: null
+    capturedAt: null
+    sha256: null
+    deviations: []
+    notes: "Golden opcional."
+
+  - name: "Novo Atendimento (Anamnese)"
+    legacyOrigin: "src/pages/NewConsultation.jsx"
+    capture:
+      command: "npm run dev (VITE_OFFLINE=true); abrir /consultas/novo e capturar screenshot"
+      expectedExitCode: 0
+      determinismStrategy: "manual"
+    file: "consultas-novo.png"
+    format: "png"
+    present: false
+    captureBy: null
+    capturedAt: null
+    sha256: null
+    deviations: []
+    notes: "Golden opcional."
+
+  - name: "Visualização de Consulta"
+    legacyOrigin: "src/pages/Consultation.jsx"
+    capture:
+      command: "npm run dev (VITE_OFFLINE=true); abrir uma consulta do seed e capturar screenshot"
+      expectedExitCode: 0
+      determinismStrategy: "manual"
+    file: "consultas-visualizacao.png"
+    format: "png"
+    present: false
+    captureBy: null
+    capturedAt: null
+    sha256: null
+    deviations: []
+    notes: "Golden opcional."
+
+  - name: "Modal: Novo Documento"
+    legacyOrigin: "src/components/medical/PrescriptionEditor.jsx"
+    capture:
+      command: "npm run dev (VITE_OFFLINE=true); abrir consulta, clicar 'Nova Receita' e capturar modal"
+      expectedExitCode: 0
+      determinismStrategy: "manual"
+    file: "modal-novo-documento.png"
+    format: "png"
+    present: false
+    captureBy: null
+    capturedAt: null
+    sha256: null
+    deviations: []
+    notes: "Golden opcional."
+
+  - name: "Modal: Upload de Exame"
+    legacyOrigin: "src/components/medical/ExamUploader.jsx"
+    capture:
+      command: "npm run dev (VITE_OFFLINE=true); abrir consulta, clicar 'Exame' e capturar modal"
+      expectedExitCode: 0
+      determinismStrategy: "manual"
+    file: "modal-upload-exame.png"
+    format: "png"
+    present: false
+    captureBy: null
+    capturedAt: null
+    sha256: null
+    deviations: []
+    notes: "Golden opcional."
+
+  - name: "Gerenciamento de Médicos"
+    legacyOrigin: "src/pages/Doctors.jsx"
+    capture:
+      command: "npm run dev (VITE_OFFLINE=true); abrir /medicos e capturar screenshot"
+      expectedExitCode: 0
+      determinismStrategy: "manual"
+    file: "medicos-listagem.png"
+    format: "png"
+    present: false
+    captureBy: null
+    capturedAt: null
+    sha256: null
+    deviations: []
+    notes: "Golden opcional."
+
+  - name: "Central de Templates"
+    legacyOrigin: "src/pages/Templates.jsx"
+    capture:
+      command: "npm run dev (VITE_OFFLINE=true); abrir /templates e capturar screenshot"
+      expectedExitCode: 0
+      determinismStrategy: "manual"
+    file: "templates-central.png"
+    format: "png"
+    present: false
+    captureBy: null
+    capturedAt: null
+    sha256: null
+    deviations: []
+    notes: "Golden opcional."
+
+  - name: "Logs de Acesso"
+    legacyOrigin: "src/pages/AccessLogs.jsx"
+    capture:
+      command: "npm run dev (VITE_OFFLINE=true); abrir /logs e capturar screenshot"
+      expectedExitCode: 0
+      determinismStrategy: "manual"
+    file: "logs-acesso.png"
+    format: "png"
+    present: false
+    captureBy: null
+    capturedAt: null
+    sha256: null
+    deviations: []
+    notes: "Golden opcional."
+
+# Telas para as quais a captura determinística não foi possível.
+nonDeterministic:
+  - name: "Detalhe do Paciente (timeline clínica)"
+    reason: "Timeline depende de dados dinâmicos do seed; captura manual com dados fixos do mockSeed"
+    fallback: "captura manual após popular com os registros do seed"
+    samples: 1
+    deviations: []
+
+# Telas em projetos sem UI ou em modo skipped.
+skipped: null
