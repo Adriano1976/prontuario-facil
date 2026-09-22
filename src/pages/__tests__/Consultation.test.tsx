@@ -411,3 +411,68 @@ describe('Consultation — assimetria de auditoria', () => {
     expect(acoes).not.toContain('create_prescription');
   });
 });
+
+/**
+ * Provas acrescentadas pela feature `006-prova-logs-acesso`.
+ *
+ * O arranjo desta feature já media a auditoria **no transporte** — o módulo `AccessLogger`
+ * corre de verdade e o que se substitui é `base44.entities.AccessLog` —, então o que faltava
+ * a `RF-05` e a `RF-20` cabia aqui, sem abrir arquivo novo.
+ *
+ * Nada acima foi tocado: os blocos anteriores continuam medindo o que mediam.
+ */
+describe('Consultation — a visualização de consulta é auditada', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    armazem.consulta = consulta({ id: ID_DA_CONSULTA, status: 'em_andamento' });
+    armazem.paciente = paciente();
+    armazem.prescricoes.length = 0;
+    armazem.exames.length = 0;
+    criarLog.mockResolvedValue({});
+    window.history.replaceState({}, '', `/Consultation?id=${ID_DA_CONSULTA}`);
+  });
+
+  it('grava view_consultation com a entidade, o identificador e o nome do paciente', async () => {
+    renderizarDetalhe();
+
+    // A leitura é feita ANTES de qualquer limpeza da espiã — o auxiliar de observador provado
+    // zera a contagem no fim, e usá-lo aqui apagaria justamente o registro a inspecionar.
+    await waitFor(() => expect(criarLog).toHaveBeenCalledTimes(1));
+
+    const documento = criarLog.mock.calls[0][0] as Record<string, unknown>;
+
+    // O bloco de assimetria prova que a espiã dispara no carregamento; o que este afirma é o
+    // CONTEÚDO do registro, campo a campo, e não apenas a ação.
+    expect(documento.action).toBe('view_consultation');
+    expect(documento.entity_type).toBe('Consultation');
+    expect(documento.entity_id).toBe(ID_DA_CONSULTA);
+    expect(documento.patient_name).toBe('Ana Souza');
+  });
+
+  it('grava DE NOVO quando o objeto da consulta muda de identidade', async () => {
+    const { rerender } = renderizarDetalhe();
+
+    await waitFor(() => expect(criarLog).toHaveBeenCalledTimes(1));
+
+    // Mesma consulta, **objeto novo** — o que um refetch devolveria. O efeito declara
+    // `[consultation, patient, consultationId]`, com DOIS objetos nas dependências.
+    const atual = armazem.consulta;
+    if (!atual) throw new Error('a consulta de prova não foi montada');
+    armazem.consulta = { ...atual };
+
+    rerender(
+      <MemoryRouter>
+        <Consultation />
+      </MemoryRouter>,
+    );
+
+    await waitFor(() => expect(criarLog).toHaveBeenCalledTimes(2));
+
+    // O mesmo defeito do detalhe do paciente, aqui com duas dependências de objeto: duas
+    // gravações para UMA visualização de consulta.
+    const acoes = criarLog.mock.calls.map(
+      ([registro]) => (registro as { action?: string }).action,
+    );
+    expect(acoes).toEqual(['view_consultation', 'view_consultation']);
+  });
+});
