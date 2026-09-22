@@ -66,3 +66,20 @@ Mapeamento global de telas identificadas via screenshots e análise de código.
 
 ---
 *Inventário revisado pelo Reversa-Visor em 2026-09-22 a partir de 21 capturas.*
+
+---
+
+## Atualização de 2026-09-22 (pós-captura) — as 22 telas têm imagem
+
+> Correção factual da tabela revisada acima, após o usuário entregar as duas últimas capturas às 12:30 e 12:32.
+
+- A linha **15 — Modal: Upload de Exame** deixa de ser `🔴 Lacuna de captura` e passa a **🟢 Documentado**, com **duas** imagens:
+  - `consultas/screenshots/tela_consulta_upload_exame.png` (golden principal — dropzone vazio)
+  - `consultas/screenshots/tela_consulta_upload_exame_imagem.png` (estado alternativo — arquivo anexado, link "× Remover")
+- **Cobertura passa de 21 de 22 para 22 de 22 telas com imagem (100%)**, contando o estado alternativo como 23 arquivos.
+- **Gatilho corrigido pela imagem**: o modal abre sobre o **Detalhe do Paciente**, pelo botão "Exame" — e não sobre a tela de Consulta, como o Visor havia registrado. O botão homônimo existe nos dois lugares.
+- Resta como lacuna **parcial** apenas o **Modal: Criar Template** (`tela_novo_templates.png`), truncado antes dos toggles "Template padrão"/"Ativo" e dos botões. O dialog completo está em `tela_editar_template.png`.
+- Consequência para a migração: os 16 cenários de paridade visual (`PT-V01`…`PT-V16`) passaram a ter **captura dourada de referência**, encerrando a lacuna declarada desde 2026-09-09 (`present: false` em todas as telas do manifest). Ver `_reversa_sdd/screens/golden/manifest.yaml` e `_reversa_sdd/migration/screen_deviation_log.md`.
+
+---
+*Correção registrada pelo Reversa-Visor em 2026-09-22, ao fim da regeneração da Fase 2 do Screen Translator.*

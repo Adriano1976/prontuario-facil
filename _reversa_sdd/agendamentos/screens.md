@@ -147,3 +147,18 @@ Formulário para reservar um horário e vincular paciente e profissional de saú
 
 ---
 *Documentação visual gerada pelo Reversa-Visor em 2026-09-22 a partir das 4 capturas em `agendamentos/screenshots/`.*
+
+---
+
+### Correção de 2026-09-22 — a seção "Data e Horário" existe
+
+> Correção factual da divergência **D1** registrada acima, feita pelo próprio Visor após leitura read-only do código legado. A seção acima **não** é reescrita.
+
+- **D1 deixa de ser 🔴 e passa a 🟢 RESOLVIDO**: a tela `Novo Agendamento` **tem** a seção de data e horário. Ela é **condicional ao médico selecionado** — `src/pages/NewAppointment.tsx:204` (`{formData.doctor_id && ( … )}`) envolve o Card **"Data e Horário"**, que contém um `Calendar` (mode single, datas passadas desabilitadas, `:215`) e o `TimeSlotPicker` (`:225`), este último exibido só depois de a data ser escolhida (`:224`).
+- **Por que a captura não a mostra**: a `tela_novo_agendamento.png` foi capturada com "Selecione o médico" em branco. A ausência é do **estado**, não do layout.
+- **Consequência para o inventário e para a migração**: o `target_screens.md` foi corrigido — a `DateTimeSection` deixa de estar "em disputa" e volta a ser contrato, com a condicionalidade declarada como invariante. O `screen_deviation_log.md` fechou o `DEV-005` como `aprovado`.
+- **Pendência de captura (não bloqueante)**: recomenda-se capturar o estado **pós-seleção** (médico e data escolhidos) para que o golden do `PT-V05` mostre o widget.
+- **Também confirmado no código**: "Tipo de Consulta" tem quatro opções (`primeira_consulta`, `retorno`, `exame`, `procedimento`) e o botão "Confirmar Agendamento" fica desabilitado sem paciente, médico e data (`:283`) — o que explica o tom claro do botão na captura.
+
+---
+*Correção registrada pelo Reversa-Visor em 2026-09-22.*
