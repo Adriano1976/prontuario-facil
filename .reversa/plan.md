@@ -58,7 +58,7 @@
 
 > Execute estes agentes quando os recursos estiverem disponíveis — podem rodar em qualquer fase.
 
-- [x] **Visor** — Análise de interface via screenshots ✅ 2026-08-28
+- [x] **Visor** — Análise de interface via screenshots ✅ 2026-08-28 → revisão com 21 capturas em 2026-09-22
 - [x] **Data Master** — Análise completa do banco de dados ✅ 2026-08-27
 - [x] **Design System** — Extração de tokens de design ✅ 2026-08-27
 - [ ] **Tracer** — Análise dinâmica (requer sistema acessível)

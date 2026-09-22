@@ -127,9 +127,18 @@
     },
     "visor": {
       "completed_at": "2026-08-28T00:00:00Z",
+      "second_pass_at": "2026-09-22T00:00:00Z",
+      "second_pass_input": "21 capturas em <output_folder>/<unit>/screenshots/",
       "files": [
         "_reversa_sdd/ui/inventory.md",
-        "_reversa_sdd/ui/flow.md"
+        "_reversa_sdd/ui/flow.md",
+        "_reversa_sdd/dashboard/screens.md",
+        "_reversa_sdd/pacientes/screens.md",
+        "_reversa_sdd/agendamentos/screens.md",
+        "_reversa_sdd/consultas/screens.md",
+        "_reversa_sdd/medicos/screens.md",
+        "_reversa_sdd/templates/screens.md",
+        "_reversa_sdd/logs-acesso/screens.md"
       ]
     },
     "data-master": {
@@ -153,6 +162,47 @@
     }
   },
   "redator_progress": "completed",
+  "visor_progress": {
+    "last_run": "2026-09-22T00:00:00Z",
+    "fonte": "<output_folder>/<unit>/screenshots/",
+    "capturas_processadas": 21,
+    "telas_documentadas": [
+      { "tela": "Dashboard Principal", "unit": "dashboard", "arquivo": "tela_dashboard.png", "estado": "preenchido (agendamentos vazios)", "confianca": "🟢" },
+      { "tela": "Listagem de Pacientes", "unit": "pacientes", "arquivo": "tela_pacientes.png", "estado": "preenchido (6)", "confianca": "🟢" },
+      { "tela": "Cadastro de Novo Paciente", "unit": "pacientes", "arquivo": "tela_novos_pacientes.png", "estado": "vazio", "confianca": "🟢" },
+      { "tela": "Editar Paciente", "unit": "pacientes", "arquivo": "tela_editar_paciente.png", "estado": "preenchido", "confianca": "🟢" },
+      { "tela": "Detalhe do Paciente (Informações + Histórico)", "unit": "pacientes", "arquivo": "tela_informacoes_paciente.png", "estado": "preenchido (6 agendamentos)", "confianca": "🟢" },
+      { "tela": "Calendário de Agendamentos", "unit": "agendamentos", "arquivo": "tela_agendamentos_calendario.png", "estado": "preenchido", "confianca": "🟢" },
+      { "tela": "Lista de Agendamentos", "unit": "agendamentos", "arquivo": "tela_agendamentos_lista.png", "estado": "preenchido (7)", "confianca": "🟢" },
+      { "tela": "Novo Agendamento", "unit": "agendamentos", "arquivo": "tela_novo_agendamento.png", "estado": "vazio", "confianca": "🟢" },
+      { "tela": "Detalhes do Agendamento (modal)", "unit": "agendamentos", "arquivo": "tela_detalhe_agendamento.png", "estado": "modal-aberto", "confianca": "🟢" },
+      { "tela": "Listagem de Consultas", "unit": "consultas", "arquivo": "tela_consultas.png", "estado": "preenchido (3)", "confianca": "🟢" },
+      { "tela": "Novo Atendimento (Anamnese)", "unit": "consultas", "arquivo": "tela_nova_consulta.png", "estado": "vazio (data/hora e status pré-preenchidos)", "confianca": "🟢" },
+      { "tela": "Editar Consulta", "unit": "consultas", "arquivo": "tela_edita_consulta.png", "estado": "preenchido", "confianca": "🟢" },
+      { "tela": "Visualização de Consulta", "unit": "consultas", "arquivo": "tela_consulta_paciente.png", "estado": "preenchido", "confianca": "🟢" },
+      { "tela": "Modal: Novo Documento", "unit": "consultas", "arquivo": "tela_consulta_novo_documento.png", "estado": "modal-aberto", "confianca": "🟢" },
+      { "tela": "Gerenciamento de Médicos", "unit": "medicos", "arquivo": "tela_medicos.png", "estado": "preenchido (3)", "confianca": "🟢" },
+      { "tela": "Modal: Novo Médico", "unit": "medicos", "arquivo": "tela_novo_medico.png", "estado": "modal-aberto (escala pré-preenchida)", "confianca": "🟢" },
+      { "tela": "Modal: Editar Médico", "unit": "medicos", "arquivo": "tela_editar_medico.png", "estado": "modal-aberto (preenchido)", "confianca": "🟢" },
+      { "tela": "Central de Templates", "unit": "templates", "arquivo": "tela_templates.png", "estado": "preenchido (4 categorias)", "confianca": "🟢" },
+      { "tela": "Modal: Criar Template", "unit": "templates", "arquivo": "tela_novo_templates.png", "estado": "modal-aberto (captura parcial)", "confianca": "🟡" },
+      { "tela": "Modal: Editar Template", "unit": "templates", "arquivo": "tela_editar_template.png", "estado": "modal-aberto (preenchido)", "confianca": "🟢" },
+      { "tela": "Logs de Acesso", "unit": "logs-acesso", "arquivo": "tela_logs_acesso.png", "estado": "preenchido (254 registros)", "confianca": "🟢" }
+    ],
+    "telas_sem_captura": ["Modal: Upload de Exame (consultas)"],
+    "telas_novas_no_inventario": [
+      "Editar Paciente",
+      "Detalhe do Paciente (Informações + Histórico)",
+      "Lista de Agendamentos",
+      "Detalhes do Agendamento (modal)",
+      "Editar Consulta",
+      "Editar Médico",
+      "Editar Template"
+    ],
+    "lacunas_abertas": 48,
+    "divergencias_registradas": 20,
+    "observacao": "Segunda passada em 2026-09-22: apêndices non-destructive nos 7 screens.md de unit, revisão de ui/inventory.md (22 telas) e ui/flow.md. Nenhuma seção pré-existente foi alterada ou removida."
+  },
   "engines": [
     "codex",
     "antigravity",
