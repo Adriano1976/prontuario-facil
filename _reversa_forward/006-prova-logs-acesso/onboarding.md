@@ -101,24 +101,60 @@ git status --porcelain -- src/components/medical/AccessLogger.ts src/pages/Acces
 
 | Ordem | Comando | Resultado | Data |
 | :---: | :--- | :--- | :--- |
-| 1 | `npm test` | *(a preencher)* | — |
-| 2 | `npm run typecheck` | *(a preencher)* | — |
-| 3 | `npm run lint` | *(a preencher)* | — |
-| 4 | `npm run prova:negativos` | *(a preencher)* | — |
-| 5 | `npm run prova:encoding` | *(a preencher)* | — |
+| 1 | `npm test` | ✅ **23 arquivos, 132 verificações, 0 falhas** — `Duration 75,78 s` na medição de referência (ver §7.1) | 2026-09-22 |
+| 2 | `npm run typecheck` | ✅ 0 erros | 2026-09-22 |
+| 3 | `npm run lint` | ✅ 0 avisos e 0 erros | 2026-09-22 |
+| 4 | `npm run prova:negativos` | ✅ 9 casos, 9 recusados pelo motivo certo, sem resíduo | 2026-09-22 |
+| 5 | `npm run prova:encoding` | ✅ 412 arquivos de texto, nenhum mojibake | 2026-09-22 |
 
-### 7.1 Medição de tempo
+**Conferência de escopo, na mesma rodada:** `git status --porcelain` mostrou os cinco arquivos de
+verificação novos, a massa compartilhada, `code-spec-matrix.md` e `Consultation.test.tsx`
+**modificado**. `AccessLogger.ts`, `AccessLogs.tsx`, `Layout.tsx`, `Dashboard.tsx` e
+`PatientDetail.tsx` **sem nenhum diff** — a feature prova, não altera.
+
+**Conferência de contagem (R-08):** as verificações passaram de **109 para 132**, e os arquivos
+de **18 para 23**. O crescimento é o exigido: esta é a primeira feature do ciclo que toca prova
+pré-existente, e uma queda denunciaria verificação perdida na edição. Nenhuma foi perdida — as
+oito verificações anteriores de `Consultation.test.tsx` seguem passando.
+
+### 7.1 Medição de tempo — e uma variância que precisa ser lida
 
 | Momento | Arquivos | Verificações | Tempo |
 | :--- | ---: | ---: | ---: |
 | Antes da feature 006 (fecho da 005, 2026-09-21) | 18 | 109 | 67,42 s |
-| Depois da feature 006 | *(a preencher)* | *(a preencher)* | *(a preencher)* |
+| Depois da feature 006, **máquina sob carga** | 23 | 132 | **122,57 s** — 🔴 **acima do teto** |
+| Depois da feature 006, **máquina calma** | 23 | 132 | **75,78 s** — ✅ com 14,22 s de folga |
 
-Teto: **90 segundos**, com 22,58 s de folga no fecho anterior. Esta feature acrescenta
-**cinco** arquivos novos — quatro de verificação e a massa compartilhada — e toca **dois**
-existentes, com uma tela densa entre eles: a folga será **medida**, não presumida (D-12). Se a
-suíte apertar o teto, o recorte declarado é reduzir o que a prova do Dashboard exercita, e
-**não** afrouxar asserção.
+**As duas medições são da mesma suíte, sem uma linha de diferença entre elas.** A primeira foi
+feita imediatamente depois de várias execuções pesadas; a segunda, com a máquina em repouso. A
+soma dos tempos **por arquivo** é de 53,16 s, e o resto do `Duration` é coleta e ambiente, que
+correm em paralelo — por isso a carga da máquina move o número tanto assim.
+
+> **O teto de 90 segundos é, portanto, uma propriedade condicional, e não garantida.** Ele é
+> cumprido com folga numa máquina calma e estourado numa máquina ocupada. Quem for conferir
+> precisa medir duas vezes antes de concluir qualquer coisa, e registrar as duas.
+
+**Onde o tempo está, medido por arquivo.** Os cinco arquivos novos **não** são o problema: o mais
+lento deles é `AccessLogs.test.tsx`, com 2,45 s, e nenhum dos outros aparece entre os doze mais
+lentos. O maior contribuinte individual é um arquivo **pré-existente**:
+
+| Arquivo | Tempo |
+| :--- | ---: |
+| `src/pages/__tests__/PatientForm.test.tsx` | **13,11 s** |
+| `src/components/medical/__tests__/PrescriptionEditor.test.tsx` | 6,39 s |
+| `src/pages/__tests__/NewAppointment.test.tsx` | 4,43 s |
+
+`PatientForm.test.tsx` é o mesmo arquivo que a feature 004 registrou como flutuante perto do teto
+de 5 s por verificação. Ele sozinho responde por um quarto do tempo de prova da suíte, e o custo
+**não** foi introduzido por esta feature.
+
+**O recorte declarado no plano não é o alavanca certa, e isso fica registrado.** O D-12 previa
+reduzir o que a prova do Dashboard exercita se a suíte apertasse; a medição mostra que o Dashboard
+nem aparece entre os mais lentos (os dublês devolvem conjuntos vazios, como planejado). Atacar o
+teto por ali não moveria o número. As alavancas reais, se o projeto quiser persegui-lo, são o
+custo por arquivo de `PatientForm.test.tsx` e o custo fixo de ambiente por arquivo — e as duas
+exigem decisão do usuário, porque a primeira toca prova de outra feature e a segunda toca
+`vitest.config.ts`, que **não** está em `allowedPaths`.
 
 ### 7.2 Comandos além dos quatro
 
