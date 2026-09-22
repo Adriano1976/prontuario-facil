@@ -268,6 +268,18 @@ Os 4 cenários de `PT-006`, com o destino de cada um. Acrescentado em 2026-09-21
 | PT-006.3 — as variáveis do template são interpoladas no save | `parity_tests/06-emissao-documento-template.feature` | 🟢 **com redação imprecisa** | A substituição acontece na **escolha do modelo**, e não no salvamento: provado que as quatro variáveis são resolvidas na aplicação e que o texto editado depois é o que se persiste. O `.feature` fica declarado impreciso (RN-02), na mesma família da `PT-005.1` |
 | PT-006.4 — template inativo não é oferecido | `parity_tests/06-emissao-documento-template.feature` | 🟢 **com ressalva** | `is_active: true` é parte do **mesmo** pedido de `PT-006.2`, provado nos argumentos exatos. Vale a mesma ressalva: o cliente pede certo e confia inteiramente no servidor |
 
+### Cenários de paridade do grupo 07
+
+Os 4 cenários de `PT-007`, com o destino de cada um. Acrescentado em 2026-09-22 pela feature
+`006-prova-logs-acesso` (RF-01 a RF-13).
+
+| Cenário | Arquivo | Veredito | Prova ou razão |
+| :--- | :--- | :---: | :--- |
+| PT-007.1 — visualização de prontuário gera `AccessLog` | `parity_tests/07-auditoria-acesso.feature` | 🟢 | `PatientDetailAudit.test.tsx` e `Consultation.test.tsx`, medidos **no transporte**: a visualização grava `view_patient` e `view_consultation` com a entidade, o identificador e o nome do paciente. O endereço literal `'client-side'` e o agente do navegador são provados em `AccessLogger.test.ts` |
+| PT-007.2 — o log é append-only e só admin lê | `parity_tests/07-auditoria-acesso.feature` | 🟢 **metade** · 🔴 **metade** | A metade do **cliente** é provada: `AccessLogger.test.ts` conta a inserção **antes** de negar leitura, alteração e exclusão, e `AccessLogs.test.tsx` prova que nenhuma linha oferece controle de editar ou excluir. A metade do **servidor** — a imutabilidade e a leitura restrita — é **RLS** e fica **declarada**, no mesmo critério do default `agendada` da feature 004. E a tela é oferecida a quem **não** é admin, o que torna imprecisa a nota de `code-analysis.md#5.1` |
+| PT-007.3 — o Dashboard gera log ao carregar | `parity_tests/07-auditoria-acesso.feature` | 🟢 | `Dashboard.test.tsx` — a montagem grava **exatamente um** registro, com `action: 'login'` e `details: 'Acesso ao dashboard'`, e os campos de entidade chegam ausentes. A ação é `login` porque o enum não tem ação de painel: toda visita ao Dashboard entra na contagem de logins |
+| PT-007.4 — a listagem carrega até 500 sem paginação | `parity_tests/07-auditoria-acesso.feature` | 🟢 **com ressalva** | `AccessLogs.test.tsx` — o pedido é emitido com os argumentos **exatos** `('-created_date', 500)`, nenhum controle de paginação existe, e mudar qualquer filtro **não** reconsulta o servidor. O teto de 500 é paridade **congelada por decisão humana** (AMB-004), e a ressalva é essa: é promessa provada, não lacuna a fechar aqui |
+
 ### Destino dos cenários de paridade não cobertos nesta feature
 
 Decisão da sessão de esclarecimentos de 2026-09-19: a conversão é **fatiada por módulo**.
@@ -279,40 +291,46 @@ Cada grupo abaixo vira feature própria; nenhum cenário fica sem destino.
 | Modo offline (`09`) | 6 | Feature a criar — conversão dos cenários de fluxo do modo offline |
 | Dashboard (`08`) | 5 | Feature a criar — depende de resolver a lacuna da Taxa de Atendimento (`confidence-report.md#Lacunas 🔴 pendentes`) |
 | Templates (`06`) | 4 | ✅ **Concluído** na feature `005-prova-templates` — ver `#Cenários de paridade do grupo 06`. Prova a **emissão de documento com modelo**; a **administração** de modelos segue sem prova, com destino declarado |
-| Logs de acesso (`07`) | 4 | Feature a criar — conversão dos cenários de fluxo da trilha de auditoria |
+| Logs de acesso (`07`) | 4 | ✅ **Concluído** na feature `006-prova-logs-acesso` — ver `#Cenários de paridade do grupo 07` |
 | Contrato de dados (`10`) | 4 | Feature a criar — contrato único honrado pelos dois modos |
 | Consultas (`05`) | 3 | ✅ **Concluído** na feature `004-prova-consultas` — ver `#Cenários de paridade do módulo Consultas` |
 | Paridade visual (`screens/V01` a `V16`) | 16 | **Lacuna declarada.** A captura dourada de referência não existe no repositório (`present: false`); produzi-la é trabalho de outra natureza |
 
-> **Saldo após a feature `005-prova-templates` (2026-09-21).** Dos 50 cenários que a
-> feature 002 transferiu, **15 estão concluídos** (8 de Agendamentos na feature 003, 3 de
-> Consultas na 004 e 4 da emissão de documento com modelo na 005) e **19 permanecem
-> transferidos** para features próprias: modo offline (6), Dashboard (5), Logs de acesso (4),
-> Contrato de dados (4). Os 16 de paridade visual seguem declarados como lacuna, e não como
-> trabalho transferido. Acrescenta-se a esses 19 um grupo que **nunca esteve na tabela de
-> transferência**: a administração de modelos, que o rótulo do grupo `06` sugeria cobrir e
-> que nenhum dos quatro cenários toca.
+> **Saldo após a feature `006-prova-logs-acesso` (2026-09-22).** Dos 50 cenários que a
+> feature 002 transferiu, **19 estão concluídos** (8 de Agendamentos na feature 003, 3 de
+> Consultas na 004, 4 da emissão de documento com modelo na 005 e 4 da trilha de auditoria na
+> 006) e **15 permanecem transferidos** para features próprias: Modo offline (6), Dashboard
+> (5) e Contrato de dados (4). Os 16 de paridade visual seguem declarados como lacuna, e não
+> como trabalho transferido.
 
 ### Lacunas de prova
 
 Registradas de propósito: uma matriz que só mostra 🟢 não é honesta. O que já foi fechado
 está marcado como fechado, e o que permanece aberto tem razão declarada.
 
-| Lacuna | Situação após a feature `005-prova-templates` |
+| Lacuna | Situação após a feature `006-prova-logs-acesso` |
 | :--- | :--- |
 | **BR-P02** (enum de tipo sanguíneo) | ✅ **Fechada.** Prova de execução em `PatientForm.test.tsx` (o formulário oferece exatamente os 9 valores) e caso negativo `status-fora-do-conjunto` em `npm run prova:negativos` |
 | **Verificações negativas do gate de tipos** (T031–T036, T039, T045, T046) | ✅ **Fechada.** `npm run prova:negativos` reproduz 9 casos por comando, confere a recusa pelo motivo certo e não deixa resíduo |
 | **Paridade do módulo Pacientes** (5 cenários) | ✅ **Fechada**, com o desdobramento do PT-001.3 declarado |
 | **Paridade do módulo Agendamentos** (8 cenários) | ✅ **Fechada**, com três ressalvas declaradas: a redação imprecisa de PT-003.1 e PT-003.3 e a vacuidade de PT-004.2 |
 | **Paridade do módulo Consultas** (3 cenários) | ✅ **Fechada**, com duas ressalvas declaradas: a redação imprecisa de PT-005.1 e a metade de interface de PT-005.3, que é **falsa** |
-| **Paridade dos módulos restantes** (34 → 19 cenários) | 🟡 **Parcialmente concluída.** Agendamentos (8) saiu na feature 003, Consultas (3) na 004 e a emissão de documento com modelo (4) na 005; **19 permanecem transferidos**, com destino declarado por grupo na seção acima |
+| **Paridade dos módulos restantes** (34 → 15 cenários) | 🟡 **Parcialmente concluída.** Agendamentos (8) saiu na feature 003, Consultas (3) na 004, a emissão de documento com modelo (4) na 005 e a trilha de auditoria (4) na 006; **15 permanecem transferidos**, com destino declarado por grupo na seção acima |
 | **As lacunas do módulo de Consultas** (`code-analysis.md#9`) | 🟡 **Quase todas declaradas, não provadas** — decisão de 2026-09-21. **Duas das três de severidade Alta deixaram de ser só declaração**: `applyTemplate` sem escape e a injeção na impressão ganharam evidência na feature 005 e continuam **abertas**. Detalhe linha a linha na seção abaixo |
 | **As três lacunas de severidade Alta de AMB-006** | 🟢 **Provadas e declaradas.** Substituição sem escape no payload, `{DIAS_AFASTAMENTO}` nunca resolvida e injeção sem escape na impressão — as três com evidência em `PrescriptionEditor.test.tsx`, e as três **abertas**, porque a decisão foi provar e declarar. Corrigir exige alterar a prova de propósito (decisão D-08 do roadmap da feature 005) |
 | **A colisão das famílias `BR-T`** | 🟡 **Contornada por citação qualificada.** `domain.md#2.3` usa `BR-T01`/`BR-T02` para *filtro por tipo* e *gate de medicamentos*; `code-analysis.md#6` (módulo templates) e `templates/requirements.md#2` usam os **mesmos IDs** para *campos obrigatórios* e *enum de 7 valores*. É o **mesmo identificador** com significados disjuntos — forma pior que a divergência de grafia de `BR-C`, porque qualificar só pelo ID não resolve |
 | **A RLS de `templates/requirements.md#4`** | 🔴 **Declarada imprecisa.** O documento diz que `Create/Update/Delete` são restritos a admin e que a leitura alcança apenas templates **ativos**. O schema diz outra coisa: `create` exige admin, mas `update` e `delete` são **criador ou** admin, e `read` é `null` — aberto a qualquer autenticado, sem filtro de atividade. É RLS de servidor: não é provável no cliente |
 | **A administração de modelos (`Templates.tsx`)** | 🔴 **Declarada, sem prova.** CRUD, agrupamento por tipo, `is_default` sem exclusividade por tipo, `insertVariable` no fim do texto e o campo `variables` órfão (`BR-T08`). Fora do escopo da feature 005 por decisão `1a`; vira feature própria |
 | **Trilha de auditoria da emissão de documento** | 🟢 **Provada e declarada.** Emitir documento não grava `AccessLog` e anexar exame grava; o defeito **permanece**, porque corrigir exige ligar a ação `create_prescription` ao fluxo |
-| **As três ações órfãs do catálogo de auditoria** | 🟡 **Declarada.** `create_prescription`, `logout` e `export_data` estão declaradas em `AccessLogger.ts:22-35` e nunca são invocadas |
+| **As três ações órfãs do catálogo de auditoria** | 🟡 **Declarada.** `create_prescription`, `logout` e `export_data` estão declaradas em `AccessLogger.ts:22-35` e nunca são invocadas. A feature 006 reafirma a declaração por decisão `1a` e **prova o contrato** do enum (doze entradas iguais às do schema); a orfandade continua sem prova, porque é propriedade estática do código |
+| **Os três modos de perda silenciosa da trilha** | 🟢 **Provados dois e declarado o terceiro.** Identificação **recusada** e identificação **vazia** não gravam nada e não propagam erro — a segunda nem imprime no console (`AccessLogger.test.ts`). A gravação **não aguardada** antes da navegação fica declarada por leitura. Os três **permanecem**: a decisão `3a` preservou a paridade |
+| **A classificação de `AccessLog` no contrato do cliente** | 🔴 **Declarada imprecisa.** `registry.ts:65-67` agrupa a trilha como entidade de **leitura aberta**, ao lado de `Doctor` e `Template` — mas a leitura é **admin-only** na RLS. E `withAccess` faz `asUser` e `asAdmin` devolverem o **mesmo** repositório, de modo que os dois acessos são indistinguíveis para esta entidade. Provado em `AccessLogs.test.tsx`: a página lê pelo repositório cru e **não declara escopo** |
+| **A tela de auditoria é oferecida a quem não é admin** | 🟢 **Provada e declarada.** `Layout.tsx:48` põe o item de navegação sem condição de papel, e não há guarda no caminho até a página. Provado em `Layout.test.tsx` com usuário sem `role`. Isso torna **imprecisa** a nota de `code-analysis.md#5.1` ("somente admins veem a tela") — a segunda metade dela está certa; a primeira, não |
+| **Os indicadores da tela de auditoria não somam o total** | 🟢 **Provada e declarada.** A heurística é por substring: `create_prescription` entra como "Edição", e `login`, `logout`, `upload_exam` e `export_data` não entram em categoria nenhuma. Com um conjunto de doze registros, os três indicadores somam **8** e o total é **12** (`AccessLogs.test.tsx`) |
+| **O recorte de data dos logs não tem teto superior** | 🟢 **Provada e declarada.** Semana e mês comparam apenas o piso (`>= hoje − N`), então um registro com data **futura** entra nos dois. É a mesma forma do defeito que a feature 004 provou em consultas (`AccessLogs.test.tsx`) |
+| **A colisão das famílias `BR-L`** | 🟡 **Contornada por citação qualificada.** `logs-acesso/requirements.md#2` usa `BR-L01`/`BR-L02`/`BR-L03` para *append-only*, *enum de ações* e *chamadas dedicadas*; `code-analysis.md#6` usa os **mesmos IDs** para *campos obrigatórios*, *quem cria e quem lê* e *imutabilidade*. É a **quarta** família com esse defeito no projeto e a **única em que os dois artefatos descrevem o mesmo módulo** |
+| **A exportação de dados não existe** | 🔴 **Declarada.** O ícone de download em `ACTION_CONFIG` é apresentação da ação `export_data`, e não há exportação implementada. A lacuna de `code-analysis.md#9` permanece correta |
+| **`PatientDetail.test.tsx` mede a chamada, não o transporte** | 🟡 **Contornada por arquivo próprio.** Aquele arquivo **dubla o módulo `AccessLogger`**, então prova que a tela chama `logAccess` — e não o que chega ao transporte. A prova de transporte da visualização de paciente vive em `PatientDetailAudit.test.tsx`, criado por esta feature |
 | **O recorte "última semana" inclui o futuro** | 🟢 **Provada e declarada.** O recorte é `>= hoje - 7 dias`, sem limite superior. A prova afirma as quatro do conjunto, futura inclusive |
 | **O default do formulário divergente do schema** | 🟡 **Provada e declarada.** O formulário grava `em_andamento` e o schema documenta `agendada`; alinhar os dois é decisão de produto |
 | **A matriz de transições da consulta não existe na extração** | 🟡 **Declarada.** `state-machines.md#4` é 🟡 e cobre apenas o agendamento; a máquina da consulta está descrita só como diagrama |
@@ -421,6 +439,30 @@ leituras que passam a ter veredito.
 > Quem corrigir precisa alterar a prova **de propósito** (decisão D-08), e a decisão fica
 > visível no diff em vez de escorregar.
 
+### Registros declarados do grupo 07
+
+Dez registros que a feature `006-prova-logs-acesso` acrescenta. Nenhum deles é conserto: são
+leituras que passam a ter veredito.
+
+| # | Registro | Situação |
+| ---: | :--- | :--- |
+| 1 | **A trilha perde eventos em silêncio, de três modos** | 🟢 **Dois provados, um declarado.** Identificação **recusada** cai no `catch` e imprime no console; identificação **vazia** sai por um `return` antecipado e **nem isso** — os dois sem gravar e sem propagar erro (`AccessLogger.test.ts`). A gravação **não aguardada** antes da navegação fica declarada por leitura. Consequência que importa: **uma trilha incompleta e uma completa são indistinguíveis** para quem só olha a tela, e o sistema anuncia conformidade com a LGPD no cabeçalho |
+| 2 | **A tela de auditoria é oferecida a quem não é admin** | 🟢 **Provada e declarada.** `Layout.test.tsx` prova o item de navegação com usuário sem `role`, e o mesmo com admin — o que demonstra que a condição de papel não participa da decisão |
+| 3 | **`AccessLog` é classificada como entidade de leitura aberta** | 🔴 **Declarada imprecisa.** `registry.ts:65-67` a agrupa com `Doctor` e `Template`, mas a leitura da trilha é admin-only na RLS. `AccessLogs.test.tsx` prova que a página lê pelo repositório **cru** e não usa `asUser` nem `asAdmin` — que, para esta entidade, são o mesmo repositório |
+| 4 | **O Dashboard grava `login` como procuração de acesso ao painel** | 🟢 **Provada.** O enum não tem ação de painel, então toda visita ao Dashboard é contabilizada como um login, e o detalhe fixo é a única distinção |
+| 5 | **A mesma visualização grava duas vezes quando o objeto muda de identidade** | 🟢 **Provada nas DUAS telas.** O detalhe do paciente declara `[patient, patientId]` e o da consulta declara `[consultation, patient, consultationId]` — dois objetos nas dependências. É defeito **sistêmico**, e não de uma tela (`PatientDetailAudit.test.tsx` e `Consultation.test.tsx`) |
+| 6 | **Os quatro indicadores não somam o total** | 🟢 **Provada.** Com doze registros, um de cada ação: visualizações 2, edições 5, exclusões 1 — soma **8** contra total **12**. `create_prescription` entra como edição, e quatro ações não entram em categoria nenhuma |
+| 7 | **O recorte de data dos logs não tem teto** | 🟢 **Provada.** Um registro com data **futura** entra em "última semana" e em "último mês", pela mesma forma que a feature 004 provou em consultas |
+| 8 | **O trio de ações órfãs** | 🟡 **Declarado, não provado** (decisão `1a`). `logout`, `create_prescription` e `export_data` nunca são invocados, e a orfandade é propriedade **estática** do código. O que **é** provado é o contrato do enum: doze entradas iguais às do schema |
+| 9 | **A colisão das famílias `BR-L`** | 🟡 **Contornada por citação qualificada.** Os mesmos identificadores denotam regras disjuntas em `logs-acesso/requirements.md#2` e `code-analysis.md#6` — e, ao contrário das colisões anteriores, os dois artefatos descrevem o **mesmo módulo** |
+| 10 | **O `PatientDetail.test.tsx` mede a chamada, não o transporte** | 🟡 **Contornada por arquivo próprio.** Aquele arquivo dubla o módulo `AccessLogger`, o que é incompatível com a prova no transporte exigida pela decisão D-02. A visualização auditada do paciente ganhou `PatientDetailAudit.test.tsx`, e o desvio está registrado no `progress.jsonl` da feature |
+
+> **Uma nota de leitura, e ela é a mais importante deste grupo.** As asserções dos modos de
+> perda silenciosa **travam o comportamento atual**: no dia em que alguém fizer a gravação
+> propagar o erro, ou gravar com marcador de usuário desconhecido, as verificações falham —
+> **por desenho** (decisão `3a`). Quem decidir corrigir precisa alterar a prova de propósito,
+> e a decisão fica visível no diff em vez de escorregar.
+
 ---
 *Gerado pelo Reversa-Writer em 2026-09-02.*
-*Seção de rastreabilidade acrescentada em 2026-09-19; módulos de Agendamentos e Consultas e suas lacunas em 2026-09-21; cenários e registros do grupo 06 (emissão de documento com modelo) em 2026-09-21.*
+*Seção de rastreabilidade acrescentada em 2026-09-19; módulos de Agendamentos e Consultas e suas lacunas em 2026-09-21; cenários e registros dos grupos 06 (emissão de documento com modelo) e 07 (trilha de auditoria) em 2026-09-21 e 2026-09-22.*
