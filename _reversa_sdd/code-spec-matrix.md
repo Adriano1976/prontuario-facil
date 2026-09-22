@@ -192,9 +192,12 @@ Medições, sobre o código desta árvore de trabalho (teto declarado: **90 segu
 | 2026-09-21, após a feature `004-prova-consultas` | 90 | 17 | 63,7 s | 0 |
 | 2026-09-21, após a feature `005-prova-templates` | 109 | 18 | 67,4 s | 0 |
 | 2026-09-22, após a feature `006-prova-logs-acesso` | 132 | 23 | 75,8 s a 122,6 s | 0 |
+| 2026-09-22, após a feature `009-prova-kpis-dashboard` | 145 | 24 | 85,9 s | 0 |
 
-As três últimas linhas foram acrescentadas pela feature `008` — a tabela estava parada na 004, e
-uma medição que não acompanha as features deixa de ser medição.
+As três linhas de `005`/`006`/`009` foram acrescentadas por features posteriores — a tabela estava
+parada na 004, e uma medição que não acompanha as features deixa de ser medição. A linha da `008`
+**não existe de propósito**: aquela feature não acrescentou verificação de unidade nenhuma, e
+repetir `132 / 23` só para preencher a linha criaria a impressão de que algo foi medido de novo.
 
 > ⚠️ **O tempo é uma propriedade CONDICIONAL, e a faixa da rodada 006 é o registro disso.** A
 > mesma suíte, sem uma linha de diferença, mediu **75,78 s** em máquina calma e **122,57 s** sob
@@ -217,14 +220,19 @@ O `sha256` de cada tela está em `_reversa_sdd/screens/golden/manifest.yaml`, qu
 está fora de escopo (`DEV-001` em `migration/screen_deviation_log.md`), e a **execução**
 automatizada depende do harness de paridade visual, ainda a criar.
 
-> ⚠️ **Prova sem dono no ciclo forward.** `src/test/mojibake.mjs` e
-> `src/test/mojibake.test.mjs` nasceram no commit `ea87955` (`test(encoding): adiciona
-> guarda de mojibake com portao no ci`) e **não pertencem ao `actions.md` de feature
-> nenhuma** — foram criados fora do ciclo forward. Estão registrados aqui para que a matriz
-> não omita uma prova que existe, mas a rastreabilidade deles é incompleta por construção:
-> não há `requirements.md` que os prometa nem ação que os exija, e o mesmo vale para
-> `.github/workflows/guarda-encoding.yml`. Regularizar isso é trabalho de feature própria,
-> não desta.
+> ⚠️ **Prova sem dono no ciclo forward — situação resolvida em 2026-09-22.** `src/test/mojibake.mjs`
+> e `src/test/mojibake.test.mjs` nasceram no commit `ea87955` (`test(encoding): adiciona guarda de
+> mojibake com portao no ci`) e **não pertenciam ao `actions.md` de feature nenhuma** — foram
+> criados fora do ciclo forward. A feature `008-prova-contrato-dados` os **adotou por registro**
+> (decisão `3a`): uma falha da guarda agora tem contrato dizendo qual promessa foi violada, e o
+> mesmo vale para `.github/workflows/guarda-encoding.yml`. A adoção **não alterou** nenhum dos dois
+> arquivos. A nota permanece aqui, no passado, porque foi esta lacuna que motivou a adoção — e
+> porque apagá-la esconderia que a prova existiu sem dono por três features.
+
+> ⚠️ **Correção de 2026-09-22 pela feature `009-prova-kpis-dashboard`.** Esta nota dizia, até esta
+> rodada, que regularizar a guarda "é trabalho de feature própria, não desta" — redação que ficou
+> **contraditória** quando a feature `008` fechou a lacuna. As duas afirmações conviviam no mesmo
+> arquivo, a poucas linhas de distância. A redação foi corrigida; o registro histórico, preservado.
 
 ### Cenários de paridade do módulo Pacientes
 
@@ -313,6 +321,36 @@ Os 4 cenários de `PT-010`, com o destino de cada um. Acrescentado em 2026-09-22
 | PT-010.3 — SDK e mock implementam a mesma interface | `parity_tests/10-contrato-base44-client.feature` | 🟢 **com duas ressalvas** | **Positivo, por citação:** o `typecheck` sobre o projeto inteiro verifica os dois adaptadores reais. **Novo:** `adaptador-incompleto` prova que omitir um gateway é recusado — o contrato tem dentes. **Ressalva 1:** os **retornos** dos adaptadores são convertidos por `as` em `createEntityRepository`, então "os mesmos tipos de retorno" **não** é verificado. **Ressalva 2:** o encaixe no registry é uma asserção em `bindAdapter` |
 | PT-010.4 — enums não aceitam valores fora do conjunto | `parity_tests/10-contrato-base44-client.feature` | 🟢 | **Citado:** `status-fora-do-conjunto` cobre `ConsultationStatus`. **Novos:** `situacao-de-agendamento-fora-do-conjunto` e `tipo-documental-fora-do-conjunto` — exatamente os dois conjuntos que o cenário nomeia e ninguém provava (decisão `4a`) |
 
+### Cenários de paridade do grupo 08
+
+Os 5 cenários de `PT-008`, com o destino de cada um. Acrescentado em 2026-09-22 pela feature
+`009-prova-kpis-dashboard`.
+
+> **Nota de instrumento.** Este grupo prova-se por **tela**, e nem todos os cinco se provam por
+> valor de cartão: `PT-008.3` prova-se pela **ausência** da superfície, e `PT-008.4` tem uma
+> **divergência registrada** entre a decisão humana e o código. A prova vive em
+> `src/pages/__tests__/DashboardKpis.test.tsx`, com massa em `src/test/dashboardFixtures.ts`.
+
+> **O bloqueio declarado estava vencido.** Esta matriz registrava o grupo `08` como dependente da
+> lacuna `G-01` (`confidence-report.md#Lacunas 🔴 pendentes`). A dependência é de **produto** —
+> `gaps.md#G-01` pede validação com stakeholder —, e não de prova: `PT-008.4` já congela o valor
+> por decisão humana registrada (`AMB-001`) e `Dashboard.tsx:173` já entrega `"94%"`. A lacuna de
+> produto **continua aberta**; o que caducou foi o bloqueio da prova.
+
+| Cenário | Arquivo | Veredito | Prova ou razão |
+| :--- | :--- | :---: | :--- |
+| PT-008.1 — KPI Pacientes Ativos conta apenas status "ativo" | `parity_tests/08-kpis-dashboard.feature` | 🟢 | `DashboardKpis.test.tsx` — com massa de 3 ativos e 2 inativos, o cartão exibe **3**. Uma massa só de ativos não distinguiria "conta os ativos" de "conta todo mundo" |
+| PT-008.2 — Agendamentos Hoje exclui cancelados | `parity_tests/08-kpis-dashboard.feature` | 🟢 | `DashboardKpis.test.tsx` — **três** verificações: o cancelado de hoje e os de outra data não contam; `faltou`, `concluido` e `confirmado` **contam**, porque o critério exclui **apenas** `cancelado`; e sem agendamento hoje o cartão exibe zero |
+| PT-008.3 — Divergência Consultas de Hoje é preservada | `parity_tests/08-kpis-dashboard.feature` | 🟡 **com achado** | **Provado pela AUSÊNCIA.** O cenário enuncia o critério da contagem de consultas de hoje, e **não há superfície onde medi-lo**: `Dashboard.tsx:83-92` calcula `todayConsultations` e `upcomingConsultations` e **descarta os dois** — nenhum cartão os consome. O que é medível, e o que a verificação trava, é o conjunto de cartões: exatamente os quatro do legado, nenhum deles um contador de consultas. O critério divergente de `AMB-002` está preservado em **código morto**, e o achado fica registrado em vez de escondido atrás de um verde |
+| PT-008.4 — Taxa de Atendimento permanece como constante mock "94%" | `parity_tests/08-kpis-dashboard.feature` | 🟡 **com ressalva** | `DashboardKpis.test.tsx` — o cartão exibe `94%`, é o **único** percentual do painel, e nenhuma tendência é renderizada. **Ressalva:** o cenário diz "vindo de **constante tipada**", e essa metade é **falsa hoje**. A decisão `AMB-001` registrou "constante explícita e tipada (`TAXA_ATENDIMENTO_MOCK = 94`)"; não há símbolo com esse nome em `src/` — o valor é o literal em `Dashboard.tsx:173`. Fica provado o **comportamento**; a divergência entre o decidido e o implementado fica registrada, não corrigida |
+| PT-008.5 — Próximos agendamentos lista até 5 futuros não cancelados | `parity_tests/08-kpis-dashboard.feature` | 🟢 | `DashboardKpis.test.tsx` — com seis futuros válidos a lista mostra **cinco**; o futuro cancelado e o passado, que têm nome próprio na massa, **não** aparecem; e sem nenhum futuro a tela exibe "Nenhum agendamento" com o atalho "Agendar consulta" |
+
+> **Além dos cinco cenários.** Por decisão `2a` da sessão de esclarecimentos, a feature provou
+> também o **quarto KPI** — "Documentos Emitidos", regra declarada em `BR-MIGRAR-029` e que nenhum
+> cenário de `PT-008` nomeia — e os **limites e o escopo** das quatro leituras (`BR-MIGRAR-033`),
+> medidos no transporte com os pares exatos de ordenação e limite. Sem isso, as três regras
+> seguiriam declaradas, vigentes e não medidas.
+
 ### Destino dos cenários de paridade não cobertos nesta feature
 
 Decisão da sessão de esclarecimentos de 2026-09-19: a conversão é **fatiada por módulo**.
@@ -322,34 +360,38 @@ Cada grupo abaixo vira feature própria; nenhum cenário fica sem destino.
 | :--- | ---: | :--- |
 | Agendamentos (`03`, `04`) | 8 | ✅ **Concluído** na feature `003-prova-agendamentos` — ver `#Cenários de paridade do módulo Agendamentos` |
 | Modo offline (`09`) | 6 | Feature a criar — conversão dos cenários de fluxo do modo offline |
-| Dashboard (`08`) | 5 | Feature a criar — depende de resolver a lacuna da Taxa de Atendimento (`confidence-report.md#Lacunas 🔴 pendentes`) |
+| Dashboard (`08`) | 5 | ✅ **Concluído** na feature `009-prova-kpis-dashboard` — ver `#Cenários de paridade do grupo 08`. Prova de **tela**, com um cenário provado pela **ausência** e uma cláusula de `PT-008.4` declarada **falsa hoje** |
 | Templates (`06`) | 4 | ✅ **Concluído** na feature `005-prova-templates` — ver `#Cenários de paridade do grupo 06`. Prova a **emissão de documento com modelo**; a **administração** de modelos segue sem prova, com destino declarado |
 | Logs de acesso (`07`) | 4 | ✅ **Concluído** na feature `006-prova-logs-acesso` — ver `#Cenários de paridade do grupo 07` |
 | Contrato de dados (`10`) | 4 | ✅ **Concluído** na feature `008-prova-contrato-dados` — ver `#Cenários de paridade do grupo 10`. Prova de **compilação**, com duas cláusulas de `PT-010.3` declaradas como **não verificadas** |
 | Consultas (`05`) | 3 | ✅ **Concluído** na feature `004-prova-consultas` — ver `#Cenários de paridade do módulo Consultas` |
 | Paridade visual (`screens/V01` a `V16`) | 16 | **Feature a criar** — harness de paridade visual. A captura dourada de referência **passou a existir em 2026-09-22**: 24 goldens com `present: true` (16 de 16 cenários) em `_reversa_sdd/screens/golden/manifest.yaml` |
 
-> **Saldo após a feature `008-prova-contrato-dados` (2026-09-22).** Dos 50 cenários que a
-> feature 002 transferiu, **23 estão concluídos** (8 de Agendamentos na feature 003, 3 de
-> Consultas na 004, 4 da emissão de documento com modelo na 005, 4 da trilha de auditoria na 006
-> e 4 do contrato de dados na 008) e **27 permanecem transferidos**: 11 de fluxo para features
-> próprias — Modo offline (6) e Dashboard (5) — e **16 de paridade visual**, cujo destino é o
-> harness. A captura dourada de referência **existe**: 24 goldens com `present: true` (16 de 16
-> cenários), em `_reversa_sdd/screens/golden/manifest.yaml`.
+> **Saldo após a feature `009-prova-kpis-dashboard` (2026-09-22).** Dos 50 cenários que a feature
+> 002 transferiu, **28 estão concluídos** (8 de Agendamentos na feature 003, 3 de Consultas na 004,
+> 4 da emissão de documento com modelo na 005, 4 da trilha de auditoria na 006, 4 do contrato de
+> dados na 008 e **5 dos KPIs do Dashboard na 009**) e **22 permanecem transferidos**: 6 de fluxo
+> para feature própria — **Modo offline**, a única que resta — e **16 de paridade visual**, cujo
+> destino é o harness. A captura dourada de referência **existe**: 24 goldens com `present: true`
+> (16 de 16 cenários), em `_reversa_sdd/screens/golden/manifest.yaml`.
+>
+> **O que mudou nesta rodada, em uma linha:** todos os grupos de fluxo com escopo definido estão
+> provados. O que resta **não é trabalho de prova, é decisão** — o Modo offline depende da decisão
+> de escopo sobre as limitações L1 a L7 do adaptador, e a paridade visual depende do harness.
 
 ### Lacunas de prova
 
 Registradas de propósito: uma matriz que só mostra 🟢 não é honesta. O que já foi fechado
 está marcado como fechado, e o que permanece aberto tem razão declarada.
 
-| Lacuna | Situação após a feature `008-prova-contrato-dados` |
+| Lacuna | Situação após a feature `009-prova-kpis-dashboard` |
 | :--- | :--- |
 | **BR-P02** (enum de tipo sanguíneo) | ✅ **Fechada.** Prova de execução em `PatientForm.test.tsx` (o formulário oferece exatamente os 9 valores) e caso negativo `status-fora-do-conjunto` em `npm run prova:negativos` |
 | **Verificações negativas do gate de tipos** (T031–T036, T039, T045, T046) | ✅ **Fechada, e ampliada.** `npm run prova:negativos` reproduz **16 casos** por comando — 15 negativos e **1 positivo** —, confere a recusa pelo motivo certo, confere que o caso positivo **compila** e não deixa resíduo. Os 9 casos originais continuam passando sem alteração; os 7 novos são da feature 008 |
 | **Paridade do módulo Pacientes** (5 cenários) | ✅ **Fechada**, com o desdobramento do PT-001.3 declarado |
 | **Paridade do módulo Agendamentos** (8 cenários) | ✅ **Fechada**, com três ressalvas declaradas: a redação imprecisa de PT-003.1 e PT-003.3 e a vacuidade de PT-004.2 |
 | **Paridade do módulo Consultas** (3 cenários) | ✅ **Fechada**, com duas ressalvas declaradas: a redação imprecisa de PT-005.1 e a metade de interface de PT-005.3, que é **falsa** |
-| **Paridade dos módulos restantes** (34 → 11 cenários de fluxo) | 🟡 **Parcialmente concluída.** Agendamentos (8) saiu na feature 003, Consultas (3) na 004, a emissão de documento com modelo (4) na 005, a trilha de auditoria (4) na 006 e o contrato de dados (4) na 008; **11 permanecem transferidos** — Modo offline (6) e Dashboard (5) —, com destino declarado por grupo na seção acima. Somados aos **16 de paridade visual**, também transferidos, o saldo total passa a **27 transferidos dos 50** da feature 002 |
+| **Paridade dos módulos restantes** (34 → 6 cenários de fluxo) | 🟡 **Quase concluída.** Agendamentos (8) saiu na feature 003, Consultas (3) na 004, a emissão de documento com modelo (4) na 005, a trilha de auditoria (4) na 006, o contrato de dados (4) na 008 e os KPIs do Dashboard (5) na 009; **6 permanecem transferidos** — apenas **Modo offline** —, com destino declarado na seção acima. Somados aos **16 de paridade visual**, o saldo total é de **22 transferidos dos 50** da feature 002 |
 | **As lacunas do módulo de Consultas** (`code-analysis.md#9`) | 🟡 **Quase todas declaradas, não provadas** — decisão de 2026-09-21. **Duas das três de severidade Alta deixaram de ser só declaração**: `applyTemplate` sem escape e a injeção na impressão ganharam evidência na feature 005 e continuam **abertas**. Detalhe linha a linha na seção abaixo |
 | **As três lacunas de severidade Alta de AMB-006** | 🟢 **Provadas e declaradas.** Substituição sem escape no payload, `{DIAS_AFASTAMENTO}` nunca resolvida e injeção sem escape na impressão — as três com evidência em `PrescriptionEditor.test.tsx`, e as três **abertas**, porque a decisão foi provar e declarar. Corrigir exige alterar a prova de propósito (decisão D-08 do roadmap da feature 005) |
 | **A colisão das famílias `BR-T`** | 🟡 **Contornada por citação qualificada.** `domain.md#2.3` usa `BR-T01`/`BR-T02` para *filtro por tipo* e *gate de medicamentos*; `code-analysis.md#6` (módulo templates) e `templates/requirements.md#2` usam os **mesmos IDs** para *campos obrigatórios* e *enum de 7 valores*. É o **mesmo identificador** com significados disjuntos — forma pior que a divergência de grafia de `BR-C`, porque qualificar só pelo ID não resolve |
@@ -387,12 +429,18 @@ está marcado como fechado, e o que permanece aberto tem razão declarada.
 | **O ponto de ligação dos adaptadores é uma asserção** | 🔴 **Declarada.** `bindAdapter` faz `as unknown as Parameters<...>` no encaixe com o registry, com justificativa de contravariância registrada no próprio código. O `PT-010.3` vale **entidade por entidade**, e não no ponto de ligação |
 | **O ramo administrativo de `applyScope` é inalcançável pelo tipo** | 🟡 **Declarada.** `filterOwned` só aceita `UserScope`, mas `applyScope` ramifica em `scope.kind === 'admin'`. O caso `escopo-admin-em-metodo-de-dono` prova que o **tipo** faz o trabalho; o ramo permanece como defesa de runtime, alcançável apenas por dentro |
 | **A inferência de `UserRole`** | 🔴 **Declarada.** Apenas `'admin'` está documentado de forma literal no projeto; `'user'` é inferência, com a pendência de confirmação registrada em `src/types/User.ts:9-11`. A feature 008 provou que o papel é **explícito no tipo**, e não qual é o seu segundo valor |
+| **O contador de Consultas de Hoje não tem superfície** | 🟢 **Provada e declarada.** `Dashboard.tsx:83-92` calcula `todayConsultations` e `upcomingConsultations` e **descarta os dois** — nenhum cartão os consome. O critério divergente de `AMB-002` está preservado em **código morto**: existe o critério, não a superfície. A prova mede a ausência (os quatro cartões do legado, nenhum deles contador de consultas) e registra o descarte. Fechada por decisão `1a` do clarify da feature 009 |
+| **A constante decidida de `AMB-001` nunca existiu** | 🔴 **Declarada.** A decisão humana de 2026-09-09 registrou "manter `94%` como **constante explícita e tipada** (`TAXA_ATENDIMENTO_MOCK = 94`)" em `ambiguity_log.md#AMB-001`. Não há símbolo com esse nome em `src/`: o valor é o literal `value="94%"` em `Dashboard.tsx:173`. `PT-008.4` afirma "vindo de constante tipada", e essa metade é **falsa hoje**. A feature 009 provou o **comportamento** e registrou a divergência (decisão `3a`) |
+| **O fluxograma do Dashboard descreve um render que não acontece** | 🔴 **Declarada — divergência documental.** `flowcharts/dashboard.md#1` afirma que `todayConsultations` e `upcomingConsultations` alimentam a renderização (`I --> N`, `J --> N`), e atribui os "4 StatsCards" a três nós, deixando o quarto cartão sem origem no diagrama. As duas primeiras afirmações são **falsas** no código, e a terceira é incompleta: o quarto cartão consome prescrições, que não é nó do fluxograma |
+| **A Taxa de Atendimento está resolvida num artefato e pendente noutro** | 🔴 **Declarada — divergência documental.** `dashboard/requirements.md:17` marca a Taxa de Atendimento como 🔴, enquanto `migration/target_domain_model.md:88` a trata como resolvida (`AMB-001 resolvido`). As duas leituras convivem no mesmo corpus sem nota de reconciliação — a pendência é de **produto** (a fórmula real nunca foi definida), e não de prova |
 | **Contagem das lacunas do módulo de Agendamentos** | 🔴 **Divergência declarada.** O artefato tem 11 linhas e o `requirements.md` da feature fala em 10 — detalhe na seção abaixo |
 
 > A tabela anterior a 2026-09-21 trazia o rótulo "Situação após a feature
 > `002-prova-automatizada`". O instantâneo daquele momento está preservado, congelado, em
 > `_reversa_sdd/addenda/002-prova-automatizada.md`; esta seção é a leitura **viva** e passa
-> a refletir a feature 003.
+> a refletir a feature `009-prova-kpis-dashboard`. Os rótulos intermediários (`003` a `008`) foram
+> sobrescritos a cada rodada, e o instantâneo de cada uma vive no adendo respectivo — é para isso
+> que os adendos existem.
 
 ### Lacunas declaradas do módulo de Agendamentos
 
