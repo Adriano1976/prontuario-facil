@@ -193,6 +193,7 @@ Medições, sobre o código desta árvore de trabalho (teto declarado: **90 segu
 | 2026-09-21, após a feature `005-prova-templates` | 109 | 18 | 67,4 s | 0 |
 | 2026-09-22, após a feature `006-prova-logs-acesso` | 132 | 23 | 75,8 s a 122,6 s | 0 |
 | 2026-09-22, após a feature `009-prova-kpis-dashboard` | 145 | 24 | 85,9 s | 0 |
+| 2026-09-22, após a feature `010-prova-modo-offline` | 168 | 26 | 69,8 s a 70,5 s | 0 |
 
 As três linhas de `005`/`006`/`009` foram acrescentadas por features posteriores — a tabela estava
 parada na 004, e uma medição que não acompanha as features deixa de ser medição. A linha da `008`
@@ -351,6 +352,40 @@ Os 5 cenários de `PT-008`, com o destino de cada um. Acrescentado em 2026-09-22
 > medidos no transporte com os pares exatos de ordenação e limite. Sem isso, as três regras
 > seguiriam declaradas, vigentes e não medidas.
 
+### Cenários de paridade do grupo 09
+
+Os 6 cenários de `PT-009`, com o destino de cada um. Acrescentado em 2026-09-22 pela feature
+`010-prova-modo-offline`.
+
+> **Nota de instrumento.** Este é o único grupo cuja promessa **não vive numa tela**: ela vive num
+> adaptador de dados e numa decisão de **carregamento de módulo**. Por isso a prova ocupa **dois**
+> arquivos — `src/api/__tests__/mockClientOffline.test.ts`, que exercita o adaptador com o
+> armazenamento local limpo, e `src/api/__tests__/offlineActivation.test.ts`, que troca o ambiente e
+> **descarta o registro de módulos** para observar as duas metades da ativação.
+
+> **O bloqueio declarado era de escopo, e foi resolvido.** Esta matriz registrava o grupo `09` como
+> "feature a criar", com a decisão pendente sobre as limitações `L1` a `L7` do adaptador. A decisão
+> de 2026-09-22 provou o **observável** e declarou o resto: `L1`, `L3`, `L4`, `L5` e `L6` têm
+> verificação; `L2` e `L7` ficam **declaradas** com veredito — a primeira não é exercitável num
+> ambiente de uma aba, e a segunda é risco de **privacidade**, não comportamento.
+
+| Cenário | Arquivo | Veredito | Prova ou razão |
+| :--- | :--- | :---: | :--- |
+| PT-009.1 — Ativação exclusiva por env var em build | `parity_tests/09-modo-offline.feature` | 🟢 **com ressalva** | `offlineActivation.test.ts` — **as duas metades**: com a variável ligada, o cliente exportado lê o seed do armazenamento local e a **fábrica do provedor não é chamada**; sem ela, a fábrica **é chamada** e nada é semeado. **Ressalva:** a metade negativa afirma que a fábrica foi chamada, e **não** que o provedor real funciona — carregá-lo exigiria configuração de aplicação e a verificação poderia falhar por motivo alheio à promessa |
+| PT-009.2 — Autenticação imediata como OFFLINE_USER | `parity_tests/09-modo-offline.feature` | 🟢 | **Citado, sem reescrita** (decisão `2a` da 008). A autenticação imediata é provada por `src/lib/__tests__/AuthContext.test.tsx`, que já substitui o ambiente e descarta o registro de módulos; e a **ausência estrutural de papel** é provada pelos casos de compilação da feature 008 (`papel-atribuido-ao-usuario-offline`, `papel-extraido-do-usuario-offline`) |
+| PT-009.3 — Persistência local com seed na primeira leitura | `parity_tests/09-modo-offline.feature` | 🟢 | `mockClientOffline.test.ts` — sem a chave, a primeira leitura semeia a coleção a partir do **seed real** e a grava sob `mock_db_<Entidade>`; criar, atualizar e excluir refletem na leitura seguinte, e o conjunto sobrevive a uma **nova instância** do cliente. Conteúdo inválido na chave não lança e devolve o seed |
+| PT-009.4 — Mock não aplica RLS (comportamento intencional) | `parity_tests/09-modo-offline.feature` | 🟢 | `mockClientOffline.test.ts`, na forma **forte**: um registro com **dono alheio**, gravado direto no armazenamento, é visível e **editável** por quem não é o dono. Não basta o próprio registro ser visível — o de outra origem também é, o que é o que `L1` significa |
+| PT-009.5 — create popula id/created_date e update preserva id com merge | `parity_tests/09-modo-offline.feature` | 🟢 **com achado** | `mockClientOffline.test.ts` — a criação preenche identificador, data de criação e a data do registro quando ausente; identificadores de duas criações são distintos; a atualização preserva o identificador e mescla, mantendo o campo não informado; e identificador desconhecido rejeita com a mensagem **exata**. **Achado:** o identificador é afirmado como não vazio e distinto, e **não** por formato, porque o adaptador cai para um gerador próprio quando o do navegador não existe |
+| PT-009.6 — filter usa comparação estrita e sort de 1 campo | `parity_tests/09-modo-offline.feature` | 🟢 | `mockClientOffline.test.ts` — valores próximos e de caixa diferente não casam entre si, e objetos de operador de intervalo ou de conteúdo não têm efeito algum; a ordenação funciona ascendente e descendente por **um** campo, e o limite corta **depois** de ordenar |
+
+> **Além dos seis cenários.** Por decisão `2a` da sessão de esclarecimentos, a feature provou também
+> o que a unit declara e nenhum cenário nomeia: o acesso dinâmico que devolve repositório para
+> **qualquer** nome de entidade, os no-ops de sessão e telemetria, o envio de arquivo como dado
+> embutido que **não** persiste, a recusa explícita do envio de e-mail, a ausência de leitura direta
+> por identificador (`L6`) e a tolerância da exclusão a identificador inexistente. E fixou em caso o
+> achado de que um identificador informado pelo chamador **sobrepõe** o gerado — contra a redação da
+> regra, que promete que a criação "sempre popula" o identificador.
+
 ### Destino dos cenários de paridade não cobertos nesta feature
 
 Decisão da sessão de esclarecimentos de 2026-09-19: a conversão é **fatiada por módulo**.
@@ -359,7 +394,7 @@ Cada grupo abaixo vira feature própria; nenhum cenário fica sem destino.
 | Grupo | Cenários | Destino |
 | :--- | ---: | :--- |
 | Agendamentos (`03`, `04`) | 8 | ✅ **Concluído** na feature `003-prova-agendamentos` — ver `#Cenários de paridade do módulo Agendamentos` |
-| Modo offline (`09`) | 6 | Feature a criar — conversão dos cenários de fluxo do modo offline |
+| Modo offline (`09`) | 6 | ✅ **Concluído** na feature `010-prova-modo-offline` — ver `#Cenários de paridade do grupo 09`. Prova de **adaptador e carregamento**, com `L2` e `L7` declaradas e uma metade da ativação provada por substituição da fábrica do provedor |
 | Dashboard (`08`) | 5 | ✅ **Concluído** na feature `009-prova-kpis-dashboard` — ver `#Cenários de paridade do grupo 08`. Prova de **tela**, com um cenário provado pela **ausência** e uma cláusula de `PT-008.4` declarada **falsa hoje** |
 | Templates (`06`) | 4 | ✅ **Concluído** na feature `005-prova-templates` — ver `#Cenários de paridade do grupo 06`. Prova a **emissão de documento com modelo**; a **administração** de modelos segue sem prova, com destino declarado |
 | Logs de acesso (`07`) | 4 | ✅ **Concluído** na feature `006-prova-logs-acesso` — ver `#Cenários de paridade do grupo 07` |
@@ -367,17 +402,18 @@ Cada grupo abaixo vira feature própria; nenhum cenário fica sem destino.
 | Consultas (`05`) | 3 | ✅ **Concluído** na feature `004-prova-consultas` — ver `#Cenários de paridade do módulo Consultas` |
 | Paridade visual (`screens/V01` a `V16`) | 16 | **Feature a criar** — harness de paridade visual. A captura dourada de referência **passou a existir em 2026-09-22**: 24 goldens com `present: true` (16 de 16 cenários) em `_reversa_sdd/screens/golden/manifest.yaml` |
 
-> **Saldo após a feature `009-prova-kpis-dashboard` (2026-09-22).** Dos 50 cenários que a feature
-> 002 transferiu, **28 estão concluídos** (8 de Agendamentos na feature 003, 3 de Consultas na 004,
-> 4 da emissão de documento com modelo na 005, 4 da trilha de auditoria na 006, 4 do contrato de
-> dados na 008 e **5 dos KPIs do Dashboard na 009**) e **22 permanecem transferidos**: 6 de fluxo
-> para feature própria — **Modo offline**, a única que resta — e **16 de paridade visual**, cujo
-> destino é o harness. A captura dourada de referência **existe**: 24 goldens com `present: true`
-> (16 de 16 cenários), em `_reversa_sdd/screens/golden/manifest.yaml`.
+> **Saldo após a feature `010-prova-modo-offline` (2026-09-22).** Dos 50 cenários que a feature 002
+> transferiu, **34 estão concluídos** (8 de Agendamentos na feature 003, 3 de Consultas na 004, 4 da
+> emissão de documento com modelo na 005, 4 da trilha de auditoria na 006, 4 do contrato de dados na
+> 008, 5 dos KPIs do Dashboard na 009 e **6 do Modo offline na 010**) e **16 permanecem
+> transferidos** — **todos de paridade visual**, cujo destino é o harness. A captura dourada de
+> referência **existe**: 24 goldens com `present: true` (16 de 16 cenários), em
+> `_reversa_sdd/screens/golden/manifest.yaml`.
 >
-> **O que mudou nesta rodada, em uma linha:** todos os grupos de fluxo com escopo definido estão
-> provados. O que resta **não é trabalho de prova, é decisão** — o Modo offline depende da decisão
-> de escopo sobre as limitações L1 a L7 do adaptador, e a paridade visual depende do harness.
+> **Os 39 cenários de fluxo estão provados.** Termina aqui a conversão que a feature 002 começou em
+> 2026-09-19: nenhum grupo de fluxo segue transferido. O que resta no mapa **nunca foi trabalho de
+> prova** — a paridade visual precisa de um harness de comparação, e a administração de modelos
+> (`Templates.tsx`) nunca teve dono.
 
 ### Lacunas de prova
 
@@ -391,7 +427,7 @@ está marcado como fechado, e o que permanece aberto tem razão declarada.
 | **Paridade do módulo Pacientes** (5 cenários) | ✅ **Fechada**, com o desdobramento do PT-001.3 declarado |
 | **Paridade do módulo Agendamentos** (8 cenários) | ✅ **Fechada**, com três ressalvas declaradas: a redação imprecisa de PT-003.1 e PT-003.3 e a vacuidade de PT-004.2 |
 | **Paridade do módulo Consultas** (3 cenários) | ✅ **Fechada**, com duas ressalvas declaradas: a redação imprecisa de PT-005.1 e a metade de interface de PT-005.3, que é **falsa** |
-| **Paridade dos módulos restantes** (34 → 6 cenários de fluxo) | 🟡 **Quase concluída.** Agendamentos (8) saiu na feature 003, Consultas (3) na 004, a emissão de documento com modelo (4) na 005, a trilha de auditoria (4) na 006, o contrato de dados (4) na 008 e os KPIs do Dashboard (5) na 009; **6 permanecem transferidos** — apenas **Modo offline** —, com destino declarado na seção acima. Somados aos **16 de paridade visual**, o saldo total é de **22 transferidos dos 50** da feature 002 |
+| **Paridade dos módulos restantes** (34 → **0** cenários de fluxo) | ✅ **Fechada.** Agendamentos (8) saiu na feature 003, Consultas (3) na 004, a emissão de documento com modelo (4) na 005, a trilha de auditoria (4) na 006, o contrato de dados (4) na 008, os KPIs do Dashboard (5) na 009 e o Modo offline (6) na 010. **Nenhum cenário de fluxo segue transferido.** Restam os **16 de paridade visual**, cujo destino é o harness — e que nunca foram trabalho de prova |
 | **As lacunas do módulo de Consultas** (`code-analysis.md#9`) | 🟡 **Quase todas declaradas, não provadas** — decisão de 2026-09-21. **Duas das três de severidade Alta deixaram de ser só declaração**: `applyTemplate` sem escape e a injeção na impressão ganharam evidência na feature 005 e continuam **abertas**. Detalhe linha a linha na seção abaixo |
 | **As três lacunas de severidade Alta de AMB-006** | 🟢 **Provadas e declaradas.** Substituição sem escape no payload, `{DIAS_AFASTAMENTO}` nunca resolvida e injeção sem escape na impressão — as três com evidência em `PrescriptionEditor.test.tsx`, e as três **abertas**, porque a decisão foi provar e declarar. Corrigir exige alterar a prova de propósito (decisão D-08 do roadmap da feature 005) |
 | **A colisão das famílias `BR-T`** | 🟡 **Contornada por citação qualificada.** `domain.md#2.3` usa `BR-T01`/`BR-T02` para *filtro por tipo* e *gate de medicamentos*; `code-analysis.md#6` (módulo templates) e `templates/requirements.md#2` usam os **mesmos IDs** para *campos obrigatórios* e *enum de 7 valores*. É o **mesmo identificador** com significados disjuntos — forma pior que a divergência de grafia de `BR-C`, porque qualificar só pelo ID não resolve |
@@ -433,12 +469,18 @@ está marcado como fechado, e o que permanece aberto tem razão declarada.
 | **A constante decidida de `AMB-001` nunca existiu** | 🔴 **Declarada.** A decisão humana de 2026-09-09 registrou "manter `94%` como **constante explícita e tipada** (`TAXA_ATENDIMENTO_MOCK = 94`)" em `ambiguity_log.md#AMB-001`. Não há símbolo com esse nome em `src/`: o valor é o literal `value="94%"` em `Dashboard.tsx:173`. `PT-008.4` afirma "vindo de constante tipada", e essa metade é **falsa hoje**. A feature 009 provou o **comportamento** e registrou a divergência (decisão `3a`) |
 | **O fluxograma do Dashboard descreve um render que não acontece** | 🔴 **Declarada — divergência documental.** `flowcharts/dashboard.md#1` afirma que `todayConsultations` e `upcomingConsultations` alimentam a renderização (`I --> N`, `J --> N`), e atribui os "4 StatsCards" a três nós, deixando o quarto cartão sem origem no diagrama. As duas primeiras afirmações são **falsas** no código, e a terceira é incompleta: o quarto cartão consome prescrições, que não é nó do fluxograma |
 | **A Taxa de Atendimento está resolvida num artefato e pendente noutro** | 🔴 **Declarada — divergência documental.** `dashboard/requirements.md:17` marca a Taxa de Atendimento como 🔴, enquanto `migration/target_domain_model.md:88` a trata como resolvida (`AMB-001 resolvido`). As duas leituras convivem no mesmo corpus sem nota de reconciliação — a pendência é de **produto** (a fórmula real nunca foi definida), e não de prova |
+| **O modo offline não aplica regra de acesso** | 🟢 **Provada e declarada — e é intencional.** `L1` é comportamento pretendido, não defeito: o armazenamento local não tem autorização (`BR-MIGRAR-044`). A prova usa a forma forte — um registro com **dono alheio**, gravado direto no armazenamento, é visível e **editável**. O que isso significa na prática é que toda página que **assume** restrição de dono se comporta de forma divergente em modo offline, e nenhuma prova cobre essa divergência |
+| **As limitações `L2` e `L7` do adaptador** | 🟡 **Declaradas com veredito.** Decisão `1a` do clarify da feature 010: `L2` (escritas concorrentes entre abas) **não é exercitável** num ambiente de uma aba — um teste que fingisse duas mediria o fingimento; e `L7` (**dados de pacientes no armazenamento local do navegador**, risco em dispositivo compartilhado) é risco de **privacidade**, não comportamento, e afirmá-lo em asserção diria que expor dados de pacientes é o pretendido. O seed é fictício (`Q-14`), e a recomendação de aviso visual foi registrada e **não implementada** |
+| **A criação do adaptador aceita identificador do chamador** | 🟡 **Provada e declarada.** `BR-OFF06` promete que a criação **sempre** popula o identificador, mas `mockClient.ts:116-121` espalha os dados do chamador **depois** do identificador gerado: um `id` informado **sobrepõe** o gerado, e o mesmo vale para a data de criação. É comportamento do legado, preservado — e a redação da regra é mais forte do que o código. A feature 010 fixou o comportamento real em caso, de modo que "consertá-lo" exija decisão explícita |
+| **`OFFLINE_USER` existe duas vezes em `src/`** | 🔴 **Declarada.** `src/api/mockClient.ts:26` define a constante sem tipo, e é ela que a sessão offline importa e usa. `src/types/User.ts:81` define **outra**, tipada como a variante offline, reexportada por `src/types/index.ts:42` — e **nenhum arquivo a consome**. Duas fontes para o mesmo valor, uma delas morta; mudar o valor num lugar não muda o outro |
+| **A ativação é lida em dois módulos, com tempos diferentes** | 🟡 **Declarada.** `src/api/base44Client.ts:21` lê a variável **no carregamento do módulo**, e `src/lib/AuthContext.tsx:130` lê **a cada verificação de estado**. São duas leituras independentes da mesma decisão, sem ponto único — e a nota de `modo-offline/requirements.md#5. Configuração` descreve uma só. A feature 010 teve de separar as provas por causa disso: só a frente de ativação precisa descartar o registro de módulos |
+| **O discriminante `kind` do usuário autenticado não tem consumidor** | 🟡 **Declarada.** `toSessionUser` produz `kind: 'authenticated'`, e nenhum ponto do código estreita por `user.kind` — o que o projeto estreita é `role`. O caminho **offline não passa** por `toSessionUser` e põe o objeto cru na sessão, de modo que as duas variantes circulam com formas diferentes |
 | **Contagem das lacunas do módulo de Agendamentos** | 🔴 **Divergência declarada.** O artefato tem 11 linhas e o `requirements.md` da feature fala em 10 — detalhe na seção abaixo |
 
 > A tabela anterior a 2026-09-21 trazia o rótulo "Situação após a feature
 > `002-prova-automatizada`". O instantâneo daquele momento está preservado, congelado, em
 > `_reversa_sdd/addenda/002-prova-automatizada.md`; esta seção é a leitura **viva** e passa
-> a refletir a feature `009-prova-kpis-dashboard`. Os rótulos intermediários (`003` a `008`) foram
+> a refletir a feature `010-prova-modo-offline`. Os rótulos intermediários (`003` a `009`) foram
 > sobrescritos a cada rodada, e o instantâneo de cada uma vive no adendo respectivo — é para isso
 > que os adendos existem.
 
