@@ -179,8 +179,8 @@ Esta matriz relaciona cada artefato de código-fonte e schema do projeto legado 
 npm test                  # a suíte completa
 npm run typecheck         # gate de tipos estrito
 npm run lint              # eslint --quiet
-npm run prova:negativos   # casos negativos recusados, sem resíduo
-npm run prova:encoding    # guarda de encoding fora da suíte
+npm run prova:negativos   # 16 casos: 15 recusados pelo motivo certo e 1 positivo que deve compilar
+npm run prova:encoding    # guarda de encoding, com dono desde a feature 008
 ```
 
 Medições, sobre o código desta árvore de trabalho (teto declarado: **90 segundos**):
@@ -190,10 +190,17 @@ Medições, sobre o código desta árvore de trabalho (teto declarado: **90 segu
 | 2026-09-19, após a feature `002-prova-automatizada` | 36 | 10 | 32,5 s | 0 |
 | 2026-09-21, após a feature `003-prova-agendamentos` | 66 | 14 | 57,9 s | 0 |
 | 2026-09-21, após a feature `004-prova-consultas` | 90 | 17 | 63,7 s | 0 |
+| 2026-09-21, após a feature `005-prova-templates` | 109 | 18 | 67,4 s | 0 |
+| 2026-09-22, após a feature `006-prova-logs-acesso` | 132 | 23 | 75,8 s a 122,6 s | 0 |
 
-O acréscimo da feature 004 foi de **24 verificações em 3 arquivos** — listagem, detalhe e
-formulário do módulo de Consultas —, com o tempo ainda **26 segundos abaixo do teto**. O
-teto foi revalidado e **não** renegociado (D-11).
+As três últimas linhas foram acrescentadas pela feature `008` — a tabela estava parada na 004, e
+uma medição que não acompanha as features deixa de ser medição.
+
+> ⚠️ **O tempo é uma propriedade CONDICIONAL, e a faixa da rodada 006 é o registro disso.** A
+> mesma suíte, sem uma linha de diferença, mediu **75,78 s** em máquina calma e **122,57 s** sob
+> carga — o teto foi cumprido numa e estourado na outra. O maior contribuinte individual é
+> `PatientForm.test.tsx`, com 13,1 s, **pré-existente**. Quem for conferir precisa medir duas
+> vezes antes de concluir qualquer coisa sobre o teto.
 
 `typecheck` e `lint` são gates independentes (**RN-05 da feature `002-prova-automatizada`**):
 o primeiro confere forma em tempo de compilação, o segundo confere estilo e imports mortos.
@@ -289,6 +296,23 @@ Os 4 cenários de `PT-007`, com o destino de cada um. Acrescentado em 2026-09-22
 | PT-007.3 — o Dashboard gera log ao carregar | `parity_tests/07-auditoria-acesso.feature` | 🟢 | `Dashboard.test.tsx` — a montagem grava **exatamente um** registro, com `action: 'login'` e `details: 'Acesso ao dashboard'`, e os campos de entidade chegam ausentes. A ação é `login` porque o enum não tem ação de painel: toda visita ao Dashboard entra na contagem de logins |
 | PT-007.4 — a listagem carrega até 500 sem paginação | `parity_tests/07-auditoria-acesso.feature` | 🟢 **com ressalva** | `AccessLogs.test.tsx` — o pedido é emitido com os argumentos **exatos** `('-created_date', 500)`, nenhum controle de paginação existe, e mudar qualquer filtro **não** reconsulta o servidor. O teto de 500 é paridade **congelada por decisão humana** (AMB-004), e a ressalva é essa: é promessa provada, não lacuna a fechar aqui |
 
+### Cenários de paridade do grupo 10
+
+Os 4 cenários de `PT-010`, com o destino de cada um. Acrescentado em 2026-09-22 pela feature
+`008-prova-contrato-dados` (RF-01 a RF-06).
+
+> **Nota de instrumento.** Este é o único grupo cuja prova é de **compilação**. Quatro dos
+> cinquenta cenários não se provam renderizando tela nem medindo transporte: provam-se
+> **recusando compilação**, pelo comando `npm run prova:negativos`. A cláusula positiva de
+> `PT-010.3` é coberta por **citação** do `typecheck`, que roda sobre o projeto inteiro.
+
+| Cenário | Arquivo | Veredito | Prova ou razão |
+| :--- | :--- | :---: | :--- |
+| PT-010.1 — acesso a dados exige escopo de ownership | `parity_tests/10-contrato-base44-client.feature` | 🟢 **com ressalva** | **Citados:** `leitura-sem-escopo`, `escopo-admin-em-metodo-de-dono` e `dono-manual-em-leitura-escopada` já o cobriam desde a feature 001, e **nenhum foi reescrito** (decisão `2a`). **Novo:** `leitura-crua-em-entidade-escopada` prova que a entidade sob RLS não expõe a leitura crua. **Ressalva:** o tipo garante que o escopo foi **informado**, nunca que ele é legítimo |
+| PT-010.2 — o papel é explícito no tipo | `parity_tests/10-contrato-base44-client.feature` | 🟢 | **Novos:** `papel-atribuido-ao-usuario-offline` e `papel-extraido-do-usuario-offline`. O segundo **substituiu** uma tentativa de provar por **comparação** de papel: o TypeScript permite comparar `undefined` com string, e o caso não era recusado. O que o tipo recusa é **extrair** o papel — a ausência é estrutural (achado F-01) |
+| PT-010.3 — SDK e mock implementam a mesma interface | `parity_tests/10-contrato-base44-client.feature` | 🟢 **com duas ressalvas** | **Positivo, por citação:** o `typecheck` sobre o projeto inteiro verifica os dois adaptadores reais. **Novo:** `adaptador-incompleto` prova que omitir um gateway é recusado — o contrato tem dentes. **Ressalva 1:** os **retornos** dos adaptadores são convertidos por `as` em `createEntityRepository`, então "os mesmos tipos de retorno" **não** é verificado. **Ressalva 2:** o encaixe no registry é uma asserção em `bindAdapter` |
+| PT-010.4 — enums não aceitam valores fora do conjunto | `parity_tests/10-contrato-base44-client.feature` | 🟢 | **Citado:** `status-fora-do-conjunto` cobre `ConsultationStatus`. **Novos:** `situacao-de-agendamento-fora-do-conjunto` e `tipo-documental-fora-do-conjunto` — exatamente os dois conjuntos que o cenário nomeia e ninguém provava (decisão `4a`) |
+
 ### Destino dos cenários de paridade não cobertos nesta feature
 
 Decisão da sessão de esclarecimentos de 2026-09-19: a conversão é **fatiada por módulo**.
@@ -301,32 +325,31 @@ Cada grupo abaixo vira feature própria; nenhum cenário fica sem destino.
 | Dashboard (`08`) | 5 | Feature a criar — depende de resolver a lacuna da Taxa de Atendimento (`confidence-report.md#Lacunas 🔴 pendentes`) |
 | Templates (`06`) | 4 | ✅ **Concluído** na feature `005-prova-templates` — ver `#Cenários de paridade do grupo 06`. Prova a **emissão de documento com modelo**; a **administração** de modelos segue sem prova, com destino declarado |
 | Logs de acesso (`07`) | 4 | ✅ **Concluído** na feature `006-prova-logs-acesso` — ver `#Cenários de paridade do grupo 07` |
-| Contrato de dados (`10`) | 4 | Feature a criar — contrato único honrado pelos dois modos |
+| Contrato de dados (`10`) | 4 | ✅ **Concluído** na feature `008-prova-contrato-dados` — ver `#Cenários de paridade do grupo 10`. Prova de **compilação**, com duas cláusulas de `PT-010.3` declaradas como **não verificadas** |
 | Consultas (`05`) | 3 | ✅ **Concluído** na feature `004-prova-consultas` — ver `#Cenários de paridade do módulo Consultas` |
 | Paridade visual (`screens/V01` a `V16`) | 16 | **Feature a criar** — harness de paridade visual. A captura dourada de referência **passou a existir em 2026-09-22**: 24 goldens com `present: true` (16 de 16 cenários) em `_reversa_sdd/screens/golden/manifest.yaml` |
 
-> **Saldo após a feature `007-matriz-paridade-visual` (2026-09-22).** Dos 50 cenários que a
-> feature 002 transferiu, **19 estão concluídos** (8 de Agendamentos na feature 003, 3 de
-> Consultas na 004, 4 da emissão de documento com modelo na 005 e 4 da trilha de auditoria na
-> 006) e **31 permanecem transferidos**: 15 de fluxo para features próprias — Modo offline (6),
-> Dashboard (5) e Contrato de dados (4) — e **16 de paridade visual**, cujo destino é o harness
-> de paridade visual. A captura dourada de referência, que era a razão da lacuna declarada até
-> 2026-09-22, **existe**: 24 goldens com `present: true` (16 de 16 cenários), em
-> `_reversa_sdd/screens/golden/manifest.yaml`.
+> **Saldo após a feature `008-prova-contrato-dados` (2026-09-22).** Dos 50 cenários que a
+> feature 002 transferiu, **23 estão concluídos** (8 de Agendamentos na feature 003, 3 de
+> Consultas na 004, 4 da emissão de documento com modelo na 005, 4 da trilha de auditoria na 006
+> e 4 do contrato de dados na 008) e **27 permanecem transferidos**: 11 de fluxo para features
+> próprias — Modo offline (6) e Dashboard (5) — e **16 de paridade visual**, cujo destino é o
+> harness. A captura dourada de referência **existe**: 24 goldens com `present: true` (16 de 16
+> cenários), em `_reversa_sdd/screens/golden/manifest.yaml`.
 
 ### Lacunas de prova
 
 Registradas de propósito: uma matriz que só mostra 🟢 não é honesta. O que já foi fechado
 está marcado como fechado, e o que permanece aberto tem razão declarada.
 
-| Lacuna | Situação após a feature `006-prova-logs-acesso` |
+| Lacuna | Situação após a feature `008-prova-contrato-dados` |
 | :--- | :--- |
 | **BR-P02** (enum de tipo sanguíneo) | ✅ **Fechada.** Prova de execução em `PatientForm.test.tsx` (o formulário oferece exatamente os 9 valores) e caso negativo `status-fora-do-conjunto` em `npm run prova:negativos` |
-| **Verificações negativas do gate de tipos** (T031–T036, T039, T045, T046) | ✅ **Fechada.** `npm run prova:negativos` reproduz 9 casos por comando, confere a recusa pelo motivo certo e não deixa resíduo |
+| **Verificações negativas do gate de tipos** (T031–T036, T039, T045, T046) | ✅ **Fechada, e ampliada.** `npm run prova:negativos` reproduz **16 casos** por comando — 15 negativos e **1 positivo** —, confere a recusa pelo motivo certo, confere que o caso positivo **compila** e não deixa resíduo. Os 9 casos originais continuam passando sem alteração; os 7 novos são da feature 008 |
 | **Paridade do módulo Pacientes** (5 cenários) | ✅ **Fechada**, com o desdobramento do PT-001.3 declarado |
 | **Paridade do módulo Agendamentos** (8 cenários) | ✅ **Fechada**, com três ressalvas declaradas: a redação imprecisa de PT-003.1 e PT-003.3 e a vacuidade de PT-004.2 |
 | **Paridade do módulo Consultas** (3 cenários) | ✅ **Fechada**, com duas ressalvas declaradas: a redação imprecisa de PT-005.1 e a metade de interface de PT-005.3, que é **falsa** |
-| **Paridade dos módulos restantes** (34 → 15 cenários de fluxo) | 🟡 **Parcialmente concluída.** Agendamentos (8) saiu na feature 003, Consultas (3) na 004, a emissão de documento com modelo (4) na 005 e a trilha de auditoria (4) na 006; **15 permanecem transferidos**, com destino declarado por grupo na seção acima. Somados aos **16 de paridade visual** — também transferidos, com destino no harness, desde que a captura dourada passou a existir em 2026-09-22 —, o saldo total passa a **31 transferidos dos 50** da feature 002 |
+| **Paridade dos módulos restantes** (34 → 11 cenários de fluxo) | 🟡 **Parcialmente concluída.** Agendamentos (8) saiu na feature 003, Consultas (3) na 004, a emissão de documento com modelo (4) na 005, a trilha de auditoria (4) na 006 e o contrato de dados (4) na 008; **11 permanecem transferidos** — Modo offline (6) e Dashboard (5) —, com destino declarado por grupo na seção acima. Somados aos **16 de paridade visual**, também transferidos, o saldo total passa a **27 transferidos dos 50** da feature 002 |
 | **As lacunas do módulo de Consultas** (`code-analysis.md#9`) | 🟡 **Quase todas declaradas, não provadas** — decisão de 2026-09-21. **Duas das três de severidade Alta deixaram de ser só declaração**: `applyTemplate` sem escape e a injeção na impressão ganharam evidência na feature 005 e continuam **abertas**. Detalhe linha a linha na seção abaixo |
 | **As três lacunas de severidade Alta de AMB-006** | 🟢 **Provadas e declaradas.** Substituição sem escape no payload, `{DIAS_AFASTAMENTO}` nunca resolvida e injeção sem escape na impressão — as três com evidência em `PrescriptionEditor.test.tsx`, e as três **abertas**, porque a decisão foi provar e declarar. Corrigir exige alterar a prova de propósito (decisão D-08 do roadmap da feature 005) |
 | **A colisão das famílias `BR-T`** | 🟡 **Contornada por citação qualificada.** `domain.md#2.3` usa `BR-T01`/`BR-T02` para *filtro por tipo* e *gate de medicamentos*; `code-analysis.md#6` (módulo templates) e `templates/requirements.md#2` usam os **mesmos IDs** para *campos obrigatórios* e *enum de 7 valores*. É o **mesmo identificador** com significados disjuntos — forma pior que a divergência de grafia de `BR-C`, porque qualificar só pelo ID não resolve |
@@ -358,7 +381,12 @@ está marcado como fechado, e o que permanece aberto tem razão declarada.
 | **Ausência de validação do horário no salvamento** | ✅ **Provada como comportamento atual.** O portão exige apenas paciente, médico e data; jornada e conflito não são revalidados. É promessa provada com prova, e não lacuna — está aqui porque corrigir mudaria comportamento observável |
 | **Colisão das famílias `BR-A0x`** | 🟡 **Contornada por citação qualificada.** A raiz é defeito documental da extração: dois artefatos usam os mesmos códigos para regras diferentes. Renumerar invalidaria citações existentes, inclusive da feature 001 — a resolver numa re-extração |
 | **Citação `W009` sem qualificação de feature** | ✅ **Corrigida nesta feature.** A matriz citava `W009` nu na linha do defeito DIV-01, mas esse identificador só existe no watch da feature `001-migracao-typescript` — o watch da 002 vai até `W008`. Como os IDs `W00x` reiniciam a cada feature, a citação nua simplesmente não resolvia |
-| **Prova de encoding sem dono no ciclo forward** | 🟡 **Declarada.** `src/test/mojibake.{mjs,test.mjs}` e `.github/workflows/guarda-encoding.yml` existem e passam, mas nasceram fora do `actions.md` de qualquer feature. Ver a nota em `#Como a prova é executada` |
+| **Prova de encoding sem dono no ciclo forward** | ✅ **Fechada pela feature `008-prova-contrato-dados`** (decisão `3a`). `src/test/mojibake.{mjs,test.mjs}` e `.github/workflows/guarda-encoding.yml` passam a ser reivindicados por um `actions.md`: uma falha da guarda agora tem contrato dizendo qual promessa foi violada. A adoção foi de **registro** — os dois arquivos **não** foram alterados. Ver a nota em `#Como a prova é executada` |
+| **O contrato garante forma, e não autorização** | 🟢 **Provada e declarada — e agora MEDIDA.** `contract.ts` e `scopedRead.ts` já registravam a ressalva (achado **F-03**); o que faltava era medir. O caso **positivo** `escopo-administrativo-declarado-por-qualquer-um` prova que qualquer código declara `{ kind: 'admin' }` e **compila**. O par negativo `escopo-admin-em-metodo-de-dono` entrega o **mesmo** objeto a `filterOwned` e é recusado — a diferença entre os dois é o método, e não quem chama |
+| **Os retornos dos adaptadores não são verificados** | 🔴 **Declarada.** `createEntityRepository` converte cada retorno com `as`, de modo que a cláusula de `PT-010.3` "o mock tem os mesmos tipos de retorno que o SDK" **não** é verificada pelo tipo. É a cláusula mais fácil de ler como coberta |
+| **O ponto de ligação dos adaptadores é uma asserção** | 🔴 **Declarada.** `bindAdapter` faz `as unknown as Parameters<...>` no encaixe com o registry, com justificativa de contravariância registrada no próprio código. O `PT-010.3` vale **entidade por entidade**, e não no ponto de ligação |
+| **O ramo administrativo de `applyScope` é inalcançável pelo tipo** | 🟡 **Declarada.** `filterOwned` só aceita `UserScope`, mas `applyScope` ramifica em `scope.kind === 'admin'`. O caso `escopo-admin-em-metodo-de-dono` prova que o **tipo** faz o trabalho; o ramo permanece como defesa de runtime, alcançável apenas por dentro |
+| **A inferência de `UserRole`** | 🔴 **Declarada.** Apenas `'admin'` está documentado de forma literal no projeto; `'user'` é inferência, com a pendência de confirmação registrada em `src/types/User.ts:9-11`. A feature 008 provou que o papel é **explícito no tipo**, e não qual é o seu segundo valor |
 | **Contagem das lacunas do módulo de Agendamentos** | 🔴 **Divergência declarada.** O artefato tem 11 linhas e o `requirements.md` da feature fala em 10 — detalhe na seção abaixo |
 
 > A tabela anterior a 2026-09-21 trazia o rótulo "Situação após a feature
@@ -476,4 +504,4 @@ leituras que passam a ter veredito.
 
 ---
 *Gerado pelo Reversa-Writer em 2026-09-02.*
-*Seção de rastreabilidade acrescentada em 2026-09-19; módulos de Agendamentos e Consultas e suas lacunas em 2026-09-21; cenários e registros dos grupos 06 (emissão de documento com modelo) e 07 (trilha de auditoria) em 2026-09-21 e 2026-09-22.*
+*Seção de rastreabilidade acrescentada em 2026-09-19; módulos de Agendamentos e Consultas e suas lacunas em 2026-09-21; cenários e registros dos grupos 06 (emissão de documento com modelo), 07 (trilha de auditoria) e 10 (contrato de dados) em 2026-09-21 e 2026-09-22; medições das features 005 e 006 e adoção da guarda de encoding em 2026-09-22.*
