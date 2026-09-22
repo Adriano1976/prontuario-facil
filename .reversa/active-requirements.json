@@ -1,9 +1,9 @@
 {
   "schema-version": 1,
-  "feature-dir": "_reversa_forward/006-prova-logs-acesso",
-  "feature-id": "006",
-  "short-name": "prova-logs-acesso",
-  "started-at": "2026-09-22T00:14:04-03:00",
+  "feature-dir": "_reversa_forward/008-prova-contrato-dados",
+  "feature-id": "008",
+  "short-name": "prova-contrato-dados",
+  "started-at": "2026-09-22T13:33:24-03:00",
   "current-stage": "requirements",
   "stages-completed": [],
   "paused-features": []
