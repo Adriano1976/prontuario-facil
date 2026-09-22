@@ -1,17 +1,33 @@
 # golden/manifest.yaml
 #
-# Manifesto dos golden files emitidos pelo Screen Translator. O Inspector consome
-# este arquivo para construir parity tests construtivos quando o oráculo legado
-# está disponível e a captura foi possível.
+# Manifesto dos golden files emitidos pelo Screen Translator.
 #
-# Nesta migração: origem ≡ alvo em plataforma (React → React+TS). O "oráculo" é a
-# própria SPA legada rodando em modo offline (VITE_OFFLINE=true), executável via
-# `npm run dev`. Captura automatizada é OQ-02 (v2); aqui ficam comandos sugeridos
-# para captura manual de screenshots. present: false para todos — o Inspector não
-# depende de golden files nesta migração (paridade visual é por construção).
+# ESTA EDIÇÃO (2026-09-22) substitui a de 2026-09-09, em que TODAS as 16 telas
+# estavam com present: false ("captura dourada de referência não existe no
+# repositório"). O usuário capturou as telas do legado manualmente e as 23
+# imagens passaram a existir em _reversa_sdd/screens/golden/.
+#
+# ── DECISÃO HUMANA QUE GOVERNA ESTE ARQUIVO (2026-09-22) ─────────────────────
+# As capturas formam um conjunto HETEROGÊNEO: 5 larguras distintas (1314, 1443,
+# 1460, 1623, 1732), 15 alturas distintas, seis capturas de página inteira e uma
+# montagem com rolagem. As normalizationRules abaixo NÃO corrigem viewport nem
+# resolução. O humano decidiu: aceitar o conjunto misto e declarar que a
+# paridade sustentada por estes goldens é CONSTRUTIVA/SEMÂNTICA (a tela existe,
+# com os mesmos componentes, textos, hierarquia e estados), NÃO comparação
+# pixel a pixel. Ver screen_deviation_log.md → DEV-001 e DEV-002.
+#
+# ── EXTENSÕES DESTE MANIFESTO AO TEMPLATE ───────────────────────────────────
+# Três campos foram acrescentados por tela, para rastreabilidade:
+#   parityScenario: "PT-Vnn" quando a tela tem cenário em
+#                   migration/parity_tests/screens/, ou null quando não tem
+#   sourceCapture:  caminho da captura original entregue pelo usuário
+#   dimensions:     WxH do golden, para transparência sobre a heterogeneidade
+#
+# Para telas sem cenário V (as "extras"), parityScenario é null e o campo notes
+# diz explicitamente que não há cenário de paridade correspondente.
 
 schemaVersion: 1
-generatedAt: 2026-09-09T15:52:00-03:00
+generatedAt: 2026-09-22T12:34:19-03:00
 reversa:
   version: "1.3.2"
 producedBy: screen-translator
@@ -22,30 +38,48 @@ oracleHash: null
 oracleCommand: "npm run dev (VITE_OFFLINE=true) e abrir a SPA no navegador"
 
 normalizationRules:
+  # Regras aceitas na comparação. Tudo fora daqui é divergência real.
   - lineEndings: "\n"
   - trimTrailingSpaces: false
   - stripAnsiColors: false
   - normalizeUtf8: true
   - injectClock: null        # SPA com dados dinâmicos; captura manual por tela
-  - seedRandom: null
+  - seedRandom: null         # idem — a massa das capturas não é fixada
+  # NOTA CRÍTICA: nenhuma regra aqui normaliza largura, altura ou recorte de
+  # página. Por isso a comparação visual direta imagem-a-imagem está fora de
+  # escopo (DEV-001). O que se compara é a especificação construtiva.
+
+captureBatch:
+  capturedBy: "Adriano"
+  capturedAt: "2026-09-22"
+  method: "manual — screenshots do app legado em execução (SPA React offline)"
+  total: 24
+  coveringScenarios: "PT-V01 a PT-V16 (V10 incluído na segunda rodada, 12:30)"
+  extras: "6 capturas sem cenário V + 2 estados alternativos (V10 anexado e V05 estado inicial)"
 
 screens:
+  # ─────────── Cenários de paridade visual PT-V01 … PT-V16 ───────────
+
   - name: "Dashboard Principal"
+    parityScenario: "PT-V01"
     legacyOrigin: "src/pages/Dashboard.jsx"
     capture:
-      command: "npm run dev (VITE_OFFLINE=true); abrir / e capturar screenshot full-page"
+      command: "npm run dev (VITE_OFFLINE=true); abrir / e capturar screenshot"
       expectedExitCode: 0
       determinismStrategy: "manual"
     file: "dashboard-principal.png"
     format: "png"
-    present: false
-    captureBy: null
-    capturedAt: null
-    sha256: null
-    deviations: []
-    notes: "Golden opcional — paridade visual por construção (mesma plataforma). Captura manual recomendada antes do merge da onda das pages."
+    present: true
+    captureBy: "Adriano"
+    capturedAt: "2026-09-22T11:13:00-03:00"
+    sha256: "735dae3e85c2fa6688ba2a570a06a12649eebe3a0d66040020cfa34fc14c34ed"
+    sourceCapture: "dashboard/screenshots/tela_dashboard.png"
+    dimensions: "1623x1008"
+    deviations: [DEV-001, DEV-002]
+    notes: "Única captura em 1623 de largura — o dashboard foi capturado em janela maior que as outras telas. Estado: KPIs preenchidos (6/0/6/94%) e bloco de agendamentos vazio."
 
   - name: "Listagem de Pacientes"
+    parityScenario: "PT-V02"
     legacyOrigin: "src/pages/Patients.jsx"
     capture:
       command: "npm run dev (VITE_OFFLINE=true); abrir /pacientes e capturar screenshot"
@@ -53,14 +87,17 @@ screens:
       determinismStrategy: "manual"
     file: "pacientes-listagem.png"
     format: "png"
-    present: false
-    captureBy: null
-    capturedAt: null
-    sha256: null
-    deviations: []
-    notes: "Golden opcional."
+    present: true
+    captureBy: "Adriano"
+    capturedAt: "2026-09-22T11:23:37-03:00"
+    sha256: "07e622ebcc341fd7aff739f992370e80d25419a5174139d4d822002a57e9c5ac"
+    sourceCapture: "pacientes/screenshots/tela_pacientes.png"
+    dimensions: "1443x1030"
+    deviations: [DEV-001, DEV-002]
+    notes: "6 pacientes listados. Os dados desta captura divergem da captura do detalhe do paciente (idade, telefone e e-mail da mesma paciente) — ver alerta de massa em pacientes/screens.md."
 
   - name: "Cadastro de Novo Paciente"
+    parityScenario: "PT-V03"
     legacyOrigin: "src/pages/PatientForm.jsx"
     capture:
       command: "npm run dev (VITE_OFFLINE=true); abrir /pacientes/novo e capturar screenshot"
@@ -68,14 +105,17 @@ screens:
       determinismStrategy: "manual"
     file: "pacientes-novo.png"
     format: "png"
-    present: false
-    captureBy: null
-    capturedAt: null
-    sha256: null
-    deviations: []
-    notes: "Golden opcional."
+    present: true
+    captureBy: "Adriano"
+    capturedAt: "2026-09-22T11:24:55-03:00"
+    sha256: "091966fd4d982d29d41452425432e5d90d0b4a677c0c0c548cb048835f97d982"
+    sourceCapture: "pacientes/screenshots/tela_novos_pacientes.png"
+    dimensions: "1443x1788"
+    deviations: [DEV-001, DEV-002]
+    notes: "Captura de página inteira (1788 px). Válida como referência de hierarquia e de textos; NÃO comparável pixel a pixel com uma captura de viewport."
 
   - name: "Calendário de Agendamentos"
+    parityScenario: "PT-V04"
     legacyOrigin: "src/pages/Appointments.jsx"
     capture:
       command: "npm run dev (VITE_OFFLINE=true); abrir /agendamentos e capturar screenshot"
@@ -83,29 +123,54 @@ screens:
       determinismStrategy: "manual"
     file: "agendamentos-calendario.png"
     format: "png"
-    present: false
-    captureBy: null
-    capturedAt: null
-    sha256: null
-    deviations: []
-    notes: "Golden opcional."
+    present: true
+    captureBy: "Adriano"
+    capturedAt: "2026-09-22T11:37:41-03:00"
+    sha256: "c3a45f30651b4cdc8927b688f630b515274211befe414ce8ac2711dd7c47a826"
+    sourceCapture: "agendamentos/screenshots/tela_agendamentos_calendario.png"
+    dimensions: "1443x1560"
+    deviations: [DEV-001, DEV-002, DEV-006]
+    notes: "Semana de 20 a 26/09/2026 com eventos em 23 e 25/09. Cores dos selos de status divergem do que a extração descrevia — ver DEV-006."
 
-  - name: "Novo Agendamento"
+  - name: "Novo Agendamento (médico e data escolhidos)"
+    parityScenario: "PT-V05"
     legacyOrigin: "src/pages/NewAppointment.jsx"
     capture:
-      command: "npm run dev (VITE_OFFLINE=true); abrir /agendamentos/novo e capturar screenshot"
+      command: "npm run dev (VITE_OFFLINE=true); abrir /agendamentos/novo, escolher paciente, médico e data e capturar"
+      expectedExitCode: 0
+      determinismStrategy: "manual"
+    file: "agendamentos-novo-escolhido.png"
+    format: "png"
+    present: true
+    captureBy: "Adriano"
+    capturedAt: "2026-09-22T12:47:00-03:00"
+    sha256: "c513a5bdb4e4499f024814343e51ed2eec20d3163ca46514d6dad1467928d065"
+    sourceCapture: "agendamentos/screenshots/tela_novo_agendamento_escolhido.png"
+    dimensions: "1443x1152"
+    deviations: [DEV-001, DEV-002, DEV-005]
+    notes: "GOLDEN PRINCIPAL do PT-V05 (recaptura de 12:47): única imagem que mostra a seção condicional 'Data e Horário' — calendário com o dia 24 selecionado e painel 'Horários Disponíveis' (14:00 a 17:30, 14:30 escolhido). Mostra Paciente 'Neide Ferreira' e Médico 'Dr. Thiago - Ultrassonografia' preenchidos e o botão 'Confirmar Agendamento' HABILITADO."
+
+  - name: "Novo Agendamento (estado inicial, sem médico)"
+    parityScenario: "PT-V05"
+    alternateStateOf: "agendamentos-novo-escolhido.png"
+    legacyOrigin: "src/pages/NewAppointment.jsx"
+    capture:
+      command: "npm run dev (VITE_OFFLINE=true); abrir /agendamentos/novo sem selecionar nada e capturar"
       expectedExitCode: 0
       determinismStrategy: "manual"
     file: "agendamentos-novo.png"
     format: "png"
-    present: false
-    captureBy: null
-    capturedAt: null
-    sha256: null
-    deviations: []
-    notes: "Golden opcional."
+    present: true
+    captureBy: "Adriano"
+    capturedAt: "2026-09-22T11:38:44-03:00"
+    sha256: "12bfd2a85552b51cbac6ae8874a4da9e745aa16ea5630db67d9d632e959ebb7c"
+    sourceCapture: "agendamentos/screenshots/tela_novo_agendamento.png"
+    dimensions: "1443x746"
+    deviations: [DEV-001, DEV-002, DEV-005]
+    notes: "Estado ALTERNATIVO (não é o golden principal): formulário em branco, sem médico — por isso a seção 'Data e Horário' não aparece. É a evidência de que a seção é condicional ao doctor_id, e mostra o botão 'Confirmar Agendamento' DESABILITADO."
 
   - name: "Listagem de Consultas"
+    parityScenario: "PT-V06"
     legacyOrigin: "src/pages/Consultations.jsx"
     capture:
       command: "npm run dev (VITE_OFFLINE=true); abrir /consultas e capturar screenshot"
@@ -113,14 +178,17 @@ screens:
       determinismStrategy: "manual"
     file: "consultas-listagem.png"
     format: "png"
-    present: false
-    captureBy: null
-    capturedAt: null
-    sha256: null
-    deviations: []
-    notes: "Golden opcional."
+    present: true
+    captureBy: "Adriano"
+    capturedAt: "2026-09-22T11:40:39-03:00"
+    sha256: "cfd569073245353a79f482952bbe03ec019eaf7ba3a26d38cde02b4ac5a24297"
+    sourceCapture: "consultas/screenshots/tela_consultas.png"
+    dimensions: "1443x762"
+    deviations: [DEV-001, DEV-002]
+    notes: "3 consultas (1 'Em Andamento', 2 'Agendada'), com filtros 'Todos Status' e 'Todas as datas'."
 
   - name: "Novo Atendimento (Anamnese)"
+    parityScenario: "PT-V07"
     legacyOrigin: "src/pages/NewConsultation.jsx"
     capture:
       command: "npm run dev (VITE_OFFLINE=true); abrir /consultas/novo e capturar screenshot"
@@ -128,14 +196,17 @@ screens:
       determinismStrategy: "manual"
     file: "consultas-novo.png"
     format: "png"
-    present: false
-    captureBy: null
-    capturedAt: null
-    sha256: null
-    deviations: []
-    notes: "Golden opcional."
+    present: true
+    captureBy: "Adriano"
+    capturedAt: "2026-09-22T11:41:08-03:00"
+    sha256: "2f3e052134979a4c1de03e53c4fbc65076e06ec67b00e17d16e0fe147d503f03"
+    sourceCapture: "consultas/screenshots/tela_nova_consulta.png"
+    dimensions: "1443x1768"
+    deviations: [DEV-001, DEV-002]
+    notes: "Captura de página inteira. Data/Hora pré-preenchida com o instante da captura (22/09/2026 14:40) e Status 'Em Andamento' — valor volátil, não usar como contrato."
 
   - name: "Visualização de Consulta"
+    parityScenario: "PT-V08"
     legacyOrigin: "src/pages/Consultation.jsx"
     capture:
       command: "npm run dev (VITE_OFFLINE=true); abrir uma consulta do seed e capturar screenshot"
@@ -143,14 +214,17 @@ screens:
       determinismStrategy: "manual"
     file: "consultas-visualizacao.png"
     format: "png"
-    present: false
-    captureBy: null
-    capturedAt: null
-    sha256: null
-    deviations: []
-    notes: "Golden opcional."
+    present: true
+    captureBy: "Adriano"
+    capturedAt: "2026-09-22T11:42:08-03:00"
+    sha256: "7b8008ea31ee666daf9ea009092932c3b92350f2ba55481ee0d976e75581d5c1"
+    sourceCapture: "consultas/screenshots/tela_consulta_paciente.png"
+    dimensions: "1443x874"
+    deviations: [DEV-001, DEV-002]
+    notes: "Traz o card 'Documentos Emitidos' (Encaminhamento, 15/09/2026 12:30), que não constava da extração anterior."
 
   - name: "Modal: Novo Documento"
+    parityScenario: "PT-V09"
     legacyOrigin: "src/components/medical/PrescriptionEditor.jsx"
     capture:
       command: "npm run dev (VITE_OFFLINE=true); abrir consulta, clicar 'Nova Receita' e capturar modal"
@@ -158,29 +232,35 @@ screens:
       determinismStrategy: "manual"
     file: "modal-novo-documento.png"
     format: "png"
-    present: false
-    captureBy: null
-    capturedAt: null
-    sha256: null
-    deviations: []
-    notes: "Golden opcional."
+    present: true
+    captureBy: "Adriano"
+    capturedAt: "2026-09-22T11:44:26-03:00"
+    sha256: "bc9d8d1dafc6bfdbbe9ea218e6690543ea724a08690ec6ac6b118824a6b12182"
+    sourceCapture: "consultas/screenshots/tela_consulta_novo_documento.png"
+    dimensions: "1314x602"
+    deviations: [DEV-001, DEV-002]
+    notes: "Modal com rolagem própria. Seção 'Medicamentos' visível e vazia, com botão '+ Adicionar'."
 
   - name: "Modal: Upload de Exame"
+    parityScenario: "PT-V10"
     legacyOrigin: "src/components/medical/ExamUploader.jsx"
     capture:
-      command: "npm run dev (VITE_OFFLINE=true); abrir consulta, clicar 'Exame' e capturar modal"
+      command: "npm run dev (VITE_OFFLINE=true); abrir o detalhe do paciente, clicar 'Exame' e capturar modal"
       expectedExitCode: 0
       determinismStrategy: "manual"
     file: "modal-upload-exame.png"
     format: "png"
-    present: false
-    captureBy: null
-    capturedAt: null
-    sha256: null
-    deviations: []
-    notes: "Golden opcional."
+    present: true
+    captureBy: "Adriano"
+    capturedAt: "2026-09-22T12:30:14-03:00"
+    sha256: "1f5b07d8325a3c647d9cb089dc29a4ef091ab08bb43be2c534906dac2f32b0ec"
+    sourceCapture: "consultas/screenshots/tela_consulta_upload_exame.png"
+    dimensions: "1314x602"
+    deviations: [DEV-001, DEV-002]
+    notes: "ÚLTIMA LACUNA DE CAPTURA FECHADA (12:30). Gatilho observado: o modal abre sobre o DETALHE DO PACIENTE, pelo botão 'Exame' — e não sobre a tela de Consulta, como a extração indicava. Estado alternativo com arquivo anexado em modal-upload-exame-anexado.png."
 
   - name: "Gerenciamento de Médicos"
+    parityScenario: "PT-V11"
     legacyOrigin: "src/pages/Doctors.jsx"
     capture:
       command: "npm run dev (VITE_OFFLINE=true); abrir /medicos e capturar screenshot"
@@ -188,14 +268,17 @@ screens:
       determinismStrategy: "manual"
     file: "medicos-listagem.png"
     format: "png"
-    present: false
-    captureBy: null
-    capturedAt: null
-    sha256: null
-    deviations: []
-    notes: "Golden opcional."
+    present: true
+    captureBy: "Adriano"
+    capturedAt: "2026-09-22T11:49:09-03:00"
+    sha256: "98cf9f8d231e9bc04972393cd4eb3725dc071244637efa9f28c0a32420d9f62c"
+    sourceCapture: "medicos/screenshots/tela_medicos.png"
+    dimensions: "1443x762"
+    deviations: [DEV-001, DEV-002]
+    notes: "3 médicos. Acento roxo nesta unit (contra verde-água nas demais) — conferir token no design-system."
 
   - name: "Central de Templates"
+    parityScenario: "PT-V12"
     legacyOrigin: "src/pages/Templates.jsx"
     capture:
       command: "npm run dev (VITE_OFFLINE=true); abrir /templates e capturar screenshot"
@@ -203,14 +286,17 @@ screens:
       determinismStrategy: "manual"
     file: "templates-central.png"
     format: "png"
-    present: false
-    captureBy: null
-    capturedAt: null
-    sha256: null
-    deviations: []
-    notes: "Golden opcional."
+    present: true
+    captureBy: "Adriano"
+    capturedAt: "2026-09-22T11:51:56-03:00"
+    sha256: "a3dc7a7b5513d9ba9f13187e815b83ee686844536b5be48c85564df6418598bb"
+    sourceCapture: "templates/screenshots/tela_templates.png"
+    dimensions: "1443x1190"
+    deviations: [DEV-001, DEV-002]
+    notes: "4 categorias, 1 modelo cada, todos com selo 'Padrão'."
 
   - name: "Logs de Acesso"
+    parityScenario: "PT-V13"
     legacyOrigin: "src/pages/AccessLogs.jsx"
     capture:
       command: "npm run dev (VITE_OFFLINE=true); abrir /logs e capturar screenshot"
@@ -218,20 +304,209 @@ screens:
       determinismStrategy: "manual"
     file: "logs-acesso.png"
     format: "png"
-    present: false
-    captureBy: null
-    capturedAt: null
-    sha256: null
-    deviations: []
-    notes: "Golden opcional."
+    present: true
+    captureBy: "Adriano"
+    capturedAt: "2026-09-22T11:54:37-03:00"
+    sha256: "df0f8e9f16ba04d78387e30b038df7670aaa6f10febf4fae55978eb3dbcbc60c"
+    sourceCapture: "logs-acesso/screenshots/tela_logs_acesso.png"
+    dimensions: "1732x15029"
+    deviations: [DEV-001, DEV-002, DEV-003]
+    notes: "Captura de página inteira com 15029 px de altura e 254 registros dinâmicos. Serve como referência ESTRUTURAL (colunas, selos, KPIs, ausência de paginação) — o conteúdo das linhas não é contrato. Ver DEV-003."
+
+  - name: "Detalhe do Paciente (timeline clínica)"
+    parityScenario: "PT-V14"
+    legacyOrigin: "src/pages/PatientDetail.jsx"
+    capture:
+      command: "npm run dev (VITE_OFFLINE=true); abrir um paciente com histórico e capturar screenshot"
+      expectedExitCode: 0
+      determinismStrategy: "manual"
+    file: "paciente-detalhe.png"
+    format: "png"
+    present: true
+    captureBy: "Adriano"
+    capturedAt: "2026-09-22T11:31:38-03:00"
+    sha256: "eb0eb3f662a50e3d11921ff94130933de0e79f9c1a7e654bafd1779f1cad2911"
+    sourceCapture: "pacientes/screenshots/tela_informacoes_paciente.png"
+    dimensions: "1443x1044"
+    deviations: [DEV-001, DEV-002, DEV-004]
+    notes: "Saiu de 'nonDeterministic' para present: true — a timeline tem 6 agendamentos com datas do seed; o golden fixa uma massa específica (DEV-004)."
+
+  - name: "Modal: Novo Médico"
+    parityScenario: "PT-V15"
+    legacyOrigin: "src/pages/Doctors.jsx (dialog)"
+    capture:
+      command: "npm run dev (VITE_OFFLINE=true); abrir /medicos e clicar '+ Novo Médico'"
+      expectedExitCode: 0
+      determinismStrategy: "manual"
+    file: "medicos-novo.png"
+    format: "png"
+    present: true
+    captureBy: "Adriano"
+    capturedAt: "2026-09-22T11:49:42-03:00"
+    sha256: "e1862542149c27bc7525fc9d57ffff67e9d15b3183856ebac400a3a308b07980"
+    sourceCapture: "medicos/screenshots/tela_novo_medico.png"
+    dimensions: "1314x602"
+    deviations: [DEV-001, DEV-002]
+    notes: "Escala pré-preenchida: Segunda a Sexta marcados, 08:00–18:00, duração 30, toggle 'Médico ativo' ligado."
+
+  - name: "Modal: Criar / Editar Template"
+    parityScenario: "PT-V16"
+    legacyOrigin: "src/pages/Templates.jsx (dialog)"
+    capture:
+      command: "npm run dev (VITE_OFFLINE=true); abrir /templates e clicar 'Editar' em um modelo"
+      expectedExitCode: 0
+      determinismStrategy: "manual"
+    file: "templates-modal.png"
+    format: "png"
+    present: true
+    captureBy: "Adriano"
+    capturedAt: "2026-09-22T11:53:24-03:00"
+    sha256: "9f0b8f406df26bb63334ed30347f56d4dd1dab2396ddc372555ffe4e5c662d60"
+    sourceCapture: "templates/screenshots/tela_editar_template.png"
+    dimensions: "1314x602"
+    deviations: [DEV-001, DEV-002, DEV-007]
+    notes: "O V16 cobre criar E editar. Escolhido o modal de EDIÇÃO como golden porque é o único que mostra o modal inteiro — o de criação está truncado antes dos toggles e ações (DEV-007)."
+
+  # ─────────── Capturas sem cenário V (extras) ───────────
+
+  - name: "Editar Paciente"
+    parityScenario: null
+    legacyOrigin: "src/pages/PatientForm.jsx (modo edição)"
+    capture:
+      command: "npm run dev (VITE_OFFLINE=true); abrir o detalhe de um paciente e clicar 'Editar'"
+      expectedExitCode: 0
+      determinismStrategy: "manual"
+    file: "pacientes-editar.png"
+    format: "png"
+    present: true
+    captureBy: "Adriano"
+    capturedAt: "2026-09-22T11:32:31-03:00"
+    sha256: "b596a794b1cfb9acfca95c5e78e27d99ca7c18d4766f9bebf786bff68ecede2f"
+    sourceCapture: "pacientes/screenshots/tela_editar_paciente.png"
+    dimensions: "1443x1686"
+    deviations: [DEV-001, DEV-002]
+    notes: "SEM cenário de paridade correspondente — telas de edição não estão entre os 16 cenários V. Entra como referência para uma feature futura. Página inteira; a caixa de aviso LGPD do cadastro NÃO aparece neste estado."
+
+  - name: "Lista de Agendamentos"
+    parityScenario: null
+    legacyOrigin: "src/pages/Appointments.jsx (aba Lista)"
+    capture:
+      command: "npm run dev (VITE_OFFLINE=true); abrir /agendamentos e alternar para a aba 'Lista'"
+      expectedExitCode: 0
+      determinismStrategy: "manual"
+    file: "agendamentos-lista.png"
+    format: "png"
+    present: true
+    captureBy: "Adriano"
+    capturedAt: "2026-09-22T11:38:13-03:00"
+    sha256: "e9772c5e06284eeb295dcdaed12652be68508bb4e01cec7684d1b3047fb9abc4"
+    sourceCapture: "agendamentos/screenshots/tela_agendamentos_lista.png"
+    dimensions: "1443x1106"
+    deviations: [DEV-001, DEV-002]
+    notes: "SEM cenário de paridade correspondente — o V04 cobre a aba Calendário. Ordenação da lista não é cronológica (registrado em agendamentos/screens.md)."
+
+  - name: "Modal: Detalhes do Agendamento"
+    parityScenario: null
+    legacyOrigin: "src/pages/Appointments.jsx (dialog de status)"
+    capture:
+      command: "npm run dev (VITE_OFFLINE=true); clicar em um cartão de evento na grade"
+      expectedExitCode: 0
+      determinismStrategy: "manual"
+    file: "modal-detalhe-agendamento.png"
+    format: "png"
+    present: true
+    captureBy: "Adriano"
+    capturedAt: "2026-09-22T11:39:32-03:00"
+    sha256: "1776d5289760a09d1a9d56aa8194ab6471b0c9eee01f0e98b573fe9937837362"
+    sourceCapture: "agendamentos/screenshots/tela_detalhe_agendamento.png"
+    dimensions: "1460x1560"
+    deviations: [DEV-001, DEV-002]
+    notes: "SEM cenário de paridade correspondente. ATENÇÃO: a imagem é uma MONTAGEM COM ROLAGEM — o cabeçalho do app aparece no meio da figura. O conteúdo do modal é legível; a composição da página não é confiável. Candidata a recaptura."
+
+  - name: "Editar Consulta"
+    parityScenario: null
+    legacyOrigin: "src/pages/NewConsultation.jsx (modo edição)"
+    capture:
+      command: "npm run dev (VITE_OFFLINE=true); abrir uma consulta e clicar 'Editar'"
+      expectedExitCode: 0
+      determinismStrategy: "manual"
+    file: "consultas-editar.png"
+    format: "png"
+    present: true
+    captureBy: "Adriano"
+    capturedAt: "2026-09-22T11:42:48-03:00"
+    sha256: "39b91b1721da04035d299e28b71d5cb1dbc3ef2d5e1254f1323adcf99edf18fa"
+    sourceCapture: "consultas/screenshots/tela_edita_consulta.png"
+    dimensions: "1443x1815"
+    deviations: [DEV-001, DEV-002]
+    notes: "SEM cenário de paridade correspondente. Diferença estrutural relevante: a seção 'Paciente' deixa de ser busca e vira cartão com botão 'Trocar'."
+
+  - name: "Modal: Editar Médico"
+    parityScenario: null
+    legacyOrigin: "src/pages/Doctors.jsx (dialog, modo edição)"
+    capture:
+      command: "npm run dev (VITE_OFFLINE=true); abrir /medicos e clicar 'Editar' em um card"
+      expectedExitCode: 0
+      determinismStrategy: "manual"
+    file: "medicos-editar.png"
+    format: "png"
+    present: true
+    captureBy: "Adriano"
+    capturedAt: "2026-09-22T11:50:26-03:00"
+    sha256: "f85d0ab61a354c07ffcd34542f2e6d98d8611bbcbc228da52a0bd7d5f951dd3c"
+    sourceCapture: "medicos/screenshots/tela_editar_medico.png"
+    dimensions: "1314x602"
+    deviations: [DEV-001, DEV-002]
+    notes: "SEM cenário de paridade correspondente — o V15 cobre o modal de criação; este é o mesmo dialog em modo edição, com 'Dr. Thiago' carregado."
+
+  - name: "Modal: Criar Template (captura parcial)"
+    parityScenario: null
+    legacyOrigin: "src/pages/Templates.jsx (dialog, modo criação)"
+    capture:
+      command: "npm run dev (VITE_OFFLINE=true); abrir /templates e clicar '+ Novo Template'"
+      expectedExitCode: 0
+      determinismStrategy: "manual"
+    file: "templates-novo.png"
+    format: "png"
+    present: true
+    captureBy: "Adriano"
+    capturedAt: "2026-09-22T11:52:23-03:00"
+    sha256: "c2b9842ef54a98b179026b60064f7bb906f9fd0992b3f3067c575f70ea183c90"
+    sourceCapture: "templates/screenshots/tela_novo_templates.png"
+    dimensions: "1314x602"
+    deviations: [DEV-001, DEV-002, DEV-007]
+    notes: "SEM cenário de paridade correspondente e CAPTURA PARCIAL: truncada antes dos toggles 'Template padrão'/'Ativo' e dos botões. Para o V16 usar templates-modal.png (DEV-007)."
+
+  # ─────────── Estado alternativo da mesma tela (V10) ───────────
+
+  - name: "Modal: Upload de Exame (arquivo anexado)"
+    parityScenario: "PT-V10"
+    alternateStateOf: "modal-upload-exame.png"
+    legacyOrigin: "src/components/medical/ExamUploader.jsx"
+    capture:
+      command: "npm run dev (VITE_OFFLINE=true); abrir o modal, anexar uma imagem e capturar"
+      expectedExitCode: 0
+      determinismStrategy: "manual"
+    file: "modal-upload-exame-anexado.png"
+    format: "png"
+    present: true
+    captureBy: "Adriano"
+    capturedAt: "2026-09-22T12:32:26-03:00"
+    sha256: "ce6598a752accb5557141aa9dee09afdf4a4fac3ea1db3d9cdccb853cabe206c"
+    sourceCapture: "consultas/screenshots/tela_consulta_upload_exame_imagem.png"
+    dimensions: "1314x602"
+    deviations: [DEV-001, DEV-002]
+    notes: "Estado ALTERNATIVO do V10 (não é golden principal): dropzone com miniatura do arquivo, nome do arquivo e link '× Remover'; no fundo, a aba 'Exames' passa de (0) para (1) e surge a ação 'Visualizar'."
 
 # Telas para as quais a captura determinística não foi possível.
-nonDeterministic:
-  - name: "Detalhe do Paciente (timeline clínica)"
-    reason: "Timeline depende de dados dinâmicos do seed; captura manual com dados fixos do mockSeed"
-    fallback: "captura manual após popular com os registros do seed"
-    samples: 1
-    deviations: []
+# Vazio nesta edição: todas as 22 telas do inventário têm captura.
+nonDeterministic: []
 
 # Telas em projetos sem UI ou em modo skipped.
 skipped: null
+
+# ── Sumário desta edição ────────────────────────────────────────────────────
+# present: true ....... 24 de 24 (era 0 de 16 em 2026-09-09)
+# cenários V cobertos .. 16 de 16 (V01–V16)
+# capturas extras ...... 6 (sem cenário V) + 2 (estados alternativos do V10 e do V05)
+# deviations ........... 7 registradas, TODAS aprovadas (DEV-005 resolvido por leitura do codigo em 2026-09-22)
