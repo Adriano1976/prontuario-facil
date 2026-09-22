@@ -1,9 +1,9 @@
 {
   "schema-version": 1,
-  "feature-dir": "_reversa_forward/005-prova-templates",
-  "feature-id": "005",
-  "short-name": "prova-templates",
-  "started-at": "2026-09-21T15:06:41-03:00",
+  "feature-dir": "_reversa_forward/006-prova-logs-acesso",
+  "feature-id": "006",
+  "short-name": "prova-logs-acesso",
+  "started-at": "2026-09-22T00:14:04-03:00",
   "current-stage": "requirements",
   "stages-completed": [],
   "paused-features": []
