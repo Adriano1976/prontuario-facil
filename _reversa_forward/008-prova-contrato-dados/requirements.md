@@ -65,6 +65,7 @@ feature não altera tipo, contrato nem comportamento.
    erro. Recusa pelo motivo errado é falha, não aprovação.
    - Origem no legado: `verificacoes-negativas.mjs` (campos `violacao`, `espera` e `codigo`)
    - Tipo: nova (contrato de prova)
+   - O comando passa a distinguir **dois tipos de caso**: o que **deve ser recusado** e o que **deve compilar**. É essa distinção que permite medir um buraco do contrato em vez de apenas declará-lo (decisão `Q5` · `5a`)
 3. **RN-03:** O contrato garante a **forma**, nunca a **autorização**. `kind: 'admin'` é uma
    declaração de quem chama, e código que a faz indevidamente continua compilando.
    - Origem no legado: `contract.ts:181-184` e `scopedRead.ts:30-32` (achado **F-03**)
@@ -89,11 +90,12 @@ feature não altera tipo, contrato nem comportamento.
    prova que o tipo faz o trabalho; o ramo permanece como defesa de runtime.
    - Origem no legado: `scopedRead.ts:118-157`
    - Tipo: nova
-8. **RN-08:** A guarda de codificação (`mojibake`) é uma prova **sem promessa**: existe, passa, e
-   nenhum `actions.md` a reivindica. Enquanto isso durar, uma falha dela não tem contrato que
-   diga qual promessa foi violada.
+8. **RN-08:** A guarda de codificação (`mojibake`) era uma prova **sem promessa**: existia, passava, e nenhum `actions.md` a reivindicava. A decisão `Q3` · `3a` **adota a guarda nesta feature**: ela passa a ter dono no `actions.md`, e a matriz deixa de listá-la como prova sem dono.
    - Origem no legado: `src/test/mojibake.mjs` e `code-spec-matrix.md#Lacunas de prova`
-   - Tipo: nova (o furo é declarado, e a decisão `Q3` pode adotá-la)
+   - Tipo: alterada (a guarda deixa de ser órfã)
+9. **RN-09:** O comando admite **casos positivos** — os que devem **compilar** —, e é essa capacidade que permite **medir** o buraco de `F-03`: um escopo administrativo declarado por quem não é administrador compila, e o comando passa a afirmar isso em vez de apenas registrar a ressalva.
+   - Origem no legado: `contract.ts:181-184`; `verificacoes-negativas.mjs`
+   - Tipo: nova (capacidade nova do arnês, decisão `Q5` · `5a`)
 
 ## 5. Requisitos Funcionais
 
@@ -110,9 +112,10 @@ feature não altera tipo, contrato nem comportamento.
 | RF-09 | Declarar o limite dos retornos dos adaptadores (**RN-05**) | Must | A matriz registra que a cláusula de "mesmos tipos de retorno" não é verificada, citando `entities.ts` | 🟢 |
 | RF-10 | Declarar o limite do ponto de ligação (**RN-06**) | Must | A matriz registra a asserção de `bindAdapter` e o alcance real de `PT-010.3` | 🟢 |
 | RF-11 | Registrar o ramo inalcançável de `applyScope` (**RN-07**) | Should | A matriz registra que `filterOwned` só aceita escopo de dono por tipo, e que o ramo administrativo é defesa de runtime | 🟢 |
-| RF-12 | Dar dono à guarda de codificação, se a decisão `Q3` for por isso | Should | As verificações da guarda passam a ser reivindicadas por um `actions.md`, e a matriz deixa de listá-la como prova sem dono | 🟢 |
+| RF-12 | Dar dono à guarda de codificação, **adotando-a nesta feature** (decisão `Q3` · `3a`) | Must | As verificações da guarda passam a ser reivindicadas por um `actions.md`, e a matriz deixa de listá-la como prova sem dono | 🟢 |
 | RF-13 | Registrar na matriz o veredito dos 4 cenários de `PT-010` e o saldo dos grupos restantes | Must | `code-spec-matrix.md` recebe a seção do grupo `10`, com o saldo atualizado e cada cláusula não coberta declarada | 🟢 |
 | RF-14 | Revalidar os comandos de gate e a integridade da árvore | Must | `npm test`, `npm run typecheck`, `npm run lint`, `npm run prova:negativos` e `npm run prova:encoding` passam; nenhum arquivo de aplicação é tocado | 🟢 |
+| RF-15 | Provar o **buraco de `F-03`** com um caso **positivo** (decisão `Q5` · `5a`) | Must | O comando passa a distinguir casos que devem ser recusados dos que devem compilar; um caso declara escopo administrativo indevido e **compila**, provando que o contrato garante forma, nunca autorização | 🟢 |
 
 ## 6. Requisitos Não Funcionais
 
@@ -174,11 +177,18 @@ Cenário: O comando não deixa resíduo no repositório
   Então o gate volta a zero erros
   E o comando confirma a ausência de resíduo
 
-Cenário: O contrato garante forma, e não autorização
-  Dado um escopo administrativo declarado por quem não é administrador
-  Quando o código compila
-  Então fica registrado que o compilador não valida autorização
+Cenário: Escopo administrativo indevido compila, e o comando mede isso
+  Dado um caso POSITIVO, que declara escopo administrativo sem ser administrador
+  Quando o gate de tipos roda sobre ele
+  Então o caso é aprovado por NÃO produzir erro
+  E fica medido que o contrato garante forma, e não autorização
   E que a defesa real é a regra de acesso do servidor
+
+Cenário: Um caso positivo recusado pelo gate é falha do comando
+  Dado um caso declarado como positivo, que deve compilar
+  Quando o gate o recusa
+  Então o comando acusa a falha, e não a aprovação
+  E os casos negativos continuam sendo aprovados por serem recusados pelo motivo certo
 ```
 
 ## 8. Prioridade MoSCoW
@@ -190,35 +200,42 @@ Cenário: O contrato garante forma, e não autorização
 | RF-08, RF-09, RF-10 | Must | As três cláusulas **não verificadas** são o achado da feature: declaradas, valem mais que um verde falso |
 | RF-13, RF-14 | Must | Convergência na matriz e gate |
 | RF-11 | Should | Achado lateral real, mas não prometido por `PT-010` |
-| RF-12 | Should | Depende da decisão `Q3`; se adotada, fecha o furo da prova sem dono |
+| RF-12, RF-15 | Must | Decisões `Q3` · `3a` e `Q5` · `5a`: a guarda ganha dono, e o buraco do `F-03` deixa de ser declaração e vira medida |
 | RNF de desempenho do gate | Should | O gate é comando próprio; a suíte de unidade quase não muda |
 
 ## 9. Esclarecimentos
 
-> Nenhuma sessão de dúvidas registrada ainda. Rode `/reversa-clarify` quando houver `[DÚVIDA]` pendente.
+### Sessão 2026-09-22
+
+Cinco perguntas apresentadas, cinco respondidas. As três primeiras vinham dos `[DÚVIDA]`
+declarados; as duas últimas saíram da varredura — e a quinta encontrou uma capacidade que o
+arnês de provas ainda **não tinha**.
+
+- **Q:** Qual é o instrumento da prova — o comando de casos negativos, ou também uma comparação de comportamento dos adaptadores?
+  **R:** `1a` — estender o comando de casos negativos e **citar** o `typecheck` para a cláusula positiva de `PT-010.3`. Sem prova de comportamento: o SDK real exigiria rede, e comparar o mock contra si mesmo não diria nada sobre o outro adaptador.
+- **Q:** Os casos que já existem — citar ou reafirmar?
+  **R:** `2a` — **citar** os existentes pelos identificadores e escrever casos novos só para as metades descobertas. Repetir o que já é provado criaria dois pontos de verdade para a mesma cláusula.
+- **Q:** A guarda de codificação entra no escopo e ganha dono?
+  **R:** `3a` — **entra**. É uma prova sem promessa, e esta é a feature de infraestrutura de gate: é onde adotá-la custa menos.
+- **Q:** Quais conjuntos fechados entram no `PT-010.4`?
+  **R:** `4a` — os que o cenário nomeia: a situação de **agendamento** e os tipos **documentais**. Ampliar para todos os conjuntos do domínio seria provar mais do que o cenário transferido pede.
+- **Q:** Provar o buraco de `F-03` com um caso positivo, ou apenas declará-lo?
+  **R:** `5a` — **provar**. O comando ganha a noção de caso **positivo** (deve compilar), e um caso declara escopo administrativo indevido e **compila**. O buraco deixa de ser declaração e vira medida — e o recurso serve às próximas features.
+
+**Consequências no documento:** o `RN-02` passou a distinguir os dois tipos de caso; o `RN-08`
+deixou de ser lacuna e virou adoção; o `RN-09` foi criado para a capacidade nova do arnês; o
+`RF-12` subiu de Should para Must; o `RF-15` foi acrescentado; um cenário Gherkin foi reescrito
+para **medir** em vez de registrar, e outro foi somado para a mecânica do comando; e a seção
+`## 10` ficou sem lacunas em aberto.
 
 ## 10. Lacunas
 
-- 🔴 [DÚVIDA] **O instrumento.** Os quatro cenários de `PT-010` são de **compilação**, e o
-  projeto tem dois instrumentos possíveis: o gate de tipos, reproduzível por
-  `npm run prova:negativos` (que já cobre parte dos cenários), e a verificação de tipo em tempo
-  de compilação do próprio projeto, que o `typecheck` já roda. Provamos estendendo o comando de
-  casos negativos e **citando** o `typecheck` para a cláusula positiva de `PT-010.3` — ou
-  acrescentamos também uma prova de **comportamento** comparando os dois adaptadores em
-  execução, que é prova de outra natureza e não estava no grupo transferido?
-- 🔴 [DÚVIDA] **Os casos que já existem.** Dos 9 casos do comando atual, três cobrem
-  `PT-010.1` (`leitura-sem-escopo`, `escopo-admin-em-metodo-de-dono`, `dono-manual-em-leitura-escopada`)
-  e um cobre parte de `PT-010.4` (`status-fora-do-conjunto`). A feature **cita** esses casos, como
-  a 004 fez com o caso do tipo fechado, ou escreve casos novos que os reafirmem para que cada
-  cenário tenha prova própria?
-- 🔴 [DÚVIDA] **A prova sem dono.** As 8 verificações da guarda de codificação existem, passam, e
-  **nenhum `actions.md` as reivindica** — é uma prova sem promessa. Esta feature é a única do
-  ciclo dedicada a contrato e infraestrutura de gate, e é onde adotá-la custa menos. A guarda
-  entra no escopo desta feature e ganha dono, ou fica declarada como lacuna para uma feature
-  própria?
+n/a — **nenhuma lacuna em aberto.** As três dúvidas declaradas foram resolvidas na sessão de
+2026-09-22, junto com as duas que a varredura encontrou (ver `## 9`).
 
 ## 11. Histórico de alterações
 
 | Data | Alteração | Autor |
 |------|-----------|-------|
 | 2026-09-22 | Versão inicial gerada por `/reversa-requirements` | reversa |
+| 2026-09-22 | Sessão de esclarecimentos (5 perguntas): instrumento é o gate com citação do `typecheck`; casos existentes são citados; a guarda de encoding é adotada e ganha dono; enums do cenário apenas; o buraco do `F-03` passa a ser medido com caso positivo. `RN-09` e `RF-15` criados, `RF-12` promovido a Must | `/reversa-clarify` |
