@@ -3,7 +3,7 @@
 # rastreabilidade:
 #   target_screens: "Novo Atendimento (Anamnese)"
 #   target_architecture: BC-02 consultas (NewConsultation.tsx, VitalSignsForm.tsx)
-#   golden: screens/golden/manifest.yaml → consultas-novo.png (present: false)
+#   golden: screens/golden/manifest.yaml → consultas-novo.png (present: true)
 #   paradigma_alvo: funcional — sem mudança; modo literal
 
 Funcionalidade: Paridade visual — Novo Atendimento (Anamnese)
@@ -19,8 +19,11 @@ Funcionalidade: Paridade visual — Novo Atendimento (Anamnese)
     E Sinais Vitais (PA, FC, Temperatura, FR, SatO2, Peso, Altura)
     E seções de Anamnese (Queixa Principal, HDA, Exame Físico) e Diagnóstico (CID-10, Plano)
     E botões "Cancelar" e "Salvar Consulta"
-    Quando houver golden capturado (consultas-novo.png)
-    Então a renderização coincide com o golden dentro das normalizationRules do manifest
+    Quando a tela for comparada com o golden consultas-novo.png (present: true)
+    Então a verificação é construtiva: mesma hierarquia, mesmos textos literais e mesmos tokens
+    E a comparação pixel a pixel está fora de escopo (DEV-001 — conjunto de goldens heterogêneo em viewport)
 
 # ---
 # Gerado pelo Reversa-Inspector em 2026-09-09.
+# Revisado pelo Reversa-Inspector em 2026-09-22: golden capturado (present: true);
+# paridade construtiva conforme DEV-001/DEV-002.

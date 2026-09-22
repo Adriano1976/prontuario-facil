@@ -3,7 +3,7 @@
 # rastreabilidade:
 #   target_screens: "Listagem de Pacientes"
 #   target_architecture: BC-01 pacientes (Patients.tsx)
-#   golden: screens/golden/manifest.yaml → pacientes-listagem.png (present: false)
+#   golden: screens/golden/manifest.yaml → pacientes-listagem.png (present: true)
 #   paradigma_alvo: funcional — sem mudança; modo literal
 
 Funcionalidade: Paridade visual — Listagem de Pacientes
@@ -18,8 +18,11 @@ Funcionalidade: Paridade visual — Listagem de Pacientes
     Então exibe contador "N pacientes cadastrados" e botão "+ Novo Paciente"
     E input de busca com placeholder "Buscar por nome, CPF, telefone ou email..."
     E cards com avatar/inicial, nome, badge status, idade, telefone, email, convênio e tipo sanguíneo
-    Quando houver golden capturado (pacientes-listagem.png)
-    Então a renderização coincide com o golden dentro das normalizationRules do manifest
+    Quando a tela for comparada com o golden pacientes-listagem.png (present: true)
+    Então a verificação é construtiva: mesma hierarquia, mesmos textos literais e mesmos tokens
+    E a comparação pixel a pixel está fora de escopo (DEV-001 — conjunto de goldens heterogêneo em viewport)
 
 # ---
 # Gerado pelo Reversa-Inspector em 2026-09-09.
+# Revisado pelo Reversa-Inspector em 2026-09-22: golden capturado (present: true);
+# paridade construtiva conforme DEV-001/DEV-002.

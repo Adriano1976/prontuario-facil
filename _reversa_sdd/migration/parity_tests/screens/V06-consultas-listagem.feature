@@ -3,7 +3,7 @@
 # rastreabilidade:
 #   target_screens: "Listagem de Consultas"
 #   target_architecture: BC-02 consultas (Consultations.tsx)
-#   golden: screens/golden/manifest.yaml → consultas-listagem.png (present: false)
+#   golden: screens/golden/manifest.yaml → consultas-listagem.png (present: true)
 #   paradigma_alvo: funcional — sem mudança; modo literal
 
 Funcionalidade: Paridade visual — Listagem de Consultas
@@ -19,8 +19,11 @@ Funcionalidade: Paridade visual — Listagem de Consultas
     E dropdowns "Todos Status" e "Todas as datas"
     E itens com iniciais do paciente, nome, badge de status, data/hora/queixa e data de retorno
     E contador "N consultas encontradas" e botão "+ Nova Consulta"
-    Quando houver golden capturado (consultas-listagem.png)
-    Então a renderização coincide com o golden dentro das normalizationRules do manifest
+    Quando a tela for comparada com o golden consultas-listagem.png (present: true)
+    Então a verificação é construtiva: mesma hierarquia, mesmos textos literais e mesmos tokens
+    E a comparação pixel a pixel está fora de escopo (DEV-001 — conjunto de goldens heterogêneo em viewport)
 
 # ---
 # Gerado pelo Reversa-Inspector em 2026-09-09.
+# Revisado pelo Reversa-Inspector em 2026-09-22: golden capturado (present: true);
+# paridade construtiva conforme DEV-001/DEV-002.

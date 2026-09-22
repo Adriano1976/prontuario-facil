@@ -3,7 +3,7 @@
 # rastreabilidade:
 #   target_screens: "Central de Templates"
 #   target_architecture: BC-05 templates (Templates.tsx)
-#   golden: screens/golden/manifest.yaml → templates-central.png (present: false)
+#   golden: screens/golden/manifest.yaml → templates-central.png (present: true)
 #   paradigma_alvo: funcional — sem mudança; modo literal
 
 Funcionalidade: Paridade visual — Central de Templates
@@ -19,8 +19,11 @@ Funcionalidade: Paridade visual — Central de Templates
     E badge "Padrão" nos modelos e preview do conteúdo
     E botões "Editar" e "Excluir" por card
     E botão "+ Novo Template"
-    Quando houver golden capturado (templates-central.png)
-    Então a renderização coincide com o golden dentro das normalizationRules do manifest
+    Quando a tela for comparada com o golden templates-central.png (present: true)
+    Então a verificação é construtiva: mesma hierarquia, mesmos textos literais e mesmos tokens
+    E a comparação pixel a pixel está fora de escopo (DEV-001 — conjunto de goldens heterogêneo em viewport)
 
 # ---
 # Gerado pelo Reversa-Inspector em 2026-09-09.
+# Revisado pelo Reversa-Inspector em 2026-09-22: golden capturado (present: true);
+# paridade construtiva conforme DEV-001/DEV-002.

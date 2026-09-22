@@ -3,7 +3,7 @@
 # rastreabilidade:
 #   target_screens: "Modal: Novo Documento"
 #   target_architecture: BC-02 consultas (PrescriptionEditor.tsx)
-#   golden: screens/golden/manifest.yaml → modal-novo-documento.png (present: false)
+#   golden: screens/golden/manifest.yaml → modal-novo-documento.png (present: true)
 #   paradigma_alvo: funcional — sem mudança; modo literal
 
 Funcionalidade: Paridade visual — Modal: Novo Documento
@@ -19,8 +19,11 @@ Funcionalidade: Paridade visual — Modal: Novo Documento
     E a seção de Medicamentos condicional (visível apenas para tipos de receita)
     E Observações com placeholder "Observações adicionais..."
     E botões "Imprimir" e "Salvar"
-    Quando houver golden capturado (modal-novo-documento.png)
-    Então a renderização coincide com o golden dentro das normalizationRules do manifest
+    Quando a tela for comparada com o golden modal-novo-documento.png (present: true)
+    Então a verificação é construtiva: mesma hierarquia, mesmos textos literais e mesmos tokens
+    E a comparação pixel a pixel está fora de escopo (DEV-001 — conjunto de goldens heterogêneo em viewport)
 
 # ---
 # Gerado pelo Reversa-Inspector em 2026-09-09.
+# Revisado pelo Reversa-Inspector em 2026-09-22: golden capturado (present: true);
+# paridade construtiva conforme DEV-001/DEV-002.

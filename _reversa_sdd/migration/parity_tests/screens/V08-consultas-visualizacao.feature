@@ -3,7 +3,7 @@
 # rastreabilidade:
 #   target_screens: "Visualização de Consulta"
 #   target_architecture: BC-02 consultas (Consultation.tsx)
-#   golden: screens/golden/manifest.yaml → consultas-visualizacao.png (present: false)
+#   golden: screens/golden/manifest.yaml → consultas-visualizacao.png (present: true)
 #   paradigma_alvo: funcional — sem mudança; modo literal
 
 Funcionalidade: Paridade visual — Visualização de Consulta
@@ -19,8 +19,11 @@ Funcionalidade: Paridade visual — Visualização de Consulta
     E painel do paciente com alerta de alergias
     E botões "Nova Receita", "Atestado" e "Exame"
     E painéis de Sinais Vitais e Anamnese consolidados
-    Quando houver golden capturado (consultas-visualizacao.png)
-    Então a renderização coincide com o golden dentro das normalizationRules do manifest
+    Quando a tela for comparada com o golden consultas-visualizacao.png (present: true)
+    Então a verificação é construtiva: mesma hierarquia, mesmos textos literais e mesmos tokens
+    E a comparação pixel a pixel está fora de escopo (DEV-001 — conjunto de goldens heterogêneo em viewport)
 
 # ---
 # Gerado pelo Reversa-Inspector em 2026-09-09.
+# Revisado pelo Reversa-Inspector em 2026-09-22: golden capturado (present: true);
+# paridade construtiva conforme DEV-001/DEV-002.

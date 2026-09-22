@@ -3,7 +3,7 @@
 # rastreabilidade:
 #   target_screens: "Modal: Criar / Editar Template"
 #   target_architecture: BC-05 templates (Templates.tsx — dialog)
-#   golden: screens/golden/manifest.yaml (templates: captura via Templates.jsx)
+#   golden: screens/golden/manifest.yaml → templates-modal.png (present: true)
 #   paradigma_alvo: funcional — sem mudança; modo literal
 
 Funcionalidade: Paridade visual — Modal: Criar / Editar Template
@@ -20,5 +20,14 @@ Funcionalidade: Paridade visual — Modal: Criar / Editar Template
     E editor de Conteúdo* e toggles "Template padrão" e "Ativo"
     E botões "Cancelar" e "Salvar"
 
+  @paridade-visual
+  Cenário: Conferência contra o golden capturado
+    Dado o componente convertido para .tsx
+    Quando a tela for comparada com o golden templates-modal.png (present: true)
+    Então a verificação é construtiva: mesma hierarquia, mesmos textos literais e mesmos tokens
+    E a comparação pixel a pixel está fora de escopo (DEV-001 — conjunto de goldens heterogêneo em viewport)
+
 # ---
 # Gerado pelo Reversa-Inspector em 2026-09-09.
+# Revisado pelo Reversa-Inspector em 2026-09-22: golden capturado (present: true);
+# paridade construtiva conforme DEV-001/DEV-002.

@@ -3,7 +3,7 @@
 # rastreabilidade:
 #   target_screens: "Dashboard Principal"
 #   target_architecture: BC-07 dashboard (Dashboard.tsx)
-#   golden: screens/golden/manifest.yaml → dashboard-principal.png (present: false)
+#   golden: screens/golden/manifest.yaml → dashboard-principal.png (present: true)
 #   paradigma_alvo: funcional — sem mudança; modo literal (screen_modernization_decision.md)
 
 Funcionalidade: Paridade visual — Dashboard Principal
@@ -19,8 +19,11 @@ Funcionalidade: Paridade visual — Dashboard Principal
     E lista "Próximos Agendamentos" com estado vazio "Nenhum agendamento"
     E botões de Ações Rápidas (Novo Paciente, Agendar Consulta, Nova Consulta)
     E busca global via PatientSearch
-    Quando houver golden capturado (dashboard-principal.png)
-    Então a renderização coincide com o golden dentro das normalizationRules do manifest
+    Quando a tela for comparada com o golden dashboard-principal.png (present: true)
+    Então a verificação é construtiva: mesma hierarquia, mesmos textos literais e mesmos tokens
+    E a comparação pixel a pixel está fora de escopo (DEV-001 — conjunto de goldens heterogêneo em viewport)
 
 # ---
 # Gerado pelo Reversa-Inspector em 2026-09-09.
+# Revisado pelo Reversa-Inspector em 2026-09-22: golden capturado (present: true);
+# paridade construtiva conforme DEV-001/DEV-002.

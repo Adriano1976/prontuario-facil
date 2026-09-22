@@ -14,10 +14,12 @@ hash: "sha256:b183179f8e568d370a99609689520f8b72082d65fc2eeb0bffbbbd1f78804b95"
 > Status final esperado quando o pipeline conclui: nenhum item PENDENTE.
 
 ## Resumo
-- Total de itens: 7
-- PENDENTES: 0
+- Total de itens: 8
+- PENDENTES: **0** (DEV-005 foi aberto e resolvido no mesmo dia — ver "Revisão 2026-09-22" no fim deste arquivo)
 - RESOLVIDOS COM DECISÃO HUMANA: 5
 - REFERIDOS À CODIFICAÇÃO: 2
+
+> O resumo original de 2026-09-09 declarava 7 itens e **0 PENDENTES**. A regeneração da Fase 2 do Screen Translator em 2026-09-22 abriu **uma pendência nova** (DEV-005), **resolvida no mesmo dia por leitura do código legado**. O total passou a 8, com **0 pendentes**.
 
 ## Itens
 
@@ -114,3 +116,50 @@ hash: "sha256:b183179f8e568d370a99609689520f8b72082d65fc2eeb0bffbbbd1f78804b95"
 
 ---
 *Gerado pelo Reversa-Orchestrator em 2026-09-09.*
+
+---
+
+## Revisão 2026-09-22 — regeneração da Fase 2 do Screen Translator
+
+> Contexto: `/reversa-migrate --regenerate=screen_translator:generation`. As **23 capturas douradas** do legado passaram a existir, encerrando a lacuna que as features forward `002` a `006` declaravam permanente ("a captura dourada de referência não existe no repositório"). Backup em `migration/.backup-20260922-122055/` e `screens/.backup-20260922-122055/`.
+
+### RESOLVIDOS COM DECISÃO HUMANA (2026-09-22)
+
+- **Política dos golden files** — as capturas formam conjunto heterogêneo (5 larguras, 15 alturas, 6 páginas inteiras, 1 montagem com rolagem) e as `normalizationRules` do manifest não normalizam viewport. Alternativa oferecida: recapturar as 16 telas em viewport padronizado. **Escolha**: aceitar o conjunto misto e declarar que a paridade é **construtiva/semântica**, não pixel a pixel. Registrado como `DEV-001`/`DEV-002` (aprovados). Consequência prática: **não há prova de pixel** para os 16 cenários, e produzi-la exigiria recaptura + harness de navegador (ver item referido à codificação abaixo).
+- **Capturas extras** — as 6 imagens sem cenário V (Editar Paciente, Lista de Agendamentos, Detalhes do Agendamento, Editar Consulta, Editar Médico, Criar Template) **entram** no manifest como entradas marcadas, e não apenas no inventário interno.
+- **Inspector** — decidido **invalidar**: `parity_specs.md` e `handoff.md` foram construídos sobre a versão de 2026-09-09 de `target_screens.md` (16 telas, 0 goldens) e ficam marcados como `stale` até serem refeitos.
+- **Divergência de hash na abertura** — os três artefatos da Fase 2 tinham hash divergente do `.state.json`. Decisão: prosseguir com backup; os hashes registrados foram atualizados para os valores correntes.
+
+### RESOLVIDO POR EVIDÊNCIA DE CÓDIGO — DEV-005 (aberto e fechado em 2026-09-22)
+
+#### DEV-005 — Novo Agendamento sem campo de data/hora na captura
+- **Descrição**: a captura `agendamentos-novo.png` (`PT-V05`, 2026-09-22 11:38) mostra o formulário com duas seções — "Paciente e Médico" (Paciente*, Médico*) e "Detalhes" (Tipo de Consulta, Observações) — e **nenhum campo de data ou horário**. A extração (`_reversa_sdd/agendamentos/screens.md`, versão de 2026-08-27) descreve um **widget de calendário interativo (date picker embutido)**; `target_screens.md` especificava uma `DateTimeSection` com esse widget (Q-03); e o cenário `PT-V05` pressupõe data/hora no formulário.
+- **Detectado por**: screen-translator (regeneração da Fase 2)
+- **Origem**: `agendamentos/screenshots/tela_novo_agendamento.png` × `src/pages/NewAppointment.jsx` × `_reversa_sdd/agendamentos/screens.md`
+- **Status**: RESOLVIDO POR EVIDÊNCIA DE CÓDIGO (2026-09-22)
+- **Opções para a decisão**:
+  - **(a)** o campo não existe nesta revisão da tela e a data/hora é definida apenas por clique na grade do calendário → a spec está errada, o formulário do alvo não deve ter date picker, e `target_screens.md` + `PT-V05` precisam ser corrigidos;
+  - **(b)** a captura cortou/omitiu a seção → a spec está certa e a captura deve ser refeita.
+- **Evidência disponível**: nenhuma além das duas acima. O código legado (`NewAppointment.jsx`) é o árbitro, e não foi consultado nesta execução porque o orquestrador opera só no nível das specs.
+- **Resolução (2026-09-22)**: o usuário pediu decisão por evidência, não por escolha entre hipóteses. A leitura read-only de `src/pages/NewAppointment.tsx` mostrou que a seção **"Data e Horário" existe e é condicional ao médico selecionado** (`:204`), contendo `Calendar` (`:215`) e `TimeSlotPicker` (`:225`, este só após a data ser escolhida). A captura foi feita com "Selecione o médico" em branco — estado inicial legítimo. **A extração estava correta**; a leitura do Visor ("sem campo de data/hora") valia apenas para aquele estado do formulário.
+- **Implicação**: o objeto de verificação do `PT-V05` volta a ser definido — formulário **com** a seção condicional. Recomendada captura complementar do estado pós-seleção para o golden desta tela. **O gate do Inspector está liberado.**
+
+### REFERIDOS À CODIFICAÇÃO (novos, desta revisão)
+
+- **Harness de paridade visual**: os 16 cenários `PT-V01`…`PT-V16` agora têm golden, mas **executá-los** exige um harness de navegador. O projeto tem `vitest` + `jsdom` + testing-library e **não tem** Playwright, Puppeteer nem biblioteca de diff de imagem. Instalar e escrever esse harness é trabalho de **feature forward nova**, não de uma spec — e, para comparação pixel a pixel, exige antes a recaptura padronizada recusada em `DEV-001`.
+- **Tokens das cores da legenda de status** (`DEV-006`): a captura mostra "Em Atendimento" verde e "Concluído" cinza-esverdeado. Se o `design-system` não tiver token para essas cores, o codificador deve abrir `DEV-008` em vez de improvisar literal solto.
+- **Recapturas recomendadas** (não bloqueiam): `logs-acesso.png` (página inteira de 15029 px — `DEV-003`), `modal-detalhe-agendamento.png` (montagem com rolagem) e `templates-novo.png` (truncada antes dos toggles — `DEV-007`).
+
+### Itens anteriores
+
+Nenhum item das seções acima mudou de status: **AMB-001 a AMB-005** seguem resolvidos com decisão humana (paridade exata), **AMB-006** e **AMB-007** seguem referidos à codificação. A captura de 2026-09-22 **confirmou** por imagem duas dessas decisões: a Taxa de Atendimento `94%` (AMB-001) e a ausência de paginação nos Logs (AMB-004).
+
+---
+### Fechamento — Inspector reexecutado (2026-09-22)
+
+- O gate de deviations foi consumido com **0 pendentes** (DEV-001 a DEV-007 aprovadas) e o **Inspector rodou** sobre a versão de 2026-09-22 de `target_screens.md`.
+- Resultado: `parity_specs.md` regenerado (24 goldens, exceções propagadas, harness de paridade visual declarado como lacuna) e **26 arquivos `.feature`** — 10 de fluxo + 16 de tela, todos os 16 agora ancorados em golden capturado.
+- Nenhuma pendência nova. O total continua **8 itens, 0 PENDENTES**. O item referido à codificação "harness de paridade visual" foi incorporado também a `parity_specs.md#Lacunas declaradas`, que é onde o codificador o encontra.
+
+---
+*Revisão registrada pelo Reversa-Orchestrator em 2026-09-22 (Fase 2 do Screen Translator regenerada; Inspector reexecutado).*

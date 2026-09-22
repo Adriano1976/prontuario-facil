@@ -3,7 +3,7 @@
 # rastreabilidade:
 #   target_screens: "Gerenciamento de Médicos"
 #   target_architecture: BC-04 medicos (Doctors.tsx)
-#   golden: screens/golden/manifest.yaml → medicos-listagem.png (present: false)
+#   golden: screens/golden/manifest.yaml → medicos-listagem.png (present: true)
 #   paradigma_alvo: funcional — sem mudança; modo literal
 
 Funcionalidade: Paridade visual — Gerenciamento de Médicos
@@ -19,8 +19,11 @@ Funcionalidade: Paridade visual — Gerenciamento de Médicos
     E intervalo de horário e badges dos dias da semana
     E botões "Editar" e "Excluir" por card
     E botão "+ Novo Médico"
-    Quando houver golden capturado (medicos-listagem.png)
-    Então a renderização coincide com o golden dentro das normalizationRules do manifest
+    Quando a tela for comparada com o golden medicos-listagem.png (present: true)
+    Então a verificação é construtiva: mesma hierarquia, mesmos textos literais e mesmos tokens
+    E a comparação pixel a pixel está fora de escopo (DEV-001 — conjunto de goldens heterogêneo em viewport)
 
 # ---
 # Gerado pelo Reversa-Inspector em 2026-09-09.
+# Revisado pelo Reversa-Inspector em 2026-09-22: golden capturado (present: true);
+# paridade construtiva conforme DEV-001/DEV-002.

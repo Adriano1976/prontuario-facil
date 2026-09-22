@@ -1,28 +1,30 @@
 ---
 schemaVersion: 1
-generatedAt: 2026-09-09T15:55:32-03:00
+generatedAt: 2026-09-22T12:55:00-03:00
 reversa:
   version: "1.3.2"
 kind: handoff
 producedBy: orchestrator
-hash: "sha256:58894a1a7fd61453e90b235a53862d5f73292d5f55b76f8f1f8438e4e9cba2e7"
+hash: "sha256:3f77bd58d493ef4bfebb5c343af278c309c20a09cb6828e02b555a16c19d5f38"
 ---
 
 # Handoff para o Agente de Codificação
 
 > Este documento é a porta de entrada para o agente de codificação (Claude Code, Codex, Cursor, Antigravity, etc.) que vai escrever o sistema novo a partir das specs.
 
+> ⚠️ **Leitura de contexto desta edição (2026-09-22).** Diferente do handoff original de 2026-09-09, **a conversão de tipos já foi executada**: as features forward `001-migracao-typescript` (JS→TS completo, 46 ações) e `002` a `006` (prova automatizada por módulo) fecharam o ciclo. O que este documento entrega agora é o **estado real da paridade**: o que já está provado por execução, o que ainda é conferência humana, e as lacunas que sobraram. Onde o template fala em "criar o repositório novo", leia "o repositório é o mesmo; a migração é de tipos sobre a mesma stack" (`migration_strategy.md`, Estratégia A).
+
 ## ⚠️ Leitura obrigatória primeiro
 
-1. **`paradigm_decision.md`**, leitura inegociável. O paradigma alvo molda como toda a codificação deve acontecer.
-2. **`topology_decision.md`**, leitura inegociável. A topologia escolhida (preservar / modernizar / híbrido) define a árvore de pastas e a fronteira entre módulos.
-3. **`screen_modernization_decision.md`**, leitura inegociável quando o legado tem UI. O modo escolhido (literal / modernizado / híbrido) define como o codificador vai materializar as telas.
+1. **`paradigm_decision.md`**, leitura inegociável. O paradigma alvo molda como toda a codificação deve acontecer. **Neste projeto: gap nenhum** — React funcional → React funcional + TypeScript. Nenhuma transformação paradigmática deve ser aplicada.
+2. **`topology_decision.md`**, leitura inegociável. A topologia escolhida define a árvore de pastas e a fronteira entre módulos.
+3. **`screen_modernization_decision.md`**, leitura inegociável (o legado tem UI). **Modo: literal na mesma plataforma** — as telas do alvo são os `.jsx` convertidos a `.tsx`, sem re-expressão visual.
 
 ## Ordem de leitura recomendada
 
 1. `paradigm_decision.md` (obrigatório, primeiro)
 2. `topology_decision.md` (obrigatório, segundo)
-3. `screen_modernization_decision.md` (obrigatório quando há UI; pular se Screen Translator rodou em modo skipped)
+3. `screen_modernization_decision.md` (obrigatório — há UI)
 4. `migration_brief.md`
 5. `target_business_rules.md`
 6. `migration_strategy.md`
@@ -30,12 +32,12 @@ hash: "sha256:58894a1a7fd61453e90b235a53862d5f73292d5f55b76f8f1f8438e4e9cba2e7"
 8. `target_domain_model.md`
 9. `target_data_model.md`
 10. `data_migration_plan.md`
-11. `target_screens.md` (quando há UI)
-12. `parity_specs.md` + `parity_tests/`
-13. `screen_deviation_log.md` (consultivo, quando há UI)
+11. `target_screens.md` (21 telas, cada uma com linha **Golden**)
+12. `parity_specs.md` + `parity_tests/` (26 cenários)
+13. `screen_deviation_log.md` (7 deviations, todas aprovadas)
 14. `risk_register.md` + `cutover_plan.md`
 15. `discard_log.md` (consultivo)
-16. `ambiguity_log.md` (consultivo)
+16. `ambiguity_log.md` (consultivo — 0 pendentes)
 
 ## Lista de artefatos produzidos
 
@@ -44,65 +46,52 @@ hash: "sha256:58894a1a7fd61453e90b235a53862d5f73292d5f55b76f8f1f8438e4e9cba2e7"
 | migration_brief.md | orchestrator | criado |
 | paradigm_decision.md | paradigm_advisor | criado |
 | target_business_rules.md | curator | criado |
-| discard_log.md | curator | criado (0 descartes — paradigma inalterado) |
-| migration_strategy.md | strategist | criado (Estratégia A confirmada pelo usuário) |
+| discard_log.md | curator | criado |
+| migration_strategy.md | strategist | criado |
 | risk_register.md | strategist | criado |
 | cutover_plan.md | strategist | criado |
-| topology_decision.md | designer (Fase 1) | criado (opção 3 — híbrido, aprovada) |
+| topology_decision.md | designer (Fase 1) | criado |
 | target_architecture.md | designer | criado |
 | target_domain_model.md | designer | criado |
 | target_data_model.md | designer | criado |
-| data_migration_plan.md | designer | criado (N/A em ETL — BaaS intocado) |
-| screen_modernization_decision.md | screen_translator (Fase 1) | criado (modo literal, aprovado) |
-| target_screens.md | screen_translator | criado (16 telas) |
-| screen_deviation_log.md | screen_translator | criado / vazio (0 deviations) |
-| _reversa_sdd/screens/inventory.json | screen_translator | criado (16 telas) |
-| _reversa_sdd/screens/golden/manifest.yaml | screen_translator | criado (goldens `present: false` — captura manual opcional) |
-| parity_specs.md | inspector | criado |
-| parity_tests/*.feature | inspector | 26 arquivos (10 fluxos + 16 telas `@paridade-visual`) |
-| ambiguity_log.md | orchestrator | consolidado (0 pendentes) |
+| data_migration_plan.md | designer | criado |
+| screen_modernization_decision.md | screen_translator (Fase 1) | criado — modo **literal** |
+| target_screens.md | screen_translator | **regenerado em 2026-09-22** — 21 telas, 24 goldens |
+| screen_deviation_log.md | screen_translator | **7 deviations** (6 técnicas do conjunto + 1 de seção condicional), todas aprovadas |
+| _reversa_sdd/screens/inventory.json | screen_translator | **21 telas** (era 16) |
+| _reversa_sdd/screens/golden/ | screen_translator | **24 goldens, `present: true` em 24 de 24** (era 0) |
+| parity_specs.md | inspector | **reexecutado em 2026-09-22** — exceções propagadas |
+| parity_tests/*.feature | inspector | **26 arquivos** — 10 de fluxo + 16 de tela |
+| ambiguity_log.md | orchestrator | consolidado — 0 pendentes |
 
 ## Bloqueadores para começar a implementação
-> Itens que precisam de decisão humana antes do agente de codificação começar.
 
-- Nenhum bloqueador. Todas as decisões humanas foram tomadas (paradigma: gap nenhum; estratégia: A; topologia: híbrido; modo de telas: literal; BR-HUMANA-001…005: paridade exata). Prosseguir.
+- **Nenhum.** O gate de deviations foi fechado com 0 pendentes: `DEV-005` (a seção "Data e Horário" do Novo Agendamento) foi resolvido por **evidência de código** — a seção existe e é **condicional ao médico selecionado** (`src/pages/NewAppointment.tsx:204-237`). Nada a decidir antes de codificar.
 
 ## Próximos passos para o agente de codificação
 
-> ⚠️ **Esta migração é de tipos na MESMA stack** (React 18 + Vite + Base44, JS → TS). Não é reescrita em outra plataforma. A árvore física atual é preservada (topologia híbrido); os arquivos `.js/.jsx` são convertidos a `.ts/.tsx` com **paridade comportamental total** — nenhuma correção de comportamento é permitida nesta migração (ver § Notas finais e `ambiguity_log.md` AMB-001…007).
+> Ordem sugerida para o que **resta** — a conversão de tipos já está feita e provada.
 
-1. **Ler `paradigm_decision.md` e internalizar**: o paradigma alvo é **funcional/declarativo React — sem mudança** (gap nenhum). Toda escolha de código deve honrar esse paradigma; **proibido** reescrever em OO/classes ou "modernizar" padrões.
-2. **Ler `topology_decision.md` e internalizar**: a topologia escolhida é **híbrido (opção 3)**. Preservar `src/pages/`, `src/components/`, `src/hooks/`, `src/lib/`, `src/utils/`; criar **`src/types/`** (novo) e refatorar `src/api/` para o contrato `Base44Client` (SDK real + mock sob interface única). Extrair helpers duplicados (ex.: `calculateAge`) para módulo tipado compartilhado sem mudar comportamento.
-3. **Ler `screen_modernization_decision.md` e internalizar**: o modo de tradução de telas é **literal** — telas do alvo são as do legado convertidas a `.tsx` com os mesmos componentes shadcn/Radix, tokens, textos e estados. Zero mudança visual. Golden files opcionais (manifest com `present: false`); se capturar, comparar dentro das `normalizationRules`.
-4. **Configurar**: manter a stack do `migration_brief.md` (TypeScript 5.8.2, React 18.2, Vite 6.1, Base44 SDK v0.8.43+ etc.). Onda 1: criar **`tsconfig.json`** com `include: ["src"]` e `strict: true`, e corrigir o script `typecheck` para **`tsc --noEmit`**. ⚠️ **Não execute `npm run typecheck` como está**: o script atual é `tsc -p ./jsconfig.json` (sem `--noEmit`) e o `jsconfig.json` exclui `src/api`, `src/lib` e `src/components/ui` — além de já falhar hoje com **677 erros em 43 arquivos** (baseline medido em 2026-09-10), que é o ponto de partida do gate. Onda 1 também: **remover as 6 dependências mortas** (`@stripe/*`, `react-leaflet`, `jspdf`, `html2canvas`, `lodash`, `react-quill` — reconfirmar com grep e obter aprovação do usuário antes; RISK-006).
-5. **Implementar bottom-up** na ordem das ondas da estratégia A (`migration_strategy.md`): (1) setup TS → (2) `src/types/` → (3) `src/api/` + `lib/` + hooks → (4) componentes → (5) pages por módulo (pacientes → consultas → agendamentos → médicos → templates → logs → dashboard) → (6) modo offline (`mockClient.ts`/`mockSeed.ts`) → (7) hardening strict 100% (`allowJs` removido, `tsc --noEmit` = 0).
-6. **Implementar as telas** consumindo `target_screens.md` como contrato literal: converter cada tela com hierarquia/textos/tokens idênticos.
-7. **Escrever os testes/specs** a partir de `parity_specs.md` e `parity_tests/*.feature` desde o início (26 arquivos). O projeto não tem framework de testes (brief não adiciona nesta migração): os `.feature` são **specs de paridade** — executar como smoke manual + gate `tsc --noEmit`; o codificador pode traduzir para framework se o usuário autorizar em fase futura.
-8. **Para cada componente**, validar que respeita o paradigma (funcional) e a topologia híbrida — seções "Honra ao paradigma/topologia" em `target_architecture.md`.
-9. **Para a migração de dados**: seguir `data_migration_plan.md` — **não há ETL/backfill/delta**; dados permanecem no BaaS; tipos espelham os schemas `base44/entities/*.jsonc`.
-10. **Para o cutover**: seguir `cutover_plan.md` (merge da onda 7 + smoke online/offline; rollback via git revert < 5 min) e os critérios go/no-go.
-
-## Itens referidos à codificação (destaque)
-> Do `ambiguity_log.md` — itens que o codificador deve **conhecer**, sem corrigir nesta migração.
-
-- **AMB-006 — XSS na interpolação de templates**: a função de interpolação (`PrescriptionEditor`) não escapa HTML no legado. **Preservar** o comportamento; documentar o risco no código/função tipada. Não adicionar escape nesta migração.
-- **AMB-007 — F-01 RBAC / F-02 token recebido por URL / F-03 IDOR**: tornar **obrigatórios por tipo** `role`, os params de URL (token) e o escopo de dados (`created_by_id`) nas APIs internas. ⚠️ **Isto não é detecção de vulnerabilidade**: o compilador verifica forma, não autorização — código que passe `role` errado, que ignore o escopo ou que leia o token continua compilando. Exigências concretas: BR-MIGRAR-034/036, `target_architecture.md` AD-03, `parity_tests/10-contrato-base44-client.feature`. Fontes canônicas dos achados: `docs/security-audit/achados.json` (F-01/F-02/F-03 Alta; F-04 Média e F-05 Baixa também ficam fora). A **correção lógica** é fase posterior — nesta migração apenas tipar: **proibido** adicionar guarda de rota/`role === 'admin'`, remover token da URL/localStorage ou mexer em RLS.
+1. **Internalizar o paradigma**: sem mudança. Se qualquer sugestão de reescrita em estilo diferente do React funcional aparecer, **recuse** (`paradigm_decision.md`).
+2. **Internalizar a topologia**: híbrida, preservando os módulos (`topology_decision.md`).
+3. **Internalizar o modo de telas**: **literal**. Materialize o que está em `target_screens.md` preservando hierarquia, textos literais e tokens. O calendário do Novo Agendamento exibe rótulos **em inglês** ("September 2026", "Su Mo Tu We Th Fr Sa") — isso é do legado, **preserve**.
+4. **Implementar a seção condicional do Novo Agendamento**: "Data e Horário" só renderiza com `doctor_id`, e os horários só após a data — não transforme em campo sempre visível (`DEV-005`).
+5. **Provar os 15 cenários de fluxo que faltam**, um grupo por feature forward: **modo offline (6)**, **Dashboard (5)**, **contrato de dados (4)**. A matriz declara o destino de cada grupo.
+6. **Construir o harness de paridade visual** — é a maior lacuna aberta. O projeto tem `vitest` + `jsdom` e **não tem** Playwright/Puppeteer/diff de imagem. Sem ele, os 16 cenários `PT-V01`…`PT-V16` permanecem **conferência humana** contra os goldens (`parity_specs.md#Lacunas declaradas`).
+7. **Se quiser pixel a pixel**, antes exija **recaptura padronizada** (viewport fixo, recorte de viewport, não página inteira) — oferecida e recusada em 2026-09-22, registrada em `DEV-001`.
+8. **Corrigir a linha defasada da matriz**: `_reversa_sdd/code-spec-matrix.md#Destino dos cenários de paridade não cobertos nesta feature` ainda diz que a captura dourada não existe. Deixou de ser verdade em 2026-09-22. O Inspector não edita artefatos da extração — a correção é da próxima feature forward ou do próximo `/reversa-sync`.
+9. **Para o cutover**, seguir `cutover_plan.md` e os critérios go/no-go.
 
 ## Itens auto-decididos (apenas se executado em --auto)
-> Listar aqui itens cujo default foi aplicado sem confirmação humana. Recomenda-se revisar antes do cutover.
 
-- Pipeline executado em **modo interativo** — nenhum item auto-decidido. Todas as decisões passaram por pausa humana.
+- Pipeline executado em **modo interativo**, nenhum item auto-decidido. As decisões de 2026-09-22 (política de golden, capturas extras, invalidação do Inspector, recaptura do V05) foram todas humanas e estão registradas em `ambiguity_log.md#Revisão 2026-09-22`.
 
 ## Notas finais
 
-- **Regra de ouro do diff**: o diff de cada onda/PR deve ser **somente de tipos/conversão** (`jsx`→`tsx`, anotações, `src/types/`, contrato da API). Qualquer mudança de comportamento visível (critério de KPI, status automático, paginação nova, badge novo, escape HTML novo, guarda de rota por `role`, token fora da URL, textos alterados) viola a paridade decidida e deve ser **recusada/revertida**.
-- **Gate de tipos (escopo exato)**: `tsc --noEmit` sobre `src/**` (87 arquivos `.js/.jsx` → `.ts/.tsx`), com `strict: true` e 0 erros ao final da onda 7, partindo do baseline de **677 erros / 43 arquivos**. Arquivos de config de raiz (`vite.config.js`, `eslint.config.js`, `postcss.config.js`, `tailwind.config.js`) **não** entram no gate.
-- **Paridade verificável**: como não há framework de testes, a paridade é atestada por **checklist de smoke manual repetível** derivado de `parity_tests/*.feature` (26 specs) — autenticação, CRUD de paciente, consultas, logs de acesso, consentimento LGPD, alternância offline/online. Não declarar "paridade 100% comprovada".
-- Comportamentos "congelados" por decisão humana (não corrigir): Taxa de Atendimento `94%` mock (AMB-001); divergência KPIs Consultas×Agendamentos (AMB-002); transição manual de status de agendamento (AMB-003); logs sem paginação até 500 (AMB-004); sem badge offline (AMB-005).
-- Campos LGPD obrigatórios no tipo: `cpf` (sensível), `lgpd_consent`, `lgpd_consent_date`, `lgpd_consent_ip` — usar tipo condicional (BR-MIGRAR-004, `target_data_model.md`).
-- Modo offline: `OFFLINE_USER` deve ser **variante discriminada sem `role`/`created_by_id`** — componentes que dependem de role não podem compilar cegos em offline (BR-MIGRAR-039).
-- Sem framework de testes nesta migração; sem mudanças em `base44/entities/*.jsonc`; sem mudanças de infra/deploy.
-- Este handoff assume a **Estratégia A** (incremental por camadas, 7 ondas). Trabalhar em PRs pequenos; o gate de cada onda é `tsc --noEmit` sem erros + smoke do módulo migrado.
+- **O que está provado hoje**: `tsc --noEmit` 0 erros · suíte com **132 verificações em 23 arquivos**, 0 falhas · `lint` 0 avisos · `prova:negativos` 9 de 9 sem resíduo · `prova:encoding` 412 arquivos íntegros · **19 dos 34 cenários de fluxo** convertidos em prova executável (features 002–006) · **16 de 16 cenários de tela** com golden capturado.
+- **O que ainda é conferência humana**: os 15 cenários de fluxo transferidos, os 16 cenários de tela (enquanto não houver harness) e a paridade **pixel a pixel**, que está declarada fora de escopo.
+- **O teto de 90 s da suíte é condicional**: medido em 75,78 s e em 122,57 s na mesma suíte, dependendo da carga da máquina. O maior contribuinte individual é `PatientForm.test.tsx` (13,11 s), pré-existente e alheio às features de prova.
+- **As capturas originais** em `_reversa_sdd/<unit>/screenshots/` (24 arquivos, incluindo o estado pós-seleção do V05) **não foram movidas nem alteradas**; os goldens em `screens/golden/` são cópias com nomes canônicos e `sha256` registrado por arquivo no manifest.
 
 ---
-*Gerado pelo Reversa-Orchestrator em 2026-09-09.*
+*Gerado pelo Reversa-Orchestrator em 2026-09-09; regenerado em 2026-09-22 após a Fase 2 do Screen Translator e a reexecução do Inspector.*

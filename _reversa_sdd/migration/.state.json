@@ -3,9 +3,11 @@
   "startedAt": "2026-09-09T15:05:07-03:00",
   "lastCheckpoint": {
     "agent": "inspector",
-    "at": "2026-09-09T15:55:32-03:00",
-    "status": "complete"
+    "at": "2026-09-22T12:55:00-03:00",
+    "status": "complete",
+    "note": "Inspector reexecutado em 2026-09-22 sobre a target_screens.md regenerada: parity_specs.md atualizado (24 goldens, 7 exceções propagadas) e os 16 cenários de tela reancorados em golden. 26 arquivos .feature no total. Pipeline de migração concluído."
   },
+  "gateState": "Pipeline de migração CONCLUÍDO em 2026-09-22: 0 deviations pendentes, Inspector reexecutado, handoff.md regenerado. Não há próximo agente na fila.",
   "completedAgents": [
     "paradigm_advisor",
     "curator",
@@ -23,6 +25,24 @@
     "screenModeApproved": true
   },
   "pendingDecisions": [],
+  "regenerations": [
+    {
+      "at": "2026-09-22T12:34:19-03:00",
+      "mode": "--regenerate=screen_translator:generation",
+      "scope": "Fase 2 do Screen Translator: target_screens.md, screen_deviation_log.md, _reversa_sdd/screens/inventory.json, _reversa_sdd/screens/golden/",
+      "preserved": [
+        "screen_modernization_decision.md (modo literal aprovado)",
+        "currentAgent.screenModeApproved = true"
+      ],
+      "backup": [
+        "_reversa_sdd/migration/.backup-20260922-122055/",
+        "_reversa_sdd/screens/.backup-20260922-122055/"
+      ],
+      "invalidated": "inspector removido de completedAgents (parity_specs.md e handoff.md ficaram baseados na versão anterior de target_screens.md) — decisão humana de 2026-09-22",
+      "reason": "As 23 capturas douradas do legado passaram a existir em 2026-09-22; as 16 telas com cenário de paridade visual estavam com present: false desde 2026-09-09 e a lacuna era declarada permanente pelas features forward 002 a 006.",
+      "hashDivergenceFound": "Os três artefatos da Fase 2 tinham hash divergente do .state.json na abertura (screen_modernization_decision.md 5a9b4a91 × 84b6d891 registrado; target_screens.md f2b09603 × a658ca2b; screen_deviation_log.md f8e2c8df × f97a1371). Apresentado ao usuário antes da operação; decisão: prosseguir com backup. Os hashes registrados foram atualizados para os valores correntes."
+    }
+  ],
   "artifacts": {
     "migration_brief.md": {
       "hash": "sha256:a183db6030c37d400863d08325673f6b18cee8d763a6204374f907343123c065",
@@ -40,9 +60,16 @@
       "hash": "sha256:54375a036ffc76c07bb96b151a018156142982dcbe2e55e9ec0b02849fb22bb6",
       "producedBy": "curator"
     },
-    "ambiguity_log.md": {
-      "hash": "sha256:cbcf4b038896d2a4d4ba3bb85c3293d89e5ddf8a1984b4c2bdb7e148e3088a0a",
-      "producedBy": "orchestrator"
+    "parity_tests/": {
+      "producedBy": "inspector",
+      "reexecutedAt": "2026-09-22T12:52:00-03:00",
+      "files": 26,
+      "breakdown": "10 arquivos de fluxo + 16 de tela (parity_tests/screens/V01..V16)",
+      "note": "os 16 cenários de tela foram reancorados em golden capturado (present: true) e ganharam a ressalva de paridade construtiva (DEV-001). Os 10 de fluxo permanecem os de 2026-09-09: nenhuma regra de negócio ou arquitetura mudou; 19 dos 34 cenários de fluxo já têm prova executável nas features forward 002 a 006."
+    },    "ambiguity_log.md": {
+      "hash": "sha256:93ec9ba2c6cf4983b0402017e0bd0e24d8666a47d815fd883c14d5b57f4ce77a",
+      "producedBy": "orchestrator",
+      "note": "hash anterior à atualização de 2026-09-22 (regeneração da Fase 2); ver históricos na seção Notas do próprio arquivo"
     },
     "migration_strategy.md": {
       "hash": "sha256:e10d2717edb48b423dce1a3ea1de2a31c98b59252610206a2b5148cdaf32e284",
@@ -77,30 +104,58 @@
       "producedBy": "designer"
     },
     "screen_modernization_decision.md": {
-      "hash": "sha256:84b6d891931d292dd4c27352820d578ac4e448eba83e7f8865de28494fef8aa4",
-      "producedBy": "screen_translator"
+      "hash": "sha256:5a9b4a91d1c91b761b9582041ba7220aa6fe8dbb93c94d654a43c1daf84f5beb",
+      "producedBy": "screen_translator",
+      "note": "preservado intacto na regeneração de 2026-09-22; hash reconferido (o valor registrado antes era 84b6d891…)"
     },
     "target_screens.md": {
-      "hash": "sha256:a658ca2b0b05421cab3c992c0568d95d3d5b4207d3f3450880426f9ea8d99c16",
-      "producedBy": "screen_translator"
+      "hash": "sha256:8ffb1968bab38b719f30dc5a56949a76010cead171b86178fbead6772aadf017",
+      "producedBy": "screen_translator",
+      "regeneratedAt": "2026-09-22T12:34:19-03:00",
+      "screenCount": 21,
+      "goldenCount": 24,
+      "bodyHash": "sha256:9885b52c2c4586cc97b9cc94bfa900eb3a86104df07da8b394fce831128312fc"
     },
     "screen_deviation_log.md": {
-      "hash": "sha256:f97a137150b798ae79eddbf493c4265e122122e9dce8c61ebb6bac9a97676088",
-      "producedBy": "screen_translator"
+      "hash": "sha256:eee164ee8981c42d17e8cf3b19cb9acd4728a5684d30b277ca3a255223b5310c",
+      "producedBy": "screen_translator",
+      "regeneratedAt": "2026-09-22T12:34:19-03:00",
+      "deviations": { "total": 7, "aprovadas": 7, "pendentes": 0, "rejeitadas": 0 },
+      "bodyHash": "sha256:c9bab70b43a8ae67a102cdfe2305d2804a098fab66ed2ec326a01e8bea38f7c8"
     },
     "_reversa_sdd/screens/inventory.json": {
-      "producedBy": "screen_translator"
+      "producedBy": "screen_translator",
+      "regeneratedAt": "2026-09-22T12:34:19-03:00",
+      "hash": "sha256:e7e70e1627e0b4ed8e306e49d5200eee37e3a921412cdfcc4608c296ccda71f3",
+      "screenCount": 21,
+      "goldenCoverage": "21 de 21 telas com captura; 6 capturas sem cenário V; 2 estados alternativos (V10 anexado e V05 estado inicial); recaptura do V05 recebida em 2026-09-22 12:47"
     },
     "_reversa_sdd/screens/golden/manifest.yaml": {
-      "producedBy": "screen_translator"
+      "producedBy": "screen_translator",
+      "regeneratedAt": "2026-09-22T12:34:19-03:00",
+      "hash": "sha256:ab354f2b21ad6468ae5a8bf4bd64aff0172a78a8722d228da607cc79911f5d33",
+      "present": "24 de 24 (era 0 de 16)",
+      "note": "o sha256 de cada golden está no próprio manifest, por tela"
+    },
+    "_reversa_sdd/screens/golden/": {
+      "producedBy": "screen_translator",
+      "emittedAt": "2026-09-22T12:34:19-03:00",
+      "files": 24,
+      "note": "cópias das capturas do usuário com nomes canônicos; as originais em <unit>/screenshots/ não foram movidas nem alteradas"
     },
     "parity_specs.md": {
-      "hash": "sha256:74a75344c41a5dd285c3c6cd8e0a22966da0578b2bca3204c7c2dde2a2ca6e56",
-      "producedBy": "inspector"
+      "hash": "sha256:2f364678400ed7f1bc6010812159755bb4bf2c93b0d1a4742245a488bbd6e959",
+      "producedBy": "inspector",
+      "reexecutedAt": "2026-09-22T12:52:00-03:00",
+      "bodyHash": "sha256:0dab46897e82d82b78ecaf13883b6a8b61d36ba6f7414765e11a74a22171fb67",
+      "note": "reexecutado sobre a target_screens.md de 2026-09-22: 24 goldens, 7 exceções propagadas, lacuna do harness de paridade visual declarada."
     },
     "handoff.md": {
-      "hash": "sha256:35e313f4ee397d89bcf0deb7a7467eb1c2fc9df905332450fe34736a19b44b77",
-      "producedBy": "orchestrator"
+      "hash": "sha256:6f3ee704142e075d78d5d420e4550e38a600570abc96193957cb2913e9f327ca",
+      "producedBy": "orchestrator",
+      "regeneratedAt": "2026-09-22T12:55:00-03:00",
+      "bodyHash": "sha256:3f77bd58d493ef4bfebb5c343af278c309c20a09cb6828e02b555a16c19d5f38",
+      "note": "regenerado após o Inspector: aponta o estado real da paridade e as lacunas abertas."
     }
   },
   "auto": false,
