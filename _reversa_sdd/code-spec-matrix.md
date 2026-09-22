@@ -201,6 +201,15 @@ A suíte exige **acesso ampliado** para subir neste ambiente: o esbuild do vites
 nomeado e falha com `spawn EPERM` em modo confinado (mesma restrição registrada no
 onboarding da feature 001, §7).
 
+**Paridade visual (16 cenários, prova por referência capturada).** A referência de tela existe
+no repositório: **24 goldens** com `present: true` em 24 de 24 entradas, cobrindo **16 de 16**
+cenários (`PT-V01`…`PT-V16`), mais 6 capturas de telas sem cenário V e 2 estados alternativos.
+O `sha256` de cada tela está em `_reversa_sdd/screens/golden/manifest.yaml`, que é a **fonte
+única** — esta matriz aponta para ele em vez de duplicar as 16 linhas. A conferência é
+**construtiva** (mesma hierarquia, mesmos textos, mesmos tokens); comparação pixel a pixel
+está fora de escopo (`DEV-001` em `migration/screen_deviation_log.md`), e a **execução**
+automatizada depende do harness de paridade visual, ainda a criar.
+
 > ⚠️ **Prova sem dono no ciclo forward.** `src/test/mojibake.mjs` e
 > `src/test/mojibake.test.mjs` nasceram no commit `ea87955` (`test(encoding): adiciona
 > guarda de mojibake com portao no ci`) e **não pertencem ao `actions.md` de feature
@@ -294,14 +303,16 @@ Cada grupo abaixo vira feature própria; nenhum cenário fica sem destino.
 | Logs de acesso (`07`) | 4 | ✅ **Concluído** na feature `006-prova-logs-acesso` — ver `#Cenários de paridade do grupo 07` |
 | Contrato de dados (`10`) | 4 | Feature a criar — contrato único honrado pelos dois modos |
 | Consultas (`05`) | 3 | ✅ **Concluído** na feature `004-prova-consultas` — ver `#Cenários de paridade do módulo Consultas` |
-| Paridade visual (`screens/V01` a `V16`) | 16 | **Lacuna declarada.** A captura dourada de referência não existe no repositório (`present: false`); produzi-la é trabalho de outra natureza |
+| Paridade visual (`screens/V01` a `V16`) | 16 | **Feature a criar** — harness de paridade visual. A captura dourada de referência **passou a existir em 2026-09-22**: 24 goldens com `present: true` (16 de 16 cenários) em `_reversa_sdd/screens/golden/manifest.yaml` |
 
-> **Saldo após a feature `006-prova-logs-acesso` (2026-09-22).** Dos 50 cenários que a
+> **Saldo após a feature `007-matriz-paridade-visual` (2026-09-22).** Dos 50 cenários que a
 > feature 002 transferiu, **19 estão concluídos** (8 de Agendamentos na feature 003, 3 de
 > Consultas na 004, 4 da emissão de documento com modelo na 005 e 4 da trilha de auditoria na
-> 006) e **15 permanecem transferidos** para features próprias: Modo offline (6), Dashboard
-> (5) e Contrato de dados (4). Os 16 de paridade visual seguem declarados como lacuna, e não
-> como trabalho transferido.
+> 006) e **31 permanecem transferidos**: 15 de fluxo para features próprias — Modo offline (6),
+> Dashboard (5) e Contrato de dados (4) — e **16 de paridade visual**, cujo destino é o harness
+> de paridade visual. A captura dourada de referência, que era a razão da lacuna declarada até
+> 2026-09-22, **existe**: 24 goldens com `present: true` (16 de 16 cenários), em
+> `_reversa_sdd/screens/golden/manifest.yaml`.
 
 ### Lacunas de prova
 
@@ -315,7 +326,7 @@ está marcado como fechado, e o que permanece aberto tem razão declarada.
 | **Paridade do módulo Pacientes** (5 cenários) | ✅ **Fechada**, com o desdobramento do PT-001.3 declarado |
 | **Paridade do módulo Agendamentos** (8 cenários) | ✅ **Fechada**, com três ressalvas declaradas: a redação imprecisa de PT-003.1 e PT-003.3 e a vacuidade de PT-004.2 |
 | **Paridade do módulo Consultas** (3 cenários) | ✅ **Fechada**, com duas ressalvas declaradas: a redação imprecisa de PT-005.1 e a metade de interface de PT-005.3, que é **falsa** |
-| **Paridade dos módulos restantes** (34 → 15 cenários) | 🟡 **Parcialmente concluída.** Agendamentos (8) saiu na feature 003, Consultas (3) na 004, a emissão de documento com modelo (4) na 005 e a trilha de auditoria (4) na 006; **15 permanecem transferidos**, com destino declarado por grupo na seção acima |
+| **Paridade dos módulos restantes** (34 → 15 cenários de fluxo) | 🟡 **Parcialmente concluída.** Agendamentos (8) saiu na feature 003, Consultas (3) na 004, a emissão de documento com modelo (4) na 005 e a trilha de auditoria (4) na 006; **15 permanecem transferidos**, com destino declarado por grupo na seção acima. Somados aos **16 de paridade visual** — também transferidos, com destino no harness, desde que a captura dourada passou a existir em 2026-09-22 —, o saldo total passa a **31 transferidos dos 50** da feature 002 |
 | **As lacunas do módulo de Consultas** (`code-analysis.md#9`) | 🟡 **Quase todas declaradas, não provadas** — decisão de 2026-09-21. **Duas das três de severidade Alta deixaram de ser só declaração**: `applyTemplate` sem escape e a injeção na impressão ganharam evidência na feature 005 e continuam **abertas**. Detalhe linha a linha na seção abaixo |
 | **As três lacunas de severidade Alta de AMB-006** | 🟢 **Provadas e declaradas.** Substituição sem escape no payload, `{DIAS_AFASTAMENTO}` nunca resolvida e injeção sem escape na impressão — as três com evidência em `PrescriptionEditor.test.tsx`, e as três **abertas**, porque a decisão foi provar e declarar. Corrigir exige alterar a prova de propósito (decisão D-08 do roadmap da feature 005) |
 | **A colisão das famílias `BR-T`** | 🟡 **Contornada por citação qualificada.** `domain.md#2.3` usa `BR-T01`/`BR-T02` para *filtro por tipo* e *gate de medicamentos*; `code-analysis.md#6` (módulo templates) e `templates/requirements.md#2` usam os **mesmos IDs** para *campos obrigatórios* e *enum de 7 valores*. É o **mesmo identificador** com significados disjuntos — forma pior que a divergência de grafia de `BR-C`, porque qualificar só pelo ID não resolve |
@@ -338,7 +349,7 @@ está marcado como fechado, e o que permanece aberto tem razão declarada.
 | **A metade de schema do status inicial** | 🔴 **Declarada.** O default `agendada` é do servidor e não é observável no cliente (D-06) |
 | **A obrigatoriedade de `date` no schema** | 🟡 **Parcial.** O formulário marca o campo como `required` no controle, mas o portão em JavaScript não confere a data; a validação do navegador não é exercitável no DOM simulado |
 | **Modo offline de ponta a ponta** (recorte DIV-01) | ✅ **Fechada** para o paciente: `mockClient.test.ts` cadastra pelo adaptador e relê pela leitura escopada. As limitações L1 a L7 do adaptador permanecem declaradas e não são provadas |
-| **Paridade visual** (16 cenários) | 🔴 **Declarada.** Depende de captura dourada inexistente |
+| **Paridade visual** (16 cenários) | 🟡 **Transferida.** A referência existe — 24 goldens, `present: true` em 24 de 24, 16 de 16 cenários (`_reversa_sdd/screens/golden/manifest.yaml`); a lacuna remanescente é a **execução**, que depende do harness de paridade visual |
 | **Criptografia do CPF em repouso** | 🔴 **Declarada.** Acontece no backend; o cliente prova apenas a marcação de campo sensível |
 | **Build de produção** | 🟡 **Declarada.** `npm run build` passou na máquina do responsável em 2026-09-17; nenhuma prova automatizada cobre o empacotamento |
 | **Concorrência entre abas no modo offline** | 🟡 **Declarada.** Limitação L2 herdada, registrada em `_reversa_sdd/code-analysis.md#10.5 Limitações funcionais` |
