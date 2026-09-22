@@ -108,3 +108,65 @@ A seção de observações daquele arquivo registra os oito itens sem peso de re
 
 ---
 *Gerado pelo Reversa-Sync em 2026-09-22.*
+
+---
+
+## Atualização 2026-09-22
+
+> Reexecução do `/reversa-sync` para esta mesma feature. Nada acima foi reescrito, apagado ou
+> corrigido: esta seção apenas registra o que foi verificado e o que mudou desde a geração do
+> adendo (10:54 de 2026-09-22).
+
+### Verificação: sem delta novo do lado da entrega
+
+| Fonte | Estado verificado | Leitura |
+|---|---|---|
+| `_reversa_forward/006-prova-logs-acesso/actions.md` | **19 de 19 ações concluídas**, nenhuma `[ ]` aberta | a feature está fechada; não é caso de sincronização parcial |
+| `_reversa_forward/006-prova-logs-acesso/progress.jsonl` | 22 linhas, última em `T019`, às 10:41 | nenhuma ação executada depois da geração deste adendo |
+| `legacy-impact.md`, `regression-watch.md`, `onboarding.md` | modificados entre 10:38 e 10:40, **antes** do adendo (10:54) | as três fontes do delta já estavam contempladas na primeira geração |
+| Código de aplicação | nenhum arquivo tocado pela feature, conforme `legacy-impact.md` | a extração não está defasada em relação ao código por causa desta feature |
+
+**Conclusão: o delta da feature é o já registrado na tabela acima e permanece válido.** O que a
+reexecução encontrou de novo é de outra natureza — a **extração** foi estendida depois deste
+adendo, por um agente independente, e um dos artefatos citados na tabela foi afetado.
+
+### Delta novo: a extração foi estendida depois deste adendo
+
+Entre 11:00 e 12:00 de 2026-09-22 rodou a **segunda passada do Visor** sobre 21 capturas de tela
+do legado, fornecidas pelo usuário em `<unit>/screenshots/`. Ela não alterou nenhum artefato
+citado como fonte desta feature, mas acrescentou seções a três artefatos da extração:
+
+| Artefato | Seção | Tipo de impacto | Delta |
+|----------|-------|-----------------|-------|
+| `_reversa_sdd/ui/inventory.md` | `Atualização de 2026-09-22 — inventário revisado sobre as capturas` | `componente-novo` | O inventário global passa de **15 para 22 telas**: as capturas revelaram *Editar Paciente*, *Detalhe do Paciente (Informações + Histórico)*, *Lista de Agendamentos*, *Detalhes do Agendamento (modal)*, *Editar Consulta*, *Editar Médico* e *Editar Template*. *Logs de Acesso* continua listado. **Os apontadores da tabela acima seguem resolvendo**: a seção `Cobertura de testes` não foi tocada e a nova seção foi acrescentada ao fim do arquivo |
+| `_reversa_sdd/logs-acesso/screens.md` | `Documentação visual a partir das capturas de tela — 2026-09-22` | `regra-alterada` | A tela de auditoria ganha leitura forense por imagem, que **corrobora por observação** três afirmações deste adendo: (a) **não há paginação, rodapé de total nem "carregar mais"** — a captura de página inteira termina em área branca, o que sustenta `BR-L04`; (b) os **KPIs do topo derivam dos registros** e não fecham com o total — a captura mostra *Total de logs* **254** contra *Visualizações* **65**, *Logins* **9** e *Exclusões* **0** (soma **74**), o mesmo desencontro medido em teste pela feature como 8 contra 12; (c) a **página não oferece operação sobre o registro** — nenhuma ação de escrita é visível. **Acréscimo de enumeração**: aparecem dois selos que não constavam da documentação do módulo — **`Criar Consulta`** e **`Editar Paciente`** —, além de `Login`, `Visualizar Consulta` e `Visualizar Paciente` |
+| `_reversa_sdd/ui/flow.md` | `Fluxo revisado sobre as capturas — 2026-09-22` | `regra-nova` | O fluxo de navegação ganha a distinção entre transições com evidência visual e inferidas, e registra **Logs de Acesso como folha do fluxo** — nenhuma ação de saída ou de escrita visível —, o que reforça o veredito desta feature sobre a página de auditoria |
+
+**Ressalvas sobre o delta acima**
+
+1. **Não é delta da feature `006`.** Os números `254 / 65 / 9 / 0` vêm de uma massa viva qualquer,
+   não da massa fixa dos testes; valem como **indício visual**, não como medição. A medição
+   continua sendo a da suíte (132 verificações em 23 arquivos).
+2. Os dois selos novos ampliam a enumeração de ações do módulo, mas **não contradizem** a tabela
+   acima: `Criar Consulta` e `Editar Paciente` são rótulos de ações gravadas na trilha, não
+   operações oferecidas pela página de auditoria.
+3. A captura de Logs de Acesso tem **1732×15029 px** e a própria seção do Visor recomenda
+   recapturá-la em viewport com massa fixa caso a paridade visual venha a ser exigida — o que
+   **não** muda o veredito de paridade desta feature, que é descritivo.
+
+### Vigência
+
+Este adendo continua **vigente desde 2026-09-22**. A reexecução não acrescentou linha de
+superação e nenhuma afirmação anterior foi revista.
+
+### Fontes desta atualização
+
+- `_reversa_forward/006-prova-logs-acesso/actions.md`
+- `_reversa_forward/006-prova-logs-acesso/progress.jsonl`
+- `_reversa_forward/006-prova-logs-acesso/legacy-impact.md`
+- `_reversa_sdd/ui/inventory.md`
+- `_reversa_sdd/logs-acesso/screens.md`
+- `_reversa_sdd/ui/flow.md`
+
+---
+*Atualização gerada pelo Reversa-Sync em 2026-09-22.*
