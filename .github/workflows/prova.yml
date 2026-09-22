@@ -1,0 +1,142 @@
+name: Prova automatizada
+
+# POR QUE ESTE WORKFLOW EXISTE
+# A suíte do projeto tem 168 verificações em 26 arquivos, construídas pelas features forward
+# 002 a 010, e NADA as executava automaticamente. A guarda de encoding ganhou portão desde o
+# começo; a prova inteira, não. Um verde que ninguém roda é uma prova que apodrece em silêncio:
+# ela continua existindo no repositório e deixa de valer como evidência.
+#
+# O QUE ELE RODA, E POR QUE NESTA ORDEM
+#   1. `typecheck` — o gate de tipos estrito, que é a única prova dos cenários de compilação
+#      (`PT-010`), e o que confere que os dois adaptadores honram o mesmo contrato.
+#   2. `lint` — estilo e imports mortos. Cobre apenas os arquivos em JavaScript do projeto; os
+#      `.ts`/`.tsx` ficam fora do alcance da configuração atual.
+#   3. `test` — a suíte completa.
+#   4. `prova:negativos` — POR ÚLTIMO, de propósito. Ele escreve e remove `src/__negative_checks__/`,
+#      e uma interrupção dura pode deixar resíduo, o que faria o `typecheck` e o `lint` falharem por
+#      motivo alheio à promessa. O próprio arnês confere a ausência de resíduo ao final, então
+#      rodá-lo depois não esconde nada — só evita que ele contamine os outros gates.
+#
+# O QUE ELE **NÃO** FAZ
+# - Não transforma a DURAÇÃO em portão. O teto de 90 segundos é critério local, medido por humano
+#   e registrado com a condição de medição: a mesma suíte, sem uma linha de diferença, já mediu
+#   69,79 s e 122,57 s. Um portão de duração falharia ao acaso, e um portão que falha ao acaso
+#   ensina a ignorar o vermelho. A duração é REPORTADA no resumo do job.
+# - Não duplica o `guarda-encoding.yml`, que roda em segundos e sem instalar dependência.
+# - Não cobre os 16 cenários de paridade visual, que seguem sem harness de comparação.
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: "prova-${{ github.ref }}"
+  cancel-in-progress: true
+
+env:
+  # LINHA DE BASE DAS VERIFICAÇÕES. A suíte pode crescer livremente; encolher exige decisão.
+  # Ao REMOVER verificações de propósito, atualize este número NO MESMO COMMIT — é o que separa
+  # uma remoção deliberada de um teste apagado para o vermelho sumir.
+  BASELINE_DE_VERIFICACOES: 168
+
+jobs:
+  prova:
+    name: Suíte e gates
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Gate de tipos
+        run: npm run typecheck
+
+      - name: Estilo e imports mortos
+        run: npm run lint
+
+      - name: Suíte completa
+        # `pipefail` é obrigatório: sem ele, o `tee` mascararia a falha da suíte, porque quem
+        # devolve o código de saída do encadeamento é o último comando.
+        #
+        # NÃO há remoção de códigos ANSI aqui, e isso é deliberado. A hipótese de que a cor
+        # quebraria a leitura foi MEDIDA: com a variável de cor forçada e a saída canalizada, a
+        # captura teve **zero** bytes de escape. Um `sed` que nunca casa seria maquinário morto —
+        # e mais uma dependência de portabilidade sem prova. Se algum executor passar a emitir
+        # cor, a conferência seguinte falha com "não foi possível ler a contagem", que aponta
+        # para o lugar certo.
+        shell: bash
+        run: |
+          set -o pipefail
+          npm test 2>&1 | tee saida-da-suite.txt
+
+      - name: Conferir que a contagem de verificações não caiu
+        shell: bash
+        run: |
+          TOTAL=$(grep -oE 'Tests +[0-9]+ passed' saida-da-suite.txt | grep -oE '[0-9]+' | head -1)
+
+          if [ -z "$TOTAL" ]; then
+            echo "::error::Não foi possível ler a contagem de verificações da saída da suíte."
+            exit 1
+          fi
+
+          echo "Verificações nesta execução: $TOTAL"
+          echo "Linha de base: $BASELINE_DE_VERIFICACOES"
+
+          if [ "$TOTAL" -lt "$BASELINE_DE_VERIFICACOES" ]; then
+            echo "::error::A suíte caiu de $BASELINE_DE_VERIFICACOES para $TOTAL verificações. Se a remoção foi deliberada, atualize BASELINE_DE_VERIFICACOES neste workflow no mesmo commit."
+            exit 1
+          fi
+
+      - name: Casos negativos do contrato de dados
+        run: npm run prova:negativos
+
+      - name: Conferir que o arnês não deixou resíduo
+        shell: bash
+        run: |
+          if [ -d src/__negative_checks__ ]; then
+            echo "::error::O arnês de casos negativos deixou src/__negative_checks__ para trás. O typecheck e o lint passariam a falhar por causa dele."
+            exit 1
+          fi
+          echo "Sem resíduo: src/__negative_checks__ não existe."
+
+      - name: Registrar o resultado, sem transformar a duração em portão
+        if: always()
+        shell: bash
+        run: |
+          if [ ! -f saida-da-suite.txt ]; then
+            echo "### Prova automatizada" >> "$GITHUB_STEP_SUMMARY"
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+            echo "A suíte não chegou a produzir saída — veja o passo com falha acima." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+
+          TOTAL=$(grep -oE 'Tests +[0-9]+ passed' saida-da-suite.txt | grep -oE '[0-9]+' | head -1)
+          ARQUIVOS=$(grep -oE 'Test Files +[0-9]+ passed' saida-da-suite.txt | grep -oE '[0-9]+' | head -1)
+          DURACAO=$(grep -oE 'Duration +[0-9.]+s' saida-da-suite.txt | grep -oE '[0-9.]+s' | head -1)
+
+          {
+            echo "### Prova automatizada"
+            echo ""
+            echo "| Métrica | Valor |"
+            echo "|---------|-------|"
+            echo "| Verificações | **${TOTAL:-não lida}** |"
+            echo "| Arquivos | ${ARQUIVOS:-não lido} |"
+            echo "| Duração | ${DURACAO:-não lida} |"
+            echo ""
+            echo "> O teto de **90 s** é critério local, medido por humano e registrado com a condição"
+            echo "> de medição. A mesma suíte já mediu 69,79 s e 122,57 s para código idêntico — por"
+            echo "> isso a duração é reportada aqui e **não** vira portão."
+          } >> "$GITHUB_STEP_SUMMARY"
