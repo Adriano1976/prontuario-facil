@@ -300,7 +300,11 @@ Cada módulo possui specs completas em `_reversa_sdd/[modulo]/`:
 - `tasks.md` — Plano de implementação
 - `screens.md` — Especificação de telas
 
-### Migração JS→TypeScript
+### Rastreamento de Implementação
+| Artefato | Descrição |
+|----------|-----------|
+| `_reversa_forward/` | Registro de ações, evidências e provas de validação de cada funcionalidade |
+
 
 | Artefato | Descrição |
 |----------|-----------|
@@ -338,7 +342,7 @@ O projeto passou por **duas** auditorias de segurança automatizada:
 | F-05 | 🔵 Baixa | XSS | Uso de `dangerouslySetInnerHTML` em `src/components/ui/chart.jsx` |
 
 ### Pontos Fortes
-
+- ✅ Integridade e paridade funcional pós-migração asseguradas via ciclo de provas automatizadas
 - ✅ Autenticação e sessão centralizadas via `base44.auth.me()`
 - ✅ Auditoria LGPD com registro de eventos de acesso (`AccessLog`)
 - ✅ Comunicação segura via SDK oficial `@base44/sdk`
@@ -384,7 +388,7 @@ O projeto passou por **duas** auditorias de segurança automatizada:
 |------|--------|-----------|
 | **CI/CD** | ✅ GitHub Actions | Deploy do mini-site (`_reversa_docs/`) para GitHub Pages |
 | **TypeScript** | ✅ Ativo | `strict: true` — 0 erros de tipo, gate `tsc --noEmit` |
-| **Testes automatizados** | ⚠️ Parcial | 26 cenários Gherkin de paridade (sem framework de execução) |
+| **Testes automatizados** | ✅ Estruturado | Ciclo de provas (002 a 010) validando KPIs, Contrato de Dados e Modo Offline via GitHub Actions |
 | **RBAC frontend** | ⚠️ Parcial | Rotas admin expostas sem verificação de role (ver F-01) |
 | **Dependências não usadas** | ⚠️ Presentes | Stripe, react-leaflet incluídas no `package.json` mas não utilizadas no `src/` |
 

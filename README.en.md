@@ -315,7 +315,11 @@ Each module has complete specs in `_reversa_sdd/[module]/`:
 - `tasks.md` — Implementation plan
 - `screens.md` — Screen specifications
 
-### JS→TypeScript Migration
+### Implementation Tracking
+| Artifact | Description |
+|----------|-------------|
+| `_reversa_forward/` | Records of actions, evidence, and validation proofs for each feature |
+
 
 | Artifact | Description |
 |----------|-------------|
@@ -353,7 +357,7 @@ The project underwent **two** automated security audits:
 | F-05 | 🔵 Low | XSS | Use of `dangerouslySetInnerHTML` in `src/components/ui/chart.jsx` |
 
 ### Strengths
-
+- ✅ Post-migration integrity and functional parity ensured via automated proof cycle
 - ✅ Authentication and session centralized through `base44.auth.me()`
 - ✅ LGPD audit trail with access events recorded in `AccessLog`
 - ✅ Secure communication through the official `@base44/sdk`
@@ -399,7 +403,7 @@ The project underwent **two** automated security audits:
 |------|--------|-------------|
 | **CI/CD** | ✅ GitHub Actions | Mini-site deployment (`_reversa_docs/`) to GitHub Pages |
 | **TypeScript** | ✅ Active | `strict: true` — 0 type errors, `tsc --noEmit` gate |
-| **Automated tests** | ⚠️ Partial | 26 Gherkin parity scenarios (no execution framework) |
+| **Automated tests** | ✅ Structured | Proof cycle (002 to 010) validating KPIs, Data Contract, and Offline Mode via GitHub Actions |
 | **Frontend RBAC** | ⚠️ Partial | Admin routes exposed without role verification (see F-01) |
 | **Unused dependencies** | ⚠️ Present | Stripe and react-leaflet included in `package.json` but not used in `src/` |
 
