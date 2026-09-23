@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-09-23T03:46:19.713Z",
+  "generatedAt": "2026-09-18T18:04:40.439Z",
   "treemap_loc_by_folder": [
     {
       "name": "pages",
-      "value": 7944,
-      "modules": 25
+      "value": 4359,
+      "modules": 12
     },
     {
       "name": "components/ui",
@@ -14,18 +14,13 @@
     },
     {
       "name": "components/medical",
-      "value": 2522,
-      "modules": 13
-    },
-    {
-      "name": "test",
-      "value": 1669,
+      "value": 1659,
       "modules": 9
     },
     {
       "name": "api",
-      "value": 1567,
-      "modules": 13
+      "value": 1079,
+      "modules": 8
     },
     {
       "name": "base44",
@@ -34,8 +29,8 @@
     },
     {
       "name": "lib",
-      "value": 591,
-      "modules": 8
+      "value": 539,
+      "modules": 7
     },
     {
       "name": "types",
@@ -49,13 +44,8 @@
     },
     {
       "name": "components/appointments",
-      "value": 391,
-      "modules": 3
-    },
-    {
-      "name": "__tests__",
-      "value": 90,
-      "modules": 1
+      "value": 274,
+      "modules": 2
     },
     {
       "name": "components",
@@ -75,16 +65,16 @@
   ],
   "top_complexity": [
     {
-      "id": "src/types/index.ts",
-      "name": "index.ts",
-      "complexity": 46,
-      "loc": 38
-    },
-    {
       "id": "src/lib/utils.ts",
       "name": "utils.ts",
       "complexity": 44,
       "loc": 21
+    },
+    {
+      "id": "src/types/index.ts",
+      "name": "index.ts",
+      "complexity": 29,
+      "loc": 38
     },
     {
       "id": "src/components/ui/button.jsx",
@@ -95,7 +85,7 @@
     {
       "id": "src/api/base44Client.ts",
       "name": "base44Client.ts",
-      "complexity": 21,
+      "complexity": 20,
       "loc": 132
     },
     {
@@ -125,7 +115,7 @@
     {
       "id": "src/api/sessionScope.ts",
       "name": "sessionScope.ts",
-      "complexity": 12,
+      "complexity": 11,
       "loc": 63
     },
     {
@@ -153,22 +143,16 @@
       "loc": 31
     },
     {
-      "id": "src/api/registry.ts",
-      "name": "registry.ts",
-      "complexity": 9,
-      "loc": 143
-    },
-    {
       "id": "src/components/ui/label.jsx",
       "name": "label.jsx",
       "complexity": 9,
       "loc": 12
     },
     {
-      "id": "src/api/contract.ts",
-      "name": "contract.ts",
+      "id": "src/api/registry.ts",
+      "name": "registry.ts",
       "complexity": 7,
-      "loc": 186
+      "loc": 143
     },
     {
       "id": "src/components/ui/dialog.jsx",
@@ -177,22 +161,28 @@
       "loc": 83
     },
     {
-      "id": "src/components/medical/AccessLogger.ts",
-      "name": "AccessLogger.ts",
-      "complexity": 7,
-      "loc": 69
+      "id": "src/api/contract.ts",
+      "name": "contract.ts",
+      "complexity": 6,
+      "loc": 186
     },
     {
-      "id": "src/test/auditFixtures.ts",
-      "name": "auditFixtures.ts",
+      "id": "src/components/medical/AccessLogger.ts",
+      "name": "AccessLogger.ts",
       "complexity": 6,
-      "loc": 165
+      "loc": 69
     },
     {
       "id": "src/components/ui/textarea.jsx",
       "name": "textarea.jsx",
       "complexity": 6,
       "loc": 15
+    },
+    {
+      "id": "src/components/ui/use-toast.jsx",
+      "name": "use-toast.jsx",
+      "complexity": 3,
+      "loc": 217
     }
   ],
   "loc_histogram": {
@@ -206,11 +196,11 @@
       5000
     ],
     "counts": [
-      69,
-      34,
-      31,
-      33,
-      3,
+      66,
+      27,
+      21,
+      20,
+      2,
       0
     ]
   },
@@ -226,25 +216,19 @@
         "id": "components/medical"
       },
       {
-        "id": "test"
-      },
-      {
-        "id": "api"
-      },
-      {
         "id": "root"
       },
       {
         "id": "lib"
       },
       {
+        "id": "api"
+      },
+      {
         "id": "components/appointments"
       },
       {
         "id": "base44"
-      },
-      {
-        "id": "__tests__"
       },
       {
         "id": "types"
@@ -296,11 +280,6 @@
         "value": 2
       },
       {
-        "source": "components/appointments",
-        "target": "test",
-        "value": 1
-      },
-      {
         "source": "components/medical",
         "target": "api",
         "value": 6
@@ -313,7 +292,7 @@
       {
         "source": "components/medical",
         "target": "types",
-        "value": 8
+        "value": 6
       },
       {
         "source": "components/medical",
@@ -323,11 +302,6 @@
       {
         "source": "components/medical",
         "target": "utils",
-        "value": 2
-      },
-      {
-        "source": "components/medical",
-        "target": "test",
         "value": 2
       },
       {
@@ -383,7 +357,7 @@
       {
         "source": "pages",
         "target": "types",
-        "value": 21
+        "value": 12
       },
       {
         "source": "pages",
@@ -401,42 +375,17 @@
         "value": 15
       },
       {
-        "source": "pages",
-        "target": "test",
-        "value": 10
-      },
-      {
         "source": "root",
         "target": "pages",
         "value": 12
-      },
-      {
-        "source": "test",
-        "target": "types",
-        "value": 6
-      },
-      {
-        "source": "test",
-        "target": "api",
-        "value": 3
-      },
-      {
-        "source": "__tests__",
-        "target": "root",
-        "value": 1
-      },
-      {
-        "source": "__tests__",
-        "target": "test",
-        "value": 1
       }
     ]
   },
   "language_distribution": [
     {
       "language": "tsx",
-      "modules": 48,
-      "loc": 11478
+      "modules": 29,
+      "loc": 6966
     },
     {
       "language": "jsx",
@@ -445,13 +394,8 @@
     },
     {
       "language": "ts",
-      "modules": 60,
-      "loc": 3784
-    },
-    {
-      "language": "mjs",
-      "modules": 3,
-      "loc": 878
+      "modules": 48,
+      "loc": 2310
     },
     {
       "language": "jsonc",
@@ -467,35 +411,23 @@
   "external_deps": [
     {
       "name": "react",
-      "count": 98
+      "count": 87
     },
     {
       "name": "lucide-react",
       "count": 42
     },
     {
-      "name": "react-router-dom",
-      "count": 34
-    },
-    {
-      "name": "vitest",
-      "count": 26
-    },
-    {
-      "name": "@testing-library/react",
-      "count": 19
-    },
-    {
       "name": "@tanstack/react-query",
+      "count": 18
+    },
+    {
+      "name": "react-router-dom",
       "count": 18
     },
     {
       "name": "framer-motion",
       "count": 17
-    },
-    {
-      "name": "@testing-library/user-event",
-      "count": 13
     },
     {
       "name": "date-fns",
@@ -510,44 +442,53 @@
       "count": 4
     },
     {
-      "name": "node:fs",
-      "count": 3
-    },
-    {
-      "name": "node:path",
-      "count": 3
-    },
-    {
       "name": "next-themes",
       "count": 2
     },
     {
       "name": "recharts",
       "count": 2
+    },
+    {
+      "name": "@radix-ui/react-dialog",
+      "count": 2
+    },
+    {
+      "name": "@base44/sdk",
+      "count": 1
+    },
+    {
+      "name": "@radix-ui/react-accordion",
+      "count": 1
+    },
+    {
+      "name": "@radix-ui/react-alert-dialog",
+      "count": 1
+    },
+    {
+      "name": "@radix-ui/react-aspect-ratio",
+      "count": 1
     }
   ],
   "summary": {
-    "totalFiles": 170,
-    "totalLoc": 20882,
+    "totalFiles": 136,
+    "totalLoc": 14018,
     "languages": {
-      "tsx": 48,
+      "tsx": 29,
       "jsx": 49,
-      "mjs": 3,
-      "ts": 60,
+      "ts": 48,
       "jsonc": 9,
       "css": 1
     },
     "groups": {
-      "pages": 25,
+      "pages": 12,
       "components/ui": 68,
-      "components/medical": 13,
-      "test": 9,
-      "api": 13,
+      "components/medical": 9,
       "root": 6,
-      "lib": 8,
-      "components/appointments": 3,
+      "lib": 7,
+      "api": 8,
+      "components/appointments": 2,
       "base44": 9,
-      "__tests__": 1,
       "types": 12,
       "components": 1,
       "hooks": 1,

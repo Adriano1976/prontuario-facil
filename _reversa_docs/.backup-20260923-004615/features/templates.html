@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <script>try{document.documentElement.setAttribute("data-theme",localStorage.getItem("rv-theme")==="light"?"light":"dark");}catch(e){}</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Templates — Prontuário Fácil</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg">
+  <meta name="reversa-category" content="diagram">
+  <meta name="reversa-producer-agent" content="reversa-docs-storyteller">
+  <meta name="reversa-template" content="feature">
+  <meta name="reversa-generated-at" content="2026-09-10T13:22:00Z">
+  <link rel="stylesheet" href="../assets/css/theme.css">
+  <script src="../assets/js/data.js"></script>
+  <script src="../assets/js/theme.js" defer></script>
+  <style>
+    .feat-hero .rv-hero__inner { text-align: left; }
+    .breadcrumb { font-size: 13px; color: var(--rv-text-faint); margin-bottom: 18px; }
+    .breadcrumb a:hover { color: #fff; }
+    .br-list { display: grid; gap: 12px; }
+    .br-item { display: flex; gap: 14px; border: 1px solid var(--rv-border); background: var(--rv-panel); border-radius: 12px; padding: 15px 18px; }
+    .br-item__code { flex: 0 0 auto; font-family: var(--rv-mono); font-size: 12px; font-weight: 700; color: var(--rv-accent-1); padding-top: 1px; }
+    .br-item__text { font-size: 14px; color: var(--rv-text-dim); }
+    .br-item__text b { color: var(--rv-text); }
+    .feat-pager { display: flex; justify-content: space-between; gap: 16px; margin-top: 8px; }
+    .feat-pager a { flex: 1; }
+    .feat-pager .next { text-align: right; }
+  </style>
+</head>
+<body data-page="feature-templates">
+  <header class="rv-header">
+    <div class="rv-header__inner">
+      <a class="rv-brand" href="../index.html">
+        <span class="seal-mini" data-seal></span>
+        <span class="rv-brand__name">Prontuário Fácil</span>
+      </a>
+      <button class="rv-nav-toggle" aria-label="Abrir menu" aria-expanded="false">☰</button>
+      <nav class="rv-nav" aria-label="Navegação principal">
+        <a href="../index.html" data-page-id="index">Visão geral</a>
+        <a href="../arquitetura.html" data-page-id="arquitetura">Arquitetura 3D</a>
+        <a href="../modulos.html" data-page-id="modulos">Módulos</a>
+        <a href="../topologia.html" data-page-id="topologia">Topologia</a>
+        <a href="../metricas.html" data-page-id="metricas">Métricas</a>
+        <a href="../glossario.html" data-page-id="glossario">Glossário</a>
+        <a href="../deck.html" data-page-id="deck">Deck</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="rv-hero feat-hero" style="padding:48px 24px 36px">
+    <canvas class="rv-hero__canvas"></canvas>
+    <div class="rv-hero__inner">
+      <div class="breadcrumb"><a href="../index.html">Início</a> / <a href="../index.html#features">Features</a> / Templates</div>
+      <h1 style="font-size:clamp(2rem,5vw,3.2rem)">📝 Templates</h1>
+      <p class="rv-hero__tagline" style="margin-left:0">Modelos de documentos médicos com variáveis interpoladas para agilizar o atendimento.</p>
+      <div class="rv-hero__actions" style="justify-content:flex-start">
+        <span class="rv-chip">Entidade: Template</span>
+        <span class="rv-chip rv-chip--warn">Admin only</span>
+        <span class="rv-chip">7 tipos</span>
+      </div>
+    </div>
+  </section>
+
+  <main class="rv-container">
+    <section class="rv-section">
+      <div class="rv-section__head rv-reveal">
+        <div class="rv-section__eyebrow">Visão geral</div>
+        <h2 class="rv-section__title">Modelos que aceleram o atendimento</h2>
+        <p class="rv-section__desc">O módulo de Templates gerencia modelos pré-definidos de texto para documentos médicos (receitas simples, controladas, atestados, solicitações de exame), agilizando o atendimento clínico.</p>
+      </div>
+      <div class="rv-section__head rv-reveal" style="margin-top:26px"><div class="rv-section__eyebrow">Regras de negócio</div></div>
+      <div class="br-list rv-reveal">
+        <div class="br-item"><span class="br-item__code">BR-T01</span><span class="br-item__text">Todo template exige <b>name</b>, <b>type</b> e <b>content</b>.</span></div>
+        <div class="br-item"><span class="br-item__code">BR-T02</span><span class="br-item__text">O tipo deve pertencer ao enum de <b>7 valores</b> permitidos (ex: <b>receita_simples</b>, <b>atestado</b>, <b>anamnese</b>).</span></div>
+        <div class="br-item"><span class="br-item__code">BR-T03</span><span class="br-item__text">Criação e exclusão restritas a administradores (<b>role == admin</b>).</span></div>
+        <div class="br-item"><span class="br-item__code">BR-T04</span><span class="br-item__text">Variáveis são interpoladas no salvamento. Contextuais como <b>{DIAS_AFASTAMENTO}</b> podem ser resolvidas pelo contexto ou exigir preenchimento manual.</span></div>
+      </div>
+    </section>
+
+    <section class="rv-section">
+      <div class="rv-section__head rv-reveal"><div class="rv-section__eyebrow">Estrutura de dados</div><h2 class="rv-section__title">Schema (Template.jsonc)</h2></div>
+      <div class="rv-table-wrap rv-reveal">
+        <table class="rv-table">
+          <thead><tr><th>Campo</th><th>Descrição</th></tr></thead>
+          <tbody>
+            <tr><td class="rv-mono">name</td><td>Nome do modelo</td></tr>
+            <tr><td class="rv-mono">type</td><td>Enum de 7 tipos de documento</td></tr>
+            <tr><td class="rv-mono">content</td><td>Corpo com variáveis interpoláveis</td></tr>
+            <tr><td class="rv-mono">is_active</td><td>Booleano (default true)</td></tr>
+            <tr><td class="rv-mono">is_default</td><td>Booleano (template padrão)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="rv-section">
+      <div class="rv-section__head rv-reveal"><div class="rv-section__eyebrow">Permissões e segurança</div><h2 class="rv-section__title">RLS</h2></div>
+      <div class="rv-table-wrap rv-reveal">
+        <table class="rv-table">
+          <thead><tr><th>Operação</th><th>Política</th></tr></thead>
+          <tbody>
+            <tr><td>Create / Update / Delete</td><td>Restrito a <b>role == admin</b></td></tr>
+            <tr><td>Read</td><td>Templates ativos liberados para profissionais de saúde</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="rv-section">
+      <div class="feat-pager">
+        <a class="rv-card" href="medicos.html"><div class="rv-card__meta">← Anterior</div><div class="rv-card__title">Médicos</div></a>
+        <a class="rv-card next" href="logs-acesso.html"><div class="rv-card__meta">Próxima →</div><div class="rv-card__title">Logs de Acesso</div></a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="rv-footer"><div class="rv-container"><div class="rv-footer__bottom"><span>Gerado por Reversa Docs · seed 89000d65</span><span>LGPD · Base44 · React 18</span></div></div></footer>
+</body>
+</html>

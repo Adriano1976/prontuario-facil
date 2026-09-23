@@ -14,12 +14,6 @@
       "loc": 594
     },
     {
-      "id": "src/components/medical/__tests__/PrescriptionEditor.test.tsx",
-      "group": "components/medical",
-      "language": "tsx",
-      "loc": 518
-    },
-    {
       "id": "src/pages/PatientDetail.tsx",
       "group": "pages",
       "language": "tsx",
@@ -38,58 +32,16 @@
       "loc": 440
     },
     {
-      "id": "src/pages/__tests__/NewAppointment.test.tsx",
-      "group": "pages",
-      "language": "tsx",
-      "loc": 427
-    },
-    {
-      "id": "src/pages/__tests__/Consultation.test.tsx",
-      "group": "pages",
-      "language": "tsx",
-      "loc": 422
-    },
-    {
       "id": "src/pages/Templates.tsx",
       "group": "pages",
       "language": "tsx",
       "loc": 406
     },
     {
-      "id": "src/test/verificacoes-negativas.mjs",
-      "group": "test",
-      "language": "mjs",
-      "loc": 384
-    },
-    {
       "id": "src/components/medical/PrescriptionEditor.tsx",
       "group": "components/medical",
       "language": "tsx",
       "loc": 382
-    },
-    {
-      "id": "src/pages/__tests__/PatientForm.test.tsx",
-      "group": "pages",
-      "language": "tsx",
-      "loc": 372
-    },
-    {
-      "id": "src/test/mojibake.mjs",
-      "group": "test",
-      "language": "mjs",
-      "loc": 367
-    },
-    {
-      "id": "src/pages/__tests__/AccessLogs.test.tsx",
-      "group": "pages",
-      "language": "tsx",
-      "loc": 358
-    },
-    {
-      "id": "src/pages/__tests__/DashboardKpis.test.tsx",
-      "group": "pages",
-      "language": "tsx",
-      "loc": 347
     },
     {
       "id": "src/pages/Dashboard.tsx",
@@ -110,40 +62,16 @@
       "loc": 306
     },
     {
-      "id": "src/pages/__tests__/NewConsultation.test.tsx",
-      "group": "pages",
-      "language": "tsx",
-      "loc": 306
-    },
-    {
       "id": "src/components/medical/ExamUploader.tsx",
       "group": "components/medical",
       "language": "tsx",
       "loc": 294
     },
     {
-      "id": "src/pages/__tests__/Appointments.test.tsx",
-      "group": "pages",
-      "language": "tsx",
-      "loc": 289
-    },
-    {
       "id": "src/pages/NewAppointment.tsx",
       "group": "pages",
       "language": "tsx",
       "loc": 285
-    },
-    {
-      "id": "src/pages/__tests__/PatientDetail.test.tsx",
-      "group": "pages",
-      "language": "tsx",
-      "loc": 285
-    },
-    {
-      "id": "src/pages/__tests__/Consultations.test.tsx",
-      "group": "pages",
-      "language": "tsx",
-      "loc": 282
     },
     {
       "id": "src/components/medical/ReportsView.tsx",
@@ -168,12 +96,6 @@
       "group": "pages",
       "language": "tsx",
       "loc": 262
-    },
-    {
-      "id": "src/api/__tests__/mockClientOffline.test.ts",
-      "group": "api",
-      "language": "ts",
-      "loc": 259
     },
     {
       "id": "src/components/ui/menubar.jsx",
@@ -212,18 +134,6 @@
       "loc": 217
     },
     {
-      "id": "src/test/dashboardFixtures.ts",
-      "group": "test",
-      "language": "ts",
-      "loc": 210
-    },
-    {
-      "id": "src/components/medical/__tests__/AccessLogger.test.ts",
-      "group": "components/medical",
-      "language": "ts",
-      "loc": 195
-    },
-    {
       "id": "src/api/mockClient.ts",
       "group": "api",
       "language": "ts",
@@ -232,12 +142,6 @@
     {
       "id": "src/api/contract.ts",
       "group": "api",
-      "language": "ts",
-      "loc": 186
-    },
-    {
-      "id": "src/test/templateFixtures.ts",
-      "group": "test",
       "language": "ts",
       "loc": 186
     },
@@ -252,12 +156,6 @@
       "group": "components/appointments",
       "language": "tsx",
       "loc": 167
-    },
-    {
-      "id": "src/test/auditFixtures.ts",
-      "group": "test",
-      "language": "ts",
-      "loc": 165
     },
     {
       "id": "base44/entities/Patient.jsonc",
@@ -275,12 +173,6 @@
       "id": "src/api/scopedRead.ts",
       "group": "api",
       "language": "ts",
-      "loc": 147
-    },
-    {
-      "id": "src/pages/__tests__/ActivePatientSelection.test.tsx",
-      "group": "pages",
-      "language": "tsx",
       "loc": 147
     },
     {
@@ -302,12 +194,6 @@
       "loc": 139
     },
     {
-      "id": "src/pages/__tests__/PatientDetailAudit.test.tsx",
-      "group": "pages",
-      "language": "tsx",
-      "loc": 139
-    },
-    {
       "id": "src/api/entities.ts",
       "group": "api",
       "language": "ts",
@@ -320,40 +206,10 @@
       "loc": 132
     },
     {
-      "id": "src/test/consultationsFixtures.ts",
-      "group": "test",
-      "language": "ts",
-      "loc": 130
-    },
-    {
       "id": "base44/entities/Consultation.jsonc",
       "group": "base44",
       "language": "jsonc",
       "loc": 128
-    },
-    {
-      "id": "src/test/mojibake.test.mjs",
-      "group": "test",
-      "language": "mjs",
-      "loc": 127
-    },
-    {
-      "id": "src/pages/__tests__/Patients.test.tsx",
-      "group": "pages",
-      "language": "tsx",
-      "loc": 125
-    },
-    {
-      "id": "src/components/appointments/__tests__/TimeSlotPicker.test.tsx",
-      "group": "components/appointments",
-      "language": "tsx",
-      "loc": 117
-    },
-    {
-      "id": "src/api/__tests__/offlineActivation.test.ts",
-      "group": "api",
-      "language": "ts",
-      "loc": 114
     },
     {
       "id": "src/components/ui/form.jsx",
@@ -440,12 +296,6 @@
       "loc": 91
     },
     {
-      "id": "src/__tests__/Layout.test.tsx",
-      "group": "__tests__",
-      "language": "tsx",
-      "loc": 90
-    },
-    {
       "id": "src/App.tsx",
       "group": "root",
       "language": "tsx",
@@ -458,20 +308,8 @@
       "loc": 88
     },
     {
-      "id": "src/test/appointmentsFixtures.ts",
-      "group": "test",
-      "language": "ts",
-      "loc": 87
-    },
-    {
       "id": "src/lib/PageNotFound.tsx",
       "group": "lib",
-      "language": "tsx",
-      "loc": 86
-    },
-    {
-      "id": "src/pages/__tests__/Dashboard.test.tsx",
-      "group": "pages",
       "language": "tsx",
       "loc": 86
     },
@@ -518,22 +356,10 @@
       "loc": 79
     },
     {
-      "id": "src/components/medical/__tests__/PatientSearch.test.tsx",
-      "group": "components/medical",
-      "language": "tsx",
-      "loc": 76
-    },
-    {
       "id": "src/components/ui/table.jsx",
       "group": "components/ui",
       "language": "jsx",
       "loc": 76
-    },
-    {
-      "id": "src/components/medical/__tests__/ConsultationTimeline.test.tsx",
-      "group": "components/medical",
-      "language": "tsx",
-      "loc": 74
     },
     {
       "id": "base44/entities/AccessLog.jsonc",
@@ -576,18 +402,6 @@
       "group": "types",
       "language": "ts",
       "loc": 54
-    },
-    {
-      "id": "src/lib/__tests__/AuthContext.test.tsx",
-      "group": "lib",
-      "language": "tsx",
-      "loc": 52
-    },
-    {
-      "id": "src/api/__tests__/mockClient.test.ts",
-      "group": "api",
-      "language": "ts",
-      "loc": 51
     },
     {
       "id": "src/types/Consultation.ts",
@@ -722,12 +536,6 @@
       "loc": 35
     },
     {
-      "id": "src/api/__tests__/scopedRead.test.ts",
-      "group": "api",
-      "language": "ts",
-      "loc": 34
-    },
-    {
       "id": "src/components/ui/scroll-area.jsx",
       "group": "components/ui",
       "language": "jsx",
@@ -762,12 +570,6 @@
       "group": "types",
       "language": "ts",
       "loc": 31
-    },
-    {
-      "id": "src/api/__tests__/sessionScope.test.ts",
-      "group": "api",
-      "language": "ts",
-      "loc": 30
     },
     {
       "id": "src/components/ui/avatar.jsx",
@@ -944,12 +746,6 @@
       "loc": 14
     },
     {
-      "id": "src/test/setup.ts",
-      "group": "test",
-      "language": "ts",
-      "loc": 13
-    },
-    {
       "id": "src/components/ui/calendar.d.ts",
       "group": "components/ui",
       "language": "ts",
@@ -1124,51 +920,6 @@
       "kind": "import"
     },
     {
-      "source": "src/api/__tests__/mockClient.test.ts",
-      "target": "src/api/contract.ts",
-      "kind": "import"
-    },
-    {
-      "source": "src/api/__tests__/mockClient.test.ts",
-      "target": "src/api/registry.ts",
-      "kind": "import"
-    },
-    {
-      "source": "src/api/__tests__/mockClient.test.ts",
-      "target": "src/api/mockClient.ts",
-      "kind": "import"
-    },
-    {
-      "source": "src/api/__tests__/mockClientOffline.test.ts",
-      "target": "src/api/mockClient.ts",
-      "kind": "import"
-    },
-    {
-      "source": "src/api/__tests__/mockClientOffline.test.ts",
-      "target": "src/api/mockSeed.ts",
-      "kind": "import"
-    },
-    {
-      "source": "src/api/__tests__/offlineActivation.test.ts",
-      "target": "src/api/mockSeed.ts",
-      "kind": "import"
-    },
-    {
-      "source": "src/api/__tests__/offlineActivation.test.ts",
-      "target": "src/api/base44Client.ts",
-      "kind": "import"
-    },
-    {
-      "source": "src/api/__tests__/scopedRead.test.ts",
-      "target": "src/api/scopedRead.ts",
-      "kind": "import"
-    },
-    {
-      "source": "src/api/__tests__/sessionScope.test.ts",
-      "target": "src/api/sessionScope.ts",
-      "kind": "import"
-    },
-    {
       "source": "src/App.tsx",
       "target": "src/components/ui/toaster.jsx",
       "kind": "import"
@@ -1226,16 +977,6 @@
     {
       "source": "src/components/appointments/TimeSlotPicker.tsx",
       "target": "src/types/index.ts",
-      "kind": "import"
-    },
-    {
-      "source": "src/components/appointments/__tests__/TimeSlotPicker.test.tsx",
-      "target": "src/components/appointments/TimeSlotPicker.tsx",
-      "kind": "import"
-    },
-    {
-      "source": "src/components/appointments/__tests__/TimeSlotPicker.test.tsx",
-      "target": "src/test/appointmentsFixtures.ts",
       "kind": "import"
     },
     {
@@ -1450,46 +1191,6 @@
     },
     {
       "source": "src/components/medical/VitalSignsForm.tsx",
-      "target": "src/types/index.ts",
-      "kind": "import"
-    },
-    {
-      "source": "src/components/medical/__tests__/AccessLogger.test.ts",
-      "target": "src/components/medical/AccessLogger.ts",
-      "kind": "import"
-    },
-    {
-      "source": "src/components/medical/__tests__/AccessLogger.test.ts",
-      "target": "src/test/auditFixtures.ts",
-      "kind": "import"
-    },
-    {
-      "source": "src/components/medical/__tests__/AccessLogger.test.ts",
-      "target": "src/types/index.ts",
-      "kind": "import"
-    },
-    {
-      "source": "src/components/medical/__tests__/ConsultationTimeline.test.tsx",
-      "target": "src/components/medical/ConsultationTimeline.tsx",
-      "kind": "import"
-    },
-    {
-      "source": "src/components/medical/__tests__/PatientSearch.test.tsx",
-      "target": "src/components/medical/PatientSearch.tsx",
-      "kind": "import"
-    },
-    {
-      "source": "src/components/medical/__tests__/PrescriptionEditor.test.tsx",
-      "target": "src/components/medical/PrescriptionEditor.tsx",
-      "kind": "import"
-    },
-    {
-      "source": "src/components/medical/__tests__/PrescriptionEditor.test.tsx",
-      "target": "src/test/templateFixtures.ts",
-      "kind": "import"
-    },
-    {
-      "source": "src/components/medical/__tests__/PrescriptionEditor.test.tsx",
       "target": "src/types/index.ts",
       "kind": "import"
     },
@@ -1881,11 +1582,6 @@
     {
       "source": "src/lib/session.ts",
       "target": "src/types/index.ts",
-      "kind": "import"
-    },
-    {
-      "source": "src/lib/__tests__/AuthContext.test.tsx",
-      "target": "src/lib/AuthContext.tsx",
       "kind": "import"
     },
     {
@@ -2644,171 +2340,6 @@
       "kind": "import"
     },
     {
-      "source": "src/pages/__tests__/AccessLogs.test.tsx",
-      "target": "src/pages/AccessLogs.tsx",
-      "kind": "import"
-    },
-    {
-      "source": "src/pages/__tests__/AccessLogs.test.tsx",
-      "target": "src/test/auditFixtures.ts",
-      "kind": "import"
-    },
-    {
-      "source": "src/pages/__tests__/AccessLogs.test.tsx",
-      "target": "src/types/index.ts",
-      "kind": "import"
-    },
-    {
-      "source": "src/pages/__tests__/ActivePatientSelection.test.tsx",
-      "target": "src/pages/NewAppointment.tsx",
-      "kind": "import"
-    },
-    {
-      "source": "src/pages/__tests__/ActivePatientSelection.test.tsx",
-      "target": "src/pages/NewConsultation.tsx",
-      "kind": "import"
-    },
-    {
-      "source": "src/pages/__tests__/Appointments.test.tsx",
-      "target": "src/pages/Appointments.tsx",
-      "kind": "import"
-    },
-    {
-      "source": "src/pages/__tests__/Appointments.test.tsx",
-      "target": "src/test/appointmentsFixtures.ts",
-      "kind": "import"
-    },
-    {
-      "source": "src/pages/__tests__/Appointments.test.tsx",
-      "target": "src/types/index.ts",
-      "kind": "import"
-    },
-    {
-      "source": "src/pages/__tests__/Consultation.test.tsx",
-      "target": "src/pages/Consultation.tsx",
-      "kind": "import"
-    },
-    {
-      "source": "src/pages/__tests__/Consultation.test.tsx",
-      "target": "src/test/consultationsFixtures.ts",
-      "kind": "import"
-    },
-    {
-      "source": "src/pages/__tests__/Consultation.test.tsx",
-      "target": "src/types/index.ts",
-      "kind": "import"
-    },
-    {
-      "source": "src/pages/__tests__/Consultations.test.tsx",
-      "target": "src/pages/Consultations.tsx",
-      "kind": "import"
-    },
-    {
-      "source": "src/pages/__tests__/Consultations.test.tsx",
-      "target": "src/test/consultationsFixtures.ts",
-      "kind": "import"
-    },
-    {
-      "source": "src/pages/__tests__/Consultations.test.tsx",
-      "target": "src/types/index.ts",
-      "kind": "import"
-    },
-    {
-      "source": "src/pages/__tests__/Dashboard.test.tsx",
-      "target": "src/pages/Dashboard.tsx",
-      "kind": "import"
-    },
-    {
-      "source": "src/pages/__tests__/Dashboard.test.tsx",
-      "target": "src/test/auditFixtures.ts",
-      "kind": "import"
-    },
-    {
-      "source": "src/pages/__tests__/Dashboard.test.tsx",
-      "target": "src/types/index.ts",
-      "kind": "import"
-    },
-    {
-      "source": "src/pages/__tests__/DashboardKpis.test.tsx",
-      "target": "src/pages/Dashboard.tsx",
-      "kind": "import"
-    },
-    {
-      "source": "src/pages/__tests__/DashboardKpis.test.tsx",
-      "target": "src/test/auditFixtures.ts",
-      "kind": "import"
-    },
-    {
-      "source": "src/pages/__tests__/DashboardKpis.test.tsx",
-      "target": "src/test/dashboardFixtures.ts",
-      "kind": "import"
-    },
-    {
-      "source": "src/pages/__tests__/DashboardKpis.test.tsx",
-      "target": "src/types/index.ts",
-      "kind": "import"
-    },
-    {
-      "source": "src/pages/__tests__/NewAppointment.test.tsx",
-      "target": "src/pages/NewAppointment.tsx",
-      "kind": "import"
-    },
-    {
-      "source": "src/pages/__tests__/NewAppointment.test.tsx",
-      "target": "src/test/appointmentsFixtures.ts",
-      "kind": "import"
-    },
-    {
-      "source": "src/pages/__tests__/NewAppointment.test.tsx",
-      "target": "src/types/index.ts",
-      "kind": "import"
-    },
-    {
-      "source": "src/pages/__tests__/NewConsultation.test.tsx",
-      "target": "src/pages/NewConsultation.tsx",
-      "kind": "import"
-    },
-    {
-      "source": "src/pages/__tests__/NewConsultation.test.tsx",
-      "target": "src/test/consultationsFixtures.ts",
-      "kind": "import"
-    },
-    {
-      "source": "src/pages/__tests__/NewConsultation.test.tsx",
-      "target": "src/types/index.ts",
-      "kind": "import"
-    },
-    {
-      "source": "src/pages/__tests__/PatientDetail.test.tsx",
-      "target": "src/pages/PatientDetail.tsx",
-      "kind": "import"
-    },
-    {
-      "source": "src/pages/__tests__/PatientDetailAudit.test.tsx",
-      "target": "src/pages/PatientDetail.tsx",
-      "kind": "import"
-    },
-    {
-      "source": "src/pages/__tests__/PatientDetailAudit.test.tsx",
-      "target": "src/test/auditFixtures.ts",
-      "kind": "import"
-    },
-    {
-      "source": "src/pages/__tests__/PatientDetailAudit.test.tsx",
-      "target": "src/types/index.ts",
-      "kind": "import"
-    },
-    {
-      "source": "src/pages/__tests__/PatientForm.test.tsx",
-      "target": "src/pages/PatientForm.tsx",
-      "kind": "import"
-    },
-    {
-      "source": "src/pages/__tests__/Patients.test.tsx",
-      "target": "src/pages/Patients.tsx",
-      "kind": "import"
-    },
-    {
       "source": "src/pages.config.ts",
       "target": "src/pages/AccessLogs.tsx",
       "kind": "import"
@@ -2871,56 +2402,6 @@
     {
       "source": "src/pages.config.ts",
       "target": "src/Layout.tsx",
-      "kind": "import"
-    },
-    {
-      "source": "src/test/appointmentsFixtures.ts",
-      "target": "src/types/index.ts",
-      "kind": "import"
-    },
-    {
-      "source": "src/test/auditFixtures.ts",
-      "target": "src/types/index.ts",
-      "kind": "import"
-    },
-    {
-      "source": "src/test/consultationsFixtures.ts",
-      "target": "src/types/index.ts",
-      "kind": "import"
-    },
-    {
-      "source": "src/test/dashboardFixtures.ts",
-      "target": "src/types/index.ts",
-      "kind": "import"
-    },
-    {
-      "source": "src/test/mojibake.test.mjs",
-      "target": "src/test/mojibake.mjs",
-      "kind": "import"
-    },
-    {
-      "source": "src/test/templateFixtures.ts",
-      "target": "src/types/index.ts",
-      "kind": "import"
-    },
-    {
-      "source": "src/test/verificacoes-negativas.mjs",
-      "target": "src/types/index.ts",
-      "kind": "import"
-    },
-    {
-      "source": "src/test/verificacoes-negativas.mjs",
-      "target": "src/api/registry.ts",
-      "kind": "import"
-    },
-    {
-      "source": "src/test/verificacoes-negativas.mjs",
-      "target": "src/api/scopedRead.ts",
-      "kind": "import"
-    },
-    {
-      "source": "src/test/verificacoes-negativas.mjs",
-      "target": "src/api/entities.ts",
       "kind": "import"
     },
     {
@@ -3067,22 +2548,12 @@
       "source": "src/types/User.ts",
       "target": "src/types/common.ts",
       "kind": "import"
-    },
-    {
-      "source": "src/__tests__/Layout.test.tsx",
-      "target": "src/Layout.tsx",
-      "kind": "import"
-    },
-    {
-      "source": "src/__tests__/Layout.test.tsx",
-      "target": "src/test/auditFixtures.ts",
-      "kind": "import"
     }
   ],
   "externalDeps": [
     {
       "package": "react",
-      "count": 98,
+      "count": 87,
       "files": [
         "src/App.tsx",
         "src/components/appointments/AppointmentCalendar.tsx",
@@ -3091,7 +2562,6 @@
         "src/components/medical/PatientSearch.tsx",
         "src/components/medical/PrescriptionEditor.tsx",
         "src/components/medical/ReportsView.tsx",
-        "src/components/medical/__tests__/PrescriptionEditor.test.tsx",
         "src/components/ui/accordion.jsx",
         "src/components/ui/alert-dialog.d.ts",
         "src/components/ui/alert-dialog.jsx",
@@ -3158,7 +2628,6 @@
         "src/Layout.tsx",
         "src/lib/AuthContext.tsx",
         "src/lib/NavigationTracker.tsx",
-        "src/lib/__tests__/AuthContext.test.tsx",
         "src/main.tsx",
         "src/pages/AccessLogs.tsx",
         "src/pages/Appointments.tsx",
@@ -3172,15 +2641,6 @@
         "src/pages/PatientForm.tsx",
         "src/pages/Patients.tsx",
         "src/pages/Templates.tsx",
-        "src/pages/__tests__/AccessLogs.test.tsx",
-        "src/pages/__tests__/Appointments.test.tsx",
-        "src/pages/__tests__/Consultation.test.tsx",
-        "src/pages/__tests__/Consultations.test.tsx",
-        "src/pages/__tests__/DashboardKpis.test.tsx",
-        "src/pages/__tests__/NewAppointment.test.tsx",
-        "src/pages/__tests__/NewConsultation.test.tsx",
-        "src/pages/__tests__/PatientForm.test.tsx",
-        "src/pages/__tests__/Patients.test.tsx",
         "src/pages.config.ts"
       ]
     },
@@ -3233,17 +2693,15 @@
       ]
     },
     {
-      "package": "react-router-dom",
-      "count": 34,
+      "package": "@tanstack/react-query",
+      "count": 18,
       "files": [
         "src/App.tsx",
-        "src/components/medical/ConsultationTimeline.tsx",
-        "src/components/medical/PatientSearch.tsx",
-        "src/components/medical/__tests__/ConsultationTimeline.test.tsx",
-        "src/components/medical/__tests__/PatientSearch.test.tsx",
+        "src/components/medical/PrescriptionEditor.tsx",
+        "src/components/medical/ReportsView.tsx",
         "src/Layout.tsx",
-        "src/lib/NavigationTracker.tsx",
         "src/lib/PageNotFound.tsx",
+        "src/lib/query-client.ts",
         "src/pages/AccessLogs.tsx",
         "src/pages/Appointments.tsx",
         "src/pages/Consultation.tsx",
@@ -3255,90 +2713,19 @@
         "src/pages/PatientDetail.tsx",
         "src/pages/PatientForm.tsx",
         "src/pages/Patients.tsx",
-        "src/pages/Templates.tsx",
-        "src/pages/__tests__/AccessLogs.test.tsx",
-        "src/pages/__tests__/ActivePatientSelection.test.tsx",
-        "src/pages/__tests__/Appointments.test.tsx",
-        "src/pages/__tests__/Consultation.test.tsx",
-        "src/pages/__tests__/Consultations.test.tsx",
-        "src/pages/__tests__/Dashboard.test.tsx",
-        "src/pages/__tests__/DashboardKpis.test.tsx",
-        "src/pages/__tests__/NewAppointment.test.tsx",
-        "src/pages/__tests__/NewConsultation.test.tsx",
-        "src/pages/__tests__/PatientDetail.test.tsx",
-        "src/pages/__tests__/PatientDetailAudit.test.tsx",
-        "src/pages/__tests__/PatientForm.test.tsx",
-        "src/pages/__tests__/Patients.test.tsx",
-        "src/__tests__/Layout.test.tsx"
+        "src/pages/Templates.tsx"
       ]
     },
     {
-      "package": "vitest",
-      "count": 26,
-      "files": [
-        "src/api/__tests__/mockClient.test.ts",
-        "src/api/__tests__/mockClientOffline.test.ts",
-        "src/api/__tests__/offlineActivation.test.ts",
-        "src/api/__tests__/scopedRead.test.ts",
-        "src/api/__tests__/sessionScope.test.ts",
-        "src/components/appointments/__tests__/TimeSlotPicker.test.tsx",
-        "src/components/medical/__tests__/AccessLogger.test.ts",
-        "src/components/medical/__tests__/ConsultationTimeline.test.tsx",
-        "src/components/medical/__tests__/PatientSearch.test.tsx",
-        "src/components/medical/__tests__/PrescriptionEditor.test.tsx",
-        "src/lib/__tests__/AuthContext.test.tsx",
-        "src/pages/__tests__/AccessLogs.test.tsx",
-        "src/pages/__tests__/ActivePatientSelection.test.tsx",
-        "src/pages/__tests__/Appointments.test.tsx",
-        "src/pages/__tests__/Consultation.test.tsx",
-        "src/pages/__tests__/Consultations.test.tsx",
-        "src/pages/__tests__/Dashboard.test.tsx",
-        "src/pages/__tests__/DashboardKpis.test.tsx",
-        "src/pages/__tests__/NewAppointment.test.tsx",
-        "src/pages/__tests__/NewConsultation.test.tsx",
-        "src/pages/__tests__/PatientDetail.test.tsx",
-        "src/pages/__tests__/PatientDetailAudit.test.tsx",
-        "src/pages/__tests__/PatientForm.test.tsx",
-        "src/pages/__tests__/Patients.test.tsx",
-        "src/test/mojibake.test.mjs",
-        "src/__tests__/Layout.test.tsx"
-      ]
-    },
-    {
-      "package": "@testing-library/react",
-      "count": 19,
-      "files": [
-        "src/components/appointments/__tests__/TimeSlotPicker.test.tsx",
-        "src/components/medical/__tests__/ConsultationTimeline.test.tsx",
-        "src/components/medical/__tests__/PatientSearch.test.tsx",
-        "src/components/medical/__tests__/PrescriptionEditor.test.tsx",
-        "src/lib/__tests__/AuthContext.test.tsx",
-        "src/pages/__tests__/AccessLogs.test.tsx",
-        "src/pages/__tests__/ActivePatientSelection.test.tsx",
-        "src/pages/__tests__/Appointments.test.tsx",
-        "src/pages/__tests__/Consultation.test.tsx",
-        "src/pages/__tests__/Consultations.test.tsx",
-        "src/pages/__tests__/Dashboard.test.tsx",
-        "src/pages/__tests__/DashboardKpis.test.tsx",
-        "src/pages/__tests__/NewAppointment.test.tsx",
-        "src/pages/__tests__/NewConsultation.test.tsx",
-        "src/pages/__tests__/PatientDetail.test.tsx",
-        "src/pages/__tests__/PatientDetailAudit.test.tsx",
-        "src/pages/__tests__/PatientForm.test.tsx",
-        "src/pages/__tests__/Patients.test.tsx",
-        "src/__tests__/Layout.test.tsx"
-      ]
-    },
-    {
-      "package": "@tanstack/react-query",
+      "package": "react-router-dom",
       "count": 18,
       "files": [
         "src/App.tsx",
-        "src/components/medical/PrescriptionEditor.tsx",
-        "src/components/medical/ReportsView.tsx",
+        "src/components/medical/ConsultationTimeline.tsx",
+        "src/components/medical/PatientSearch.tsx",
         "src/Layout.tsx",
+        "src/lib/NavigationTracker.tsx",
         "src/lib/PageNotFound.tsx",
-        "src/lib/query-client.ts",
         "src/pages/AccessLogs.tsx",
         "src/pages/Appointments.tsx",
         "src/pages/Consultation.tsx",
@@ -3374,25 +2761,6 @@
         "src/pages/PatientForm.tsx",
         "src/pages/Patients.tsx",
         "src/pages/Templates.tsx"
-      ]
-    },
-    {
-      "package": "@testing-library/user-event",
-      "count": 13,
-      "files": [
-        "src/components/appointments/__tests__/TimeSlotPicker.test.tsx",
-        "src/components/medical/__tests__/PatientSearch.test.tsx",
-        "src/components/medical/__tests__/PrescriptionEditor.test.tsx",
-        "src/pages/__tests__/AccessLogs.test.tsx",
-        "src/pages/__tests__/ActivePatientSelection.test.tsx",
-        "src/pages/__tests__/Appointments.test.tsx",
-        "src/pages/__tests__/Consultation.test.tsx",
-        "src/pages/__tests__/Consultations.test.tsx",
-        "src/pages/__tests__/NewAppointment.test.tsx",
-        "src/pages/__tests__/NewConsultation.test.tsx",
-        "src/pages/__tests__/PatientDetail.test.tsx",
-        "src/pages/__tests__/PatientForm.test.tsx",
-        "src/pages/__tests__/Patients.test.tsx"
       ]
     },
     {
@@ -3439,24 +2807,6 @@
       ]
     },
     {
-      "package": "node:fs",
-      "count": 3,
-      "files": [
-        "src/test/mojibake.mjs",
-        "src/test/mojibake.test.mjs",
-        "src/test/verificacoes-negativas.mjs"
-      ]
-    },
-    {
-      "package": "node:path",
-      "count": 3,
-      "files": [
-        "src/test/mojibake.mjs",
-        "src/test/mojibake.test.mjs",
-        "src/test/verificacoes-negativas.mjs"
-      ]
-    },
-    {
       "package": "next-themes",
       "count": 2,
       "files": [
@@ -3478,14 +2828,6 @@
       "files": [
         "src/components/ui/dialog.jsx",
         "src/components/ui/sheet.jsx"
-      ]
-    },
-    {
-      "package": "node:url",
-      "count": 2,
-      "files": [
-        "src/test/mojibake.mjs",
-        "src/test/verificacoes-negativas.mjs"
       ]
     },
     {
@@ -3739,27 +3081,6 @@
       "files": [
         "src/main.tsx"
       ]
-    },
-    {
-      "package": "node:os",
-      "count": 1,
-      "files": [
-        "src/test/mojibake.test.mjs"
-      ]
-    },
-    {
-      "package": "@testing-library/jest-dom",
-      "count": 1,
-      "files": [
-        "src/test/setup.ts"
-      ]
-    },
-    {
-      "package": "node:child_process",
-      "count": 1,
-      "files": [
-        "src/test/verificacoes-negativas.mjs"
-      ]
     }
   ],
   "cycles": [
@@ -3769,8 +3090,8 @@
     ]
   ],
   "summary": {
-    "edges": 411,
+    "edges": 346,
     "cycles": 1,
-    "externalPackages": 56
+    "externalPackages": 47
   }
 }

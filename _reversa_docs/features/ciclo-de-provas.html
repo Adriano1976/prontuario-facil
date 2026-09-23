@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <script>try{document.documentElement.setAttribute("data-theme",localStorage.getItem("rv-theme")==="light"?"light":"dark");}catch(e){}</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ciclo de Provas — Prontuário Fácil</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg">
+  <meta name="reversa-category" content="diagram">
+  <meta name="reversa-producer-agent" content="reversa-docs-storyteller">
+  <meta name="reversa-template" content="feature">
+  <meta name="reversa-generated-at" content="2026-09-23T03:55:00Z">
+  <link rel="stylesheet" href="../assets/css/theme.css">
+  <script src="../assets/js/data.js"></script>
+  <script src="../assets/js/theme.js" defer></script>
+  <style>
+    .feat-hero .rv-hero__inner { text-align: left; }
+    .breadcrumb { font-size: 13px; color: var(--rv-text-faint); margin-bottom: 18px; }
+    .breadcrumb a:hover { color: #fff; }
+    .br-list { display: grid; gap: 12px; }
+    .br-item { display: flex; gap: 14px; border: 1px solid var(--rv-border); background: var(--rv-panel); border-radius: 12px; padding: 15px 18px; }
+    .br-item__code { flex: 0 0 auto; font-family: var(--rv-mono); font-size: 12px; font-weight: 700; color: var(--rv-accent-1); padding-top: 1px; }
+    .br-item__text { font-size: 14px; color: var(--rv-text-dim); }
+    .br-item__text b { color: var(--rv-text); }
+    .br-item--bad { border-left: 3px solid #ef4444; }
+    .br-item--warn { border-left: 3px solid #f59e0b; }
+    .br-item--good { border-left: 3px solid #22c55e; }
+    .feat-pager { display: flex; justify-content: space-between; gap: 16px; margin-top: 8px; }
+    .feat-pager a { flex: 1; }
+    .feat-pager .next { text-align: right; }
+    .flow { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+    .flow__step { border: 1px solid var(--rv-border); background: var(--rv-panel); border-radius: 12px; padding: 14px; }
+    .flow__step b { display: block; font-size: 12px; color: var(--rv-accent-1); letter-spacing: .06em; text-transform: uppercase; margin-bottom: 6px; }
+    .flow__step span { font-size: 13px; color: var(--rv-text-dim); }
+    .gherkin { font-family: var(--rv-mono); font-size: 13px; background: rgba(0,0,0,.3); border: 1px solid var(--rv-border); border-radius: 12px; padding: 18px; white-space: pre-wrap; color: var(--rv-text-dim); }
+    :root[data-theme="light"] .gherkin { background: rgba(15,23,42,.04); }
+    .quote { border-left: 3px solid var(--rv-accent-1); background: var(--rv-panel); border-radius: 0 12px 12px 0; padding: 16px 20px; margin: 0; font-size: 15px; color: var(--rv-text); font-style: italic; }
+    .quote cite { display: block; margin-top: 10px; font-size: 12px; font-style: normal; color: var(--rv-text-faint); font-family: var(--rv-mono); }
+    .prov-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; }
+    .prov-card { border: 1px solid var(--rv-border); background: var(--rv-panel); border-radius: 12px; padding: 16px 18px; }
+    .prov-card__num { font-family: var(--rv-mono); font-size: 12px; font-weight: 700; color: var(--rv-accent-1); }
+    .prov-card__name { font-size: 15px; font-weight: 700; color: var(--rv-text); margin: 4px 0 6px; }
+    .prov-card__desc { font-size: 13px; color: var(--rv-text-dim); margin: 0 0 10px; }
+    .prov-card__meta { font-size: 11.5px; color: var(--rv-text-faint); }
+    .grow-row { display: flex; align-items: center; gap: 12px; padding: 7px 0; border-bottom: 1px solid var(--rv-border); }
+    .grow-row:last-child { border-bottom: 0; }
+    .grow-row__label { flex: 0 0 150px; font-size: 13px; color: var(--rv-text-dim); font-family: var(--rv-mono); }
+    .grow-row__bar { flex: 1; height: 8px; border-radius: 4px; background: linear-gradient(90deg, var(--rv-accent-1), var(--rv-accent-2, #8b5cf6)); }
+    .grow-row__val { flex: 0 0 130px; text-align: right; font-size: 13px; color: var(--rv-text); font-weight: 700; }
+  </style>
+</head>
+<body data-page="feature-ciclo-de-provas">
+  <header class="rv-header">
+    <div class="rv-header__inner">
+      <a class="rv-brand" href="../index.html">
+        <span class="seal-mini" data-seal></span>
+        <span class="rv-brand__name">Prontuário Fácil</span>
+      </a>
+      <button class="rv-nav-toggle" aria-label="Abrir menu" aria-expanded="false">☰</button>
+      <nav class="rv-nav" aria-label="Navegação principal">
+        <a href="../index.html" data-page-id="index">Visão geral</a>
+        <a href="../arquitetura.html" data-page-id="arquitetura">Arquitetura 3D</a>
+        <a href="../modulos.html" data-page-id="modulos">Módulos</a>
+        <a href="../topologia.html" data-page-id="topologia">Topologia</a>
+        <a href="../metricas.html" data-page-id="metricas">Métricas</a>
+        <a href="../timeline.html" data-page-id="timeline">Timeline</a>
+        <a href="../glossario.html" data-page-id="glossario">Glossário</a>
+        <a href="../deck.html" data-page-id="deck">Deck</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="rv-hero feat-hero" style="padding:48px 24px 36px">
+    <canvas class="rv-hero__canvas"></canvas>
+    <div class="rv-hero__inner">
+      <div class="breadcrumb"><a href="../index.html">Início</a> / <a href="../index.html#features">Features</a> / Ciclo de Provas</div>
+      <h1 style="font-size:clamp(2rem,5vw,3.2rem)">🧪 Ciclo de Provas</h1>
+      <p class="rv-hero__tagline" style="margin-left:0">Depois de trocar a linguagem, o projeto provou que o comportamento não mudou. Nove features, um artefato de prova por promessa, quatro portões no CI.</p>
+      <div class="rv-hero__actions" style="justify-content:flex-start">
+        <span class="rv-chip">Features 002 a 010</span>
+        <span class="rv-chip rv-chip--good">135/135 ações</span>
+        <span class="rv-chip rv-chip--good">168 verificações</span>
+        <span class="rv-chip">Cenário legado</span>
+      </div>
+    </div>
+  </section>
+
+  <main class="rv-container">
+    <section class="rv-section">
+      <div class="rv-section__head rv-reveal">
+        <div class="rv-section__eyebrow">Visão geral</div>
+        <h2 class="rv-section__title">O sistema que não tinha uma única prova</h2>
+        <p class="rv-section__desc">Até 19 de setembro de 2026 o Prontuário Fácil não tinha nenhuma verificação automatizada. Não era uma impressão: a extração registrava <b>"nenhum teste encontrado (sem framework de teste configurado)"</b> no inventário e classificava <b>"sem testes, zero arquivos de teste"</b> como lacuna de severidade alta. Ao mesmo tempo, a especificação de paridade já tinha <b>26 arquivos de cenário e 55 cenários</b> que nenhum comando executava. Nas duas pontas havia papel: de um lado a promessa, do outro a ausência.</p>
+        <p class="rv-section__desc" style="margin-top:14px">A migração TypeScript fechou o gate de tipos em 0 erros, mas paridade atestada por verificação de tipos somada a roteiro manual de fumaça tem um teto declarado: prova que o código <b>compila</b>, não que ele <b>se comporta igual</b>. O ciclo de provas existe para fechar essa distância, uma fatia por módulo.</p>
+      </div>
+
+      <div class="rv-stats rv-reveal" style="margin-top:24px">
+        <div class="rv-stat"><div class="rv-stat__value" data-count="9">0</div><div class="rv-stat__label">Features de prova</div></div>
+        <div class="rv-stat"><div class="rv-stat__value" data-count="135">0</div><div class="rv-stat__label">Ações concluídas</div></div>
+        <div class="rv-stat"><div class="rv-stat__value" data-count="168">0</div><div class="rv-stat__label">Verificações na suíte</div></div>
+        <div class="rv-stat"><div class="rv-stat__value" data-count="26">0</div><div class="rv-stat__label">Arquivos de prova</div></div>
+        <div class="rv-stat"><div class="rv-stat__value" data-count="55">0</div><div class="rv-stat__label">Cenários de paridade</div></div>
+      </div>
+    </section>
+
+    <section class="rv-section">
+      <div class="rv-section__head rv-reveal">
+        <div class="rv-section__eyebrow">Estratégia</div>
+        <h2 class="rv-section__title">Prova de caracterização, não de intenção</h2>
+        <p class="rv-section__desc">O que se prova é o comportamento <b>observado</b> do sistema, e não o comportamento pretendido. É a estratégia que a especificação de paridade já declarava como primária, e a feature 002 registra explicitamente que <b>não introduz estratégia nova</b>, apenas executa a declarada.</p>
+        <p class="rv-section__desc" style="margin-top:14px">A consequência prática é que um defeito encontrado <b>não vira conserto</b>. Ele vira veredito declarado, com arquivo e linha, e a verificação passa a congelar o comportamento atual. O adversário declarado do programa nunca foi um defeito: foi a <b>afirmação sem lastro</b>, do roteiro manual de fumaça à leitura de código apresentada como prova.</p>
+      </div>
+      <blockquote class="quote rv-reveal">A prova observa; não altera. Nenhum contrato de dados, schema de entidade do backend ou comportamento observável é modificado para acomodar a suíte.<cite>RN-04 · _reversa_forward/002-prova-automatizada/requirements.md</cite></blockquote>
+    </section>
+
+    <section class="rv-section">
+      <div class="rv-section__head rv-reveal">
+        <div class="rv-section__eyebrow">As nove features</div>
+        <h2 class="rv-section__title">O que cada uma foi provar</h2>
+        <p class="rv-section__desc">Todas com execução integral e nenhuma com ação parcial: 135 de 135 ações fechadas, zero tarefas abertas.</p>
+      </div>
+      <div class="prov-grid rv-reveal">
+        <div class="prov-card"><div class="prov-card__num">002</div><div class="prov-card__name">Prova automatizada</div><p class="prov-card__desc">A camada de prova vira cidadã do ciclo: requisitos próprios, rastreabilidade e comando reproduzível para as verificações negativas do gate de tipos. Prova os 5 cenários de Pacientes.</p><div class="prov-card__meta">14 ações · 9 casos negativos · +2 verificações</div></div>
+        <div class="prov-card"><div class="prov-card__num">003</div><div class="prov-card__name">Prova de Agendamentos</div><p class="prov-card__desc">Disponibilidade, conflito de horário, ciclo de status e a ordem entre o e-mail de confirmação e a gravação.</p><div class="prov-card__meta">11 ações · 8 cenários · +30 verificações</div></div>
+        <div class="prov-card"><div class="prov-card__num">004</div><div class="prov-card__name">Prova de Consultas</div><p class="prov-card__desc">A máquina de estados da consulta: situação inicial, troca de situação, filtro da listagem e legenda do detalhe.</p><div class="prov-card__meta">14 ações · 3 cenários · +24 verificações</div></div>
+        <div class="prov-card"><div class="prov-card__num">005</div><div class="prov-card__name">Prova de Templates</div><p class="prov-card__desc">O componente por onde passa todo documento clínico emitido, com as três lacunas de AMB-006 afirmadas em vez de corrigidas.</p><div class="prov-card__meta">18 ações · 4 cenários · +19 verificações</div></div>
+        <div class="prov-card"><div class="prov-card__num">006</div><div class="prov-card__name">Prova de Logs de Acesso</div><p class="prov-card__desc">A trilha de auditoria, separando o que é do cliente do que é regra do servidor, e medindo três modos de perda silenciosa de evento.</p><div class="prov-card__meta">19 ações · 4 cenários · +23 verificações</div></div>
+        <div class="prov-card"><div class="prov-card__num">007</div><div class="prov-card__name">Matriz de paridade visual</div><p class="prov-card__desc">A premissa de que a captura de referência não existia cai: 24 goldens passam a existir e os 16 cenários visuais viram trabalho transferido com destino nomeado.</p><div class="prov-card__meta">10 ações · 24 goldens · auditoria cruzada</div></div>
+        <div class="prov-card"><div class="prov-card__num">008</div><div class="prov-card__name">Prova do contrato de dados</div><p class="prov-card__desc">O contrato único honrado pelos dois adaptadores, e o buraco de autorização que deixa de ser ressalva e passa a ser medido.</p><div class="prov-card__meta">13 ações · 4 cenários · 16 casos no arnês</div></div>
+        <div class="prov-card"><div class="prov-card__num">009</div><div class="prov-card__name">Prova dos KPIs do Dashboard</div><p class="prov-card__desc">Os quatro cartões e a lista de próximos agendamentos exibem exatamente os números que o sistema declara.</p><div class="prov-card__meta">16 ações · 5 cenários · +13 verificações</div></div>
+        <div class="prov-card"><div class="prov-card__num">010</div><div class="prov-card__name">Prova do modo offline</div><p class="prov-card__desc">Ativação exclusiva por variável de construção e o comportamento completo do adaptador local: semeadura, persistência, corrupção, filtro, ordenação e recusa.</p><div class="prov-card__meta">20 ações · 6 cenários · +23 verificações</div></div>
+      </div>
+    </section>
+
+    <section class="rv-section">
+      <div class="rv-section__head rv-reveal">
+        <div class="rv-section__eyebrow">Crescimento</div>
+        <h2 class="rv-section__title">A suíte, feature a feature</h2>
+        <p class="rv-section__desc">Todas as 39 promessas de fluxo foram convertidas em execução. As features 007 e 008 não acrescentam verificação de unidade: uma corrige rastreabilidade e a outra estende o arnês de compilação.</p>
+      </div>
+      <div class="rv-reveal" style="border:1px solid var(--rv-border);background:var(--rv-panel);border-radius:12px;padding:18px 20px">
+        <div class="grow-row"><span class="grow-row__label">Antes da 002</span><span class="grow-row__bar" style="max-width:34px"></span><span class="grow-row__val">34 · 10 arq.</span></div>
+        <div class="grow-row"><span class="grow-row__label">002</span><span class="grow-row__bar" style="max-width:36px"></span><span class="grow-row__val">36 · 10 arq.</span></div>
+        <div class="grow-row"><span class="grow-row__label">003</span><span class="grow-row__bar" style="max-width:66px"></span><span class="grow-row__val">66 · 14 arq.</span></div>
+        <div class="grow-row"><span class="grow-row__label">004</span><span class="grow-row__bar" style="max-width:90px"></span><span class="grow-row__val">90 · 17 arq.</span></div>
+        <div class="grow-row"><span class="grow-row__label">005</span><span class="grow-row__bar" style="max-width:109px"></span><span class="grow-row__val">109 · 18 arq.</span></div>
+        <div class="grow-row"><span class="grow-row__label">006</span><span class="grow-row__bar" style="max-width:132px"></span><span class="grow-row__val">132 · 23 arq.</span></div>
+        <div class="grow-row"><span class="grow-row__label">007</span><span class="grow-row__bar" style="max-width:132px"></span><span class="grow-row__val">132 · 23 arq.</span></div>
+        <div class="grow-row"><span class="grow-row__label">008</span><span class="grow-row__bar" style="max-width:132px"></span><span class="grow-row__val">132 · 23 arq.</span></div>
+        <div class="grow-row"><span class="grow-row__label">009</span><span class="grow-row__bar" style="max-width:145px"></span><span class="grow-row__val">145 · 24 arq.</span></div>
+        <div class="grow-row"><span class="grow-row__label">010</span><span class="grow-row__bar" style="max-width:168px"></span><span class="grow-row__val">168 · 26 arq.</span></div>
+      </div>
+      <p class="rv-section__desc rv-reveal" style="margin-top:12px">O salto da 003 tem duas origens: 22 verificações do módulo de agendamentos e <b>8 da guarda de codificação</b>, que nasceram juntas. O total declarado no workflow confere com o repositório: <b>26 arquivos e 168 verificações</b>.</p>
+    </section>
+
+    <section class="rv-section">
+      <div class="rv-section__head rv-reveal">
+        <div class="rv-section__eyebrow">Achados</div>
+        <h2 class="rv-section__title">O que as provas revelaram</h2>
+        <p class="rv-section__desc">Esta é a parte que justifica o programa. Nenhum destes achados foi corrigido, e a razão está na seção de método.</p>
+      </div>
+      <div class="br-list rv-reveal">
+        <div class="br-item br-item--bad"><span class="br-item__code">🔴 004</span><span class="br-item__text"><b>Emitir receita não deixa rastro.</b> O catálogo de ações auditáveis tem <b>doze</b> entradas, <b>nove</b> são invocadas e <b>três nunca são</b>: <span class="rv-mono">create_prescription</span>, <span class="rv-mono">logout</span> e <span class="rv-mono">export_data</span>. A primeira é a que importa: o fluxo existe, a ação existe no catálogo e <b>nada liga os dois</b>. Um documento derivado de diagnóstico, portanto dado sensível, é emitido sem registro. O contraste com o exame anexado é o que torna o achado demonstrável: anexar <b>audita</b>, por dentro do componente; emitir receita não audita por caminho nenhum. A regra confrontada é a <b>BR-S01</b>, marcada como confirmada em <span class="rv-mono">domain.md</span>.</span></div>
+        <div class="br-item br-item--bad"><span class="br-item__code">🔴 006</span><span class="br-item__text"><b>Três modos de perda silenciosa na trilha.</b> O primeiro: a identificação do usuário <b>falha</b>, o <span class="rv-mono">catch</span> engole a exceção, imprime em <span class="rv-mono">console.error</span> e nenhum erro chega a quem chamou. O segundo: a identificação devolve <b>usuário vazio</b> e o retorno antecipado sai <b>sem nem imprimir</b>, o mais silencioso dos três. O terceiro: a gravação <b>não é aguardada</b> antes da navegação, e este fica declarado por leitura em vez de provado, porque provar cancelamento exigiria simular o ciclo de vida da requisição e o resultado diria mais sobre o arranjo do que sobre o sistema.</span></div>
+        <div class="br-item br-item--bad"><span class="br-item__code">🔴 006</span><span class="br-item__text"><b>Os indicadores da tela de auditoria não fecham.</b> Um conjunto desenhado de <b>12</b> registros produziu visualizações 2, edições 5 e exclusões 1: soma <b>8 contra um total de 12</b>, com a emissão de receita entrando na conta como edição. A causa é a classificação por trecho de texto. No mesmo módulo, <b>"somente administradores veem a tela de auditoria" é impreciso</b>: o item de navegação é incondicional e nenhuma guarda intercepta o caminho, então quem não é administrador chega à tela e encontra a tabela vazia. E há <b>gravação duplicada</b> quando a identidade do objeto muda entre renderizações, provada em duas telas.</span></div>
+        <div class="br-item br-item--warn"><span class="br-item__code">🟠 003</span><span class="br-item__text"><b>Duas regras de negócio provadas falsas.</b> A primeira promete que o laço de geração confere se o horário cabe na duração: ele só confere se o horário <b>começa</b> antes do fim do expediente, então com consulta de 45 minutos e expediente até as 18:00 a grade oferece <b>17:45</b>, que terminaria às 18:30. A segunda promete que concluir a consulta marca o agendamento como concluído: <b>a transição é manual</b> e nada no código a faz. A mesma afirmação falsa aparece em dois artefatos diferentes da extração.</span></div>
+        <div class="br-item br-item--warn"><span class="br-item__code">🟠 003</span><span class="br-item__text"><b>Três defeitos reais, nenhum corrigido.</b> O botão do seletor de horário <b>não declara o tipo</b> e o componente de botão não impõe padrão: dentro do formulário, escolher o horário <b>grava o agendamento antes de o usuário confirmar</b>. O envio do formulário não trata erro, o que torna <b>silenciosa</b> a falha do e-mail de confirmação. E a data escolhida <b>nunca é descartada</b> quando médico ou data mudam, permitindo gravar um horário que a própria tela mostra como indisponível.</span></div>
+        <div class="br-item br-item--warn"><span class="br-item__code">🟠 005</span><span class="br-item__text"><b>AMB-006: três lacunas de severidade alta, agora congeladas.</b> O marcador <span class="rv-mono">{DIAS_AFASTAMENTO}</span> é anunciado na interface, é coletado no formulário e enviado, e ainda assim <b>chega literal ao documento</b>. A substituição <b>não escapa marcação</b>, e a marcação também chega literal. E o caminho de impressão injeta conteúdo sem escape. A terceira tem um agravante que vale nomear: é a <b>única das três que sai do sistema</b>, porque vai para uma janela que o médico imprime e entrega ao paciente. As duas primeiras ficam no banco.</span></div>
+        <div class="br-item br-item--warn"><span class="br-item__code">🟠 005</span><span class="br-item__text"><b>Dois achados novos, fora do catálogo da extração.</b> Trocar o tipo do documento <b>depois</b> de aplicar um modelo deixa o texto antigo no campo e o grava no documento do tipo novo, com o nome do modelo em branco. E reabrir o editor <b>não recupera</b> o modelo de origem. No mesmo módulo, dois artefatos usam <b>os mesmos identificadores de regra para significados diferentes</b>, e a restrição de acesso documentada não corresponde à do schema.</span></div>
+        <div class="br-item br-item--warn"><span class="br-item__code">🟠 009</span><span class="br-item__text"><b>O quarto cartão do painel não é uma contagem de consultas.</b> Os dois agregados de consulta são <b>calculados e descartados</b>: o critério sobrevive em código morto, sem superfície onde medi-lo. No mesmo painel, a constante decidida para o indicador percentual <b>nunca existiu</b>: a decisão pedia uma constante explícita e tipada e o código traz o literal <span class="rv-mono">"94%"</span>, sem fórmula e sem tendência. A paridade do comportamento foi cumprida; <b>a forma decidida nunca foi implementada</b>. O diagrama de fluxo do painel também está errado, e agora se sabe onde.</span></div>
+        <div class="br-item br-item--warn"><span class="br-item__code">🟡 008</span><span class="br-item__text"><b>O contrato garante forma, nunca autorização.</b> Um caso positivo declara um escopo de administrador <b>do nada</b>, entrega ao método administrativo e <b>compila</b>; o par negativo entrega o mesmo objeto ao método de dono e é recusado. A diferença entre os dois é o método, não quem chama. Três cláusulas do cenário seguem <b>não verificadas</b> e declaradas: a autorização em si, os tipos de retorno dos adaptadores, convertidos por asserção, e o ponto de ligação entre eles. E o ramo administrativo do filtro de escopo é <b>inalcançável pelo tipo</b>, permanecendo como defesa de tempo de execução.</span></div>
+        <div class="br-item br-item--warn"><span class="br-item__code">🟡 010</span><span class="br-item__text"><b>Duas cópias do usuário offline e uma promessa maior que o código.</b> O usuário do modo offline existe em <b>dois lugares</b>: uma cópia sem tipo, usada de fato, e uma versão tipada com <b>zero consumidores</b>. A variável de ativação é lida em dois módulos e em <b>momentos diferentes</b>, o que obrigou dois arquivos de prova. E a regra que promete que o identificador é sempre gerado pelo sistema <b>não se sustenta</b>: a criação espalha os dados do chamador <b>depois</b> do identificador gerado, então um identificador informado sobrepõe o gerado. O caso registra o comportamento real e passa a falhar se alguém "consertar" isso.</span></div>
+      </div>
+    </section>
+
+    <section class="rv-section">
+      <div class="rv-section__head rv-reveal">
+        <div class="rv-section__eyebrow">Método</div>
+        <h2 class="rv-section__title">Provar e declarar, sem corrigir</h2>
+        <p class="rv-section__desc">A decisão que atravessa as nove features é sempre a mesma: a prova <b>observa</b>, não altera. Nenhum arquivo de aplicação, contrato de dados ou schema de entidade foi modificado para acomodar a suíte.</p>
+      </div>
+      <div class="br-list rv-reveal">
+        <div class="br-item"><span class="br-item__code">Trava</span><span class="br-item__text">Ao afirmar o defeito, a suíte passa a <b>travar a paridade</b>. No dia em que alguém corrigir AMB-006, estas verificações <b>falham</b>. Isso é desejável, porque a mudança de comportamento não passa despercebida. E é perigoso como registro, porque a prova passa a enunciar uma vulnerabilidade conhecida. Quem corrigir precisa alterar a verificação na mesma passada, de propósito, e a decisão fica visível no diff.</span></div>
+        <div class="br-item"><span class="br-item__code">Asserção</span><span class="br-item__text"><b>Asserção positiva para provar ausência.</b> Nunca afirmar que nada foi chamado, porque isso passa por vacuidade. Afirma-se o valor observável depois da ação, ou contam-se as gravações antes e depois. É o que separa uma verificação que falha por motivo legível de uma que falha por acidente de arranjo.</span></div>
+        <div class="br-item"><span class="br-item__code">Transporte</span><span class="br-item__text"><b>Provar no transporte, não no módulo.</b> O dublê fica na entidade do backend e o módulo real corre, porque dublar a própria função de registro mediria a substituição e não o sistema. A técnica é atribuída diretamente ao fato de o defeito da receita não auditada ter passado despercebido.</span></div>
+        <div class="br-item"><span class="br-item__code">Falsificar</span><span class="br-item__text"><b>Falsificar antes de aceitar o verde.</b> Uma feature quebrou de propósito o indicador de 94% para 95% e a lista de 5 para 6, e conferiu que a suíte acusava <b>exatamente as duas</b>. Outra quebrou três asserções e conferiu a mensagem de erro exata. Um instrumento que nunca falhou não é evidência de nada.</span></div>
+        <div class="br-item"><span class="br-item__code">Relógio</span><span class="br-item__text"><b>Determinismo de data.</b> A regra é que nenhuma verificação dependa do <b>valor</b> do relógio real para decidir o resultado. Na prática consolidou-se congelar apenas a data, mantendo os temporizadores reais, porque temporizadores falsos conflitam com as esperas assíncronas de interface. E massa de prova com construtor local de data, jamais string de data, por causa da interpretação em UTC.</span></div>
+        <div class="br-item"><span class="br-item__code">Limite</span><span class="br-item__text"><b>Declarar o limite em vez de disfarçá-lo.</b> O destino de cada cenário é um entre provado por execução, endereçado a uma feature nomeada ou lacuna com razão. A matriz registra promessa sem prova de forma marcada e <b>nunca omitida</b>. Como o backend é serviço de terceiro, a suíte afirma apenas o que é afirmável no cliente: que a leitura <b>declarou</b> o escopo, nunca que o servidor o honrou.</span></div>
+      </div>
+      <blockquote class="quote rv-reveal" style="margin-top:16px">uma trilha incompleta e uma trilha completa são indistinguíveis para quem só olha a tela<cite>_reversa_forward/006-prova-logs-acesso/investigation.md · sobre os três modos de perda silenciosa</cite></blockquote>
+    </section>
+
+    <section class="rv-section">
+      <div class="rv-section__head rv-reveal">
+        <div class="rv-section__eyebrow">Automação</div>
+        <h2 class="rv-section__title">Os quatro portões, nesta ordem</h2>
+        <blockquote class="quote rv-reveal" style="margin-bottom:18px">Um verde que ninguém roda é uma prova que apodrece em silêncio: ela continua existindo no repositório e deixa de valer como evidência.<cite>.github/workflows/prova.yml · cabeçalho</cite></blockquote>
+      </div>
+      <div class="flow rv-reveal">
+        <div class="flow__step"><b>Portão 1</b><span>Verificação de tipos: a única prova dos cenários de compilação e o que confere que os dois adaptadores honram o mesmo contrato</span></div>
+        <div class="flow__step"><b>Portão 2</b><span>Estilo e imports mortos. Alcança apenas os arquivos em JavaScript; os tipados ficam fora da configuração atual</span></div>
+        <div class="flow__step"><b>Portão 3</b><span>Suíte completa, com a contagem de verificações conferida contra a linha de base</span></div>
+        <div class="flow__step"><b>Portão 4</b><span>Casos negativos do contrato, por último de propósito: escreve e remove uma pasta de prova, e rodá-lo depois evita contaminar os anteriores</span></div>
+      </div>
+      <div class="br-list rv-reveal" style="margin-top:16px">
+        <div class="br-item"><span class="br-item__code">Piso</span><span class="br-item__text">A suíte pode <b>crescer livremente</b>; encolher exige atualizar a linha de base <b>no mesmo commit</b>. É o que separa uma remoção deliberada de um teste apagado para o vermelho sumir. O valor declarado hoje é <b>168</b>.</span></div>
+        <div class="br-item"><span class="br-item__code">Resíduo</span><span class="br-item__text">O próprio arranjo dos casos negativos <b>confere a ausência de resíduo</b> ao final, porque uma interrupção dura deixaria a pasta de prova para trás e faria os portões anteriores falharem por motivo alheio à promessa.</span></div>
+        <div class="br-item"><span class="br-item__code">Duração</span><span class="br-item__text"><b>A duração não é portão, de propósito.</b> A mesma suíte, sem uma linha de diferença, já mediu 69,79 s e 122,57 s, e em outra feature 75,78 s em máquina calma contra 122,57 s sob carga concorrente. Um portão de duração falharia ao acaso, e um portão que falha ao acaso ensina a ignorar o vermelho. O tempo é <b>reportado</b> no resumo do job, com a condição de medição registrada.</span></div>
+        <div class="br-item"><span class="br-item__code">Escopo</span><span class="br-item__text">Um segundo workflow roda a <b>guarda de codificação</b> em segundos e sem instalar dependência, varrendo o código e todas as pastas de documentação do Reversa. Um terceiro publica <b>este mini-site</b> e <b>não</b> é integração contínua da aplicação, distinção que a extração registra explicitamente.</span></div>
+      </div>
+    </section>
+
+    <section class="rv-section">
+      <div class="rv-section__head rv-reveal">
+        <div class="rv-section__eyebrow">Incidente</div>
+        <h2 class="rv-section__title">Quando a guarda pegou o próprio autor</h2>
+        <p class="rv-section__desc">Durante a feature 005, uma edição em massa com ferramentas de texto do Windows decodificou um arquivo sem marca de codificação pela página ANSI e deixou <b>330 sequências corrompidas</b> em um dos artefatos de ações. A guarda de codificação acusou: 108 de 109 arquivos passaram, e a única falha era justamente o arquivo editado.</p>
+        <p class="rv-section__desc" style="margin-top:14px">A segunda detecção foi involuntária e mais interessante: a guarda acusou <b>a própria nota que documentava o incidente</b>, porque a nota citava o par de caracteres defeituoso como exemplo literal. A nota foi reescrita. A limitação ficou registrada com honestidade: <b>a guarda varre bytes, não intenção</b>.</p>
+      </div>
+    </section>
+
+    <section class="rv-section">
+      <div class="rv-section__head rv-reveal">
+        <div class="rv-section__eyebrow">Limites</div>
+        <h2 class="rv-section__title">O que segue sem prova</h2>
+        <p class="rv-section__desc">Declarado para que o verde não sugira mais do que existe.</p>
+      </div>
+      <div class="br-list rv-reveal">
+        <div class="br-item"><span class="br-item__code">16 de 55</span><span class="br-item__text">Os <b>39 cenários de fluxo</b> estão todos provados por execução. Os <b>16 visuais</b> não são lacuna: são trabalho com destino nomeado, o <b>harness de comparação de telas</b>, que ainda não existe. Até lá, a paridade visual é <b>conferência humana</b>.</span></div>
+        <div class="br-item"><span class="br-item__code">Goldens</span><span class="br-item__text">As <b>24 capturas de referência</b> existem e cobrem os <b>16 de 16</b> cenários visuais. O manifest de telas é a <b>fonte única</b> do resumo criptográfico por tela, apontado por referência e não copiado. Decisão humana registrada: o conjunto é heterogêneo e a paridade sustentada é <b>construtiva e semântica</b>, não comparação pixel a pixel.</span></div>
+        <div class="br-item"><span class="br-item__code">Estilo</span><span class="br-item__text">O portão de estilo <b>não alcança</b> os arquivos tipados nem duas pastas de componentes com a configuração atual. A lacuna está declarada no próprio workflow, junto do motivo.</span></div>
+        <div class="br-item"><span class="br-item__code">Cobertura</span><span class="br-item__text">O medidor de cobertura está declarado no manifesto e <b>sem uso registrado</b>: nenhuma das nove features produziu percentual de cobertura. A verificação é por promessa, não por linha executada.</span></div>
+        <div class="br-item"><span class="br-item__code">Escopo</span><span class="br-item__text">A aba de Relatórios do painel ficou <b>fora do escopo por completo</b>. A ordenação da lista de próximos agendamentos é enunciada por pertinência e cardinalidade, <b>não por ordem</b>. E o aviso visual de que os dados são fictícios no modo offline segue <b>não implementado</b>, como lacuna de produto.</span></div>
+      </div>
+    </section>
+
+    <section class="rv-section">
+      <div class="rv-section__head rv-reveal">
+        <div class="rv-section__eyebrow">Efeito no código</div>
+        <h2 class="rv-section__title">Por que o projeto quase dobrou de tamanho</h2>
+        <p class="rv-section__desc">O programa de provas é a maior parte do crescimento recente do repositório. No período, o código passou de 136 para 170 arquivos e de 14.018 para 20.882 linhas, e nasceram <b>95 itens sob vigilância</b> distribuídos pelos registros de cada feature.</p>
+      </div>
+      <div class="rv-table-wrap rv-reveal">
+        <table class="rv-table">
+          <thead><tr><th>O que apareceu</th><th>Onde</th></tr></thead>
+          <tbody>
+            <tr><td><b>15 arquivos de verificação</b> novos, mais 2 ampliados</td><td class="rv-mono">src/**/__tests__/</td></tr>
+            <tr><td><b>5 arquivos de massa de prova</b>, com construtores de entidade e datas locais</td><td class="rv-mono">src/test/</td></tr>
+            <tr><td><b>Arranjo e configuração</b> do ambiente de DOM simulado</td><td class="rv-mono">vitest.config.ts</td></tr>
+            <tr><td><b>Comando dos casos negativos</b>, que monta, executa, confere a recusa e limpa</td><td class="rv-mono">src/test/verificacoes-negativas.mjs</td></tr>
+            <tr><td><b>Guarda de codificação</b>, nascida sem dono de feature e depois adotada por registro</td><td class="rv-mono">src/test/mojibake.test.mjs</td></tr>
+            <tr><td><b>Três workflows</b>: a prova, a guarda de codificação e a publicação da documentação</td><td class="rv-mono">.github/workflows/</td></tr>
+            <tr><td><b>Capturas de referência e inventário de telas</b></td><td class="rv-mono">_reversa_sdd/screens/</td></tr>
+            <tr><td><b>Dez adendos</b> que anotam o efeito de cada feature na extração reversa</td><td class="rv-mono">_reversa_sdd/addenda/</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="rv-section">
+      <div class="rv-section__head rv-reveal">
+        <div class="rv-section__eyebrow">Rastreabilidade</div>
+        <h2 class="rv-section__title">Fontes</h2>
+      </div>
+      <div class="rv-table-wrap rv-reveal">
+        <table class="rv-table">
+          <thead><tr><th>Artefato</th><th>Conteúdo</th></tr></thead>
+          <tbody>
+            <tr><td class="rv-mono">_reversa_forward/002 a 010-*/requirements.md</td><td>Requisitos, critérios de aceite e regras de cada prova</td></tr>
+            <tr><td class="rv-mono">_reversa_forward/002 a 010-*/actions.md</td><td>As 135 ações executadas, com o desfecho de cada uma</td></tr>
+            <tr><td class="rv-mono">_reversa_forward/002 a 010-*/investigation.md</td><td>Os achados, com arquivo e linha de cada um</td></tr>
+            <tr><td class="rv-mono">_reversa_forward/002 a 010-*/regression-watch.md</td><td>Os 95 itens que precisam continuar verdadeiros</td></tr>
+            <tr><td class="rv-mono">_reversa_forward/007-matriz-paridade-visual/audit/</td><td>Auditoria cruzada: 1 achado alto, 4 médios e 1 baixo</td></tr>
+            <tr><td class="rv-mono">_reversa_sdd/addenda/002 a 010-*.md</td><td>O que cada feature mudou na leitura da extração</td></tr>
+            <tr><td class="rv-mono">_reversa_sdd/code-spec-matrix.md</td><td>Rastreabilidade promessa, código e prova, com o saldo dos cenários</td></tr>
+            <tr><td class="rv-mono">_reversa_sdd/screens/golden/manifest.yaml</td><td>Fonte única do resumo criptográfico por tela</td></tr>
+            <tr><td class="rv-mono">.github/workflows/prova.yml</td><td>Os quatro portões e a linha de base das verificações</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="rv-section">
+      <div class="feat-pager">
+        <a class="rv-card" href="migracao-typescript.html"><div class="rv-card__meta">← Anterior</div><div class="rv-card__title">Migração TypeScript</div></a>
+        <a class="rv-card next" href="../index.html#features"><div class="rv-card__meta">Próxima →</div><div class="rv-card__title">Todas as features</div></a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="rv-footer">
+    <div class="rv-container">
+      <div class="rv-footer__bottom"><span>Gerado por Reversa Docs · seed 89000d65</span><span>LGPD · Base44 · React 18</span></div>
+    </div>
+  </footer>
+</body>
+</html>

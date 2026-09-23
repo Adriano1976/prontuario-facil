@@ -20,15 +20,6 @@
       "type": "file"
     },
     {
-      "id": "src/components/medical/__tests__/PrescriptionEditor.test.tsx",
-      "name": "PrescriptionEditor.test.tsx",
-      "path": "src/components/medical/__tests__/PrescriptionEditor.test.tsx",
-      "group": "components/medical",
-      "language": "tsx",
-      "loc": 518,
-      "type": "file"
-    },
-    {
       "id": "src/pages/PatientDetail.tsx",
       "name": "PatientDetail.tsx",
       "path": "src/pages/PatientDetail.tsx",
@@ -56,24 +47,6 @@
       "type": "file"
     },
     {
-      "id": "src/pages/__tests__/NewAppointment.test.tsx",
-      "name": "NewAppointment.test.tsx",
-      "path": "src/pages/__tests__/NewAppointment.test.tsx",
-      "group": "pages",
-      "language": "tsx",
-      "loc": 427,
-      "type": "file"
-    },
-    {
-      "id": "src/pages/__tests__/Consultation.test.tsx",
-      "name": "Consultation.test.tsx",
-      "path": "src/pages/__tests__/Consultation.test.tsx",
-      "group": "pages",
-      "language": "tsx",
-      "loc": 422,
-      "type": "file"
-    },
-    {
       "id": "src/pages/Templates.tsx",
       "name": "Templates.tsx",
       "path": "src/pages/Templates.tsx",
@@ -83,57 +56,12 @@
       "type": "file"
     },
     {
-      "id": "src/test/verificacoes-negativas.mjs",
-      "name": "verificacoes-negativas.mjs",
-      "path": "src/test/verificacoes-negativas.mjs",
-      "group": "test",
-      "language": "mjs",
-      "loc": 384,
-      "type": "file"
-    },
-    {
       "id": "src/components/medical/PrescriptionEditor.tsx",
       "name": "PrescriptionEditor.tsx",
       "path": "src/components/medical/PrescriptionEditor.tsx",
       "group": "components/medical",
       "language": "tsx",
       "loc": 382,
-      "type": "file"
-    },
-    {
-      "id": "src/pages/__tests__/PatientForm.test.tsx",
-      "name": "PatientForm.test.tsx",
-      "path": "src/pages/__tests__/PatientForm.test.tsx",
-      "group": "pages",
-      "language": "tsx",
-      "loc": 372,
-      "type": "file"
-    },
-    {
-      "id": "src/test/mojibake.mjs",
-      "name": "mojibake.mjs",
-      "path": "src/test/mojibake.mjs",
-      "group": "test",
-      "language": "mjs",
-      "loc": 367,
-      "type": "file"
-    },
-    {
-      "id": "src/pages/__tests__/AccessLogs.test.tsx",
-      "name": "AccessLogs.test.tsx",
-      "path": "src/pages/__tests__/AccessLogs.test.tsx",
-      "group": "pages",
-      "language": "tsx",
-      "loc": 358,
-      "type": "file"
-    },
-    {
-      "id": "src/pages/__tests__/DashboardKpis.test.tsx",
-      "name": "DashboardKpis.test.tsx",
-      "path": "src/pages/__tests__/DashboardKpis.test.tsx",
-      "group": "pages",
-      "language": "tsx",
-      "loc": 347,
       "type": "file"
     },
     {
@@ -164,15 +92,6 @@
       "type": "file"
     },
     {
-      "id": "src/pages/__tests__/NewConsultation.test.tsx",
-      "name": "NewConsultation.test.tsx",
-      "path": "src/pages/__tests__/NewConsultation.test.tsx",
-      "group": "pages",
-      "language": "tsx",
-      "loc": 306,
-      "type": "file"
-    },
-    {
       "id": "src/components/medical/ExamUploader.tsx",
       "name": "ExamUploader.tsx",
       "path": "src/components/medical/ExamUploader.tsx",
@@ -182,39 +101,12 @@
       "type": "file"
     },
     {
-      "id": "src/pages/__tests__/Appointments.test.tsx",
-      "name": "Appointments.test.tsx",
-      "path": "src/pages/__tests__/Appointments.test.tsx",
-      "group": "pages",
-      "language": "tsx",
-      "loc": 289,
-      "type": "file"
-    },
-    {
       "id": "src/pages/NewAppointment.tsx",
       "name": "NewAppointment.tsx",
       "path": "src/pages/NewAppointment.tsx",
       "group": "pages",
       "language": "tsx",
       "loc": 285,
-      "type": "file"
-    },
-    {
-      "id": "src/pages/__tests__/PatientDetail.test.tsx",
-      "name": "PatientDetail.test.tsx",
-      "path": "src/pages/__tests__/PatientDetail.test.tsx",
-      "group": "pages",
-      "language": "tsx",
-      "loc": 285,
-      "type": "file"
-    },
-    {
-      "id": "src/pages/__tests__/Consultations.test.tsx",
-      "name": "Consultations.test.tsx",
-      "path": "src/pages/__tests__/Consultations.test.tsx",
-      "group": "pages",
-      "language": "tsx",
-      "loc": 282,
       "type": "file"
     },
     {
@@ -251,15 +143,6 @@
       "group": "pages",
       "language": "tsx",
       "loc": 262,
-      "type": "file"
-    },
-    {
-      "id": "src/api/__tests__/mockClientOffline.test.ts",
-      "name": "mockClientOffline.test.ts",
-      "path": "src/api/__tests__/mockClientOffline.test.ts",
-      "group": "api",
-      "language": "ts",
-      "loc": 259,
       "type": "file"
     },
     {
@@ -317,24 +200,6 @@
       "type": "file"
     },
     {
-      "id": "src/test/dashboardFixtures.ts",
-      "name": "dashboardFixtures.ts",
-      "path": "src/test/dashboardFixtures.ts",
-      "group": "test",
-      "language": "ts",
-      "loc": 210,
-      "type": "file"
-    },
-    {
-      "id": "src/components/medical/__tests__/AccessLogger.test.ts",
-      "name": "AccessLogger.test.ts",
-      "path": "src/components/medical/__tests__/AccessLogger.test.ts",
-      "group": "components/medical",
-      "language": "ts",
-      "loc": 195,
-      "type": "file"
-    },
-    {
       "id": "src/api/mockClient.ts",
       "name": "mockClient.ts",
       "path": "src/api/mockClient.ts",
@@ -348,15 +213,6 @@
       "name": "contract.ts",
       "path": "src/api/contract.ts",
       "group": "api",
-      "language": "ts",
-      "loc": 186,
-      "type": "file"
-    },
-    {
-      "id": "src/test/templateFixtures.ts",
-      "name": "templateFixtures.ts",
-      "path": "src/test/templateFixtures.ts",
-      "group": "test",
       "language": "ts",
       "loc": 186,
       "type": "file"
@@ -377,15 +233,6 @@
       "group": "components/appointments",
       "language": "tsx",
       "loc": 167,
-      "type": "file"
-    },
-    {
-      "id": "src/test/auditFixtures.ts",
-      "name": "auditFixtures.ts",
-      "path": "src/test/auditFixtures.ts",
-      "group": "test",
-      "language": "ts",
-      "loc": 165,
       "type": "file"
     },
     {
@@ -412,15 +259,6 @@
       "path": "src/api/scopedRead.ts",
       "group": "api",
       "language": "ts",
-      "loc": 147,
-      "type": "file"
-    },
-    {
-      "id": "src/pages/__tests__/ActivePatientSelection.test.tsx",
-      "name": "ActivePatientSelection.test.tsx",
-      "path": "src/pages/__tests__/ActivePatientSelection.test.tsx",
-      "group": "pages",
-      "language": "tsx",
       "loc": 147,
       "type": "file"
     },
@@ -452,15 +290,6 @@
       "type": "file"
     },
     {
-      "id": "src/pages/__tests__/PatientDetailAudit.test.tsx",
-      "name": "PatientDetailAudit.test.tsx",
-      "path": "src/pages/__tests__/PatientDetailAudit.test.tsx",
-      "group": "pages",
-      "language": "tsx",
-      "loc": 139,
-      "type": "file"
-    },
-    {
       "id": "src/api/entities.ts",
       "name": "entities.ts",
       "path": "src/api/entities.ts",
@@ -479,15 +308,6 @@
       "type": "file"
     },
     {
-      "id": "src/test/consultationsFixtures.ts",
-      "name": "consultationsFixtures.ts",
-      "path": "src/test/consultationsFixtures.ts",
-      "group": "test",
-      "language": "ts",
-      "loc": 130,
-      "type": "file"
-    },
-    {
       "id": "base44/entities/Consultation.jsonc",
       "name": "Consultation.jsonc",
       "path": "base44/entities/Consultation.jsonc",
@@ -495,42 +315,6 @@
       "language": "jsonc",
       "loc": 128,
       "type": "entity"
-    },
-    {
-      "id": "src/test/mojibake.test.mjs",
-      "name": "mojibake.test.mjs",
-      "path": "src/test/mojibake.test.mjs",
-      "group": "test",
-      "language": "mjs",
-      "loc": 127,
-      "type": "file"
-    },
-    {
-      "id": "src/pages/__tests__/Patients.test.tsx",
-      "name": "Patients.test.tsx",
-      "path": "src/pages/__tests__/Patients.test.tsx",
-      "group": "pages",
-      "language": "tsx",
-      "loc": 125,
-      "type": "file"
-    },
-    {
-      "id": "src/components/appointments/__tests__/TimeSlotPicker.test.tsx",
-      "name": "TimeSlotPicker.test.tsx",
-      "path": "src/components/appointments/__tests__/TimeSlotPicker.test.tsx",
-      "group": "components/appointments",
-      "language": "tsx",
-      "loc": 117,
-      "type": "file"
-    },
-    {
-      "id": "src/api/__tests__/offlineActivation.test.ts",
-      "name": "offlineActivation.test.ts",
-      "path": "src/api/__tests__/offlineActivation.test.ts",
-      "group": "api",
-      "language": "ts",
-      "loc": 114,
-      "type": "file"
     },
     {
       "id": "src/components/ui/form.jsx",
@@ -659,15 +443,6 @@
       "type": "file"
     },
     {
-      "id": "src/__tests__/Layout.test.tsx",
-      "name": "Layout.test.tsx",
-      "path": "src/__tests__/Layout.test.tsx",
-      "group": "__tests__",
-      "language": "tsx",
-      "loc": 90,
-      "type": "file"
-    },
-    {
       "id": "src/App.tsx",
       "name": "App.tsx",
       "path": "src/App.tsx",
@@ -686,28 +461,10 @@
       "type": "entity"
     },
     {
-      "id": "src/test/appointmentsFixtures.ts",
-      "name": "appointmentsFixtures.ts",
-      "path": "src/test/appointmentsFixtures.ts",
-      "group": "test",
-      "language": "ts",
-      "loc": 87,
-      "type": "file"
-    },
-    {
       "id": "src/lib/PageNotFound.tsx",
       "name": "PageNotFound.tsx",
       "path": "src/lib/PageNotFound.tsx",
       "group": "lib",
-      "language": "tsx",
-      "loc": 86,
-      "type": "file"
-    },
-    {
-      "id": "src/pages/__tests__/Dashboard.test.tsx",
-      "name": "Dashboard.test.tsx",
-      "path": "src/pages/__tests__/Dashboard.test.tsx",
-      "group": "pages",
       "language": "tsx",
       "loc": 86,
       "type": "file"
@@ -776,30 +533,12 @@
       "type": "file"
     },
     {
-      "id": "src/components/medical/__tests__/PatientSearch.test.tsx",
-      "name": "PatientSearch.test.tsx",
-      "path": "src/components/medical/__tests__/PatientSearch.test.tsx",
-      "group": "components/medical",
-      "language": "tsx",
-      "loc": 76,
-      "type": "file"
-    },
-    {
       "id": "src/components/ui/table.jsx",
       "name": "table.jsx",
       "path": "src/components/ui/table.jsx",
       "group": "components/ui",
       "language": "jsx",
       "loc": 76,
-      "type": "file"
-    },
-    {
-      "id": "src/components/medical/__tests__/ConsultationTimeline.test.tsx",
-      "name": "ConsultationTimeline.test.tsx",
-      "path": "src/components/medical/__tests__/ConsultationTimeline.test.tsx",
-      "group": "components/medical",
-      "language": "tsx",
-      "loc": 74,
       "type": "file"
     },
     {
@@ -863,24 +602,6 @@
       "group": "types",
       "language": "ts",
       "loc": 54,
-      "type": "file"
-    },
-    {
-      "id": "src/lib/__tests__/AuthContext.test.tsx",
-      "name": "AuthContext.test.tsx",
-      "path": "src/lib/__tests__/AuthContext.test.tsx",
-      "group": "lib",
-      "language": "tsx",
-      "loc": 52,
-      "type": "file"
-    },
-    {
-      "id": "src/api/__tests__/mockClient.test.ts",
-      "name": "mockClient.test.ts",
-      "path": "src/api/__tests__/mockClient.test.ts",
-      "group": "api",
-      "language": "ts",
-      "loc": 51,
       "type": "file"
     },
     {
@@ -1082,15 +803,6 @@
       "type": "file"
     },
     {
-      "id": "src/api/__tests__/scopedRead.test.ts",
-      "name": "scopedRead.test.ts",
-      "path": "src/api/__tests__/scopedRead.test.ts",
-      "group": "api",
-      "language": "ts",
-      "loc": 34,
-      "type": "file"
-    },
-    {
       "id": "src/components/ui/scroll-area.jsx",
       "name": "scroll-area.jsx",
       "path": "src/components/ui/scroll-area.jsx",
@@ -1142,15 +854,6 @@
       "group": "types",
       "language": "ts",
       "loc": 31,
-      "type": "file"
-    },
-    {
-      "id": "src/api/__tests__/sessionScope.test.ts",
-      "name": "sessionScope.test.ts",
-      "path": "src/api/__tests__/sessionScope.test.ts",
-      "group": "api",
-      "language": "ts",
-      "loc": 30,
       "type": "file"
     },
     {
@@ -1415,15 +1118,6 @@
       "type": "file"
     },
     {
-      "id": "src/test/setup.ts",
-      "name": "setup.ts",
-      "path": "src/test/setup.ts",
-      "group": "test",
-      "language": "ts",
-      "loc": 13,
-      "type": "file"
-    },
-    {
       "id": "src/components/ui/calendar.d.ts",
       "name": "calendar.d.ts",
       "path": "src/components/ui/calendar.d.ts",
@@ -1533,27 +1227,24 @@
     }
   ],
   "summary": {
-    "totalFiles": 170,
-    "totalLoc": 20882,
+    "totalFiles": 136,
+    "totalLoc": 14018,
     "languages": {
-      "tsx": 48,
+      "tsx": 29,
       "jsx": 49,
-      "mjs": 3,
-      "ts": 60,
+      "ts": 48,
       "jsonc": 9,
       "css": 1
     },
     "groups": {
-      "pages": 25,
+      "pages": 12,
       "components/ui": 68,
-      "components/medical": 13,
-      "test": 9,
-      "api": 13,
+      "components/medical": 9,
       "root": 6,
-      "lib": 8,
-      "components/appointments": 3,
+      "lib": 7,
+      "api": 8,
+      "components/appointments": 2,
       "base44": 9,
-      "__tests__": 1,
       "types": 12,
       "components": 1,
       "hooks": 1,

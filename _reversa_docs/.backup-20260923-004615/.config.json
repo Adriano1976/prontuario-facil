@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-09-10T13:12:15.288Z",
+  "reversa": { "version": "1.3.2" },
+  "projectName": "prontuario-facil",
+  "interview": {
+    "readerProfile": "auditor",
+    "depth": "full",
+    "visualStyle": "premium",
+    "visualStyleFreeform": "Efeitos especiais maximos: hero animado com particulas, glassmorphism, scroll-reveal animations, Code City 3D (Three.js), microinteracoes e transicoes suaves. Estrutura de site publico WordPress.com: header sticky + hero + grade de cards/blog + footer. Público auditor exige densidade de metricas e evidencias."
+  },
+  "seed": {
+    "hash": "sha256:89000d65108d30a04a67c05cce9b1ab43ac94568f97583bf63f11b423981eeda",
+    "source": "project_name",
+    "explicitOverride": null
+  },
+  "knowledgeSources": {
+    "soul": true,
+    "chronicle": true,
+    "topology": true,
+    "sddSpecs": [
+      "agendamentos",
+      "consultas",
+      "dashboard",
+      "logs-acesso",
+      "medicos",
+      "modo-offline",
+      "pacientes",
+      "templates"
+    ],
+    "sourceCode": true
+  },
+  "pagesPlanned": [
+    "index.html",
+    "arquitetura.html",
+    "modulos.html",
+    "topologia.html",
+    "metricas.html",
+    "timeline.html",
+    "glossario.html",
+    "deck.html",
+    "features/agendamentos.html",
+    "features/consultas.html",
+    "features/dashboard.html",
+    "features/logs-acesso.html",
+    "features/medicos.html",
+    "features/modo-offline.html",
+    "features/pacientes.html",
+    "features/templates.html"
+  ],
+  "pagesOmitted": []
+}

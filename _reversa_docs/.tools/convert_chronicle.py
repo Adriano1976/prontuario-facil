@@ -26,15 +26,21 @@ if sys.platform == "win32":
 DATE_PATTERN = re.compile(r"\b(\d{4}-\d{2}-\d{2})\b")
 HEADING_PATTERN = re.compile(r"^#{1,3}\s+(.+)$", re.MULTILINE)
 
+# Contrato do topo da crônica: "uma linha com data ISO (AAAA-MM-DD) = um evento".
+# A data precisa ABRIR um item de lista para contar como evento. Isso mantém o
+# contrato e ignora rodapés, citações em bloco e prosa que apenas mencione uma
+# data no meio da frase (ex.: "*Gerado pelo Reversa em 2026-09-10.*").
+EVENT_LINE_PATTERN = re.compile(r"^[ \t]*[-*+][ \t]+(\d{4}-\d{2}-\d{2})\b")
+
 
 def parse_chronicle(text: str):
     events = []
     for line in text.splitlines():
-        date_match = DATE_PATTERN.search(line)
-        if not date_match:
+        match = EVENT_LINE_PATTERN.match(line)
+        if not match:
             continue
         events.append({
-            "date": date_match.group(1),
+            "date": match.group(1),
             "title": line.strip("-* ").strip()[:120],
             "raw": line.strip(),
         })

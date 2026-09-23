@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "startedAt": "2026-09-10T13:12:15Z",
-  "lastCheckpoint": "2026-09-18T18:17:47Z",
+  "lastCheckpoint": "2026-09-23T03:52:05Z",
   "pipelineDurationMs": 112295,
   "completedAgents": [
     "mapper",
@@ -11,110 +11,116 @@
   ],
   "pendingAgents": [],
   "pages": {
-    "index.html": {
-      "status": "created",
-      "agent": "reversa-docs-publisher",
-      "hash": "sha256:9203a26f1184e79ff82c37eb4f6df9cb04956e76d15a6258ea0fd531dc6b7cdf"
-    },
     "arquitetura.html": {
       "status": "created",
       "agent": "reversa-docs-mapper",
       "hash": "sha256:b3d58f04a989e5b252f53e43870e00484164b0281e52468fb0a89cb0b05a457e"
     },
-    "modulos.html": {
-      "status": "created",
-      "agent": "reversa-docs-mapper",
-      "hash": "sha256:d8f31868c24060882f070b94ed5e8002327648238a2940e1c0697520ea370b13"
-    },
-    "topologia.html": {
-      "status": "created",
-      "agent": "reversa-docs-mapper",
-      "hash": "sha256:394f0b6509630ca4998085ff3d705eb2704944eb0fc4bad6118725e77cc392bd"
-    },
-    "metricas.html": {
-      "status": "created",
-      "agent": "reversa-docs-analyst",
-      "hash": "sha256:e969e14941c3411f3aeb735b72240e05051a3f2cd561abde8e5d6191a53a6be2"
-    },
-    "timeline.html": {
-      "status": "created",
-      "agent": "reversa-docs-analyst",
-      "hash": "sha256:31edf7f5d71cdb55816572e4920437730e208fb2e57f4a1b9db607bf98c9d0ec"
-    },
-    "glossario.html": {
-      "status": "created",
-      "agent": "reversa-docs-storyteller",
-      "hash": "sha256:7de6d598a95573971f201afc4c3931a624c3c160e6213bc64fd478816fdfe940"
-    },
     "deck.html": {
       "status": "created",
       "agent": "reversa-docs-storyteller",
-      "hash": "sha256:f761f8bfdd7e28ed8c7f217f6456ba335593be1890e1059123ba588614cad997"
-    },
-    "features/pacientes.html": {
-      "status": "created",
-      "agent": "reversa-docs-storyteller",
-      "hash": "sha256:8f1ca43511bd4cb8cf2f3855dd0e802153c060f96625dbe104d1ded28462d36f"
-    },
-    "features/consultas.html": {
-      "status": "created",
-      "agent": "reversa-docs-storyteller",
-      "hash": "sha256:1e6655008db88d50610558a5b6be839e386e02af3387a81cb784b6f1adf84ba0"
+      "hash": "sha256:1460b1b75b88ecf5974472bc7f6e00e9139023ca46815361b6beb30fa2fcd7b6"
     },
     "features/agendamentos.html": {
       "status": "created",
       "agent": "reversa-docs-storyteller",
       "hash": "sha256:a2d95d4af457967bd9db653b58e64eeb97758ce101657834ec7f8cf8b13ce92c"
     },
-    "features/medicos.html": {
+    "features/ciclo-de-provas.html": {
       "status": "created",
       "agent": "reversa-docs-storyteller",
-      "hash": "sha256:a1fcea9b50b7835465ffb4612223f9610960a36345dcb51bcf8bda3c4e189165"
+      "hash": "sha256:9f2517856ab49ea019eca786008b09b955aa930bcf4b2b4d78050c9c533014c4"
     },
-    "features/templates.html": {
+    "features/consultas.html": {
       "status": "created",
       "agent": "reversa-docs-storyteller",
-      "hash": "sha256:b1d3ae74ab67806aad11952e0e5b9da32ed8f0bb32c78e694cfc8d39925153af"
-    },
-    "features/logs-acesso.html": {
-      "status": "created",
-      "agent": "reversa-docs-storyteller",
-      "hash": "sha256:cad3b37bdd81b4219d861e83410bbcf5c1d375feefe0e84d66e8f9a3640ab935"
+      "hash": "sha256:1e6655008db88d50610558a5b6be839e386e02af3387a81cb784b6f1adf84ba0"
     },
     "features/dashboard.html": {
       "status": "created",
       "agent": "reversa-docs-storyteller",
       "hash": "sha256:2a8b23f88789b21fc25548aee02966d12060bf8583b70eceafbafeb0a18f76ef"
     },
+    "features/logs-acesso.html": {
+      "status": "created",
+      "agent": "reversa-docs-storyteller",
+      "hash": "sha256:cad3b37bdd81b4219d861e83410bbcf5c1d375feefe0e84d66e8f9a3640ab935"
+    },
+    "features/medicos.html": {
+      "status": "created",
+      "agent": "reversa-docs-storyteller",
+      "hash": "sha256:a1fcea9b50b7835465ffb4612223f9610960a36345dcb51bcf8bda3c4e189165"
+    },
+    "features/migracao-typescript.html": {
+      "status": "created",
+      "agent": "reversa-docs-storyteller",
+      "hash": "sha256:38a3ad5db57a4985d0034b3cb346952de689599a3ebdf8c31fb195fa4fc48790"
+    },
     "features/modo-offline.html": {
       "status": "created",
       "agent": "reversa-docs-storyteller",
       "hash": "sha256:476030932e885e60e55d76943606fc5f23ca70f51d08ac46ae95d069cd6d6028"
     },
-    "features/migracao-typescript.html": {
+    "features/pacientes.html": {
       "status": "created",
       "agent": "reversa-docs-storyteller",
-      "hash": "sha256:34598ea93862f2381ffdce029d1c3cf8fbb58e2b02d6e87b3fd7e0795de3be82"
+      "hash": "sha256:8f1ca43511bd4cb8cf2f3855dd0e802153c060f96625dbe104d1ded28462d36f"
+    },
+    "features/templates.html": {
+      "status": "created",
+      "agent": "reversa-docs-storyteller",
+      "hash": "sha256:b1d3ae74ab67806aad11952e0e5b9da32ed8f0bb32c78e694cfc8d39925153af"
+    },
+    "glossario.html": {
+      "status": "created",
+      "agent": "reversa-docs-storyteller",
+      "hash": "sha256:7de6d598a95573971f201afc4c3931a624c3c160e6213bc64fd478816fdfe940"
+    },
+    "index.html": {
+      "status": "created",
+      "agent": "reversa-docs-publisher",
+      "hash": "sha256:12c13491aa0519a6743bf8e54ba8f5db550391e237712f3b53b47bec7fc1837b"
+    },
+    "metricas.html": {
+      "status": "created",
+      "agent": "reversa-docs-analyst",
+      "hash": "sha256:25e7fe231aa8224c4992d76df1b03be5a4083948a1d952411b3b30af8f54530d"
+    },
+    "modulos.html": {
+      "status": "created",
+      "agent": "reversa-docs-mapper",
+      "hash": "sha256:d8f31868c24060882f070b94ed5e8002327648238a2940e1c0697520ea370b13"
+    },
+    "timeline.html": {
+      "status": "created",
+      "agent": "reversa-docs-analyst",
+      "hash": "sha256:31edf7f5d71cdb55816572e4920437730e208fb2e57f4a1b9db607bf98c9d0ec"
+    },
+    "topologia.html": {
+      "status": "created",
+      "agent": "reversa-docs-mapper",
+      "hash": "sha256:394f0b6509630ca4998085ff3d705eb2704944eb0fc4bad6118725e77cc392bd"
     }
   },
   "pagesGenerated": [
-    "index.html",
     "arquitetura.html",
-    "modulos.html",
-    "topologia.html",
-    "metricas.html",
-    "timeline.html",
-    "glossario.html",
     "deck.html",
-    "features/pacientes.html",
-    "features/consultas.html",
     "features/agendamentos.html",
-    "features/medicos.html",
-    "features/templates.html",
-    "features/logs-acesso.html",
+    "features/ciclo-de-provas.html",
+    "features/consultas.html",
     "features/dashboard.html",
+    "features/logs-acesso.html",
+    "features/medicos.html",
+    "features/migracao-typescript.html",
     "features/modo-offline.html",
-    "features/migracao-typescript.html"
+    "features/pacientes.html",
+    "features/templates.html",
+    "glossario.html",
+    "index.html",
+    "metricas.html",
+    "modulos.html",
+    "timeline.html",
+    "topologia.html"
   ],
   "pagesOmitted": [],
   "auxiliaryHtmls": [],

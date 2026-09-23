@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <script>try{document.documentElement.setAttribute("data-theme",localStorage.getItem("rv-theme")==="light"?"light":"dark");}catch(e){}</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard — Prontuário Fácil</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/img/favicon.svg">
+  <meta name="reversa-category" content="diagram">
+  <meta name="reversa-producer-agent" content="reversa-docs-storyteller">
+  <meta name="reversa-template" content="feature">
+  <meta name="reversa-generated-at" content="2026-09-10T13:22:00Z">
+  <link rel="stylesheet" href="../assets/css/theme.css">
+  <script src="../assets/js/data.js"></script>
+  <script src="../assets/js/theme.js" defer></script>
+  <style>
+    .feat-hero .rv-hero__inner { text-align: left; }
+    .breadcrumb { font-size: 13px; color: var(--rv-text-faint); margin-bottom: 18px; }
+    .breadcrumb a:hover { color: #fff; }
+    .br-list { display: grid; gap: 12px; }
+    .br-item { display: flex; gap: 14px; border: 1px solid var(--rv-border); background: var(--rv-panel); border-radius: 12px; padding: 15px 18px; }
+    .br-item__code { flex: 0 0 auto; font-family: var(--rv-mono); font-size: 12px; font-weight: 700; color: var(--rv-accent-1); padding-top: 1px; }
+    .br-item__text { font-size: 14px; color: var(--rv-text-dim); }
+    .br-item__text b { color: var(--rv-text); }
+    .feat-pager { display: flex; justify-content: space-between; gap: 16px; margin-top: 8px; }
+    .feat-pager a { flex: 1; }
+    .feat-pager .next { text-align: right; }
+    .gherkin { font-family: var(--rv-mono); font-size: 13px; background: rgba(0,0,0,.3); border: 1px solid var(--rv-border); border-radius: 12px; padding: 18px; white-space: pre-wrap; color: var(--rv-text-dim); }
+  </style>
+</head>
+<body data-page="feature-dashboard">
+  <header class="rv-header">
+    <div class="rv-header__inner">
+      <a class="rv-brand" href="../index.html">
+        <span class="seal-mini" data-seal></span>
+        <span class="rv-brand__name">Prontuário Fácil</span>
+      </a>
+      <button class="rv-nav-toggle" aria-label="Abrir menu" aria-expanded="false">☰</button>
+      <nav class="rv-nav" aria-label="Navegação principal">
+        <a href="../index.html" data-page-id="index">Visão geral</a>
+        <a href="../arquitetura.html" data-page-id="arquitetura">Arquitetura 3D</a>
+        <a href="../modulos.html" data-page-id="modulos">Módulos</a>
+        <a href="../topologia.html" data-page-id="topologia">Topologia</a>
+        <a href="../metricas.html" data-page-id="metricas">Métricas</a>
+        <a href="../glossario.html" data-page-id="glossario">Glossário</a>
+        <a href="../deck.html" data-page-id="deck">Deck</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="rv-hero feat-hero" style="padding:48px 24px 36px">
+    <canvas class="rv-hero__canvas"></canvas>
+    <div class="rv-hero__inner">
+      <div class="breadcrumb"><a href="../index.html">Início</a> / <a href="../index.html#features">Features</a> / Dashboard</div>
+      <h1 style="font-size:clamp(2rem,5vw,3.2rem)">📊 Dashboard</h1>
+      <p class="rv-hero__tagline" style="margin-left:0">Métricas-chave de saúde e atividade recente, com atalhos de ação rápida e busca global de pacientes.</p>
+      <div class="rv-hero__actions" style="justify-content:flex-start">
+        <span class="rv-chip">Página: Dashboard.jsx</span>
+        <span class="rv-chip rv-chip--warn">1 KPI mockado</span>
+        <span class="rv-chip">KPIs</span>
+      </div>
+    </div>
+  </section>
+
+  <main class="rv-container">
+    <section class="rv-section">
+      <div class="rv-section__head rv-reveal">
+        <div class="rv-section__eyebrow">Visão geral</div>
+        <h2 class="rv-section__title">O painel de controle do médico</h2>
+        <p class="rv-section__desc">Página que mostra estatísticas de pacientes, consultas, prescrições e agendamentos para acesso rápido do médico.</p>
+      </div>
+
+      <div class="rv-section__head rv-reveal" style="margin-top:26px"><div class="rv-section__eyebrow">Regras de negócio</div></div>
+      <div class="br-list rv-reveal">
+        <div class="br-item"><span class="br-item__code">KPI-01</span><span class="br-item__text"><b>Pacientes Ativos</b>: total de pacientes com status igual a <b>ativo</b>.</span></div>
+        <div class="br-item"><span class="br-item__code">KPI-02</span><span class="br-item__text"><b>Agendamentos Hoje</b>: total cuja data coincide com o dia atual e status diferente de <b>cancelado</b>.</span></div>
+        <div class="br-item"><span class="br-item__code">KPI-03</span><span class="br-item__text"><b>Documentos Emitidos</b>: baseado no total retornado (até 100) das prescrições ordenadas por data de criação.</span></div>
+        <div class="br-item"><span class="br-item__code">KPI-04</span><span class="br-item__text"><b>Taxa de Atendimento</b>: atualmente exibida <b>fixa/mockada em "94%"</b>; sem fórmula, fonte agregada ou período definidos no legado. 🔴</span></div>
+        <div class="br-item"><span class="br-item__code">KPI-05</span><span class="br-item__text"><b>Próximos Agendamentos</b>: até 5 com data futura e status diferente de <b>cancelado</b>.</span></div>
+      </div>
+    </section>
+
+    <section class="rv-section">
+      <div class="rv-section__head rv-reveal"><div class="rv-section__eyebrow">Requisitos funcionais</div><h2 class="rv-section__title">RFs</h2></div>
+      <div class="rv-table-wrap rv-reveal">
+        <table class="rv-table">
+          <thead><tr><th>ID</th><th>Requisito</th><th>Prioridade</th></tr></thead>
+          <tbody>
+            <tr><td>RF-01</td><td>Exibir KPIs numéricos e percentuais</td><td>Must</td></tr>
+            <tr><td>RF-02</td><td>Lista de "Próximos Agendamentos" (futuros, não cancelados, limite 5)</td><td>Must</td></tr>
+            <tr><td>RF-03</td><td>Botões de "Ações Rápidas" (Novo Paciente, Nova Consulta)</td><td>Should</td></tr>
+            <tr><td>RF-04</td><td>Barra de busca global de pacientes (nome/CPF via PatientSearch)</td><td>Must</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="rv-section">
+      <div class="rv-section__head rv-reveal"><div class="rv-section__eyebrow">Critérios de aceitação</div><h2 class="rv-section__title">Cenário Gherkin</h2></div>
+      <div class="gherkin rv-reveal">Dado que o médico acessou a página do Dashboard
+Quando os dados da API são carregados
+Então o KPI "Pacientes Ativos" deve mostrar o total de pacientes com status "ativo"
+E a lista de Próximos Agendamentos não deve conter consultas passadas ou canceladas
+E um evento de auditoria de "Acesso ao dashboard" deve ser gravado via logAccess</div>
+    </section>
+
+    <section class="rv-section">
+      <div class="rv-section__head rv-reveal"><div class="rv-section__eyebrow">Rastreabilidade</div><h2 class="rv-section__title">Código relacionado</h2></div>
+      <div class="rv-table-wrap rv-reveal">
+        <table class="rv-table">
+          <thead><tr><th>Arquivo</th><th>Função</th><th>Cobertura</th></tr></thead>
+          <tbody>
+            <tr><td class="rv-mono">src/pages/Dashboard.jsx</td><td>Dashboard</td><td>🟢</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="rv-section">
+      <div class="feat-pager">
+        <a class="rv-card" href="logs-acesso.html"><div class="rv-card__meta">← Anterior</div><div class="rv-card__title">Logs de Acesso</div></a>
+        <a class="rv-card next" href="modo-offline.html"><div class="rv-card__meta">Próxima →</div><div class="rv-card__title">Modo Offline</div></a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="rv-footer"><div class="rv-container"><div class="rv-footer__bottom"><span>Gerado por Reversa Docs · seed 89000d65</span><span>LGPD · Base44 · React 18</span></div></div></footer>
+</body>
+</html>
