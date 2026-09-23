@@ -36,6 +36,20 @@
 - 2026-09-17 — Endurecimento final: allowJs desligado e decisão D-13 registrada (A020 a A022)
 - 2026-09-18 — Documentada a unit Migração TypeScript no mini-site e ampliado o glossário
 - 2026-09-18 — Mini-site Reversa Docs regenerado: 136 arquivos, 346 importações e 1 ciclo
+- 2026-09-19 — /reversa-forward abre a feature 002 e a camada de prova nasce: a suíte sai de 34 para 36 verificações em 10 arquivos
+- 2026-09-19 — Verificações negativas do gate de tipos viram comando reproduzível: 9 casos recusados pelo motivo esperado, sem resíduo
+- 2026-09-19 — Defeito do modo offline provado de ponta a ponta: registro criado offline ficava invisível para as leituras com escopo
+- 2026-09-21 — Feature 003 (prova de Agendamentos) eleva a suíte a 66 verificações em 14 arquivos
+- 2026-09-21 — Feature 004 (prova de Consultas) eleva a suíte a 90 verificações e revela que emitir receita não deixa rastro na auditoria
+- 2026-09-21 — Feature 005 (prova de Templates) eleva a suíte a 109 verificações e as três lacunas de AMB-006 ficam provadas e congeladas
+- 2026-09-21 — Edição em massa corrompe 330 sequências em um artefato e a guarda de codificação acusa o próprio autor
+- 2026-09-22 — Feature 006 (prova de Logs de Acesso) mede três modos de perda silenciosa na trilha de auditoria LGPD
+- 2026-09-22 — Feature 007: 24 capturas de referência passam a existir e os 16 cenários de paridade visual viram trabalho transferido
+- 2026-09-22 — Feature 008 (prova do contrato de dados) e o arnês de casos negativos cresce de 9 para 16
+- 2026-09-22 — Feature 009 (prova dos KPIs do Dashboard) eleva a suíte a 145 verificações em 24 arquivos
+- 2026-09-22 — Feature 010 (prova do modo offline) fecha a suíte em 168 verificações em 26 arquivos, com 39 de 39 cenários de fluxo provados
+- 2026-09-22 — Workflow de prova entra no CI com quatro portões e linha de base de 168 verificações
+- 2026-09-23 — Mini-site ganha a página do Ciclo de Provas e os dados passam a 170 arquivos, 411 importações e 56 pacotes
 
 ---
 *Gerado pelo Reversa em 2026-09-10.*
