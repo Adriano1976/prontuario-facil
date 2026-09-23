@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "startedAt": "2026-09-10T13:12:15Z",
-  "lastCheckpoint": "2026-09-23T03:52:05Z",
+  "lastCheckpoint": "2026-09-23T04:17:03Z",
   "pipelineDurationMs": 112295,
   "completedAgents": [
     "mapper",
@@ -79,7 +79,7 @@
     "index.html": {
       "status": "created",
       "agent": "reversa-docs-publisher",
-      "hash": "sha256:12c13491aa0519a6743bf8e54ba8f5db550391e237712f3b53b47bec7fc1837b"
+      "hash": "sha256:eb7151f6d07e6944373b4bd2b9d915ea0e3527b8019984bccd11dedac45ece77"
     },
     "metricas.html": {
       "status": "created",
@@ -94,7 +94,7 @@
     "timeline.html": {
       "status": "created",
       "agent": "reversa-docs-analyst",
-      "hash": "sha256:31edf7f5d71cdb55816572e4920437730e208fb2e57f4a1b9db607bf98c9d0ec"
+      "hash": "sha256:3f52273c222b6f35713c894596928b25b2b86c0d19d37b181974bc4fedc6cc30"
     },
     "topologia.html": {
       "status": "created",

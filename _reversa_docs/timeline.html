@@ -88,15 +88,15 @@
       color: var(--rv-text-dim);
       transition: color .2s ease;
     }
-    /* escalonamento: blocos acima alternam alto(110px)/baixo(40px); abaixo alternam perto(40px)/profundo(110px) */
-    .tl-evt--above.tl-evt--far .tl-evt__connector { top: -110px; height: 110px; }
-    .tl-evt--above.tl-evt--far .tl-evt__text { bottom: 110px; }
-    .tl-evt--above.tl-evt--near .tl-evt__connector { top: -40px; height: 40px; }
-    .tl-evt--above.tl-evt--near .tl-evt__text { bottom: 40px; }
-    .tl-evt--below.tl-evt--near .tl-evt__connector { top: 0; height: 40px; }
-    .tl-evt--below.tl-evt--near .tl-evt__text { top: 40px; }
-    .tl-evt--below.tl-evt--far .tl-evt__connector { top: 0; height: 110px; }
-    .tl-evt--below.tl-evt--far .tl-evt__text { top: 110px; }
+    /* Escalonamento: cada evento recebe seu proprio deslocamento em --evt-offset,
+       definido em tempo de render. Eventos do mesmo dia alternam acima e abaixo,
+       avancando um nivel de profundidade a cada par, o que suporta qualquer
+       quantidade de eventos na mesma data sem sobreposicao. */
+    .tl-evt { --evt-offset: 40px; }
+    .tl-evt--above .tl-evt__connector { top: calc(-1 * var(--evt-offset)); height: var(--evt-offset); }
+    .tl-evt--above .tl-evt__text { bottom: var(--evt-offset); }
+    .tl-evt--below .tl-evt__connector { top: 0; height: var(--evt-offset); }
+    .tl-evt--below .tl-evt__text { top: var(--evt-offset); }
     .tl-evt:hover .tl-evt__dot,
     .tl-evt:focus-visible .tl-evt__dot {
       box-shadow: 0 0 0 7px var(--evt-halo), 0 0 18px 2px var(--evt-color);
@@ -169,7 +169,7 @@
     <div class="rv-hero__inner">
       <span class="rv-eyebrow"><span class="dot"></span> Crônica do projeto</span>
       <h1>Linha do <span class="grad">tempo</span></h1>
-      <p class="rv-hero__tagline">Histórico de eventos do Prontuário Fácil, da fundação do projeto ao ciclo forward de migração.</p>
+      <p class="rv-hero__tagline">Histórico de eventos do Prontuário Fácil, da fundação do projeto ao ciclo de provas.</p>
     </div>
   </section>
 
@@ -211,6 +211,7 @@
         <span class="rv-chip tl-chip" data-cat="Documentação">Documentação</span>
         <span class="rv-chip tl-chip" data-cat="Segurança">Segurança</span>
         <span class="rv-chip tl-chip" data-cat="Migração">Migração</span>
+        <span class="rv-chip tl-chip" data-cat="Provas">Provas</span>
       </div>
       <div class="tl-list" id="tl-list"></div>
     </section>
@@ -262,7 +263,8 @@
       var t = title.toLowerCase();
       if (/migra|paridade|handoff|cutover/.test(t)) return "Migração";
       if (/lgpd|auditoria|seguran|security|consentimento/.test(t)) return "Segurança";
-      if (/readme|documenta|docs|relatório|relatorio/.test(t)) return "Documentação";
+      if (/readme|documenta|docs|relatório|relatorio|mini-site|minisite/.test(t)) return "Documentação";
+      if (/prova|verifica[çc]|teste|su[ií]te|golden|arn[eê]s|port[ãa]o/.test(t)) return "Provas";
       if (/reversa|scout|archaeologist|detective|architect|data master|design system|visor|soul|specs sdd|spec sdd|review-report|confidence|gaps|\bc4\b|\berd\b|impact matrix|can[oô]nic/.test(t)) return "Reversa";
       return "Código";
     }
@@ -300,7 +302,7 @@
     }
 
     // ---- categorias + cores (compartilhadas pelo gráfico e pela legenda) ----
-    var CATEGORIES = ["Reversa", "Código", "Documentação", "Segurança", "Migração"];
+    var CATEGORIES = ["Reversa", "Código", "Documentação", "Segurança", "Migração", "Provas"];
     function catColor(cat) {
       var c = themeColors();
       return cat === "Reversa" ? c.a1
@@ -308,6 +310,7 @@
         : cat === "Documentação" ? c.good
         : cat === "Segurança" ? c.bad
         : cat === "Migração" ? c.warn
+        : cat === "Provas" ? c.a3
         : c.a3;
     }
 
@@ -321,19 +324,31 @@
       var PX_PER_DAY = 64, SIDE_PAD = 64;
       track.style.width = (SIDE_PAD * 2 + spanDays * PX_PER_DAY) + "px";
       track.querySelectorAll(".tl-evt").forEach(function (el) { el.remove(); });
-      events.forEach(function (e, i) {
+
+      // ordinal de cada dia distinto: dias alternam o nivel de partida, o que
+      // preserva o ritmo visual mesmo quando quase toda data tem um evento so
+      var dateOrdinal = {};
+      events.forEach(function (e) {
+        if (!(e.date in dateOrdinal)) dateOrdinal[e.date] = Object.keys(dateOrdinal).length;
+      });
+      var seenByDate = {};
+      var maxOffset = 40;
+
+      events.forEach(function (e) {
         var xPx = SIDE_PAD + Math.round((Date.parse(e.date) - first) / 86400000) * PX_PER_DAY;
         var title = cleanTitle(e.title);
         var color = catColor(categorize(title));
-        var isAbove = (i % 2 === 0);
-        var rowPos = isAbove ? (i / 2) : ((i - 1) / 2);
-        // acima: 1o longe(60px), 2o perto(35px)... ; abaixo: 1o perto(35px), 2o longe(60px)...
-        var depth = isAbove
-          ? (rowPos % 2 === 0 ? "tl-evt--far" : "tl-evt--near")
-          : (rowPos % 2 === 0 ? "tl-evt--near" : "tl-evt--far");
+        // posicao deste evento dentro do proprio dia (0-based)
+        var k = (seenByDate[e.date] = (seenByDate[e.date] || 0) + 1) - 1;
+        var isAbove = (k % 2 === 0);
+        var level = Math.floor(k / 2);
+        var base = (dateOrdinal[e.date] % 2 === 0) ? 40 : 75;
+        var offset = base + level * 70;
+        if (offset > maxOffset) maxOffset = offset;
         var evt = document.createElement("div");
-        evt.className = "tl-evt " + (isAbove ? "tl-evt--above" : "tl-evt--below") + " " + depth;
+        evt.className = "tl-evt " + (isAbove ? "tl-evt--above" : "tl-evt--below");
         evt.style.left = xPx + "px";
+        evt.style.setProperty("--evt-offset", offset + "px");
         evt.style.setProperty("--evt-color", color);
         evt.style.setProperty("--evt-halo", color + "33");
         evt.title = title;
@@ -353,6 +368,9 @@
         });
         track.appendChild(evt);
       });
+
+      // a altura acompanha o nivel mais profundo, para nenhum bloco ser cortado
+      track.style.height = Math.max(460, (maxOffset + 90) * 2 + 20) + "px";
     }
 
     // ---- legenda de categorias ----
