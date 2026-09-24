@@ -148,8 +148,12 @@ export default function NewConsultation() {
 
     const saveMutation = useMutation({
         mutationFn: async (data: ConsultationFormState) => {
+            // Por BR-MIGRAR-034, endereçar uma consulta existente exige o escopo. A
+            // resolução é a mesma que as leituras desta tela já usam.
+            const scope = resolveScope(toSessionUser(await base44.auth.me()));
             if (consultationId) {
                 await base44.entities.Consultation.update(
+                    scope,
                     consultationId,
                     data as unknown as Partial<WriteInput<Consultation>>,
                 );

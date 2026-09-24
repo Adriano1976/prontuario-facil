@@ -181,6 +181,9 @@ export default function PatientForm() {
 
   const saveMutation = useMutation({
     mutationFn: async (data: PatientFormState) => {
+      // O escopo é resolvido AQUI porque a mutação endereça um registro existente: por
+      // BR-MIGRAR-034, `update` o exige. A leitura acima usa a mesma resolução.
+      const scope = resolveScope(toSessionUser(await base44.auth.me()));
       let photoUrl = formData.photo_url;
       if (photoFile) {
         const { file_url } = await base44.integrations.Core.UploadFile({ file: photoFile });
@@ -190,7 +193,7 @@ export default function PatientForm() {
       const saveData = { ...data, photo_url: photoUrl } as unknown as WriteInput<Patient>;
 
       if (patientId) {
-        await base44.entities.Patient.update(patientId, saveData);
+        await base44.entities.Patient.update(scope, patientId, saveData);
         await logAccess(ACCESS_ACTIONS.EDIT_PATIENT, 'Patient', patientId, data.full_name);
       } else {
         await base44.entities.Patient.create(saveData);

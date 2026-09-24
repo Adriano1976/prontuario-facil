@@ -276,6 +276,8 @@ describe('PatientForm', () => {
 
     await vi.waitFor(() => expect(updatePatient).toHaveBeenCalledOnce());
     expect(updatePatient).toHaveBeenCalledWith(
+      // O escopo vem primeiro: atualizar endereçando um identificador o exige (BR-MIGRAR-034).
+      { kind: 'user', user_id: 'demo-user-001' },
       'patient-1',
       expect.objectContaining({
         full_name: 'Carla Mendes Atualizada',

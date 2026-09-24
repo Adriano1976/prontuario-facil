@@ -182,7 +182,7 @@ describe('Appointments — situação do agendamento', () => {
     // rearmada em cada teste para que nenhum caso herde o armazém do anterior.
     atualizarAgendamento.mockReset();
     atualizarAgendamento.mockImplementation(
-      async (id: string, alteracoes: Partial<Appointment>) => {
+      async (_escopo: unknown, id: string, alteracoes: Partial<Appointment>) => {
         const registro = armazem.agendamentos.find((item) => item.id === id);
         if (registro) Object.assign(registro, alteracoes);
         return registro;
@@ -222,7 +222,12 @@ describe('Appointments — situação do agendamento', () => {
     await user.click(within(dialogo).getByRole('button', { name: 'Confirmar' }));
 
     await vi.waitFor(() =>
-      expect(atualizarAgendamento).toHaveBeenCalledWith('agendamento-1', { status: 'confirmado' }),
+      expect(atualizarAgendamento).toHaveBeenCalledWith(
+        // O escopo vem primeiro (BR-MIGRAR-034).
+        { kind: 'user', user_id: 'demo-user-001' },
+        'agendamento-1',
+        { status: 'confirmado' },
+      ),
     );
     // A confirmação se vê na tela: o diálogo se fecha quando a gravação é aceita.
     await vi.waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
@@ -249,7 +254,11 @@ describe('Appointments — situação do agendamento', () => {
     await user.click(within(dialogo).getByRole('button', { name: 'Cancelar' }));
 
     await vi.waitFor(() =>
-      expect(atualizarAgendamento).toHaveBeenCalledWith('agendamento-1', { status: 'cancelado' }),
+      expect(atualizarAgendamento).toHaveBeenCalledWith(
+        { kind: 'user', user_id: 'demo-user-001' },
+        'agendamento-1',
+        { status: 'cancelado' },
+      ),
     );
 
     unmount();
@@ -275,7 +284,11 @@ describe('Appointments — situação do agendamento', () => {
     await user.selectOptions(seletorDeSituacao(dialogo), 'faltou');
 
     await vi.waitFor(() =>
-      expect(atualizarAgendamento).toHaveBeenCalledWith('agendamento-1', { status: 'faltou' }),
+      expect(atualizarAgendamento).toHaveBeenCalledWith(
+        { kind: 'user', user_id: 'demo-user-001' },
+        'agendamento-1',
+        { status: 'faltou' },
+      ),
     );
 
     unmount();

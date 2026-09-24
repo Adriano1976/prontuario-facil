@@ -246,7 +246,13 @@ describe('PatientDetail', () => {
 
     await user.click(screen.getByRole('button', { name: 'Excluir' }));
 
-    await vi.waitFor(() => expect(deletePatient).toHaveBeenCalledWith('patient-1'));
+    // O escopo vem primeiro: excluir endereçando um identificador o exige (BR-MIGRAR-034).
+    await vi.waitFor(() =>
+      expect(deletePatient).toHaveBeenCalledWith(
+        { kind: 'user', user_id: 'demo-user-001' },
+        'patient-1',
+      ),
+    );
     expect(logAccess).toHaveBeenCalledWith(
       'delete_record',
       'Patient',

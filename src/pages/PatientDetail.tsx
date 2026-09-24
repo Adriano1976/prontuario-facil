@@ -172,7 +172,11 @@ export default function PatientDetail() {
     });
 
     const deleteMutation = useMutation({
-        mutationFn: () => base44.entities.Patient.delete(patientId ?? ''),
+        mutationFn: async () => {
+            // Por BR-MIGRAR-034, excluir endereçando um identificador exige o escopo.
+            const scope = resolveScope(toSessionUser(await base44.auth.me()));
+            return base44.entities.Patient.delete(scope, patientId ?? '');
+        },
         onSuccess: () => {
             logAccess(ACCESS_ACTIONS.DELETE_RECORD, 'Patient', patientId, patient?.full_name ?? null);
             navigate(createPageUrl('Patients'));

@@ -249,7 +249,7 @@ describe('NewConsultation — troca de situação persistida', () => {
     armazem.consultas.length = 0;
     armazem.pacientes.push(paciente());
     armazem.consultas.push(consulta({ id: ID_DA_CONSULTA, status: 'em_andamento' }));
-    atualizarConsulta.mockImplementation(async (id: string, alteracoes: Record<string, unknown>) => ({
+    atualizarConsulta.mockImplementation(async (_escopo: unknown, id: string, alteracoes: Record<string, unknown>) => ({
       id,
       ...alteracoes,
     }));
@@ -269,6 +269,8 @@ describe('NewConsultation — troca de situação persistida', () => {
 
     await vi.waitFor(() => expect(atualizarConsulta).toHaveBeenCalledTimes(1));
     expect(atualizarConsulta).toHaveBeenCalledWith(
+      // O escopo vem primeiro (BR-MIGRAR-034).
+      { kind: 'user', user_id: 'demo-user-001' },
       ID_DA_CONSULTA,
       expect.objectContaining({ status: 'concluida' }),
     );

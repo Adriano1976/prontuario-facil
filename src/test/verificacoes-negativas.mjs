@@ -130,6 +130,30 @@ export function caso(pacientes: OwnedEntity<Patient>) {
 `,
   },
   {
+    id: 'mutacao-sem-escopo',
+    violacao: 'Exclusão de dado clínico sem declarar o escopo de acesso (F-03, BR-MIGRAR-034)',
+    codigo: 'TS2554',
+    fonte: `import type { OwnedEntity } from '@/api/scopedRead';
+import type { Patient } from '@/types';
+
+export function caso(pacientes: OwnedEntity<Patient>) {
+  return pacientes.delete('paciente-1');
+}
+`,
+  },
+  {
+    id: 'atualizacao-sem-escopo',
+    violacao: 'Atualização de dado clínico sem declarar o escopo de acesso (F-03, BR-MIGRAR-034)',
+    codigo: 'TS2554',
+    fonte: `import type { OwnedEntity } from '@/api/scopedRead';
+import type { Patient } from '@/types';
+
+export function caso(pacientes: OwnedEntity<Patient>) {
+  return pacientes.update('paciente-1', { full_name: 'Outro nome' });
+}
+`,
+  },
+  {
     id: 'escopo-admin-em-metodo-de-dono',
     violacao: 'Escopo administrativo entregue a método que exige escopo de dono (T034)',
     espera: '"admin"',

@@ -80,8 +80,11 @@ export default function Appointments() {
     });
 
     const updateStatusMutation = useMutation({
-        mutationFn: ({ id, status }: { id: string; status: AppointmentStatus }) =>
-            base44.entities.Appointment.update(id, { status }),
+        mutationFn: async ({ id, status }: { id: string; status: AppointmentStatus }) => {
+            // Por BR-MIGRAR-034, endereçar um agendamento existente exige o escopo.
+            const scope = resolveScope(toSessionUser(await base44.auth.me()));
+            return base44.entities.Appointment.update(scope, id, { status });
+        },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['appointments'] });
             setShowDetails(false);

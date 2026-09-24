@@ -79,12 +79,18 @@ export interface ScopedReader<T extends OwnedRecord> {
  * obrigatoriamente pelo escopo.
  */
 export interface OwnedEntity<T extends OwnedRecord> extends ScopedReader<T> {
-  /** Cria um registro; o servidor (ou o mock) preenche `id` e `created_date`. */
+  /** Cria um registro; o servidor (ou o mock) preenche `id`, `created_date` e o dono. */
   create(data: WriteInput<T>): Promise<T>;
-  /** Atualiza um registro; `id` é preservado (BR-MIGRAR-042). */
-  update(id: string, data: Partial<WriteInput<T>>): Promise<T>;
-  /** Exclui um registro. */
-  delete(id: string): Promise<DeleteResult>;
+  /**
+   * Atualiza um registro.
+   *
+   * O ESCOPO É EXIGIDO (BR-MIGRAR-034): endereçar um registro existente por
+   * identificador é operação sob isolamento de dono, e omitir o escopo não compila.
+   * `id` é preservado (BR-MIGRAR-042).
+   */
+  update(scope: AccessScope, id: string, data: Partial<WriteInput<T>>): Promise<T>;
+  /** Exclui um registro. O escopo é exigido pelo mesmo motivo de `update`. */
+  delete(scope: AccessScope, id: string): Promise<DeleteResult>;
   /** Acesso administrativo explícito: leitura sem filtro de dono. */
   asAdmin(scope: AdminScope): EntityRead<T>;
 }
@@ -101,8 +107,14 @@ export function createOwnedEntity<T extends OwnedRecord>(
   const reader = createScopedReader<T>(repo);
   return {
     create: repo.create,
-    update: repo.update,
-    delete: repo.delete,
+    // ⚠️ O escopo é EXIGIDO na assinatura e NÃO altera a chamada. `update`/`delete` do
+    // contrato tomam apenas o identificador, e quem decide a posse é a regra de acesso do
+    // servidor. O que esta camada entrega é a OBRIGATORIEDADE DE CONTRATO (BR-MIGRAR-034):
+    // endereçar um registro existente sem declarar o escopo não compila. Verificar posse
+    // AQUI seria duplicar a RLS no cliente — decisão recusada em `sessionScope.ts:18-21`,
+    // e que não protegeria de um cliente adulterado.
+    update: (_scope, id, data) => repo.update(id, data),
+    delete: (_scope, id) => repo.delete(id),
     asAdmin: () => repo,
     ...reader,
   };
