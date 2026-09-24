@@ -195,6 +195,7 @@ Medições, sobre o código desta árvore de trabalho (teto declarado: **90 segu
 | 2026-09-22, após a feature `009-prova-kpis-dashboard` | 145 | 24 | 85,9 s | 0 |
 | 2026-09-22, após a feature `010-prova-modo-offline` | 168 | 26 | 69,8 s a 70,5 s | 0 |
 | 2026-09-24, após a correção do F-01 (`011-rbac-frontend`) | 179 | 28 | 72,5 s a 101,5 s | 0 |
+| 2026-09-24, após a correção do F-04 (`013-leitura-da-trilha`) | 180 | 28 | 98,7 s | 0 |
 
 As três linhas de `005`/`006`/`009` foram acrescentadas por features posteriores — a tabela estava
 parada na 004, e uma medição que não acompanha as features deixa de ser medição. A linha da `008`
@@ -332,6 +333,41 @@ arquivos**, com `typecheck` em 0 erros.
 > Por isso o F-03 fica **parcialmente** endereçado: a metade de contrato está feita, e a metade de
 > runtime continua sendo — deliberadamente — a RLS. Quem ler o achado da auditoria sem esta nota
 > vai procurar no cliente uma verificação que o projeto decidiu não ter.
+
+### Correção do F-04 — leitura da trilha (2026-09-24)
+
+O achado diz que a listagem da trilha é "ampla (até 500 registros) e não aplica filtro de
+tenant/organização no frontend". Duas precisões antes do registro:
+
+1. **O "filtro de inquilino" não existe neste sistema.** `base44/entities/AccessLog.jsonc` tem oito
+   propriedades e **nenhuma** de inquilino ou organização. O isolamento do projeto é por **dono**
+   (`created_by_id`) nas entidades clínicas, e a trilha não tem dono: a RLS dela é por **papel**
+   (`read: role == admin`). Não há o que filtrar — a cláusula do achado não é implementável como
+   está escrita.
+2. **O que era corrigível era a omissão.** A leitura saía pelo repositório **cru**, sem escopo
+   declarado, enquanto a **inserção** na mesma entidade já declarava o seu (`AccessLogger.ts:60`,
+   `asUser`). Era a única operação da trilha feita sem escopo nenhum.
+
+| O que mudou | Onde |
+| :--- | :--- |
+| A leitura passou a exigir escopo administrativo declarado; o caminho de quem não é admin responde vazio **sem perguntar ao servidor** | `AccessLogs.tsx` — `leituraDaTrilha` |
+| O limite e a ordenação do pedido continuam **exatamente** `('-created_date', 500)` (AMB-004) | idem |
+| A prova inverteu a afirmação: `asAdmin` era espionado para ser encontrado **sem uso**; agora é afirmado **com** o escopo | `AccessLogs.test.tsx` |
+
+**Prova.** A suíte vai de 179 para **180 verificações em 28 arquivos** — a nova mede o caminho de
+quem não é administrador, que antes era **indistinguível** de "admin lendo", porque os dois eram o
+mesmo código. `typecheck` em 0 erros e `prova:encoding` em 499 arquivos íntegros.
+
+> ⚠️ **Esta mudança foi antecipada como "regra nova" pelo watch da feature 006.** O item `W006`
+> vigiava a leitura "com os argumentos exatos e **sem escopo declarado**", e nomeava como sinal de
+> violação exatamente o que foi feito: "*a leitura passa a usar `asAdmin`/`asUser` — o que seria
+> regra nova, e não conserto*". É regra nova, foi feita de propósito, e `W006` fica **superado** —
+> o registro de que a leitura já foi crua permanece no watch daquela feature.
+
+> ⚠️ **O que não mudou.** A restrição de leitura continua sendo a RLS do servidor: `asAdmin`
+> declara o escopo e **não** verifica autorização, e em runtime `asUser` e `asAdmin` devolvem o
+> mesmo repositório (`registry.ts:125`). O teto de 500 registros e a ausência de paginação seguem
+> como paridade congelada (AMB-004) e **não** foram tocados.
 
 ### Cenários de paridade do módulo Pacientes
 
@@ -534,7 +570,7 @@ está marcado como fechado, e o que permanece aberto tem razão declarada.
 | **Trilha de auditoria da emissão de documento** | 🟢 **Provada e declarada.** Emitir documento não grava `AccessLog` e anexar exame grava; o defeito **permanece**, porque corrigir exige ligar a ação `create_prescription` ao fluxo |
 | **As três ações órfãs do catálogo de auditoria** | 🟡 **Declarada.** `create_prescription`, `logout` e `export_data` estão declaradas em `AccessLogger.ts:22-35` e nunca são invocadas. A feature 006 reafirma a declaração por decisão `1a` e **prova o contrato** do enum (doze entradas iguais às do schema); a orfandade continua sem prova, porque é propriedade estática do código |
 | **Os três modos de perda silenciosa da trilha** | 🟢 **Provados dois e declarado o terceiro.** Identificação **recusada** e identificação **vazia** não gravam nada e não propagam erro — a segunda nem imprime no console (`AccessLogger.test.ts`). A gravação **não aguardada** antes da navegação fica declarada por leitura. Os três **permanecem**: a decisão `3a` preservou a paridade |
-| **A classificação de `AccessLog` no contrato do cliente** | 🔴 **Declarada imprecisa.** `registry.ts:65-67` agrupa a trilha como entidade de **leitura aberta**, ao lado de `Doctor` e `Template` — mas a leitura é **admin-only** na RLS. E `withAccess` faz `asUser` e `asAdmin` devolverem o **mesmo** repositório, de modo que os dois acessos são indistinguíveis para esta entidade. Provado em `AccessLogs.test.tsx`: a página lê pelo repositório cru e **não declara escopo** |
+| **A classificação de `AccessLog` no contrato do cliente** | 🟡 **Parcialmente resolvida em 2026-09-24.** O `registry.ts:65-67` continua agrupando a trilha como entidade de **leitura aberta**, ao lado de `Doctor` e `Template` — e essa classificação segue imprecisa, porque a leitura é **admin-only** na RLS. O que mudou foi o **uso**: `AccessLogs.tsx` passou a **declarar escopo administrativo** (correção do F-04, 2026-09-24), de modo que a imprecisão do registry não se propaga mais para a leitura. Em runtime as duas formas continuam indistinguíveis (`withAccess` devolve o mesmo repositório), e a **inserção** segue usando a forma de dono, de propósito (`registry.ts:69-72`) |
 | **A tela de auditoria é oferecida a quem não é admin** | ✅ **Fechada** em 2026-09-24 pela correção do F-01 (`011-rbac-frontend`). O item de navegação passou a `adminOnly` e é filtrado por `user?.role === 'admin'` (`Layout.tsx`), e a rota `/AccessLogs` ganhou guarda de papel (`App.tsx`). A nota de `code-analysis.md#5.1` ("somente admins veem a tela") **volta a ser verdadeira** — era exatamente ela que a extração não podia sustentar. Prova em `Layout.test.tsx` (reescrito) e `RbacRotas.test.tsx` (novo). O texto original desta linha está preservado no adendo `006` e no watch `W008` daquela feature |
 | **Os indicadores da tela de auditoria não somam o total** | 🟢 **Provada e declarada.** A heurística é por substring: `create_prescription` entra como "Edição", e `login`, `logout`, `upload_exam` e `export_data` não entram em categoria nenhuma. Com um conjunto de doze registros, os três indicadores somam **8** e o total é **12** (`AccessLogs.test.tsx`) |
 | **O recorte de data dos logs não tem teto superior** | 🟢 **Provada e declarada.** Semana e mês comparam apenas o piso (`>= hoje − N`), então um registro com data **futura** entra nos dois. É a mesma forma do defeito que a feature 004 provou em consultas (`AccessLogs.test.tsx`) |
@@ -701,7 +737,7 @@ desta tabela.
 | **F-01** — RBAC inexistente no frontend | Alta | ✅ **Corrigido** | Menu, rota da trilha e ações de Médicos e Templates — ver `#Correção do F-01 — guarda de papel no frontend` |
 | **F-02** — `access_token` por query string e em `LocalStorage` | Alta | ⛔ **Não corrigível neste repositório** | Nota abaixo |
 | **F-03** — IDOR nas mutações por identificador | Alta | 🟡 **Contrato feito; a metade de runtime é da RLS, por decisão** | Ver `#Correção do F-03 — obrigatoriedade de escopo nas mutações` |
-| **F-04** — leitura ampla da trilha, sem isolamento no cliente | Média | 🔴 **Aberto** | `AccessLogs.tsx:75-78`; watch `W006` da feature `006`, ainda vigente |
+| **F-04** — leitura ampla da trilha, sem isolamento no cliente | Média | ✅ **Corrigido no que era corrigível no cliente** | A leitura passou a declarar escopo administrativo — ver `#Correção do F-04 — leitura da trilha`. O "filtro de inquilino" do achado **não existe** neste sistema: a entidade não tem campo de inquilino |
 | **F-05** — `dangerouslySetInnerHTML` no componente de gráficos | Baixa | 🔴 **Aberto** | `src/components/ui/chart.jsx:74` |
 
 > ⚠️ **F-02 não se fecha neste repositório, e a razão é verificável no SDK.** O
