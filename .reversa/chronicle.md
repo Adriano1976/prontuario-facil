@@ -53,6 +53,7 @@
 - 2026-09-24 — Correção do F-01: guarda de papel no menu, na rota da trilha e nas ações de Médicos e Templates, alinhada a BR-MIGRAR-015/017/020/024; a suíte vai a 179 verificações em 28 arquivos
 - 2026-09-24 — Correção do F-03: update e delete das entidades sob RLS passam a exigir escopo por contrato (BR-MIGRAR-034); o arnês de casos negativos vai a 18
 - 2026-09-24 — Correção do F-04: a leitura da trilha de auditoria passa a declarar escopo administrativo e a dizer o caminho de quem não é admin; a suíte vai a 180 verificações
+- 2026-09-24 — Correção do F-05: o sink dangerouslySetInnerHTML sai do componente de gráficos, que passa a entregar o CSS como texto; a suíte vai a 183 verificações em 29 arquivos
 
 ---
 *Gerado pelo Reversa em 2026-09-10.*

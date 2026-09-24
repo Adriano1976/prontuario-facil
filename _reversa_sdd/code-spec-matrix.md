@@ -196,6 +196,7 @@ Medições, sobre o código desta árvore de trabalho (teto declarado: **90 segu
 | 2026-09-22, após a feature `010-prova-modo-offline` | 168 | 26 | 69,8 s a 70,5 s | 0 |
 | 2026-09-24, após a correção do F-01 (`011-rbac-frontend`) | 179 | 28 | 72,5 s a 101,5 s | 0 |
 | 2026-09-24, após a correção do F-04 (`013-leitura-da-trilha`) | 180 | 28 | 98,7 s | 0 |
+| 2026-09-24, após a correção do F-05 | 183 | 29 | 97,6 s | 0 |
 
 As três linhas de `005`/`006`/`009` foram acrescentadas por features posteriores — a tabela estava
 parada na 004, e uma medição que não acompanha as features deixa de ser medição. A linha da `008`
@@ -738,7 +739,7 @@ desta tabela.
 | **F-02** — `access_token` por query string e em `LocalStorage` | Alta | ⛔ **Não corrigível neste repositório** | Nota abaixo |
 | **F-03** — IDOR nas mutações por identificador | Alta | 🟡 **Contrato feito; a metade de runtime é da RLS, por decisão** | Ver `#Correção do F-03 — obrigatoriedade de escopo nas mutações` |
 | **F-04** — leitura ampla da trilha, sem isolamento no cliente | Média | ✅ **Corrigido no que era corrigível no cliente** | A leitura passou a declarar escopo administrativo — ver `#Correção do F-04 — leitura da trilha`. O "filtro de inquilino" do achado **não existe** neste sistema: a entidade não tem campo de inquilino |
-| **F-05** — `dangerouslySetInnerHTML` no componente de gráficos | Baixa | 🔴 **Aberto** | `src/components/ui/chart.jsx:74` |
+| **F-05** — `dangerouslySetInnerHTML` no componente de gráficos | Baixa | ✅ **Corrigido** | O sink foi removido de `src/components/ui/chart.jsx` — nota abaixo |
 
 > ⚠️ **F-02 não se fecha neste repositório, e a razão é verificável no SDK.** O
 > `src/lib/app-params.ts` lê o token da query string e o grava em `localStorage` — mas quem
@@ -755,8 +756,27 @@ desta tabela.
 > recomendação da auditoria ("eliminar o envio do token via URL e o armazenamento") não é
 > alcançável no cliente.
 
----
+> ⚠️ **F-05 — o sink saiu, e o componente é código morto.** O `ChartStyle` de
+> `src/components/ui/chart.jsx` injetava as regras de cor por `dangerouslySetInnerHTML` e passou a
+> entregá-las como **texto** (`<style>{css}</style>`): o React grava o valor por `textContent`,
+> que **não** é interpretado como marcação. A recomendação literal da auditoria — propriedades
+> customizadas inline — **não** foi seguida porque as regras têm duas variantes de tema (`light` e
+> `.dark`, em `THEMES`) e uma propriedade inline não expressa a variante escura: aplicá-la
+> trocaria um achado de segurança baixo por um defeito latente de tema.
+>
+> **Duas evidências independentes de que o componente não tem consumidor**, registradas porque
+> mudam a leitura do achado: nenhum arquivo de `src/` o importa, e ele era o **único** componente
+> de `components/ui` sem `.d.ts` — a migração criou sombra de tipo para os **19** que o projeto
+> consome, e a ausência da vigésima era, por si só, a evidência. A prova
+> (`src/__tests__/ChartStyle.test.tsx`) é o primeiro código do projeto a importá-lo, e a sombra
+> `chart.d.ts` nasceu com ela.
+>
+> **Esta correção não tem watch próprio**, ao contrário de F-01, F-03 e F-04: não há contrato de
+> comportamento a preservar, e a guarda é a própria prova — que alimenta o componente com uma cor
+> que tenta fechar a tag de estilo e abrir um `<script>`, e afirma que nada executável aparece no
+> DOM. Devolver o `dangerouslySetInnerHTML` faz essa verificação falhar.
 
+---
 *Gerado pelo Reversa-Writer em 2026-09-02.*
 *Seção de rastreabilidade acrescentada em 2026-09-19; módulos de Agendamentos e Consultas e suas lacunas em 2026-09-21; cenários e registros dos grupos 06 (emissão de documento com modelo), 07 (trilha de auditoria) e 10 (contrato de dados) em 2026-09-21 e 2026-09-22; medições das features 005 e 006 e adoção da guarda de encoding em 2026-09-22.*
-*Correção do F-01 e registro vivo dos achados de segurança em 2026-09-24.*
+*Correção do F-01 e registro vivo dos achados de segurança em 2026-09-24; correções do F-03, F-04 e F-05 em 2026-09-24.*
