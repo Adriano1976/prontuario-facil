@@ -50,6 +50,7 @@
 - 2026-09-22 — Feature 010 (prova do modo offline) fecha a suíte em 168 verificações em 26 arquivos, com 39 de 39 cenários de fluxo provados
 - 2026-09-22 — Workflow de prova entra no CI com quatro portões e linha de base de 168 verificações
 - 2026-09-23 — Mini-site ganha a página do Ciclo de Provas e os dados passam a 170 arquivos, 411 importações e 56 pacotes
+- 2026-09-24 — Correção do F-01: guarda de papel no menu, na rota da trilha e nas ações de Médicos e Templates, alinhada a BR-MIGRAR-015/017/020/024; a suíte vai a 179 verificações em 28 arquivos
 
 ---
 *Gerado pelo Reversa em 2026-09-10.*

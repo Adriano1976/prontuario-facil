@@ -194,11 +194,18 @@ Medições, sobre o código desta árvore de trabalho (teto declarado: **90 segu
 | 2026-09-22, após a feature `006-prova-logs-acesso` | 132 | 23 | 75,8 s a 122,6 s | 0 |
 | 2026-09-22, após a feature `009-prova-kpis-dashboard` | 145 | 24 | 85,9 s | 0 |
 | 2026-09-22, após a feature `010-prova-modo-offline` | 168 | 26 | 69,8 s a 70,5 s | 0 |
+| 2026-09-24, após a correção do F-01 (`011-rbac-frontend`) | 179 | 28 | 72,5 s a 101,5 s | 0 |
 
 As três linhas de `005`/`006`/`009` foram acrescentadas por features posteriores — a tabela estava
 parada na 004, e uma medição que não acompanha as features deixa de ser medição. A linha da `008`
 **não existe de propósito**: aquela feature não acrescentou verificação de unidade nenhuma, e
 repetir `132 / 23` só para preencher a linha criaria a impressão de que algo foi medido de novo.
+
+> ⚠️ **A linha da `011` é a primeira do projeto que ultrapassou o teto declarado de 90 s nesta
+> máquina**: 101,5 s na medição de fecho, contra **72,5 s da mesma suíte minutos antes**. Ela
+> acrescenta 11 verificações e dois arquivos, o que não explica a diferença — a variação é da
+> mesma natureza da registrada na rodada 006 (75,78 s calma / 122,57 s sob carga): o tempo mede o
+> ambiente tanto quanto o código. Quem for conferir precisa medir duas vezes.
 
 > ⚠️ **O tempo é uma propriedade CONDICIONAL, e a faixa da rodada 006 é o registro disso.** A
 > mesma suíte, sem uma linha de diferença, mediu **75,78 s** em máquina calma e **122,57 s** sob
@@ -207,7 +214,16 @@ repetir `132 / 23` só para preencher a linha criaria a impressão de que algo f
 > vezes antes de concluir qualquer coisa sobre o teto.
 
 `typecheck` e `lint` são gates independentes (**RN-05 da feature `002-prova-automatizada`**):
-o primeiro confere forma em tempo de compilação, o segundo confere estilo e imports mortos.
+o primeiro confere forma em tempo de compilação, o segundo **deveria** conferir estilo e imports
+mortos.
+
+> ⚠️ **Correção de 2026-09-24: o `lint` está VAZIO, e o "0 avisos" das medições não mede nada.**
+> `eslint.config.js` casa apenas `src/components/**/*.{js,mjs,cjs,jsx}`,
+> `src/pages/**/*.{js,mjs,cjs,jsx}` e `src/Layout.jsx`. Todos os `.jsx` que restam vivem em
+> `src/components/ui/**`, que o **próprio config ignora**; e `src/Layout.jsx` deixou de existir na
+> migração para `.tsx`. Nenhum arquivo do projeto é examinado. O gate de `typecheck` continua
+> válido e é o que de fato cobre o código de aplicação — foi ele que sustentou a correção do F-01,
+> e não o `lint`.
 A suíte exige **acesso ampliado** para subir neste ambiente: o esbuild do vitest abre pipe
 nomeado e falha com `spawn EPERM` em modo confinado (mesma restrição registrada no
 onboarding da feature 001, §7).
@@ -234,6 +250,52 @@ automatizada depende do harness de paridade visual, ainda a criar.
 > rodada, que regularizar a guarda "é trabalho de feature própria, não desta" — redação que ficou
 > **contraditória** quando a feature `008` fechou a lacuna. As duas afirmações conviviam no mesmo
 > arquivo, a poucas linhas de distância. A redação foi corrigida; o registro histórico, preservado.
+
+### Correção do F-01 — guarda de papel no frontend (2026-09-24)
+
+Primeira mudança de **comportamento** registrada neste corpus depois do ciclo de provas. Ela não
+nasceu de uma feature forward: nasceu de revisão de segurança, e é registrada aqui porque altera o
+que a extração afirmava. O adendo é `_reversa_sdd/addenda/011-rbac-frontend.md`, e o watch vive em
+`_reversa_forward/011-rbac-frontend/regression-watch.md`.
+
+O que mudou, e a regra que autoriza cada parte:
+
+| Mudança | Regra que autoriza |
+| :--- | :--- |
+| O item de navegação da trilha de auditoria passou a ser escondido de quem não é admin | BR-MIGRAR-024 — read/update/delete apenas `admin` |
+| A rota `/AccessLogs` ganhou guarda de papel | BR-MIGRAR-024 |
+| Criar, editar e excluir em **Médicos** passaram a ser escondidos de quem não é admin | BR-MIGRAR-015 — CRUD só admin |
+| Criar, editar e excluir em **Templates**, incluindo o botão do estado vazio | BR-MIGRAR-020 — CRUD restrito a admin |
+| **Médicos e Templates continuam visíveis e alcançáveis** por qualquer autenticado | BR-MIGRAR-017 e BR-MIGRAR-020 — **leitura livre** |
+
+A última linha é o que separa a correção de um excesso, e é o ponto em que a primeira tentativa
+errou: ela guardou as três rotas e promoveu o usuário offline a `admin` para a guarda passar. A
+guarda de **rota** ficou onde a *leitura* é restrita; a guarda de **ação** ficou onde o restrito é
+a *escrita*.
+
+**Prova.** Três arquivos e 11 verificações novas — a suíte vai de 168/26 para **179/28**:
+
+| Arquivo | O que prova |
+| :--- | :--- |
+| `src/__tests__/Layout.test.tsx` (reescrito) | O item de auditoria some para quem não é admin; Médicos e Templates **permanecem**; o admin vê o item, uma vez só |
+| `src/__tests__/RbacRotas.test.tsx` (novo) | Não-admin em `/AccessLogs` é redirecionado **e** avisado; o admin entra; o não-admin **entra** em `/Doctors` e `/Templates` |
+| `src/__tests__/GuardasDeAcao.test.tsx` (novo) | As três ações de escrita somem das duas telas para quem não é admin, e a leitura continua funcionando |
+
+**A prova foi falsificada antes de ser aceita.** Desligada a guarda nas duas telas, **3 das 6**
+verificações de ação falharam — exatamente as que medem o não-admin —, e os casos de admin
+seguiram verdes. Revertida, sem resíduo.
+
+> ⚠️ **O watch da feature `006` previu esta mudança, e a classificou como legítima.** O item
+> `W008` dizia: "Surge uma guarda de papel no caminho até a tela. Isso **não** é defeito — é regra
+> nova, e invalidaria a nota de que a tela é oferecida a todos". É exatamente o que aconteceu:
+> `W008` fica **superado**, não violado — e o registro de que a tela já foi oferecida a todos
+> permanece no adendo daquela feature.
+
+> ⚠️ **O que esta correção NÃO fechou.** `AccessLogs.tsx` continua lendo com os argumentos exatos
+> `('-created_date', 500)` e **sem escopo declarado** (watch `W006`, ainda vigente, e o achado
+> F-04); a autorização de escrita continua sendo, em última instância, a regra do servidor; e o
+> `RoleGuard` é guarda de **interface** — ele não substitui a RLS nem torna seguro um cliente
+> adulterado. F-02, F-03 e F-04 seguem abertos.
 
 ### Cenários de paridade do módulo Pacientes
 
@@ -301,7 +363,7 @@ Os 4 cenários de `PT-007`, com o destino de cada um. Acrescentado em 2026-09-22
 | Cenário | Arquivo | Veredito | Prova ou razão |
 | :--- | :--- | :---: | :--- |
 | PT-007.1 — visualização de prontuário gera `AccessLog` | `parity_tests/07-auditoria-acesso.feature` | 🟢 | `PatientDetailAudit.test.tsx` e `Consultation.test.tsx`, medidos **no transporte**: a visualização grava `view_patient` e `view_consultation` com a entidade, o identificador e o nome do paciente. O endereço literal `'client-side'` e o agente do navegador são provados em `AccessLogger.test.ts` |
-| PT-007.2 — o log é append-only e só admin lê | `parity_tests/07-auditoria-acesso.feature` | 🟢 **metade** · 🔴 **metade** | A metade do **cliente** é provada: `AccessLogger.test.ts` conta a inserção **antes** de negar leitura, alteração e exclusão, e `AccessLogs.test.tsx` prova que nenhuma linha oferece controle de editar ou excluir. A metade do **servidor** — a imutabilidade e a leitura restrita — é **RLS** e fica **declarada**, no mesmo critério do default `agendada` da feature 004. E a tela é oferecida a quem **não** é admin, o que torna imprecisa a nota de `code-analysis.md#5.1` |
+| PT-007.2 — o log é append-only e só admin lê | `parity_tests/07-auditoria-acesso.feature` | 🟢 **metade** · 🔴 **metade** | A metade do **cliente** é provada: `AccessLogger.test.ts` conta a inserção **antes** de negar leitura, alteração e exclusão, e `AccessLogs.test.tsx` prova que nenhuma linha oferece controle de editar ou excluir. A metade do **servidor** — a imutabilidade e a leitura restrita — é **RLS** e fica **declarada**, no mesmo critério do default `agendada` da feature 004. A tela deixou de ser oferecida a quem **não** é admin em 2026-09-24 (correção do F-01), o que **restaura** a precisão da nota de `code-analysis.md#5.1` |
 | PT-007.3 — o Dashboard gera log ao carregar | `parity_tests/07-auditoria-acesso.feature` | 🟢 | `Dashboard.test.tsx` — a montagem grava **exatamente um** registro, com `action: 'login'` e `details: 'Acesso ao dashboard'`, e os campos de entidade chegam ausentes. A ação é `login` porque o enum não tem ação de painel: toda visita ao Dashboard entra na contagem de logins |
 | PT-007.4 — a listagem carrega até 500 sem paginação | `parity_tests/07-auditoria-acesso.feature` | 🟢 **com ressalva** | `AccessLogs.test.tsx` — o pedido é emitido com os argumentos **exatos** `('-created_date', 500)`, nenhum controle de paginação existe, e mudar qualquer filtro **não** reconsulta o servidor. O teto de 500 é paridade **congelada por decisão humana** (AMB-004), e a ressalva é essa: é promessa provada, não lacuna a fechar aqui |
 
@@ -437,7 +499,7 @@ está marcado como fechado, e o que permanece aberto tem razão declarada.
 | **As três ações órfãs do catálogo de auditoria** | 🟡 **Declarada.** `create_prescription`, `logout` e `export_data` estão declaradas em `AccessLogger.ts:22-35` e nunca são invocadas. A feature 006 reafirma a declaração por decisão `1a` e **prova o contrato** do enum (doze entradas iguais às do schema); a orfandade continua sem prova, porque é propriedade estática do código |
 | **Os três modos de perda silenciosa da trilha** | 🟢 **Provados dois e declarado o terceiro.** Identificação **recusada** e identificação **vazia** não gravam nada e não propagam erro — a segunda nem imprime no console (`AccessLogger.test.ts`). A gravação **não aguardada** antes da navegação fica declarada por leitura. Os três **permanecem**: a decisão `3a` preservou a paridade |
 | **A classificação de `AccessLog` no contrato do cliente** | 🔴 **Declarada imprecisa.** `registry.ts:65-67` agrupa a trilha como entidade de **leitura aberta**, ao lado de `Doctor` e `Template` — mas a leitura é **admin-only** na RLS. E `withAccess` faz `asUser` e `asAdmin` devolverem o **mesmo** repositório, de modo que os dois acessos são indistinguíveis para esta entidade. Provado em `AccessLogs.test.tsx`: a página lê pelo repositório cru e **não declara escopo** |
-| **A tela de auditoria é oferecida a quem não é admin** | 🟢 **Provada e declarada.** `Layout.tsx:48` põe o item de navegação sem condição de papel, e não há guarda no caminho até a página. Provado em `Layout.test.tsx` com usuário sem `role`. Isso torna **imprecisa** a nota de `code-analysis.md#5.1` ("somente admins veem a tela") — a segunda metade dela está certa; a primeira, não |
+| **A tela de auditoria é oferecida a quem não é admin** | ✅ **Fechada** em 2026-09-24 pela correção do F-01 (`011-rbac-frontend`). O item de navegação passou a `adminOnly` e é filtrado por `user?.role === 'admin'` (`Layout.tsx`), e a rota `/AccessLogs` ganhou guarda de papel (`App.tsx`). A nota de `code-analysis.md#5.1` ("somente admins veem a tela") **volta a ser verdadeira** — era exatamente ela que a extração não podia sustentar. Prova em `Layout.test.tsx` (reescrito) e `RbacRotas.test.tsx` (novo). O texto original desta linha está preservado no adendo `006` e no watch `W008` daquela feature |
 | **Os indicadores da tela de auditoria não somam o total** | 🟢 **Provada e declarada.** A heurística é por substring: `create_prescription` entra como "Edição", e `login`, `logout`, `upload_exam` e `export_data` não entram em categoria nenhuma. Com um conjunto de doze registros, os três indicadores somam **8** e o total é **12** (`AccessLogs.test.tsx`) |
 | **O recorte de data dos logs não tem teto superior** | 🟢 **Provada e declarada.** Semana e mês comparam apenas o piso (`>= hoje − N`), então um registro com data **futura** entra nos dois. É a mesma forma do defeito que a feature 004 provou em consultas (`AccessLogs.test.tsx`) |
 | **A colisão das famílias `BR-L`** | 🟡 **Contornada por citação qualificada.** `logs-acesso/requirements.md#2` usa `BR-L01`/`BR-L02`/`BR-L03` para *append-only*, *enum de ações* e *chamadas dedicadas*; `code-analysis.md#6` usa os **mesmos IDs** para *campos obrigatórios*, *quem cria e quem lê* e *imutabilidade*. É a **quarta** família com esse defeito no projeto e a **única em que os dois artefatos descrevem o mesmo módulo** |
