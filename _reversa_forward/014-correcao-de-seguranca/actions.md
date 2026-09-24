@@ -15,60 +15,62 @@
 |---------|-------|
 | Total de ações | 28 |
 | Paralelizáveis (`[//]`) | 9 |
-| Maior cadeia de dependência | 5 |
+| Maior cadeia de dependência | 8 |
 
 ## Fase 1, Preparação
 
 | ID | Descrição | Dependências | Paralelismo | Arquivo alvo | Confidência | Status |
 |----|-----------|--------------|-------------|--------------|-------------|--------|
-| T001 | Ler os dois relatórios de auditoria e extrair os cinco achados com severidade, evidência e recomendação | - | `[//]` | `docs/security-audit/001-record/`, `docs/security-audit/002-record/` | 🟢 | [X] |
-| T002 | Confrontar cada achado com as `BR-MIGRAR` já existentes e determinar qual regra autoriza cada correção | T001 | - | `_reversa_sdd/migration/target_business_rules.md` | 🟢 | [X] |
-| T003 | Levantar todos os pontos de leitura e de escrita das cinco entidades sob RLS | T002 | - | `src/` | 🟢 | [X] |
-| T004 | Ler `.reversa/reversa-config.json` antes da primeira escrita fora das pastas do Reversa | - | `[//]` | `.reversa/reversa-config.json` | 🟢 | [X] |
+| T001 | Ler os dois relatórios de auditoria e extrair os cinco achados com severidade, evidência e recomendação (`F-01`–`F-05`, origem de `RF-01` a `RF-13`) | - | `[//]` | `docs/security-audit/001-record/`, `docs/security-audit/002-record/` | 🟢 | [X] |
+| T002 | Confrontar cada achado com as `BR-MIGRAR` já existentes e determinar qual regra autoriza cada correção (`BR-MIGRAR-015`, `017`, `020`, `024`, `034`) | T001 | - | `_reversa_sdd/migration/target_business_rules.md` | 🟢 | [X] |
+| T003 | Levantar todos os pontos de leitura e de escrita das cinco entidades sob RLS (`RF-06`, `RF-07`) | T002 | - | `src/` | 🟢 | [X] |
+| T004 | Ler `.reversa/reversa-config.json` antes da primeira escrita fora das pastas do Reversa (`D-08`) | - | `[//]` | `.reversa/reversa-config.json` | 🟢 | [X] |
 
 ## Fase 2, Testes
 
+> Só o que **independe** do núcleo. As provas que dependem de código da Fase 3 desceram para lá — ver a nota 7.
+
 | ID | Descrição | Dependências | Paralelismo | Arquivo alvo | Confidência | Status |
 |----|-----------|--------------|-------------|--------------|-------------|--------|
-| T005 | Reescrever a prova do menu para a regra nova: auditoria só para admin, Médicos e Templates para todos | T002 | `[//]` | `src/__tests__/Layout.test.tsx` | 🟢 | [X] |
-| T006 | Criar a prova do encanamento das rotas — não-admin recusado na trilha, aceito em Médicos e Templates | T002 | `[//]` | `src/__tests__/RbacRotas.test.tsx` | 🟢 | [X] |
-| T007 | Criar a prova das guardas de ação, incluindo o botão do estado vazio | T002 | `[//]` | `src/__tests__/GuardasDeAcao.test.tsx` | 🟢 | [X] |
-| T008 | Acrescentar os dois casos negativos de mutação sem escopo ao arnês de compilação | T015 | - | `src/test/verificacoes-negativas.mjs` | 🟢 | [X] |
-| T009 | Criar a prova do componente de gráficos, alimentando-o com cor hostil | T018 | `[//]` | `src/__tests__/ChartStyle.test.tsx` | 🟢 | [X] |
+| T005 | Reescrever a prova do menu para a regra nova: auditoria só para admin, Médicos e Templates para todos (`RF-01`, `RF-03`, `D-01`) | T002 | `[//]` | `src/__tests__/Layout.test.tsx` | 🟢 | [X] |
+| T006 | Criar a prova do encanamento das rotas — não-admin recusado na trilha, aceito em Médicos e Templates (`RF-02`, `RF-03`, `D-01`) | T002 | `[//]` | `src/__tests__/RbacRotas.test.tsx` | 🟢 | [X] |
+| T007 | Criar a prova das guardas de ação, incluindo o botão do estado vazio (`RF-04`, `RF-05`, `D-01`) | T002 | `[//]` | `src/__tests__/GuardasDeAcao.test.tsx` | 🟢 | [X] |
 
 ## Fase 3, Núcleo
 
 | ID | Descrição | Dependências | Paralelismo | Arquivo alvo | Confidência | Status |
 |----|-----------|--------------|-------------|--------------|-------------|--------|
-| T010 | Criar o ponto único de leitura da sessão para a interface | T003 | `[//]` | `src/lib/useCurrentUser.ts` | 🟢 | [X] |
-| T011 | Reescrever a guarda de rota e restringi-la à trilha de auditoria | T010 | - | `src/App.tsx` | 🟢 | [X] |
-| T012 | Filtrar o menu por papel, marcando **apenas** a trilha como admin-only | T010 | - | `src/Layout.tsx` | 🟢 | [X] |
-| T013 | Esconder criar, editar e excluir de Médicos para quem não é admin | T010 | `[//]` | `src/pages/Doctors.tsx` | 🟢 | [X] |
-| T014 | Idem em Templates, **incluindo** o botão do estado vazio | T010 | `[//]` | `src/pages/Templates.tsx` | 🟢 | [X] |
-| T015 | Exigir o escopo na assinatura de `update` e `delete` das entidades sob RLS | T003 | - | `src/api/scopedRead.ts` | 🟢 | [X] |
-| T016 | Declarar o escopo nos quatro pontos de escrita das telas | T015 | - | `src/pages/PatientForm.tsx`, `src/pages/NewConsultation.tsx`, `src/pages/Appointments.tsx`, `src/pages/PatientDetail.tsx` | 🟢 | [X] |
-| T017 | Declarar escopo administrativo na leitura da trilha e dizer o caminho de quem não é admin | T010, T003 | - | `src/pages/AccessLogs.tsx` | 🟢 | [X] |
-| T018 | Remover o `dangerouslySetInnerHTML`, entregando o CSS como texto | T004 | - | `src/components/ui/chart.jsx` | 🟢 | [X] |
-| T019 | Criar a sombra de tipo que faltava para o componente de gráficos | T018 | - | `src/components/ui/chart.d.ts` | 🟢 | [X] |
+| T010 | Criar o ponto único de leitura da sessão para a interface (`RF-01`, `RF-04`, `RF-05`, `D-01`) | T003 | `[//]` | `src/lib/useCurrentUser.ts` | 🟢 | [X] |
+| T011 | Reescrever a guarda de rota e restringi-la à trilha de auditoria (`RF-02`, `D-01`) | T010 | - | `src/App.tsx` | 🟢 | [X] |
+| T012 | Filtrar o menu por papel, marcando **apenas** a trilha como admin-only (`RF-01`, `RF-03`, `D-01`) | T010 | - | `src/Layout.tsx` | 🟢 | [X] |
+| T013 | Esconder criar, editar e excluir de Médicos para quem não é admin (`RF-04`, `D-01`) | T010 | `[//]` | `src/pages/Doctors.tsx` | 🟢 | [X] |
+| T014 | Idem em Templates, **incluindo** o botão do estado vazio (`RF-05`, `D-01`) | T010 | `[//]` | `src/pages/Templates.tsx` | 🟢 | [X] |
+| T015 | Exigir o escopo na assinatura de `update` e `delete` das entidades sob RLS (`RF-06`, `D-03`) | T003 | - | `src/api/scopedRead.ts` | 🟢 | [X] |
+| T008 | Acrescentar os dois casos negativos de mutação sem escopo ao arnês de compilação (`RF-06`, `D-03`) — **movida da Fase 2**, porque depende de `T015` | T015 | - | `src/test/verificacoes-negativas.mjs` | 🟢 | [X] |
+| T016 | Declarar o escopo nos quatro pontos de escrita das telas (`RF-06`, `D-03`) | T015 | - | `src/pages/PatientForm.tsx`, `src/pages/NewConsultation.tsx`, `src/pages/Appointments.tsx`, `src/pages/PatientDetail.tsx` | 🟢 | [X] |
+| T017 | Declarar escopo administrativo na leitura da trilha e dizer o caminho de quem não é admin (`RF-07`, `RF-08`, `D-04`) | T010, T003 | - | `src/pages/AccessLogs.tsx` | 🟢 | [X] |
+| T018 | Remover o `dangerouslySetInnerHTML`, entregando o CSS como texto (`RF-10`, `D-05`) | T004 | - | `src/components/ui/chart.jsx` | 🟢 | [X] |
+| T009 | Criar a prova do componente de gráficos, alimentando-o com cor hostil (`RF-10`, `D-05`) — **movida da Fase 2**, porque depende de `T018` | T018 | `[//]` | `src/__tests__/ChartStyle.test.tsx` | 🟢 | [X] |
+| T019 | Criar a sombra de tipo que faltava para o componente de gráficos (`RF-10`, `D-05`) | T018 | - | `src/components/ui/chart.d.ts` | 🟢 | [X] |
 
 ## Fase 4, Integração
 
 | ID | Descrição | Dependências | Paralelismo | Arquivo alvo | Confidência | Status |
 |----|-----------|--------------|-------------|--------------|-------------|--------|
-| T020 | Reverter a promoção do usuário offline a administrador | T011 | - | `src/api/mockClient.ts` | 🟢 | [X] |
-| T021 | Atualizar as seis asserções que o contrato novo quebrou, fazendo-as **afirmar** o escopo | T015, T016 | - | `src/pages/__tests__/PatientForm.test.tsx`, `Appointments.test.tsx`, `PatientDetail.test.tsx`, `NewConsultation.test.tsx` | 🟢 | [X] |
-| T022 | Tapar a lacuna de `matchMedia` no jsdom, exigida pelo provedor de tema | T006 | - | `src/test/setup.ts` | 🟢 | [X] |
-| T023 | Rodar os quatro portões e conferir o resultado contra a linha de base | T005, T006, T007, T008, T009 | - | - | 🟢 | [X] |
+| T020 | Reverter a promoção do usuário offline a administrador (`RF-09`, `D-02`) | T011 | - | `src/api/mockClient.ts` | 🟢 | [X] |
+| T021 | Atualizar as seis asserções que o contrato novo quebrou, fazendo-as **afirmar** o escopo (`RF-06`, `D-03`) | T015, T016 | - | `src/pages/__tests__/PatientForm.test.tsx`, `Appointments.test.tsx`, `PatientDetail.test.tsx`, `NewConsultation.test.tsx` | 🟢 | [X] |
+| T022 | Tapar a lacuna de `matchMedia` no jsdom, exigida pelo provedor de tema (`RF-02`, `D-01`) | T006 | - | `src/test/setup.ts` | 🟢 | [X] |
+| T023 | Rodar os quatro portões e conferir o resultado contra a linha de base (`RF-11`, `D-07`) | T005, T006, T007, T008, T009 | - | - | 🟢 | [X] |
 
 ## Fase 5, Polimento
 
 | ID | Descrição | Dependências | Paralelismo | Arquivo alvo | Confidência | Status |
 |----|-----------|--------------|-------------|--------------|-------------|--------|
-| T024 | Falsificar a prova das guardas de ação, conferir as 3 falhas e reverter sem resíduo | T007, T013, T014 | - | `src/pages/Doctors.tsx`, `src/pages/Templates.tsx` | 🟢 | [X] |
-| T025 | Registrar as seções da correção, a tabela dos cinco achados e as medições na matriz | T023 | - | `_reversa_sdd/code-spec-matrix.md` | 🟢 | [X] |
-| T026 | Escrever o adendo da correção do F-01 | T025 | - | `_reversa_sdd/addenda/011-rbac-frontend.md` | 🟢 | [X] |
-| T027 | Escrever os watches das três correções | T025 | - | `_reversa_forward/011-rbac-frontend/regression-watch.md`, `012-escopo-em-mutacoes/regression-watch.md`, `013-leitura-da-trilha/regression-watch.md` | 🟢 | [X] |
-| T028 | Conferir arquivo por arquivo o que os adendos declararam e registrar o que não foi aplicado | T025 | - | `_reversa_sdd/pendencias-de-convergencia.md` | 🟢 | [X] |
+| T024 | Falsificar a prova das guardas de ação, conferir as 3 falhas e reverter sem resíduo (`RF-11`, `D-07`) | T007, T013, T014 | - | `src/pages/Doctors.tsx`, `src/pages/Templates.tsx` | 🟢 | [X] |
+| T025 | Registrar as seções da correção, a tabela dos cinco achados e as medições na matriz (`RF-12`, `RF-13`, `D-08`, `D-09`) | T023 | - | `_reversa_sdd/code-spec-matrix.md` | 🟢 | [X] |
+| T026 | Escrever o adendo da correção do F-01 (`RF-12`, `D-08`) | T025 | - | `_reversa_sdd/addenda/011-rbac-frontend.md` | 🟢 | [X] |
+| T027 | Escrever os watches das três correções (`RF-12`, `D-08`) | T025 | - | `_reversa_forward/011-rbac-frontend/regression-watch.md`, `012-escopo-em-mutacoes/regression-watch.md`, `013-leitura-da-trilha/regression-watch.md` | 🟢 | [X] |
+| T028 | Conferir arquivo por arquivo o que os adendos declararam e registrar o que não foi aplicado (`RF-12`, `D-08`) | T025 | - | `_reversa_sdd/pendencias-de-convergencia.md` | 🟢 | [X] |
 
 ## Notas de execução
 
@@ -94,6 +96,17 @@
    `| [X] |`, **sem crase**. Mesma divergência consciente registrada nas features `002` a `010`. Com a
    forma do template, esta feature seria lida com **zero** ações — e o estágio sairia por sorte, não
    por leitura.
+7. **Duas provas desceram de fase, e a maior cadeia de dependência foi corrigida.** `T008` (casos
+   negativos de mutação) e `T009` (prova do componente de gráficos) estavam na Fase 2 por serem
+   provas, mas dependiam de `T015` e `T018`, que estão na Fase 3 — **ordem de execução impossível
+   como escrita**, apontada pelo `cross-check.md` (`A004`). As duas passaram para a Fase 3, logo após
+   as suas dependências. Na mesma conferência, o resumo passou a declarar a cadeia **real**: **8
+   elos** — `T001` → `T002` → `T003` → `T015` → `T008` → `T023` → `T025` → `T026` —, e não 5. O
+   número anterior estava errado desde a primeira versão, e a auditoria não o pegou porque o eixo de
+   sanidade verifica **ciclos**, não profundidade.
+8. **Cada ação passou a declarar os IDs que cumpre** (`RF-xx`, `D-xx`), como fazem as features `002`
+   a `010`. Era o achado `A001` do `cross-check.md`: o rastro requisito → decisão → ação existia
+   **semanticamente** e não era verificável mecanicamente.
 
 ## Histórico de alterações
 
