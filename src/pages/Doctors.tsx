@@ -41,14 +41,17 @@ const DAYS_OF_WEEK: { value: Weekday; label: string }[] = [
  * Permite adicionar, editar e excluir perfis de médico.
  * Configura dias de trabalho, horários e duração de agendamento por médico.
  *
- * PARIDADE: comportamento, textos e aparência idênticos ao anterior. Continuam
- * iguais: a listagem ordenada por criação, o formulário com dias, janela e duração,
- * o carregamento do registro ao editar (inclusive campos ausentes ficando vazios) e
- * a exclusão sem confirmação.
+ * PARIDADE: comportamento, textos e aparência idênticos ao anterior, com **uma exceção
+ * declarada**. Continuam iguais: a listagem ordenada por criação, o formulário com dias,
+ * janela e duração, o carregamento do registro ao editar (inclusive campos ausentes
+ * ficando vazios) e a exclusão sem confirmação. A exceção é a guarda de ação do achado
+ * F-01: criar, editar e excluir deixam de ser OFERECIDOS a quem não é administrador.
  *
- * PARIDADE DE LEITURA: médicos têm leitura livre para autenticados (BR-MIGRAR-017);
- * a leitura permanece sem escopo, como no legado. O CRUD segue restrito a admin
- * pela regra de acesso do servidor, intocada.
+ * PARIDADE DE LEITURA: médicos têm leitura livre para autenticados (BR-MIGRAR-017); a
+ * leitura permanece sem escopo, como no legado, e a tela segue acessível a todos. A
+ * ESCRITA é restrita a admin (BR-MIGRAR-015) — a regra de acesso do servidor continua
+ * sendo a palavra final, e a guarda de ação apenas deixa de anunciar o que não é
+ * permitido.
  */
 
 /** Estado do formulário, com os mesmos campos opcionais do registro editado. */

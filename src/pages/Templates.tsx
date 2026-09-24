@@ -67,14 +67,17 @@ const AVAILABLE_VARIABLES = [
  * Permite criar, editar e excluir templates com substituição de variável.
  * Suporta marcar templates como padrão ou ativo/inativo.
  *
- * PARIDADE: comportamento, textos e aparência idênticos ao anterior. Continuam
- * iguais: o agrupamento por tipo na ordem fixa do conjunto, o esqueleto de
- * carregamento, a edição com os padrões de `is_default`/`is_active`, a inserção de
- * variável ao fim do conteúdo e a exclusão com confirmação.
+ * PARIDADE: comportamento, textos e aparência idênticos ao anterior, com **uma exceção
+ * declarada**. Continuam iguais: o agrupamento por tipo na ordem fixa do conjunto, o
+ * esqueleto de carregamento, a edição com os padrões de `is_default`/`is_active`, a
+ * inserção de variável ao fim do conteúdo e a exclusão com confirmação. A exceção é a
+ * guarda de ação do achado F-01: criar, editar e excluir deixam de ser OFERECIDOS a quem
+ * não é administrador.
  *
- * PARIDADE DE LEITURA: templates têm leitura livre para autenticados
- * (BR-MIGRAR-020); a leitura permanece sem escopo, como no legado. O CRUD segue
- * restrito a admin pela regra de acesso do servidor, intocada.
+ * PARIDADE DE LEITURA: templates têm leitura livre para autenticados (BR-MIGRAR-020); a
+ * leitura permanece sem escopo, como no legado, e a tela segue acessível a todos. A
+ * ESCRITA é restrita a admin — a regra de acesso do servidor continua sendo a palavra
+ * final, e a guarda de ação apenas deixa de anunciar o que não é permitido.
  */
 
 /** Estado do formulário. */
