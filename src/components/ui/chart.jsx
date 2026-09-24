@@ -69,11 +69,19 @@ const ChartStyle = ({
     return null
   }
 
-  return (
-    (<style
-      dangerouslySetInnerHTML={{
-        __html: Object.entries(THEMES)
-          .map(([theme, prefix]) => `
+  // O CSS é montado como TEXTO e entregue como filho do `<style>`: o React grava o valor por
+  // `textContent`, que **não** é interpretado como marcação. A versão anterior usava
+  // `dangerouslySetInnerHTML`, e era exatamente esse o achado F-05 das auditorias de segurança
+  // (severidade baixa) — a diferença entre os dois caminhos é a possibilidade de injeção.
+  //
+  // POR QUE NÃO CSS CUSTOM PROPERTIES INLINE, que foi a recomendação literal da auditoria: as
+  // regras abaixo têm DUAS variantes de tema (`light` e `.dark`, em `THEMES`), e uma propriedade
+  // inline não consegue expressar a variante de tema — aplicá-la removeria o tema escuro. Como
+  // o componente não tem consumidor hoje, a troca passaria despercebida e viraria defeito
+  // latente. Remover o sink sem alterar o comportamento é o que fecha o achado sem inventar
+  // regressão.
+  const css = Object.entries(THEMES)
+    .map(([theme, prefix]) => `
 ${prefix} [data-chart=${id}] {
 ${colorConfig
 .map(([key, itemConfig]) => {
@@ -85,9 +93,9 @@ return color ? `  --color-${key}: ${color};` : null
 .join("\n")}
 }
 `)
-          .join("\n"),
-      }} />)
-  );
+    .join("\n")
+
+  return (<style>{css}</style>);
 }
 
 const ChartTooltip = RechartsPrimitive.Tooltip
