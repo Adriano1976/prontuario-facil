@@ -638,7 +638,7 @@ leituras que passam a ter veredito.
 | # | Registro | Situação |
 | ---: | :--- | :--- |
 | 1 | **A trilha perde eventos em silêncio, de três modos** | 🟢 **Dois provados, um declarado.** Identificação **recusada** cai no `catch` e imprime no console; identificação **vazia** sai por um `return` antecipado e **nem isso** — os dois sem gravar e sem propagar erro (`AccessLogger.test.ts`). A gravação **não aguardada** antes da navegação fica declarada por leitura. Consequência que importa: **uma trilha incompleta e uma completa são indistinguíveis** para quem só olha a tela, e o sistema anuncia conformidade com a LGPD no cabeçalho |
-| 2 | **A tela de auditoria é oferecida a quem não é admin** | 🟢 **Provada e declarada.** `Layout.test.tsx` prova o item de navegação com usuário sem `role`, e o mesmo com admin — o que demonstra que a condição de papel não participa da decisão |
+| 2 | **A tela de auditoria era oferecida a quem não é admin** | ✅ **Fechada** em 2026-09-24 pela correção do F-01. O item de navegação passou a ser filtrado por papel, e `Layout.test.tsx` foi **reescrito** para provar o contrário do que provava: o item some para quem não tem papel e permanece para o admin. O texto original deste registro está preservado no adendo `006` |
 | 3 | **`AccessLog` é classificada como entidade de leitura aberta** | 🔴 **Declarada imprecisa.** `registry.ts:65-67` a agrupa com `Doctor` e `Template`, mas a leitura da trilha é admin-only na RLS. `AccessLogs.test.tsx` prova que a página lê pelo repositório **cru** e não usa `asUser` nem `asAdmin` — que, para esta entidade, são o mesmo repositório |
 | 4 | **O Dashboard grava `login` como procuração de acesso ao painel** | 🟢 **Provada.** O enum não tem ação de painel, então toda visita ao Dashboard é contabilizada como um login, e o detalhe fixo é a única distinção |
 | 5 | **A mesma visualização grava duas vezes quando o objeto muda de identidade** | 🟢 **Provada nas DUAS telas.** O detalhe do paciente declara `[patient, patientId]` e o da consulta declara `[consultation, patient, consultationId]` — dois objetos nas dependências. É defeito **sistêmico**, e não de uma tela (`PatientDetailAudit.test.tsx` e `Consultation.test.tsx`) |
@@ -654,6 +654,37 @@ leituras que passam a ter veredito.
 > **por desenho** (decisão `3a`). Quem decidir corrigir precisa alterar a prova de propósito,
 > e a decisão fica visível no diff em vez de escorregar.
 
+### Achados de segurança — estado da correção (2026-09-24)
+
+Registro **vivo** dos cinco achados das auditorias de `docs/security-audit/`. Os relatórios de
+2026-09-09 e de 2026-09-16 são **históricos** e não são reescritos: o estado de cada achado é o
+desta tabela.
+
+| Achado | Severidade | Estado em 2026-09-24 | Onde |
+| :--- | :---: | :--- | :--- |
+| **F-01** — RBAC inexistente no frontend | Alta | ✅ **Corrigido** | Menu, rota da trilha e ações de Médicos e Templates — ver `#Correção do F-01 — guarda de papel no frontend` |
+| **F-02** — `access_token` por query string e em `LocalStorage` | Alta | ⛔ **Não corrigível neste repositório** | Nota abaixo |
+| **F-03** — IDOR nas mutações por identificador | Alta | 🔴 **Aberto** | `scopedRead.ts` não exige escopo na escrita; `PatientDetail.tsx:175` exclui por identificador direto |
+| **F-04** — leitura ampla da trilha, sem isolamento no cliente | Média | 🔴 **Aberto** | `AccessLogs.tsx:75-78`; watch `W006` da feature `006`, ainda vigente |
+| **F-05** — `dangerouslySetInnerHTML` no componente de gráficos | Baixa | 🔴 **Aberto** | `src/components/ui/chart.jsx:74` |
+
+> ⚠️ **F-02 não se fecha neste repositório, e a razão é verificável no SDK.** O
+> `src/lib/app-params.ts` lê o token da query string e o grava em `localStorage` — mas quem
+> constrói o cliente faz **o mesmo sozinho**: em `@base44/sdk/dist/client.js:123` o `createClient`
+> executa `token || getAccessToken()`, e `getAccessToken()` tem por default `saveToStorage: true`
+> e `paramName: 'access_token'` (`dist/utils/auth-utils.js:38`). Apagar o tratamento do
+> `app-params.ts` **não removeria a exposição** — o SDK colheria e persistiria o token do mesmo
+> modo. E `CreateClientConfig` não expõe opção para desligar isso (`dist/client.types.d.ts:15-64`).
+>
+> **O que fecharia o achado:** deixar de receber sessão por `?access_token=`, apoiando-se na sessão
+> por cookie `httpOnly` que o próprio SDK referencia (`dist/modules/auth.js:170`). É decisão de
+> **plataforma/deployment**, não deste repositório. Qualquer alteração que se limite ao
+> `app-params.ts` deve ser registrada como **cosmética**, nunca como correção do achado — a
+> recomendação da auditoria ("eliminar o envio do token via URL e o armazenamento") não é
+> alcançável no cliente.
+
 ---
+
 *Gerado pelo Reversa-Writer em 2026-09-02.*
 *Seção de rastreabilidade acrescentada em 2026-09-19; módulos de Agendamentos e Consultas e suas lacunas em 2026-09-21; cenários e registros dos grupos 06 (emissão de documento com modelo), 07 (trilha de auditoria) e 10 (contrato de dados) em 2026-09-21 e 2026-09-22; medições das features 005 e 006 e adoção da guarda de encoding em 2026-09-22.*
+*Correção do F-01 e registro vivo dos achados de segurança em 2026-09-24.*
