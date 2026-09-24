@@ -66,7 +66,7 @@ const RoleGuard = ({ children, requiredRole = 'admin' }: { children: ReactNode, 
 };
 
 const AuthenticatedApp = () => {
-  const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
+  const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin, checkAppState } = useAuth();
 
   // Show loading spinner while checking app public settings or auth
   if (isLoadingPublicSettings || isLoadingAuth) {
@@ -82,9 +82,30 @@ const AuthenticatedApp = () => {
     if (authError.type === 'user_not_registered') {
       return <UserNotRegisteredError />;
     } else if (authError.type === 'auth_required') {
-      // Redirect to login automatically
+      // AUSÊNCIA de sessão: é o caso do visitante que ainda não entrou, e é por aqui que
+      // ele chega ao login. Redireciona, como sempre.
       navigateToLogin();
       return null;
+    } else if (authError.type === 'session_check_failed') {
+      // FALHA de verificação (rede, servidor indisponível). NÃO redireciona: derrubar o
+      // usuário para o login por causa de uma oscilação de rede trocaria um erro de
+      // transporte por um logout que ele não pediu (RN-08 da feature `015`).
+      return (
+        <div className="fixed inset-0 flex flex-col items-center justify-center gap-3 p-6 text-center">
+          <h1 className="text-lg font-semibold">Não foi possível verificar a sessão</h1>
+          <p className="max-w-md text-sm text-slate-600">
+            A conexão com o servidor falhou. Isto não é um logout: sua sessão continua
+            válida quando o servidor estiver acessível novamente.
+          </p>
+          <button
+            type="button"
+            className="rounded-md border border-slate-300 px-3 py-1.5 text-sm"
+            onClick={() => { void checkAppState(); }}
+          >
+            Tentar novamente
+          </button>
+        </div>
+      );
     }
   }
 

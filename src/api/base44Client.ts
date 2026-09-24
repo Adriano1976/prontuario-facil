@@ -38,15 +38,6 @@ const { appId, token, functionsVersion, appBaseUrl } = appParams as {
 };
 
 /**
- * Indica se há token de sessão.
- *
- * A verificação da sessão só é feita quando existe token — é a condição do legado, e a
- * camada de sessão precisa dela. Fica aqui para que a leitura dos parâmetros de
- * inicialização continue num lugar só.
- */
-export const hasSessionToken = Boolean(token);
-
-/**
  * Lê as configurações públicas da aplicação.
  *
  * POR QUE AQUI: o consumidor legado (`AuthContext.jsx`) criava o cliente de requisição

@@ -1,6 +1,6 @@
 import { createContext, useState, useContext, useEffect } from 'react';
 import type { ReactNode } from 'react';
-import { base44, hasSessionToken } from '@/api/base44Client';
+import { base44 } from '@/api/base44Client';
 import { toSessionUser } from '@/lib/session';
 import { OFFLINE_USER } from '@/api/mockClient';
 import type { User } from '@/types';
@@ -117,7 +117,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       const status = statusDoErro(error);
       if (status === 401 || status === 403) {
+        // AUSÊNCIA de sessão — o servidor respondeu, e respondeu que não há sessão.
         setAuthError({ type: 'auth_required', message: 'Authentication required' });
+      } else {
+        // FALHA de verificação: rede fora, servidor indisponível, resposta inesperada.
+        // Não é ausência de sessão, e tratá-la como tal faria uma oscilação de rede
+        // parecer logout silencioso (RN-08 da feature `015`).
+        setAuthError({
+          type: 'session_check_failed',
+          message: mensagemDoErro(error, 'Could not verify the session'),
+        });
       }
     }
   };
@@ -143,15 +152,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const publicSettings = await base44.auth.getPublicSettings();
         setAppPublicSettings(publicSettings);
 
-        // A verificação da sessão só faz sentido quando há token. É a condição que o
-        // legado usava, e é ela que decide entre consultar o servidor e considerar a
-        // sessão ausente.
-        if (hasSessionToken) {
-          await checkUserAuth();
-        } else {
-          setIsLoadingAuth(false);
-          setIsAuthenticated(false);
-        }
+        // A verificação acontece SEMPRE. O cliente deixou de guardar credencial de sessão
+        // (feature `015`), e a sessão passa a ser decidida pelo servidor — pelo cookie de
+        // sessão, que viaja porque as requisições são same-origin. Enquanto esta condição
+        // dependesse de uma credencial legível pelo cliente, remover a persistência
+        // deslogaria o usuário a cada recarga.
+        await checkUserAuth();
         setIsLoadingPublicSettings(false);
       } catch (appError) {
         console.error('App state check failed:', appError);
