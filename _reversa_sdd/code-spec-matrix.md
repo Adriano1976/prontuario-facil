@@ -294,8 +294,9 @@ seguiram verdes. Revertida, sem resíduo.
 > permanece no adendo daquela feature.
 
 > ⚠️ **O que esta correção NÃO fechou.** `AccessLogs.tsx` continua lendo com os argumentos exatos
-> `('-created_date', 500)` e **sem escopo declarado** (watch `W006`, ainda vigente, e o achado
-> F-04); a autorização de escrita continua sendo, em última instância, a regra do servidor; e o
+> `('-created_date', 500)` e **sem escopo declarado** (watch `W006` da feature `006`, **vigente à
+> época desta correção** — superado depois pela correção do F-04, seção adiante; o achado F-04); a
+> autorização de escrita continua sendo, em última instância, a regra do servidor; e o
 > `RoleGuard` é guarda de **interface** — ele não substitui a RLS nem torna seguro um cliente
 > adulterado. F-02, F-03 e F-04 seguem abertos — o estado de cada um é o da seção
 > `#Achados de segurança — estado da correção`.

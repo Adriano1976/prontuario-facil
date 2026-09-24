@@ -5,6 +5,11 @@
 > Este arquivo foi escrito **fora do ciclo forward** — a mudança nasceu de revisão de segurança — e
 > é lido pelo `/reversa-sync` e por futuras re-extrações. Os itens abaixo precisam continuar
 > verdadeiros.
+>
+> ⚠️ **A lista vigente é `_reversa_forward/014-correcao-de-seguranca/regression-watch.md`**, que
+> consolida os watches das três correções de 2026-09-24 e acrescenta o do F-05. Este arquivo fica como
+> registro da entrega do F-03 isoladamente. Os cinco itens abaixo estão **todos** consolidados lá, como
+> `W006`–`W009` e `W014`.
 
 ## Watch principal
 
@@ -31,8 +36,12 @@ Registradas **sem peso de regressão**: são os limites declarados da correção
 
 ## Herança
 
-- **Não supera** nenhum item de watch anterior. A feature `006` vigia a leitura da trilha (`W006`), e
-  a `002` vigia a limpeza do arnês (`W006` daquela feature) — as duas seguem vigentes.
+- **Não supera** nenhum item de watch anterior. A feature `002` vigia a limpeza do arnês (`W006`
+  daquela feature) — e essa segue vigente.
+- **`006/W006` deixou de valer depois desta correção**, pela irmã `013-leitura-da-trilha`, que fez a
+  leitura da trilha **declarar escopo administrativo** — exatamente o que `006/W006` nomeava como sinal
+  de violação. A superação está registrada em `014`/`W010`. Esta correção **não** a tocou: o escopo
+  dela são as mutações.
 - **Fora do ciclo:** as features `001` a `010` têm `requirements.md`, `roadmap.md` e `actions.md`.
   Esta não tem, porque a correção nasceu de revisão de segurança — o registro dela é a seção
   `#Correção do F-03` de `_reversa_sdd/code-spec-matrix.md`.

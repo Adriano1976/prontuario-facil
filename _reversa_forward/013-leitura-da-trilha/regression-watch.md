@@ -5,6 +5,11 @@
 > Este arquivo foi escrito **fora do ciclo forward** — a mudança nasceu de revisão de segurança — e
 > é lido pelo `/reversa-sync` e por futuras re-extrações. Os itens abaixo precisam continuar
 > verdadeiros.
+>
+> ⚠️ **A lista vigente é `_reversa_forward/014-correcao-de-seguranca/regression-watch.md`**, que
+> consolida os watches das três correções de 2026-09-24 e acrescenta o do F-05. Este arquivo fica como
+> registro da entrega do F-04 isoladamente. Os cinco itens abaixo estão **todos** consolidados lá, como
+> `W010`–`W012`, `W015` e `W016`.
 
 ## Watch principal
 
@@ -29,6 +34,10 @@
 - **Supera** `W006` de `_reversa_forward/006-prova-logs-acesso/regression-watch.md`, que vigiava a
   leitura "sem escopo declarado" e nomeava esta mudança como sinal de violação **e** como "regra
   nova, não conserto". É regra nova, feita de propósito, com a prova reescrita na mesma passada.
+- **Supera também** `W006` de `_reversa_forward/011-rbac-frontend/regression-watch.md` — a cópia
+  daquele item, escrita quando a correção do F-01 não tocou a leitura da trilha e a declaração de
+  escopo ainda era violação. Esta é a correção que a tornou regra: as duas linhas diziam o contrário
+  uma da outra, e a divergência foi resolvida marcando a de `011` como superada.
 - **Herdado** da mesma feature: os **três modos de perda silenciosa** da trilha e as **ações
   órfãs** do catálogo continuam abertos e vigiados — esta correção não os tocou.
 - **Fora do ciclo:** as features `001` a `010` têm `requirements.md`, `roadmap.md` e `actions.md`.

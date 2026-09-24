@@ -44,11 +44,16 @@ Registradas **sem peso de regressão**: são os limites declarados da correção
 
 ## Herança e superação
 
-- **Supera** dois itens da feature `006-prova-logs-acesso`:
-  - `W006` daquela feature vigiava a leitura da trilha "**sem escopo declarado**", e nomeava como
-    sinal de violação exatamente o que foi feito. É regra nova, feita de propósito.
-  - `W008` vigiava "a navegação **não** consulta papel", e declarava na própria linha que a guarda
-    seria "*regra nova, e não conserto*". Foi o que aconteceu.
+- **Supera** três itens anteriores:
+  - `006/W006` vigiava a leitura da trilha "**sem escopo declarado**", e nomeava como sinal de
+    violação exatamente o que foi feito. É regra nova, feita de propósito.
+  - `006/W008` vigiava "a navegação **não** consulta papel", e declarava na própria linha que a
+    guarda seria "*regra nova, e não conserto*". Foi o que aconteceu.
+  - `011/W006` — **herdado** daquele `006/W006` e registrado em
+    `_reversa_forward/011-rbac-frontend/regression-watch.md` como "ainda vigente", quando já não era:
+    nomeava a mesma condição (a leitura passar a usar `asAdmin`/`asUser`) como sinal de violação.
+    **Superado por `W010` deste arquivo**, que é a regra vigente para a leitura da trilha. A duplicata
+    foi marcada como superada no próprio arquivo de origem em 2026-09-24.
 - **Herdado** da mesma feature, e ainda vigente: os **três modos de perda silenciosa** da trilha, as
   **ações órfãs** do catálogo de auditoria e a imutabilidade da trilha no servidor (RLS). Esta
   feature não os tocou.
