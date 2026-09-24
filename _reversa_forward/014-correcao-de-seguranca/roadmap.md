@@ -46,6 +46,7 @@ foram tratadas como obrigação:
 | D-06 | A correção do F-05 **não** tem watch próprio | Não há contrato de comportamento a preservar; a guarda é a prova, que alimenta o componente com uma cor hostil e afirma que nada executável nasce | a) criar watch de um item só — ruído sem função | 🟢 |
 | D-07 | Toda correção entra com prova, e a prova das guardas de ação é **falsificada** antes de aceita | Verde de primeira não prova nada: desligada a guarda, 3 das 6 verificações falharam — exatamente as que medem o não-admin | a) aceitar o verde — foi assim que o F-01 passou despercebido por duas auditorias | 🟢 |
 | D-08 | O trabalho é registrado por **adendo + seções da matriz + watches**, e a edição direta de artefatos da extração é declarada **fora do rito** | O framework prevê que o adendo **anote** e a re-extração **converga**; editar a extração à mão cria uma segunda divergência, e ela fica registrada em `_reversa_sdd/pendencias-de-convergencia.md` | a) não registrar — deixaria o corpus afirmando o comportamento revogado; b) registrar só na matriz — deixaria as três features sem watch | 🟢 |
+| D-09 | O **F-02 não é corrigido neste repositório**: o achado fica registrado com a evidência medida, e o remendo no `app-params.ts` é **recusado** | O SDK do Base44 faz **o mesmo sozinho** — `@base44/sdk/dist/client.js:123` executa `token \|\| getAccessToken()`, e `getAccessToken()` tem por default `saveToStorage: true` e `paramName: 'access_token'` (`dist/utils/auth-utils.js:38`). Apagar o tratamento do `app-params.ts` **não removeria a exposição**, e `CreateClientConfig` não expõe opção para desligar isso. O que fecharia o achado é deixar de receber sessão por `?access_token=`, apoiando-se na sessão por cookie `httpOnly` que o próprio SDK referencia — decisão de **plataforma/deployment** | a) alinhar o `app-params.ts` com o utilitário do SDK e chamar isso de correção — **teatro de segurança**: a exposição permanece, e o registro passaria a afirmar o contrário; b) remover o tratamento de token do cliente — o SDK o colheria de volta, com o mesmo resultado | 🟢 |
 
 ## 4. Premissas
 
@@ -59,13 +60,13 @@ foram tratadas como obrigação:
 
 | Componente | Arquivo de origem no legado | Tipo de mudança | Resumo |
 |------------|------------------------------|-----------------|--------|
-| `App` | `_reversa_sdd/c4-components.md`; `code-spec-matrix.md#Rastreabilidade` | contrato-alterado | Ganha a guarda de rota por papel, e o aviso de acesso negado sai do corpo do render para um efeito |
+| `App` | `_reversa_sdd/c4-components.md#Visão de Componentes (Container SPA)`; `_reversa_sdd/code-spec-matrix.md#Rastreabilidade Spec → Código → Teste` | contrato-alterado | Ganha a guarda de rota por papel, e o aviso de acesso negado sai do corpo do render para um efeito |
 | `Layout` | `_reversa_sdd/code-analysis.md#3.1` (logs-acesso) | regra-alterada | O item da trilha passa a ser filtrado por papel; Médicos e Templates seguem visíveis |
 | `Doctors` | `_reversa_sdd/code-analysis.md#3` (medicos) | regra-alterada | As três ações de escrita deixam de ser oferecidas a quem não é admin |
 | `Templates` | `_reversa_sdd/code-analysis.md#3` (templates) | regra-alterada | Idem, incluindo o botão do estado vazio |
 | `AccessLogs` | `_reversa_sdd/code-analysis.md#3.1` (logs-acesso) | contrato-alterado | A leitura passa a declarar escopo administrativo |
 | `createOwnedEntity` | `_reversa_sdd/migration/target_domain_model.md` | contrato-alterado | `update` e `delete` passam a exigir o escopo na assinatura |
-| Leitura da sessão | `_reversa_sdd/code-analysis.md#3.1` | componente-novo | `src/lib/useCurrentUser.ts` — ponto único de leitura da sessão |
+| Leitura da sessão | `_reversa_sdd/c4-components.md#Componentes de Infraestrutura` | componente-novo | `src/lib/useCurrentUser.ts` — ponto único de leitura da sessão, contraparte na interface do `AuthContext.jsx`, que é o componente que a extração documenta ali |
 | `ChartStyle` | `_reversa_sdd/code-analysis.md` (componentes de UI) | regra-alterada | O CSS deixa de ser injetado por `dangerouslySetInnerHTML` |
 
 ## 6. Delta no modelo de dados
@@ -101,7 +102,7 @@ implantação. O que existe é **merge pendente**: as 15 alterações vivem na b
 - [x] `regression-watch.md` gerado
 - [x] `legacy-impact.md` gerado (é a fonte do `/reversa-sync`)
 - [x] Adendo vigente em `_reversa_sdd/addenda/011-rbac-frontend.md` (parcial — ver a nota de proveniência)
-- [ ] `cross-check.md` executado — **não executado**: o `/reversa-audit` exige os três artefatos, que só passaram a existir retroactivamente em 2026-09-24, depois da entrega
+- [x] `cross-check.md` executado em 2026-09-24 — **0 CRITICAL e 0 HIGH** na reexecução, após a correção de `A001`, `A002` e `A007` do primeiro relatório; restam **4 MEDIUM**, todos de rastreabilidade e redação estrutural
 - [ ] Re-extração reversa executada e sem regressão vermelha (recomendado, não obrigatório)
 - [ ] Merge da branch `fix/seguranca-frontend` — **pendente**, e é o que falta para o F-01 deixar de estar vulnerável em `main`
 
@@ -110,3 +111,4 @@ implantação. O que existe é **merge pendente**: as 15 alterações vivem na b
 | Data | Alteração | Autor |
 |------|-----------|-------|
 | 2026-09-24 | Versão inicial, escrita **retroactivamente** sobre a entrega já feita | reversa |
+| 2026-09-24 | Correção de `A001` e `A007` — as citações a `code-analysis.md#3.1` e a `code-spec-matrix.md` passam a **resolver a alvo único** — e acréscimo da decisão **`D-09`**, que dá decisão ao `RF-13` e registra a alternativa recusada do remendo no `app-params.ts`. Feito por **revisão humana** após o primeiro `cross-check.md` | revisão |
