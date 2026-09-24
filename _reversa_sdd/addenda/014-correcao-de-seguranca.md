@@ -94,3 +94,19 @@ mesmo arquivo, **sem peso de regressão**: são os limites declarados da correç
 - `_reversa_forward/014-correcao-de-seguranca/actions.md`
 - `_reversa_forward/014-correcao-de-seguranca/regression-watch.md`
 - `_reversa_sdd/pendencias-de-convergencia.md`
+
+## Atualização 2026-09-24
+
+Conferência da consolidação dos watches, feita **logo após** a criação deste adendo, encontrou **três
+itens que não tinham sido transportados** dos watches originais — a consolidação estava em 12 dos 15:
+
+- `W014` — os dois casos negativos de mutação sem escopo seguem recusando com `TS2554` (vinha de `012/W005`)
+- `W015` — os filtros da trilha continuam **em memória** (vinha de `013/W004`)
+- `W016` — a inserção na trilha continua usando a forma de dono, `asUser` (vinha de `013/W005`)
+
+A seção `## Regras sob vigilância` acima fala em **treze** itens. A lista vigente passa a ter
+**dezesseis** (`W001` a `W016`), em `_reversa_forward/014-correcao-de-seguranca/regression-watch.md`. A
+contagem anterior **está preservada** no texto acima, e a correção fica aqui — o adendo **não** é
+reescrito, conforme a política de escrita do `/reversa-sync`.
+
+Nenhum outro ponto deste adendo muda: os impactos por artefato, o cenário e a vigência permanecem.

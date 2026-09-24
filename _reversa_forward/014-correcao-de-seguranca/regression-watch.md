@@ -24,6 +24,9 @@
 | W011 | `src/pages/AccessLogs.tsx`; `PT-007.4`; `AMB-004` | O pedido mantém os argumentos **exatos** `('-created_date', 500)` — nem o teto nem a ordenação mudam | presença | O limite ou a ordenação mudam. O teto é paridade **congelada por decisão humana** |
 | W012 | `src/pages/AccessLogs.tsx` | Para escopo que não é administrativo, a leitura responde vazio e **não chega a perguntar ao servidor** | presença, na prova de tela | O caminho de quem não é admin volta a consultar o transporte, reintroduzindo a indistinção entre "admin lendo" e "qualquer um lendo" |
 | W013 | `src/components/ui/chart.jsx` — `ChartStyle`; achado F-05; prova `ChartStyle.test.tsx` | O CSS é entregue como **texto** ao `<style>`; `dangerouslySetInnerHTML` não é usado | ausência do sink e presença do texto | O sink volta, ou a cor hostil da prova deixa de chegar como texto — a verificação falha porque passa a existir `<script>` no DOM |
+| W014 | `src/test/verificacoes-negativas.mjs` — casos `mutacao-sem-escopo` e `atualizacao-sem-escopo`; herdado de `012/W005` | Os dois casos existem e seguem recusando com `TS2554`, e o arnês não deixa resíduo | presença | Um dos casos some, muda de código esperado, ou o arnês passa a aceitar a omissão — o que significa que o contrato deixou de ser exigido |
+| W015 | `src/pages/AccessLogs.tsx` — filtros; `BR-L04`/`BR-L05`; herdado de `013/W004` | Os filtros da trilha continuam **em memória**: mudar ação, texto ou data não reconsulta o servidor, e os filtros não entram na chave da consulta | presença | Surge consulta por filtro, ou os filtros entram na chave — a prova conta as chamadas ao transporte |
+| W016 | `src/components/medical/AccessLogger.ts:60`; `BR-MIGRAR-024`; herdado de `013/W005` | A **inserção** na trilha continua usando a forma de dono (`asUser`), e não a administrativa | presença | A inserção passa a usar `asAdmin` — o que exigiria que todo autenticado fosse admin para gravar a própria trilha |
 
 ## Observações
 
