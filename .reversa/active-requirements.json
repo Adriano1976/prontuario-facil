@@ -1,8 +1,8 @@
 {
   "schema-version": 1,
-  "feature-dir": "_reversa_forward/014-correcao-de-seguranca",
-  "feature-id": "014",
-  "short-name": "correcao-de-seguranca",
+  "feature-dir": "_reversa_forward/015-sessao-sem-token-na-url",
+  "feature-id": "015",
+  "short-name": "sessao-sem-token-na-url",
   "started-at": "2026-09-24T00:00:00-03:00",
   "current-stage": "done",
   "stages-completed": [

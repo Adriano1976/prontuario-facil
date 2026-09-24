@@ -197,6 +197,7 @@ Medições, sobre o código desta árvore de trabalho (teto declarado: **90 segu
 | 2026-09-24, após a correção do F-01 (`011-rbac-frontend`) | 179 | 28 | 72,5 s a 101,5 s | 0 |
 | 2026-09-24, após a correção do F-04 (`013-leitura-da-trilha`) | 180 | 28 | 98,7 s | 0 |
 | 2026-09-24, após a correção do F-05 | 183 | 29 | 97,6 s | 0 |
+| 2026-09-24, após a correção do F-02 | 198 | 31 | 89,6 s | 0 |
 
 As três linhas de `005`/`006`/`009` foram acrescentadas por features posteriores — a tabela estava
 parada na 004, e uma medição que não acompanha as features deixa de ser medição. A linha da `008`
@@ -728,6 +729,34 @@ leituras que passam a ter veredito.
 > **por desenho** (decisão `3a`). Quem decidir corrigir precisa alterar a prova de propósito,
 > e a decisão fica visível no diff em vez de escorregar.
 
+### Correção do F-02 — a metade corrigível no cliente (2026-09-24)
+
+O achado F-02 tem **duas metades**, e só uma é deste repositório. A auditoria de
+2026-09-16 descreve as duas: *"Recepção de token de acesso sensível via parâmetro de
+consulta de URL (`access_token`) **e persistência do token em LocalStorage**"*.
+
+| Metade | Estado | Onde |
+| :--- | :--- | :--- |
+| **Persistência** — o cliente adotava e gravava a credencial | ✅ **Fechada** | O cliente não adota nem grava: `access_token` é lido apenas para ser retirado da URL, e o resíduo de versões anteriores é removido a cada carga. O símbolo `hasSessionToken`, que decidia a verificação de sessão por credencial legível, **foi removido** |
+| **Trânsito** — a credencial passa pela URL | ⛔ **Aberta, e de plataforma** | A origem é o **login hospedado da plataforma**, no retorno pós-autenticação. O cliente não tem como impedir que a credencial transite; fechar exige mudar o fluxo de login, que é do dono da plataforma |
+
+**O que a correção NÃO fez, e por quê.** A recomendação literal da auditoria — OAuth PKCE
+com cookie `httpOnly` — não foi adotada: a adoção de PKCE muda o fluxo de login, e o
+`httpOnly` **já existe** na plataforma. O que faltava era o cliente parar de duplicar a
+credencial num lugar legível. A sessão passou a depender do cookie, que viaja porque as
+requisições são same-origin.
+
+**Duas provas, e as duas foram falsificadas antes de aceitas.** Reintroduzida a gravação, a
+prova de não-persistência **falha**; invertida a ordem entre a limpeza da URL e a captura de
+`from_url`, a prova de ordem **falha** com o sinal nomeado (`base44_from_url` contendo
+`access_token=`). As duas falsificações **não** falharam na primeira tentativa: as provas
+mediam o estado final, e o valor sujo era sobrescrito pelo limpo. Registrado em
+`regression-watch.md` (`W003`, `O003`) porque é o tipo de prova que parece rigorosa sem ser.
+
+> ⚠️ **Não leia esta correção como fechamento do achado.** A linha do F-02 na tabela de
+> estado passa a **🟡 parcial**, e a metade do trânsito continua aberta com dono nomeado.
+> Registro completo em `_reversa_forward/015-sessao-sem-token-na-url/legacy-impact.md`.
+
 ### Achados de segurança — estado da correção (2026-09-24)
 
 Registro **vivo** dos cinco achados das auditorias de `docs/security-audit/`. Os relatórios de
@@ -737,7 +766,7 @@ desta tabela.
 | Achado | Severidade | Estado em 2026-09-24 | Onde |
 | :--- | :---: | :--- | :--- |
 | **F-01** — RBAC inexistente no frontend | Alta | ✅ **Corrigido** | Menu, rota da trilha e ações de Médicos e Templates — ver `#Correção do F-01 — guarda de papel no frontend` |
-| **F-02** — `access_token` por query string e em `LocalStorage` | Alta | ⛔ **Não corrigível neste repositório** | Nota abaixo |
+| **F-02** — `access_token` por query string e em `LocalStorage` | Alta | 🟡 **Parcialmente corrigido em 2026-09-24** (`015-sessao-sem-token-na-url`) | A metade da **persistência** está fechada: o cliente não adota nem grava a credencial, e remove o resíduo de versões anteriores. A metade do **trânsito na URL** continua aberta e é de plataforma — ver `_reversa_forward/015-sessao-sem-token-na-url/legacy-impact.md` e `regression-watch.md` |
 | **F-03** — IDOR nas mutações por identificador | Alta | 🟡 **Contrato feito; a metade de runtime é da RLS, por decisão** | Ver `#Correção do F-03 — obrigatoriedade de escopo nas mutações` |
 | **F-04** — leitura ampla da trilha, sem isolamento no cliente | Média | ✅ **Corrigido no que era corrigível no cliente** | A leitura passou a declarar escopo administrativo — ver `#Correção do F-04 — leitura da trilha`. O "filtro de inquilino" do achado **não existe** neste sistema: a entidade não tem campo de inquilino |
 | **F-05** — `dangerouslySetInnerHTML` no componente de gráficos | Baixa | ✅ **Corrigido** | O sink foi removido de `src/components/ui/chart.jsx` — nota abaixo |
