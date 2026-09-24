@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { base44 } from '@/api/base44Client';
+import { toSessionUser } from '@/lib/session';
+import { isAdminScope, resolveScope } from '@/api/sessionScope';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
@@ -63,10 +65,30 @@ type DateFilter = 'all' | 'today' | 'week' | 'month';
  * usuário/paciente, os filtros de ação e de intervalo, os quatro indicadores e a
  * tabela com a ausência de paginação.
  *
- * PARIDADE DE LEITURA: a leitura permanece sem escopo declarado — a restrição real
- * da trilha (leitura apenas por admin, BR-MIGRAR-024) é imposta pela regra de
- * acesso do servidor, intocada, como no legado.
+ * PARIDADE DE LEITURA, **com uma exceção declarada**: a leitura deixou de ser feita
+ * pelo repositório cru. A trilha é admin-only (BR-MIGRAR-024) e o escopo administrativo
+ * passou a ser DECLARADO (correção do achado F-04, 2026-09-24) — a omissão anterior está
+ * registrada no watch `W006` da feature 006 e no adendo da correção. O limite e a
+ * ordenação do pedido continuam exatamente os mesmos.
+ *
+ * A inserção na trilha sempre declarou o seu escopo (`AccessLogger`), e a leitura era a
+ * única operação desta entidade feita sem escopo nenhum.
  */
+
+/**
+ * Declara a leitura da trilha com escopo administrativo.
+ *
+ * A restrição é do servidor, e continua sendo; o que a camada entrega é a
+ * OBRIGATORIEDADE DE CONTRATO: `asAdmin` aceita apenas escopo administrativo, então o
+ * caminho de quem não é admin precisa ser dito em vez de ficar implícito. Para um
+ * escopo de dono, a resposta é o conjunto vazio — a leitura não vaza dado e não chega a
+ * perguntar ao servidor.
+ */
+const leituraDaTrilha = async () => {
+  const scope = resolveScope(toSessionUser(await base44.auth.me()));
+  if (!isAdminScope(scope)) return [];
+  return base44.entities.AccessLog.asAdmin(scope).list('-created_date', 500);
+};
 export default function AccessLogs() {
     const [search, setSearch] = useState('');
     const [actionFilter, setActionFilter] = useState<ActionFilter>('all');
@@ -74,7 +96,7 @@ export default function AccessLogs() {
 
     const { data: logs, isLoading } = useQuery({
         queryKey: ['access-logs'],
-        queryFn: () => base44.entities.AccessLog.list('-created_date', 500),
+        queryFn: leituraDaTrilha,
     });
 
     const filteredLogs = logs?.filter(log => {

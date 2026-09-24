@@ -26,9 +26,12 @@ import type { ReactNode } from 'react';
  *
  * TRÊS RESSALVAS DECLARADAS, e as três importam para não ler cobertura onde não há:
  *
- * 1. **A leitura é pedida SEM escopo declarado** (decisão D-03). A página chama `list` direto
- *    no repositório, e `asAdmin` existe e não é usado. A restrição de leitura a
- *    administrador é **RLS do servidor**, e a prova a **declara** em vez de afirmá-la.
+ * 1. **A leitura DECLARA escopo administrativo desde 2026-09-24** (correção do F-04). Até
+ *    então ela era pedida sem escopo nenhum, por decisão D-03, e esta prova afirmava a
+ *    omissão — `asAdmin` era espionado justamente para ser encontrado sem uso. A restrição
+ *    de leitura a administrador continua sendo **RLS do servidor**, e a prova segue
+ *    **declarando** isso em vez de afirmá-lo: o que a camada entrega é a obrigatoriedade de
+ *    contrato, não a autorização.
  * 2. **O teto de 500 registros é paridade congelada** (AMB-004, `handoff.md`). A ausência de
  *    paginação é promessa provada, não lacuna desta feature.
  * 3. **O filtro é do cliente.** Mudar filtro não reconsulta o servidor, e é isso que a prova
@@ -42,6 +45,7 @@ const {
   filtrar,
   asUser,
   asAdmin,
+  sessao,
 } = vi.hoisted(() => ({
   armazem: { logs: [] as AccessLog[] },
   cacheDeConsultas: new Map<string, boolean>(),
@@ -49,17 +53,20 @@ const {
   filtrar: vi.fn(),
   asUser: vi.fn(),
   asAdmin: vi.fn(),
+  /** A sessão que `auth.me` devolve. A prova troca o papel para medir os dois caminhos. */
+  sessao: { valor: null as Record<string, unknown> | null },
 }));
 
 /**
  * O repositório do transporte, com as cinco operações.
  *
- * `asUser` e `asAdmin` existem **e são espiados** de propósito: é a prova de que a página
- * não declara escopo nenhum — ela usa `list` direto, enquanto as duas formas de acesso com
- * escopo ficam sem uso.
+ * `asUser` e `asAdmin` existem **e são espiados** de propósito: a prova afirma QUAL das
+ * duas formas de acesso a página usa — e a resposta mudou em 2026-09-24, com a correção
+ * do F-04 (antes, nenhuma das duas era usada).
  */
 vi.mock('@/api/base44Client', () => ({
   base44: {
+    auth: { me: vi.fn(async () => sessao.valor) },
     entities: {
       AccessLog: {
         list: listar,
@@ -90,6 +97,12 @@ vi.mock('@tanstack/react-query', () => ({
 /** O cache é por verificação: sem isto, a massa de uma vazaria para a seguinte. */
 beforeEach(() => {
   cacheDeConsultas.clear();
+  // A trilha é admin-only (BR-MIGRAR-024), então a sessão padrão desta prova é de
+  // administrador. As duas formas de acesso com escopo entregam o mesmo repositório
+  // dublado; a verificação do fim do arquivo troca a sessão para medir o outro caminho.
+  sessao.valor = { id: 'admin-1', email: 'admin@medrecord.local', role: 'admin' };
+  asUser.mockImplementation(() => ({ list: listar, filter: filtrar }));
+  asAdmin.mockImplementation(() => ({ list: listar, filter: filtrar }));
 });
 
 /**
@@ -175,23 +188,38 @@ describe('AccessLogs — o pedido de leitura', () => {
     vi.clearAllMocks();
     reporArmazem(registro());
     listar.mockImplementation(async () => armazem.logs);
-    asUser.mockImplementation(() => ({ list: listar, filter: filtrar }));
-    asAdmin.mockImplementation(() => ({ list: listar, filter: filtrar }));
   });
 
-  it('pede os registros com a ordenação e o limite exatos, e sem escopo declarado', async () => {
+  it('pede os registros com a ordenação e o limite exatos, e declara o escopo administrativo', async () => {
     renderizarPagina();
     await screen.findByText('Acesso de prova');
 
     // Argumentos EXATOS: a ordenação por criação decrescente e o teto de 500. É o que
-    // `PT-007.4` promete, e o teto é paridade congelada (AMB-004).
+    // `PT-007.4` promete, e o teto é paridade congelada (AMB-004) — a correção do F-04 não
+    // tocou nem no limite nem na ordenação.
     expect(listar).toHaveBeenCalledWith('-created_date', 500);
 
-    // A leitura sai pelo repositório cru. As duas formas de acesso com escopo existem no
-    // cliente e **nenhuma** é usada aqui: a restrição de leitura a administrador é aplicada
-    // pelo servidor, e a prova declara isso em vez de afirmá-lo.
-    expect(asAdmin).not.toHaveBeenCalled();
+    // O escopo passou a ser DECLARADO (correção do F-04, 2026-09-24). A trilha é admin-only
+    // (BR-MIGRAR-024), então a forma usada é a administrativa, e a de dono não é usada. A
+    // restrição continua sendo aplicada pelo servidor; o que mudou é que a omissão deixou
+    // de ser possível em silêncio.
+    expect(asAdmin).toHaveBeenCalledWith({ kind: 'admin' });
     expect(asUser).not.toHaveBeenCalled();
+  });
+
+  it('não pergunta ao servidor quando a sessão não é de administrador', async () => {
+    // O caminho de quem não é admin precisava ser DITO — era o que a omissão escondia:
+    // "admin lendo a trilha" e "qualquer um lendo a trilha" eram o mesmo código.
+    sessao.valor = { id: 'user-1', email: 'user@medrecord.local' };
+
+    renderizarPagina();
+    await screen.findByText('Acesso de prova');
+
+    // ⚠️ O dublê de `useQuery` devolve o armazém, e não o retorno da consulta — por isso a
+    // asserção é sobre o TRANSPORTE, que é onde a diferença existe: para quem não é admin, a
+    // leitura responde vazio **sem chegar a pedir**.
+    expect(asAdmin).not.toHaveBeenCalled();
+    expect(listar).not.toHaveBeenCalled();
   });
 
   it('não oferece controle de paginação e não reconsulta quando um filtro muda', async () => {
