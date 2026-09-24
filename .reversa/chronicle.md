@@ -51,6 +51,7 @@
 - 2026-09-22 — Workflow de prova entra no CI com quatro portões e linha de base de 168 verificações
 - 2026-09-23 — Mini-site ganha a página do Ciclo de Provas e os dados passam a 170 arquivos, 411 importações e 56 pacotes
 - 2026-09-24 — Correção do F-01: guarda de papel no menu, na rota da trilha e nas ações de Médicos e Templates, alinhada a BR-MIGRAR-015/017/020/024; a suíte vai a 179 verificações em 28 arquivos
+- 2026-09-24 — Correção do F-03: update e delete das entidades sob RLS passam a exigir escopo por contrato (BR-MIGRAR-034); o arnês de casos negativos vai a 18
 
 ---
 *Gerado pelo Reversa em 2026-09-10.*

@@ -167,7 +167,7 @@ Esta matriz relaciona cada artefato de código-fonte e schema do projeto legado 
 
 | Promessa (spec) | Código que cumpre | Teste que prova | Veredito |
 | :--- | :--- | :--- | :---: |
-| Verificações negativas do gate de tipos são reproduzíveis por comando | `src/test/verificacoes-negativas.mjs` | `npm run prova:negativos` — 9 casos, recusa conferida **pelo motivo** e sem resíduo | 🟢 |
+| Verificações negativas do gate de tipos são reproduzíveis por comando | `src/test/verificacoes-negativas.mjs` | `npm run prova:negativos` — **18 casos** (17 negativos e 1 positivo), recusa conferida **pelo motivo** e sem resíduo | 🟢 |
 | Cadastro de paciente no modo offline aparece na listagem escopada (defeito DIV-01, **W009 da feature `001-migracao-typescript`**) | `src/api/mockClient.ts`, `src/api/registry.ts`, `src/api/scopedRead.ts` | `src/api/__tests__/mockClient.test.ts` — cadastra pelo adaptador e relê por `listOwned` e `filterOwned` | 🟢 |
 | Contrato único de acesso a dados, honrado tanto pelo modo online quanto pelo offline | `src/api/contract.ts`, `src/api/base44Client.ts`, `src/api/mockClient.ts`, `src/api/registry.ts` | `src/api/__tests__/mockClient.test.ts` (execução) + `npm run typecheck` (compilação) | 🟢 |
 | Sessão autenticada convertida para o tipo de domínio; a ausência de papel no modo offline é explícita, não silenciosa | `src/lib/session.ts`, `src/lib/AuthContext.tsx`, `src/api/sessionScope.ts` | `src/lib/__tests__/AuthContext.test.tsx`, `src/api/__tests__/sessionScope.test.ts` | 🟢 |
@@ -179,7 +179,7 @@ Esta matriz relaciona cada artefato de código-fonte e schema do projeto legado 
 npm test                  # a suíte completa
 npm run typecheck         # gate de tipos estrito
 npm run lint              # eslint --quiet
-npm run prova:negativos   # 16 casos: 15 recusados pelo motivo certo e 1 positivo que deve compilar
+npm run prova:negativos   # 18 casos: 17 recusados pelo motivo certo e 1 positivo que deve compilar
 npm run prova:encoding    # guarda de encoding, com dono desde a feature 008
 ```
 
@@ -295,7 +295,43 @@ seguiram verdes. Revertida, sem resíduo.
 > `('-created_date', 500)` e **sem escopo declarado** (watch `W006`, ainda vigente, e o achado
 > F-04); a autorização de escrita continua sendo, em última instância, a regra do servidor; e o
 > `RoleGuard` é guarda de **interface** — ele não substitui a RLS nem torna seguro um cliente
-> adulterado. F-02, F-03 e F-04 seguem abertos.
+> adulterado. F-02, F-03 e F-04 seguem abertos — o estado de cada um é o da seção
+> `#Achados de segurança — estado da correção`.
+
+### Correção do F-03 — obrigatoriedade de escopo nas mutações (2026-09-24)
+
+O achado F-03 diz que "mutações de exclusão e atualização são feitas por ID direto sem validação
+de posse no cliente". O contrato do projeto **já prometia** o conserto, e o que faltava era a
+metade da escrita. **BR-MIGRAR-034**: "*Tornar obrigatório por tipos: assinaturas de
+query/**mutation** exigem `created_by_id`/escopo... (o compilador **não** valida autorização em
+runtime, e a RLS do BaaS permanece intocada)*".
+
+Até aqui, `scopedRead.ts` entregava só a leitura: as 5 entidades sob RLS não expõem `list`/`filter`
+crus, e omitir o escopo não compila. `update` e `delete` seguiam endereçando o registro por
+identificador **sem exigir nada**.
+
+| O que mudou | Onde |
+| :--- | :--- |
+| `OwnedEntity.update(scope, id, data)` e `delete(scope, id)` passam a **exigir o escopo** | `src/api/scopedRead.ts` |
+| As 4 chamadas das telas passaram a declarar o escopo, resolvido por `resolveScope` como as leituras já faziam | `PatientForm.tsx`, `NewConsultation.tsx`, `Appointments.tsx`, `PatientDetail.tsx` |
+| O `create` **continua sem exigir escopo**, de propósito: criação é aberta a autenticados (BR-MIGRAR-036) e não há filtro de posse a omitir | — |
+
+**Prova.** Dois casos negativos novos no arnês de compilação — `mutacao-sem-escopo` e
+`atualizacao-sem-escopo` —, ambos recusados com `TS2554` ("Expected 2/3 arguments"), e o arnês
+passa de 16 para **18 casos**, com resíduo nenhum. As 6 verificações existentes das quatro telas
+passaram a afirmar o escopo como primeiro argumento, e a suíte segue em **179 verificações em 28
+arquivos**, com `typecheck` em 0 erros.
+
+> ⚠️ **O que esta correção NÃO é, e é preciso dizê-lo com todas as letras.** Ela **não** verifica
+> posse em runtime: a implementação recebe o escopo e **não altera a chamada** — `update`/`delete`
+> do contrato tomam apenas o identificador, e quem decide a posse é a regra de acesso do servidor.
+> O que ela entrega é **obrigatoriedade de contrato**: endereçar um registro existente sem
+> declarar o escopo **não compila**. Verificar posse no cliente duplicaria a RLS e não protegeria
+> de um cliente adulterado — decisão recusada e registrada em `sessionScope.ts:18-21`.
+>
+> Por isso o F-03 fica **parcialmente** endereçado: a metade de contrato está feita, e a metade de
+> runtime continua sendo — deliberadamente — a RLS. Quem ler o achado da auditoria sem esta nota
+> vai procurar no cliente uma verificação que o projeto decidiu não ter.
 
 ### Cenários de paridade do módulo Pacientes
 
@@ -485,7 +521,7 @@ está marcado como fechado, e o que permanece aberto tem razão declarada.
 | Lacuna | Situação após a feature `009-prova-kpis-dashboard` |
 | :--- | :--- |
 | **BR-P02** (enum de tipo sanguíneo) | ✅ **Fechada.** Prova de execução em `PatientForm.test.tsx` (o formulário oferece exatamente os 9 valores) e caso negativo `status-fora-do-conjunto` em `npm run prova:negativos` |
-| **Verificações negativas do gate de tipos** (T031–T036, T039, T045, T046) | ✅ **Fechada, e ampliada.** `npm run prova:negativos` reproduz **16 casos** por comando — 15 negativos e **1 positivo** —, confere a recusa pelo motivo certo, confere que o caso positivo **compila** e não deixa resíduo. Os 9 casos originais continuam passando sem alteração; os 7 novos são da feature 008 |
+| **Verificações negativas do gate de tipos** (T031–T036, T039, T045, T046) | ✅ **Fechada, e ampliada.** `npm run prova:negativos` reproduz **18 casos** por comando — 17 negativos e **1 positivo** —, confere a recusa pelo motivo certo, confere que o caso positivo **compila** e não deixa resíduo. Os 9 casos originais continuam passando sem alteração; 7 entraram na feature 008, e os **2 últimos** são da correção do F-03 (`mutacao-sem-escopo` e `atualizacao-sem-escopo`) |
 | **Paridade do módulo Pacientes** (5 cenários) | ✅ **Fechada**, com o desdobramento do PT-001.3 declarado |
 | **Paridade do módulo Agendamentos** (8 cenários) | ✅ **Fechada**, com três ressalvas declaradas: a redação imprecisa de PT-003.1 e PT-003.3 e a vacuidade de PT-004.2 |
 | **Paridade do módulo Consultas** (3 cenários) | ✅ **Fechada**, com duas ressalvas declaradas: a redação imprecisa de PT-005.1 e a metade de interface de PT-005.3, que é **falsa** |
@@ -664,7 +700,7 @@ desta tabela.
 | :--- | :---: | :--- | :--- |
 | **F-01** — RBAC inexistente no frontend | Alta | ✅ **Corrigido** | Menu, rota da trilha e ações de Médicos e Templates — ver `#Correção do F-01 — guarda de papel no frontend` |
 | **F-02** — `access_token` por query string e em `LocalStorage` | Alta | ⛔ **Não corrigível neste repositório** | Nota abaixo |
-| **F-03** — IDOR nas mutações por identificador | Alta | 🔴 **Aberto** | `scopedRead.ts` não exige escopo na escrita; `PatientDetail.tsx:175` exclui por identificador direto |
+| **F-03** — IDOR nas mutações por identificador | Alta | 🟡 **Contrato feito; a metade de runtime é da RLS, por decisão** | Ver `#Correção do F-03 — obrigatoriedade de escopo nas mutações` |
 | **F-04** — leitura ampla da trilha, sem isolamento no cliente | Média | 🔴 **Aberto** | `AccessLogs.tsx:75-78`; watch `W006` da feature `006`, ainda vigente |
 | **F-05** — `dangerouslySetInnerHTML` no componente de gráficos | Baixa | 🔴 **Aberto** | `src/components/ui/chart.jsx:74` |
 
