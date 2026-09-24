@@ -780,3 +780,4 @@ desta tabela.
 *Gerado pelo Reversa-Writer em 2026-09-02.*
 *Seção de rastreabilidade acrescentada em 2026-09-19; módulos de Agendamentos e Consultas e suas lacunas em 2026-09-21; cenários e registros dos grupos 06 (emissão de documento com modelo), 07 (trilha de auditoria) e 10 (contrato de dados) em 2026-09-21 e 2026-09-22; medições das features 005 e 006 e adoção da guarda de encoding em 2026-09-22.*
 *Correção do F-01 e registro vivo dos achados de segurança em 2026-09-24; correções do F-03, F-04 e F-05 em 2026-09-24.*
+*Convergência dos adendos conferida **arquivo por arquivo** em 2026-09-24: os vereditos das features `009` e `010` foram aplicados, e o que os adendos `003` a `010` declararam sem aplicar está registrado em `_reversa_sdd/pendencias-de-convergencia.md`.*

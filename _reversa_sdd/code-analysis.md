@@ -1528,17 +1528,26 @@ O mock espelha a mesma forma do SDK real:
 - Tolerante a JSON corrompido (cai pro seed)
 - Não há TTL nem limpeza — dados persistem entre reloads até o usuário limpar storage
 
+> 🟢 **Provado em 2026-09-24 (feature `010-prova-modo-offline`).** A semeadura na primeira leitura
+> foi medida contra o **seed real**, com os identificadores conferidos um a um, e a tolerância a
+> conteúdo corrompido foi medida com a chave preenchida por valor inválido — usando entidade
+> **semeada**, para que o desfecho não se confundisse com ausência. O que era descrição de
+> comportamento passou a ser comportamento verificado (`mockClientOffline.test.ts`).
+
 ### 10.5 Limitações funcionais 🟡
 
-| # | Limitação | Severidade |
-|---|-----------|------------|
-| L1 | Sem RLS — qualquer um lê/escreve qualquer entidade | Alta |
-| L2 | Sem conflito entre abas/janelas (escritas concorrentes) | Média |
-| L3 | Upload de arquivo vira Data URL em memória (não persiste — perdido no próximo reload) | Alta |
-| L4 | Filtros são estritos (`===`), sem operadores `in`, `contains`, `gte`, `lte` | Média |
-| L5 | `sortAndLimit` aceita apenas 1 campo, sem suporte a múltiplos | Baixa |
-| L6 | Sem `get(id)` direto — o caller tem que usar `filter` | Média |
-| L7 | LGPD: dados de pacientes seed ficam no `localStorage` do navegador — risco em dispositivos compartilhados | Alta |
+> **Veredito de prova (2026-09-24, feature `010-prova-modo-offline`).** A tabela deixa de ser só um
+> aviso e passa a dizer **o que está medido**. Nenhuma limitação mudou de conteúdo.
+
+| # | Limitação | Severidade | Veredito |
+|---|-----------|------------|----------|
+| L1 | Sem RLS — qualquer um lê/escreve qualquer entidade | Alta | 🟢 **Afirmada** — na forma forte: um registro com dono **alheio** é visível e editável (`BR-OFF10`) |
+| L2 | Sem conflito entre abas/janelas (escritas concorrentes) | Média | 🟡 **Declarada, não exercitável** — um teste que fingisse duas abas mediria o fingimento, não a concorrência |
+| L3 | Upload de arquivo vira Data URL em memória (não persiste — perdido no próximo reload) | Alta | 🟢 **Afirmada** — o envio devolve dado embutido e **não cria coleção** no armazenamento |
+| L4 | Filtros são estritos (`===`), sem operadores `in`, `contains`, `gte`, `lte` | Média | 🟢 **Afirmada** — igualdade exata, provada com valores próximos; operadores de intervalo e de conteúdo não têm efeito |
+| L5 | `sortAndLimit` aceita apenas 1 campo, sem suporte a múltiplos | Baixa | 🟢 **Afirmada** — um campo, ascendente e descendente, e o corte acontece **depois** de ordenar |
+| L6 | Sem `get(id)` direto — o caller tem que usar `filter` | Média | 🟢 **Afirmada** — o repositório não expõe leitura por identificador, e o caminho declarado funciona |
+| L7 | LGPD: dados de pacientes seed ficam no `localStorage` do navegador — risco em dispositivos compartilhados | Alta | 🟡 **Declarada** — é risco de **privacidade**, não comportamento. Afirmá-la em asserção diria que expor dados de pacientes é o pretendido. O seed é fictício (`Q-14`), e o aviso visual recomendado **não foi implementado** (`G-04`) |
 
 ### 10.6 Compatibilidade
 

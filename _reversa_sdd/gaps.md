@@ -10,6 +10,16 @@
 | G-02 | 🟡 Moderado | `logs-acesso/screens.md` | O legado carrega 500 registros e renderiza todos os filtrados sem paginação; ainda falta decidir a política desejada acima desse limite. | Definir comportamento de paginação e estratégia de carregamento. |
 | G-04 | 🟡 Moderado | `modo-offline/` | O badge/aviso visual recomendado para indicar “Modo Offline — dados fictícios/de teste” ainda não foi implementado no código. | Implementar em etapa própria, fora do escopo do Reviewer. |
 
+> **Nota de convergência (2026-09-24, feature `010-prova-modo-offline`).** `G-04` permanece
+> **aberta**, e **nenhuma prova a cobre**. É lacuna de **produto**, não de prova: implementar o
+> aviso mudaria comportamento observável, e a suíte teria de mudar de propósito. Ver
+> `_reversa_sdd/addenda/010-prova-modo-offline.md` e `_reversa_sdd/modo-offline/requirements.md#7`.
+>
+> **Nota de convergência (2026-09-24, feature `009-prova-kpis-dashboard`).** `G-01` também
+> **permanece aberta** e segue pedindo validação com stakeholder. O que caducou foi o **bloqueio de
+> prova** que dela derivava — a feature `009` provou o comportamento (a constante `94%`) sem
+> resolver a fórmula. A lacuna é de **produto**. Ver `dashboard/requirements.md`.
+
 ## Lacunas resolvidas nesta revisão
 
 | Item anterior | Resolução |

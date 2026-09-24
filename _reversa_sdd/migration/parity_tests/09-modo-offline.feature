@@ -11,6 +11,26 @@ Funcionalidade: Modo offline (VITE_OFFLINE=true) com paridade de contrato
   Quero rodar a SPA sem Base44 com dados locais
   Para demonstrar e testar sem credenciais ou rede
 
+  # ---------------------------------------------------------------------------
+  # VEREDITO DE PROVA — convergência de 2026-09-24 (feature 010-prova-modo-offline)
+  #
+  # Os seis cenários abaixo foram convertidos em verificação de execução em
+  # src/api/__tests__/mockClientOffline.test.ts e src/api/__tests__/offlineActivation.test.ts
+  # — DOIS arquivos, porque a promessa não vive numa tela: uma metade se mede exercitando o
+  # adaptador e a outra no carregamento do módulo. Os vereditos por cenário vivem em
+  # _reversa_sdd/code-spec-matrix.md#Cenários de paridade do grupo 09, e o registro completo
+  # em _reversa_sdd/addenda/010-prova-modo-offline.md.
+  #
+  #   PT-009.1  PROVADO nas duas metades, com a RESSALVA de que a negativa afirma a CHAMADA da
+  #                          fábrica do provedor, e não o funcionamento do provedor real
+  #   PT-009.2  PROVADO      sessão imediata como usuário de demonstração, sem consultar o servidor
+  #   PT-009.3  PROVADO      semeadura na primeira leitura e persistência das três operações
+  #   PT-009.4  PROVADO      o mock NÃO aplica RLS — comportamento INTENCIONAL (BR-MIGRAR-044)
+  #   PT-009.5  PROVADO COM ACHADO — a criação aceita identificador do chamador, que SOBREPÕE o
+  #                          gerado; a redação de BR-OFF06 é mais forte do que o código
+  #   PT-009.6  PROVADO      filtro por igualdade estrita e ordenação de um campo
+  # ---------------------------------------------------------------------------
+
   @paridade @critico
   Cenário: Ativação exclusiva por env var em build
     Dado VITE_OFFLINE=true no build

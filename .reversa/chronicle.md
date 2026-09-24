@@ -54,6 +54,7 @@
 - 2026-09-24 — Correção do F-03: update e delete das entidades sob RLS passam a exigir escopo por contrato (BR-MIGRAR-034); o arnês de casos negativos vai a 18
 - 2026-09-24 — Correção do F-04: a leitura da trilha de auditoria passa a declarar escopo administrativo e a dizer o caminho de quem não é admin; a suíte vai a 180 verificações
 - 2026-09-24 — Correção do F-05: o sink dangerouslySetInnerHTML sai do componente de gráficos, que passa a entregar o CSS como texto; a suíte vai a 183 verificações em 29 arquivos
+- 2026-09-24 — Convergência dos adendos conferida arquivo por arquivo: vereditos das features 009 e 010 aplicados, e o que os adendos 003 a 010 declararam sem aplicar fica registrado em pendencias-de-convergencia.md
 
 ---
 *Gerado pelo Reversa em 2026-09-10.*

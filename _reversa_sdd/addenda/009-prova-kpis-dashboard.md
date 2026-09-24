@@ -68,3 +68,14 @@ origem.
 - `_reversa_forward/009-prova-kpis-dashboard/onboarding.md`
 - `_reversa_forward/009-prova-kpis-dashboard/progress.jsonl`
 - `_reversa_forward/009-prova-kpis-dashboard/actions.md`
+
+---
+
+## Correção de caminho — 2026-09-24
+
+A tabela acima cita `_reversa_sdd/migration/gaps.md`. **Esse arquivo não existe**: as lacunas de
+especificação vivem em `_reversa_sdd/gaps.md`, e é lá que `G-01` está. O texto da tabela **não** é
+reescrito — adendo é registro histórico —, e esta nota é a correção de leitura.
+
+O levantamento completo do que este adendo declarou e não foi aplicado está em
+`_reversa_sdd/pendencias-de-convergencia.md`.

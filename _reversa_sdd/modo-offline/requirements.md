@@ -25,6 +25,29 @@ O modo offline permite rodar a SPA **sem** o backend Base44, com todos os dados 
 - **BR-OFF11**: `auth.logout()` e `auth.redirectToLogin()` são no-op em offline. O usuário permanece "logado" porque a sessão é local e não há servidor para invalidar. 🟢
 - **BR-OFF12**: `appLogs.logUserInApp()` é no-op. 🟢
 
+> **Veredito de prova — convergência de 2026-09-24 (feature `010-prova-modo-offline`).** Nenhuma
+> regra abaixo mudou de conteúdo. O que passou a existir é a **medição**, em
+> `src/api/__tests__/mockClientOffline.test.ts` (21 verificações) e
+> `src/api/__tests__/offlineActivation.test.ts` (2). A prova ocupa **dois** arquivos porque a
+> promessa não vive numa tela: uma metade se mede exercitando o adaptador, e a outra se mede **no
+> carregamento do módulo**, porque a variável de ativação é lida uma vez por processo. Adendo:
+> `_reversa_sdd/addenda/010-prova-modo-offline.md`.
+
+| Regra | Veredito | Verificação |
+| :--- | :--- | :--- |
+| `BR-OFF01` | 🟢 **Provada** | `offlineActivation.test.ts` — "com a variável ligada, o cliente exportado é o do adaptador local" |
+| `BR-OFF02` | 🟢 **Provada** | idem, e a metade negativa confirma que a fábrica do provedor é chamada **e** que nada é semeado sem a variável |
+| `BR-OFF03` | 🟢 **Provada por prova herdada** | `src/lib/__tests__/AuthContext.test.tsx` — "uses the offline demo user when offline mode is enabled" (feature `002`); esta feature **cita**, não reafirma |
+| `BR-OFF04` | 🟢 **Provada** | Quatro verificações: semeadura sob a chave prefixada com os identificadores conferidos um a um, queda para o seed com conteúdo inválido, as três operações refletidas na leitura seguinte e a sobrevivência a uma nova instância do cliente |
+| `BR-OFF05` | 🟢 **Provada** | O contrato é exercitado: `list`/`filter` com ordenação e limite, `create`/`update`/`delete`, `UploadFile`, os no-ops de sessão e o de telemetria |
+| `BR-OFF06` | 🟡 **Provada com ressalva** | A criação preenche identificador, data de criação e data do registro; **mas** um identificador informado pelo chamador **sobrepõe** o gerado — a redação da regra é mais forte do que o código, e o comportamento foi fixado em caso |
+| `BR-OFF07` | 🟢 **Provada** | Preserva o identificador e mescla; identificador desconhecido rejeita com a mensagem afirmada **por extenso** |
+| `BR-OFF08` | 🟢 **Provada** | Igualdade exata, provada com valores próximos e caixa diferente; operadores de intervalo e de conteúdo não têm efeito |
+| `BR-OFF09` | 🟢 **Provada** | Ascendente, descendente, e o corte **depois** de ordenar |
+| `BR-OFF10` | 🟢 **Provada como comportamento INTENCIONAL** | Forma forte: um registro com **dono alheio**, gravado direto no armazenamento, é visível **e editável** (`BR-MIGRAR-044`) |
+| `BR-OFF11` | 🟢 **Provada** | Encerrar sessão e redirecionar não alteram o armazenamento |
+| `BR-OFF12` | 🟢 **Provada** | O no-op de telemetria não altera o armazenamento |
+
 ## 3. Estrutura de Dados
 
 ### 3.1 Persistência
@@ -114,6 +137,17 @@ OFFLINE_USER = {
 | P4 | Sem migração de dados entre releases — se `mockSeed` mudar de formato, dados antigos podem corromper | Baixa |
 | P5 | Toggle compile-time — debug mais lento (precisa rebuild) | Baixa |
 
+> **Veredito de prova (2026-09-24).** Os cinco pontos ganham veredito, e **nenhum deles mudou de
+> conteúdo**.
+
+| # | Veredito |
+| :--- | :--- |
+| `P1` | 🔴 **NÃO IMPLEMENTADO, e nenhuma prova o cobre.** É lacuna de **produto** (`G-04`): a recomendação de aviso visual foi registrada em `Q-14` e não foi implementada. Implementá-la mudaria comportamento observável, e a prova teria de mudar de propósito |
+| `P2` | 🟢 **Provado** — é o `BR-OFF10`: o adaptador não aplica regra de acesso, e isso é intencional |
+| `P3` | 🟡 **Provado em parte** — as bordas declaradas **têm** verificação: não há leitura direta por identificador (`L6`) e o envio de e-mail é recusado com mensagem própria. O que segue sem prova é a lista de operações que o legado nunca usou |
+| `P4` | 🟡 **Declarado, não exercitável** — provar migração de dados entre releases exigiria duas versões do seed convivendo no mesmo armazenamento |
+| `P5` | 🟢 **Provado** — a ativação é lida **no carregamento do módulo**, que é exatamente o que faz o toggle ser de construção |
+
 ## 8. Critérios de Aceite
 
 - [ ] Setar `VITE_OFFLINE=true` em `.env.local` e rodar `npm run dev` abre a aplicação sem erros no console.
@@ -122,6 +156,13 @@ OFFLINE_USER = {
 - [ ] Criar, editar e excluir pacientes reflete na próxima leitura (persistência local).
 - [ ] Limpar o `localStorage` e recarregar restaura os dados do seed.
 - [ ] Setar `VITE_OFFLINE=false` (ou ausente) volta ao comportamento online (requer credenciais Base44 válidas).
+
+> ⚠️ **Os critérios acima ficaram SEM MEDIÇÃO PRÓPRIA (2026-09-24).** Os seis itens falam de
+> **tela** — a aplicação abrir sem erro, o login não aparecer, o Dashboard carregar com o seed, o
+> CRUD refletir, o `localStorage` limpo restaurar o seed, o toggle voltar ao online. Nenhum cenário
+> de `PT-009` descreve tela: os seis são de **contrato do adaptador**. A superfície de lista de
+> pacientes é prova herdada da feature `002`. Isso fica **declarado**, e não contado como coberto —
+> a verificação de tela deste módulo continua sendo conferência humana.
 
 ---
 *Gerado pelo Reversa-Writer em 2026-08-28.*

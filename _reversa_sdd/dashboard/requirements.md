@@ -17,6 +17,28 @@ Página do dashboard mostrando métricas-chave de saúde e atividade recente. Ex
 - [Taxa de Atendimento] O valor é atualmente exibido fixo/mockado em "94%"; não há fórmula, fonte agregada ou período definidos no legado. 🔴
 - [Próximos Agendamentos] Exibe até 5 agendamentos onde a data é no futuro (maior que a data/hora atual) e o status é diferente de 'cancelado'. 🟢
 
+> **Veredito de prova — convergência de 2026-09-24 (feature `009-prova-kpis-dashboard`).** As cinco
+> regras deixaram de ser promessa: cada uma tem verificação de execução em
+> `src/pages/__tests__/DashboardKpis.test.tsx`. **Nenhuma regra mudou de conteúdo** — o que passou a
+> existir é a medição. Adendo: `_reversa_sdd/addenda/009-prova-kpis-dashboard.md`.
+
+| Regra | Veredito | Verificação |
+| :--- | :--- | :--- |
+| Pacientes Ativos | 🟢 **Provada** | `PT-008.1` — o paciente inativo é ignorado |
+| Agendamentos Hoje | 🟢 **Provada, com a borda explícita** | `PT-008.2` — exclui **apenas** `cancelado`, de modo que `faltou`, `concluido` e `confirmado` **contam**; e o agendamento de outra data não entra |
+| Documentos Emitidos | 🟢 **Provada** | `BR-MIGRAR-029` — reflete o tamanho da leitura, inclusive quando ela vem vazia |
+| Taxa de Atendimento | 🔴 **Provada como comportamento, pendente como produto** | `PT-008.4` — afirma a constante `"94%"`, sem fórmula e sem tendência. A lacuna remanescente é de **produto**, não de prova |
+| Próximos Agendamentos | 🟢 **Provada** | `PT-008.5` — limita a cinco, ignora passado e cancelado, e exibe o estado vazio com o atalho |
+
+> **Limites e escopo das quatro leituras.** `BR-MIGRAR-033` prova que cada leitura sai com a
+> ordenação e o limite do legado (pacientes 100, consultas 50, prescrições 100, agendamentos 100) e
+> que **o escopo da sessão é declarado**. É a verificação de `W006` e `W007` do watch da feature.
+>
+> **Um achado que o adendo registra e esta tabela não resolve:** `PT-008.3` é provado pela
+> **ausência** — o critério divergente de `AMB-002` (o contador de Consultas de Hoje) está
+> preservado em **código morto** (`Dashboard.tsx:83-92` calcula e descarta), e não há superfície
+> onde medi-lo.
+
 ## Requisitos Funcionais
 
 | ID | Requisito | Prioridade | Critério de Aceite |
@@ -47,8 +69,9 @@ E um evento de auditoria de "Acesso ao dashboard" deve ser gravado via logAccess
 
 ### Taxa de Atendimento — decisão pendente
 
-- A implementação atual confirma apenas o placeholder `94%` em `src/pages/Dashboard.jsx:140-141`. 🟢
-- A fórmula sugerida `concluídos / (concluídos + cancelados + faltou) × 100`, a entidade `Appointment` como fonte e o período de cálculo são hipóteses para validação, não requisitos confirmados. 🔴
+- A implementação atual confirma apenas o placeholder `94%`. 🟢 **Medido em 2026-09-24**: `PT-008.4` prova que o valor exibido é a constante, sem fórmula e sem tendência.
+- A fórmula sugerida `concluídos / (concluídos + cancelados + faltou) × 100`, a entidade `Appointment` como fonte e o período de cálculo são hipóteses para validação, não requisitos confirmados. 🔴 **Lacuna de PRODUTO, aberta.** O que caducou foi o **bloqueio de prova** que dela derivava (`G-01`) — a feature `009` provou o comportamento sem resolver a fórmula. Ver `_reversa_sdd/gaps.md`.
+- ⚠️ **Divergência registrada em 2026-09-24.** A decisão humana (`AMB-001`, `migration/ambiguity_log.md`) registrou "manter `94%` como **constante explícita e tipada** (`TAXA_ATENDIMENTO_MOCK = 94`)". **Não existe símbolo com esse nome em `src/`**: o valor é o literal `value="94%"` em `Dashboard.tsx`. O **comportamento** foi preservado; a **forma decidida** nunca foi implementada. A cláusula de `PT-008.4` que diz "vindo de constante tipada" é **falsa hoje**.
 
 ## Prioridade (MoSCoW)
 
