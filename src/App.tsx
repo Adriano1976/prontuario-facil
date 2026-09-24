@@ -4,11 +4,15 @@ import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
 import NavigationTracker from '@/lib/NavigationTracker'
 import { pagesConfig } from './pages.config'
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate, useNavigate } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
+import { useToast } from "@/components/ui/use-toast";
 import type { ComponentType, ReactNode } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { base44 } from '@/api/base44Client';
+import { toSessionUser } from '@/lib/session';
 
 const Pages = pagesConfig.Pages as Record<string, ComponentType>;
 const LayoutComp = pagesConfig.Layout as ComponentType<{
@@ -21,6 +25,39 @@ const MainPage: ComponentType = mainPageKey ? Pages[mainPageKey] : (() => <></>)
 const LayoutWrapper = ({ children, currentPageName }: { children: ReactNode; currentPageName: string }) => LayoutComp ?
   <LayoutComp currentPageName={currentPageName}>{children}</LayoutComp>
   : <>{children}</>;
+
+/**
+ * Componente de Guarda de Papel (RBAC)
+ * Protege rotas que exigem privilégios de administrador.
+ */
+const RoleGuard = ({ children, requiredRole = 'admin' }: { children: ReactNode, requiredRole?: string }) => {
+  const { toast } = useToast();
+  const navigate = useNavigate();
+
+  const { data: user, isLoading } = useQuery({
+    queryKey: ['current-user'],
+    queryFn: async () => toSessionUser(await base44.auth.me()),
+  });
+
+  if (isLoading) {
+    return (
+      <div className="fixed inset-0 flex items-center justify-center">
+        <div className="w-8 h-8 border-4 border-slate-200 border-t-slate-800 rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
+  if (user?.role !== requiredRole) {
+    toast({
+      variant: "destructive",
+      title: "Acesso Negado",
+      description: "Você não tem permissão para acessar esta página.",
+    });
+    return <Navigate to="/" replace />;
+  }
+
+  return <>{children}</>;
+};
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -53,22 +90,30 @@ const AuthenticatedApp = () => {
           <MainPage />
         </LayoutWrapper>
       } />
-      {Object.entries(Pages).map(([path, Page]) => (
-        <Route
-          key={path}
-          path={`/${path}`}
-          element={
-            <LayoutWrapper currentPageName={path}>
-              <Page />
-            </LayoutWrapper>
-          }
-        />
-      ))}
+      {Object.entries(Pages).map(([path, Page]) => {
+        const isAdminPage = ['Doctors', 'Templates', 'AccessLogs'].includes(path);
+        return (
+          <Route
+            key={path}
+            path={`/${path}`}
+            element={
+              <LayoutWrapper currentPageName={path}>
+                {isAdminPage ? (
+                  <RoleGuard>
+                    <Page />
+                  </RoleGuard>
+                ) : (
+                  <Page />
+                )}
+              </LayoutWrapper>
+            }
+          />
+        );
+      })}
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
 };
-
 
 /**
  * Componente principal da aplicação.
@@ -80,7 +125,6 @@ const AuthenticatedApp = () => {
  * @returns Aplicação com provedores e rotas.
  */
 function App() {
-
   return (
     <AuthProvider>
       <QueryClientProvider client={queryClientInstance}>

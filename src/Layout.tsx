@@ -39,13 +39,13 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 
 const NAV_ITEMS = [
-    { name: 'Dashboard', icon: LayoutDashboard, page: 'Dashboard' },
-    { name: 'Pacientes', icon: Users, page: 'Patients' },
-    { name: 'Agendamentos', icon: Calendar, page: 'Appointments' },
-    { name: 'Consultas', icon: Stethoscope, page: 'Consultations' },
-    { name: 'Médicos', icon: UserCog, page: 'Doctors' },
-    { name: 'Templates', icon: FileText, page: 'Templates' },
-    { name: 'Logs de Acesso', icon: Shield, page: 'AccessLogs' },
+    { name: 'Dashboard', icon: LayoutDashboard, page: 'Dashboard', adminOnly: false },
+    { name: 'Pacientes', icon: Users, page: 'Patients', adminOnly: false },
+    { name: 'Agendamentos', icon: Calendar, page: 'Appointments', adminOnly: false },
+    { name: 'Consultas', icon: Stethoscope, page: 'Consultations', adminOnly: false },
+    { name: 'Médicos', icon: UserCog, page: 'Doctors', adminOnly: true },
+    { name: 'Templates', icon: FileText, page: 'Templates', adminOnly: true },
+    { name: 'Logs de Acesso', icon: Shield, page: 'AccessLogs', adminOnly: true },
 ];
 
 const BOTTOM_NAV_ITEMS = NAV_ITEMS.slice(0, 4);
@@ -127,12 +127,12 @@ export default function Layout({ children, currentPageName }: LayoutProps) {
 
                         {/* Desktop Navigation */}
                         <div className="hidden md:flex items-center gap-1">
-                            {NAV_ITEMS.map(item => {
+                            {NAV_ITEMS.filter(item => !item.adminOnly || user?.role === 'admin').map(item => {
                                 const Icon = item.icon;
                                 const isActive = currentPageName === item.page;
                                 return (
                                     <Link key={item.page} to={createPageUrl(item.page)}>
-                                        <Button 
+                                        <Button
                                             variant={isActive ? "secondary" : "ghost"}
                                             className={`flex items-center gap-2 ${isActive ? 'bg-sky-50 text-sky-700' : 'text-slate-600'}`}
                                         >
@@ -188,16 +188,16 @@ export default function Layout({ children, currentPageName }: LayoutProps) {
                 {mobileMenuOpen && (
                     <div className="md:hidden border-t border-slate-200 bg-white">
                         <div className="px-4 py-3 space-y-1">
-                            {NAV_ITEMS.map(item => {
+                            {NAV_ITEMS.filter(item => !item.adminOnly || user?.role === 'admin').map(item => {
                                 const Icon = item.icon;
                                 const isActive = currentPageName === item.page;
                                 return (
-                                    <Link 
-                                        key={item.page} 
+                                    <Link
+                                        key={item.page}
                                         to={createPageUrl(item.page)}
                                         onClick={() => setMobileMenuOpen(false)}
                                     >
-                                        <Button 
+                                        <Button
                                             variant={isActive ? "secondary" : "ghost"}
                                             className={`w-full justify-start ${isActive ? 'bg-sky-50 text-sky-700' : 'text-slate-600'}`}
                                         >
