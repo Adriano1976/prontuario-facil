@@ -3,6 +3,7 @@ import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
+import { useCurrentUser } from '@/lib/useCurrentUser';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -95,6 +96,11 @@ const estadoInicial = (): TemplateFormState => ({
 
 export default function Templates() {
     const queryClient = useQueryClient();
+    const { data: user } = useCurrentUser();
+    // A ESCRITA é restrita a admin (BR-MIGRAR-020). A LEITURA dos templates ativos é
+    // livre para profissionais (BR-MIGRAR-020), então a tela segue acessível — o que se
+    // esconde de quem não é admin são as ações de criar, editar e excluir.
+    const isAdmin = user?.role === 'admin';
     const [showEditor, setShowEditor] = useState(false);
     const [editingTemplate, setEditingTemplate] = useState<Template | null>(null);
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
@@ -193,13 +199,15 @@ export default function Templates() {
                             <p className="text-slate-500 mt-1">Modelos de documentos editáveis</p>
                         </div>
                     </div>
-                    <Button 
-                        onClick={() => { resetForm(); setEditingTemplate(null); setShowEditor(true); }}
-                        className="bg-gradient-to-r from-violet-500 to-purple-500 hover:from-violet-600 hover:to-purple-600"
-                    >
-                        <Plus className="h-4 w-4 mr-2" />
-                        Novo Template
-                    </Button>
+                    {isAdmin && (
+                        <Button
+                            onClick={() => { resetForm(); setEditingTemplate(null); setShowEditor(true); }}
+                            className="bg-gradient-to-r from-violet-500 to-purple-500 hover:from-violet-600 hover:to-purple-600"
+                        >
+                            <Plus className="h-4 w-4 mr-2" />
+                            Novo Template
+                        </Button>
+                    )}
                 </motion.div>
 
                 {/* Template List */}
@@ -246,24 +254,26 @@ export default function Templates() {
                                                     <p className="text-sm text-slate-500 line-clamp-2 mb-4">
                                                         {template.content?.substring(0, 150)}...
                                                     </p>
-                                                    <div className="flex gap-2">
-                                                        <Button 
-                                                            variant="outline" 
-                                                            size="sm"
-                                                            onClick={() => handleEdit(template)}
-                                                        >
-                                                            <Edit className="h-4 w-4 mr-1" />
-                                                            Editar
-                                                        </Button>
-                                                        <Button 
-                                                            variant="outline" 
-                                                            size="sm"
-                                                            className="text-rose-600 hover:bg-rose-50"
-                                                            onClick={() => handleDelete(template)}
-                                                        >
-                                                            <Trash2 className="h-4 w-4" />
-                                                        </Button>
-                                                    </div>
+                                                    {isAdmin && (
+                                                        <div className="flex gap-2">
+                                                            <Button
+                                                                variant="outline"
+                                                                size="sm"
+                                                                onClick={() => handleEdit(template)}
+                                                            >
+                                                                <Edit className="h-4 w-4 mr-1" />
+                                                                Editar
+                                                            </Button>
+                                                            <Button
+                                                                variant="outline"
+                                                                size="sm"
+                                                                className="text-rose-600 hover:bg-rose-50"
+                                                                onClick={() => handleDelete(template)}
+                                                            >
+                                                                <Trash2 className="h-4 w-4" />
+                                                            </Button>
+                                                        </div>
+                                                    )}
                                                 </CardContent>
                                             </Card>
                                         ))}
@@ -277,10 +287,12 @@ export default function Templates() {
                         <FileText className="h-16 w-16 mx-auto text-slate-300 mb-4" />
                         <h3 className="text-lg font-medium text-slate-900 mb-2">Nenhum template criado</h3>
                         <p className="text-slate-500 mb-6">Crie templates para agilizar a emissão de documentos</p>
-                        <Button onClick={() => setShowEditor(true)}>
-                            <Plus className="h-4 w-4 mr-2" />
-                            Criar Primeiro Template
-                        </Button>
+                        {isAdmin && (
+                            <Button onClick={() => setShowEditor(true)}>
+                                <Plus className="h-4 w-4 mr-2" />
+                                Criar Primeiro Template
+                            </Button>
+                        )}
                     </Card>
                 )}
             </div>

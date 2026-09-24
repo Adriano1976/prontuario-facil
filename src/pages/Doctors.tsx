@@ -3,6 +3,7 @@ import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
+import { useCurrentUser } from '@/lib/useCurrentUser';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -77,6 +78,11 @@ const estadoInicial = (): DoctorFormState => ({
 
 export default function Doctors() {
     const queryClient = useQueryClient();
+    const { data: user } = useCurrentUser();
+    // A ESCRITA é restrita a admin (BR-MIGRAR-015). A LEITURA da lista é livre para
+    // autenticados (BR-MIGRAR-017), então a tela segue acessível — o que se esconde de
+    // quem não é admin são as ações de criar, editar e excluir.
+    const isAdmin = user?.role === 'admin';
     const [showEditor, setShowEditor] = useState(false);
     const [editingDoctor, setEditingDoctor] = useState<Doctor | null>(null);
 
@@ -156,13 +162,15 @@ export default function Doctors() {
                             <p className="text-slate-500 mt-1">Gerencie médicos e agendas</p>
                         </div>
                     </div>
-                    <Button 
-                        onClick={() => { resetForm(); setEditingDoctor(null); setShowEditor(true); }}
-                        className="bg-gradient-to-r from-violet-500 to-purple-500"
-                    >
-                        <Plus className="h-4 w-4 mr-2" />
-                        Novo Médico
-                    </Button>
+                    {isAdmin && (
+                        <Button
+                            onClick={() => { resetForm(); setEditingDoctor(null); setShowEditor(true); }}
+                            className="bg-gradient-to-r from-violet-500 to-purple-500"
+                        >
+                            <Plus className="h-4 w-4 mr-2" />
+                            Novo Médico
+                        </Button>
+                    )}
                 </motion.div>
 
                 {/* Doctors List */}
@@ -199,20 +207,22 @@ export default function Doctors() {
                                             ))}
                                         </div>
                                     </div>
-                                    <div className="flex gap-2 mt-4">
-                                        <Button variant="outline" size="sm" onClick={() => handleEdit(doctor)}>
-                                            <Edit className="h-4 w-4 mr-1" />
-                                            Editar
-                                        </Button>
-                                        <Button 
-                                            variant="outline" 
-                                            size="sm"
-                                            className="text-rose-600"
-                                            onClick={() => deleteMutation.mutate(doctor.id)}
-                                        >
-                                            <Trash2 className="h-4 w-4" />
-                                        </Button>
-                                    </div>
+                                    {isAdmin && (
+                                        <div className="flex gap-2 mt-4">
+                                            <Button variant="outline" size="sm" onClick={() => handleEdit(doctor)}>
+                                                <Edit className="h-4 w-4 mr-1" />
+                                                Editar
+                                            </Button>
+                                            <Button
+                                                variant="outline"
+                                                size="sm"
+                                                className="text-rose-600"
+                                                onClick={() => deleteMutation.mutate(doctor.id)}
+                                            >
+                                                <Trash2 className="h-4 w-4" />
+                                            </Button>
+                                        </div>
+                                    )}
                                 </CardContent>
                             </Card>
                         </motion.div>

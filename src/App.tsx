@@ -4,15 +4,14 @@ import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClientInstance } from '@/lib/query-client'
 import NavigationTracker from '@/lib/NavigationTracker'
 import { pagesConfig } from './pages.config'
-import { BrowserRouter as Router, Route, Routes, Navigate, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 import { useToast } from "@/components/ui/use-toast";
+import { useEffect } from 'react';
 import type { ComponentType, ReactNode } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { base44 } from '@/api/base44Client';
-import { toSessionUser } from '@/lib/session';
+import { useCurrentUser } from '@/lib/useCurrentUser';
 
 const Pages = pagesConfig.Pages as Record<string, ComponentType>;
 const LayoutComp = pagesConfig.Layout as ComponentType<{
@@ -27,17 +26,29 @@ const LayoutWrapper = ({ children, currentPageName }: { children: ReactNode; cur
   : <>{children}</>;
 
 /**
- * Componente de Guarda de Papel (RBAC)
- * Protege rotas que exigem privilégios de administrador.
+ * Guarda de ROTA por papel (RBAC).
+ *
+ * Protege rotas cuja **leitura** é restrita a administrador. No projeto é o caso de uma
+ * só: a trilha de auditoria (BR-MIGRAR-024, read/update/delete apenas admin). Médicos e
+ * Templates **não** entram aqui — a leitura deles é livre para autenticados
+ * (BR-MIGRAR-017/020); nesses dois a restrição é sobre a ESCRITA, e vive na própria tela.
+ *
+ * O aviso de acesso negado sai num efeito, e não durante a renderização: em render, ele
+ * repetiria a cada passagem e transformaria renderização em efeito colateral.
  */
 const RoleGuard = ({ children, requiredRole = 'admin' }: { children: ReactNode, requiredRole?: string }) => {
   const { toast } = useToast();
-  const navigate = useNavigate();
+  const { data: user, isLoading } = useCurrentUser();
+  const autorizado = user?.role === requiredRole;
 
-  const { data: user, isLoading } = useQuery({
-    queryKey: ['current-user'],
-    queryFn: async () => toSessionUser(await base44.auth.me()),
-  });
+  useEffect(() => {
+    if (isLoading || autorizado) return;
+    toast({
+      variant: "destructive",
+      title: "Acesso Negado",
+      description: "Você não tem permissão para acessar esta página.",
+    });
+  }, [isLoading, autorizado, toast]);
 
   if (isLoading) {
     return (
@@ -47,12 +58,7 @@ const RoleGuard = ({ children, requiredRole = 'admin' }: { children: ReactNode, 
     );
   }
 
-  if (user?.role !== requiredRole) {
-    toast({
-      variant: "destructive",
-      title: "Acesso Negado",
-      description: "Você não tem permissão para acessar esta página.",
-    });
+  if (!autorizado) {
     return <Navigate to="/" replace />;
   }
 
@@ -91,7 +97,10 @@ const AuthenticatedApp = () => {
         </LayoutWrapper>
       } />
       {Object.entries(Pages).map(([path, Page]) => {
-        const isAdminPage = ['Doctors', 'Templates', 'AccessLogs'].includes(path);
+        // Guarda de ROTA só para a trilha de auditoria: leitura admin-only (BR-MIGRAR-024).
+        // Médicos e Templates têm leitura livre para autenticados (BR-MIGRAR-017/020) — a
+        // restrição deles é sobre a ESCRITA, e mora na própria tela.
+        const isAdminPage = path === 'AccessLogs';
         return (
           <Route
             key={path}
@@ -120,7 +129,10 @@ const AuthenticatedApp = () => {
  * Configura o provedor de autenticação, roteamento, cliente de query e elementos de UI globais.
  * Manipula inicialização da app, estados de erro e roteamento de páginas baseado em autenticação.
  *
- * PARIDADE: conversão de linguagem; comportamento idêntico ao anterior.
+ * PARIDADE: conversão de linguagem. **Uma exceção declarada**: as rotas de administração
+ * ganharam guarda de papel (achado F-01) — a trilha de auditoria passou a exigir `admin`,
+ * e as ações de escrita de Médicos e Templates passaram a ser escondidas de quem não é
+ * admin (BR-MIGRAR-015/017/020/024). Fora disso, nada mudou.
  *
  * @returns Aplicação com provedores e rotas.
  */

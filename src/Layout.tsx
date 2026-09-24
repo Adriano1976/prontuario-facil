@@ -3,8 +3,7 @@ import type { ReactNode } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { base44 } from '@/api/base44Client';
-import { toSessionUser } from '@/lib/session';
-import { useQuery } from '@tanstack/react-query';
+import { useCurrentUser } from '@/lib/useCurrentUser';
 import { Button } from "@/components/ui/button";
 import { 
     LayoutDashboard, 
@@ -38,13 +37,22 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useToast } from "@/components/ui/use-toast";
 
+/**
+ * Itens da navegação principal.
+ *
+ * `adminOnly` esconde o item de quem não é administrador, e só é verdadeiro onde a
+ * **leitura** é restrita a admin — hoje, apenas a trilha de auditoria (BR-MIGRAR-024).
+ * Médicos e Templates aparecem para todos de propósito: a leitura deles é livre para
+ * autenticados (BR-MIGRAR-017/020), e o que é restrito ali é a escrita, escondida na
+ * própria tela.
+ */
 const NAV_ITEMS = [
     { name: 'Dashboard', icon: LayoutDashboard, page: 'Dashboard', adminOnly: false },
     { name: 'Pacientes', icon: Users, page: 'Patients', adminOnly: false },
     { name: 'Agendamentos', icon: Calendar, page: 'Appointments', adminOnly: false },
     { name: 'Consultas', icon: Stethoscope, page: 'Consultations', adminOnly: false },
-    { name: 'Médicos', icon: UserCog, page: 'Doctors', adminOnly: true },
-    { name: 'Templates', icon: FileText, page: 'Templates', adminOnly: true },
+    { name: 'Médicos', icon: UserCog, page: 'Doctors', adminOnly: false },
+    { name: 'Templates', icon: FileText, page: 'Templates', adminOnly: false },
     { name: 'Logs de Acesso', icon: Shield, page: 'AccessLogs', adminOnly: true },
 ];
 
@@ -62,10 +70,11 @@ interface LayoutProps {
  * Exibe barra lateral de navegação, header com menu de usuário e área de conteúdo principal.
  * Design responsível com suporte a menu móvel.
  *
- * PARIDADE: conversão de linguagem; comportamento e aparência idênticos ao anterior.
- * Continuam iguais: a navegação, as páginas em tela cheia, o menu de usuário, a saída
- * e a exclusão de conta — incluindo a falha silenciosa de logout e o aviso de erro.
- * A sessão é lida pelo ponto único de conversão da camada de sessão.
+ * PARIDADE: conversão de linguagem. **Uma exceção declarada**: o item de navegação da
+ * trilha de auditoria passa a ser escondido de quem não é administrador (achado F-01).
+ * Continuam iguais: as páginas em tela cheia, o menu de usuário, a saída e a exclusão de
+ * conta — incluindo a falha silenciosa de logout e o aviso de erro. A sessão é lida pelo
+ * ponto único de conversão da camada de sessão, agora via `useCurrentUser`.
  */
 export default function Layout({ children, currentPageName }: LayoutProps) {
     const navigate = useNavigate();
@@ -74,10 +83,7 @@ export default function Layout({ children, currentPageName }: LayoutProps) {
     const [isDeleting, setIsDeleting] = useState(false);
     const { toast } = useToast();
 
-    const { data: user } = useQuery({
-        queryKey: ['current-user'],
-        queryFn: async () => toSessionUser(await base44.auth.me()),
-    });
+    const { data: user } = useCurrentUser();
 
     const handleLogout = async () => {
         await base44.auth.logout();

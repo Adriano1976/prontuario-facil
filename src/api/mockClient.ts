@@ -27,7 +27,6 @@ export const OFFLINE_USER = {
   id: 'demo-user-001',
   email: 'demo@medrecord.local',
   full_name: 'Dra. Demo',
-  role: 'admin',  // <--- Altere de 'user' para 'admin' aqui
 };
 
 const DB_PREFIX = 'mock_db_';
