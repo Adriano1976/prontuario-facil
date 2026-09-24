@@ -14,6 +14,8 @@ hash: "sha256:0dab46897e82d82b78ecaf13883b6a8b61d36ba6f7414765e11a74a22171fb67"
 > Estratégia de validação de equivalência comportamental entre legado e sistema novo, adaptada ao paradigma escolhido em `paradigm_decision.md`.
 
 > **Edição de 2026-09-22 (Inspector reexecutado).** Duas coisas mudaram desde a versão de 2026-09-09, e as duas estão refletidas abaixo: **(1)** o projeto passou a **ter suíte automatizada** — 132 verificações em 23 arquivos, com `typecheck`, `lint`, `prova:negativos` e `prova:encoding` como gates (construída pelas features forward `001` a `006`); **(2)** as **24 capturas douradas passaram a existir** (era 0 de 16), o que transforma a paridade visual de "validação manual até capturar" em **verificação construtiva contra golden**.
+>
+> ⚠️ **Correção de 2026-09-24 — as contagens deste documento pararam na feature `006`.** O Inspector **não** foi reexecutado depois disso: as features `009` e `010` e as correções de segurança do F-01, F-03, F-04 e F-05 nunca chegaram aqui. Onde este arquivo diz **132 verificações em 23 arquivos**, leia **183 em 29**; onde diz **9 de 9 casos negativos**, leia **18 casos (17 negativos e 1 positivo)**; e o `lint` **não examina arquivo nenhum** — portão vazio, registrado em `code-spec-matrix.md#Como a prova é executada`. A regeneração pelo Inspector é o caminho canônico e **continua pendente**; esta nota é o remendo declarado, não a convergência.
 
 ## Estratégia geral
 
@@ -27,7 +29,7 @@ hash: "sha256:0dab46897e82d82b78ecaf13883b6a8b61d36ba6f7414765e11a74a22171fb67"
 
 ## Critérios de "paridade aceita"
 
-- **Métrica primária**: `tsc --noEmit` retorna **0 erros** com `strict: true` e nenhum arquivo `.jsx`/`.js` de aplicação no programa; **suíte automatizada verde** — 132 verificações em 23 arquivos, 0 falhas (medido em 2026-09-22); `lint` 0 avisos; `prova:negativos` 9 de 9 sem resíduo; `prova:encoding` 412 arquivos íntegros; **zero** divergência funcional detectada nos characterization tests de fluxos críticos (45 BR-MIGRAR reproduzidos; nenhuma correção comportamental aplicada — AMB-001…006).
+- **Métrica primária**: `tsc --noEmit` retorna **0 erros** com `strict: true` e nenhum arquivo `.jsx`/`.js` de aplicação no programa; **suíte automatizada verde** — **183 verificações em 29 arquivos, 0 falhas** (medido em 2026-09-24; a medição de 2026-09-22 registrava 132/23, e o parágrafo do topo explica a defasagem); `prova:negativos` **18 casos (17 negativos e 1 positivo)** sem resíduo; `prova:encoding` **499 arquivos íntegros**; **zero** divergência funcional detectada nos characterization tests de fluxos críticos (45 BR-MIGRAR reproduzidos; nenhuma correção comportamental aplicada — AMB-001…006). O `lint` **não entra nesta lista**: o portão está vazio e não examina arquivo nenhum.
 - **Honestidade da métrica**: a paridade funcional é hoje **parcialmente automatizada**. Do lado do comportamento, 19 dos 34 cenários de fluxo têm prova executável e os 15 restantes seguem transferidos a features próprias (§"Transferências"). Do lado dos tipos, o gate é total. Do lado **visual**, a verificação é **construtiva** (existe, mesma hierarquia, mesmos textos, mesmos tokens) e **não** pixel a pixel — ver `DEV-001`/`DEV-002`.
 - **Janela de observação**: onda a onda (cada onda = verificação `typecheck` + smoke manual do módulo migrado) + janela pós-cutover de 3–5 dias úteis de uso real (`cutover_plan.md`).
 - **Critério de bloqueio**: qualquer comportamento divergente no smoke/characterization (ex.: KPI com critério alterado; status com automação nova; paginação adicionada; badge novo) **bloqueia o merge/cutover** — a regra é "diff só de tipos", nenhuma correção de AMB-002/003/006 nem de BR-HUMANA-001…005. Desde 2026-09-22, **falha na suíte, no `typecheck` ou nos gates de prova também bloqueia**.
@@ -85,15 +87,13 @@ hash: "sha256:0dab46897e82d82b78ecaf13883b6a8b61d36ba6f7414765e11a74a22171fb67"
 
 ## Transferências — cenários de fluxo ainda sem prova
 
-Saldo após a feature `006-prova-logs-acesso`: dos 50 cenários transferidos pela feature `002`, **19 concluídos** (Agendamentos 8, Consultas 3, emissão de documento 4, trilha de auditoria 4) e **15 transferidos** a features próprias:
+Saldo após a feature `010-prova-modo-offline` (corrigido em 2026-09-24 — este quadro estava parado na `006`): dos 50 cenários transferidos pela feature `002`, **34 concluídos** (Agendamentos 8, Consultas 3, emissão de documento 4, trilha de auditoria 4, contrato de dados 4, KPIs do Dashboard 5, modo offline 6) e **16 transferidos** — **todos de paridade visual**, cujo destino é o harness de comparação:
 
 | Grupo | Cenários | Destino |
 |---|---:|---|
-| Modo offline (`09`) | 6 | Feature a criar — conversão dos cenários de fluxo do modo offline |
-| Dashboard (`08`) | 5 | Feature a criar — depende de resolver a lacuna da Taxa de Atendimento |
-| Contrato de dados (`10`) | 4 | Feature a criar — contrato único honrado pelos dois modos |
+| Paridade visual (`screens/V01` a `V16`) | 16 | Feature a criar — harness de paridade visual (`code-spec-matrix.md#Destino dos cenários de paridade não cobertos nesta feature`) |
 
-> ⚠️ **Defasagem registrada**: `_reversa_sdd/code-spec-matrix.md#Destino dos cenários de paridade não cobertos nesta feature` ainda declara os 16 cenários de **paridade visual** como "lacuna declarada, a captura dourada não existe". Isso **deixou de ser verdade em 2026-09-22**. O Inspector não edita artefatos da extração — a correção dessa linha é da próxima feature forward ou do próximo `/reversa-sync`.
+> ⚠️ **Defasagem corrigida nesta passada.** A nota que vivia aqui dizia que a matriz ainda declarava os 16 cenários de paridade visual como "lacuna, a captura dourada não existe". Isso **deixou de ser verdade em 2026-09-22** e a matriz já foi corrigida pela feature `007-matriz-paridade-visual`: os **24 goldens existem** e a lacuna remanescente é a **execução**. A nota antiga passou a ser, ela própria, a defasagem — e este é o registro de que ela foi removida.
 
 ## Lacunas declaradas
 

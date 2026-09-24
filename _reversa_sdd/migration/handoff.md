@@ -88,8 +88,8 @@ hash: "sha256:3f77bd58d493ef4bfebb5c343af278c309c20a09cb6828e02b555a16c19d5f38"
 
 ## Notas finais
 
-- **O que está provado hoje**: `tsc --noEmit` 0 erros · suíte com **132 verificações em 23 arquivos**, 0 falhas · `lint` 0 avisos · `prova:negativos` 9 de 9 sem resíduo · `prova:encoding` 412 arquivos íntegros · **19 dos 34 cenários de fluxo** convertidos em prova executável (features 002–006) · **16 de 16 cenários de tela** com golden capturado.
-- **O que ainda é conferência humana**: os 15 cenários de fluxo transferidos, os 16 cenários de tela (enquanto não houver harness) e a paridade **pixel a pixel**, que está declarada fora de escopo.
+- **O que está provado hoje** (**corrigido em 2026-09-24** — esta linha estava parada na feature `006`): `tsc --noEmit` 0 erros · suíte com **183 verificações em 29 arquivos**, 0 falhas · `prova:negativos` **18 casos (17 negativos e 1 positivo)**, sem resíduo · `prova:encoding` **499 arquivos íntegros** · **39 de 39 cenários de fluxo** convertidos em prova executável (features 002–010) · **16 de 16 cenários de tela** com golden capturado, faltando a **execução**. O `lint` **saiu desta lista**: o portão não examina arquivo nenhum — ver `code-spec-matrix.md#Como a prova é executada`.
+- **O que ainda é conferência humana**: os **16 cenários de tela** (enquanto não houver harness de paridade visual) e a paridade **pixel a pixel**, que está declarada fora de escopo. **Nenhum cenário de fluxo segue transferido.**
 - **O teto de 90 s da suíte é condicional**: medido em 75,78 s e em 122,57 s na mesma suíte, dependendo da carga da máquina. O maior contribuinte individual é `PatientForm.test.tsx` (13,11 s), pré-existente e alheio às features de prova.
 - **As capturas originais** em `_reversa_sdd/<unit>/screenshots/` (24 arquivos, incluindo o estado pós-seleção do V05) **não foram movidas nem alteradas**; os goldens em `screens/golden/` são cópias com nomes canônicos e `sha256` registrado por arquivo no manifest.
 

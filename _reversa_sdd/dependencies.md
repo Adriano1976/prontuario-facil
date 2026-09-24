@@ -86,7 +86,7 @@
 
 ## Observações
 
-- **Prova automatizada presente desde 2026-09-19** — esta linha afirmava o contrário e foi corrigida pela feature `002-prova-automatizada` (ação T010). Existe arcabouço de prova configurado e há 10 arquivos de verificação executáveis por `npm test`; as dependências de desenvolvimento correspondentes foram declaradas depois da extração original e não constam do levantamento acima. A reprodução das verificações negativas do gate de tipos vive em `npm run prova:negativos` (`src/test/verificacoes-negativas.mjs`). Rastreabilidade em `_reversa_sdd/code-spec-matrix.md#Rastreabilidade Spec → Código → Teste`.
+- **Prova automatizada presente desde 2026-09-19** — esta linha afirmava o contrário e foi corrigida pela feature `002-prova-automatizada` (ação T010); a contagem foi corrigida em 2026-09-24. Existe arcabouço de prova configurado e há **29 arquivos de verificação, com 183 verificações**, executáveis por `npm test`; as dependências de desenvolvimento correspondentes foram declaradas depois da extração original e não constam do levantamento acima. A reprodução das verificações negativas do gate de tipos vive em `npm run prova:negativos` (`src/test/verificacoes-negativas.mjs`), com **18 casos**. Rastreabilidade em `_reversa_sdd/code-spec-matrix.md#Rastreabilidade Spec → Código → Teste`.
 - O README cita "Supabase", mas **não existe** dependência Supabase — a stack real de backend é a Base44.
 - A app não possui servidor próprio; toda persistência e autenticação passa pela API da Base44 (proxied pelo plugin Vite, ex.: `/api/apps/public`).
 
