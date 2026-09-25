@@ -187,9 +187,13 @@ jobs:
             exit 0
           fi
 
-          TOTAL=$(grep -oE 'Tests +[0-9]+ passed' saida-da-suite.txt | grep -oE '[0-9]+' | head -1)
-          ARQUIVOS=$(grep -oE 'Test Files +[0-9]+ passed' saida-da-suite.txt | grep -oE '[0-9]+' | head -1)
-          DURACAO=$(grep -oE 'Duration +[0-9.]+s' saida-da-suite.txt | grep -oE '[0-9.]+s' | head -1)
+          # `|| true` em cada leitura: o bash do runner roda com `-e`, e um `grep` sem casamento
+          # devolve status 1. Sem isto, o passo de RESUMO morria por não ter encontrado um texto
+          # — derrubando o job depois de a suíte, os tipos, o lint e as provas terem passado.
+          # Um passo de relatório nunca deve ser o motivo de um vermelho.
+          TOTAL=$(grep -oE 'Tests +[0-9]+ passed' saida-da-suite.txt | grep -oE '[0-9]+' | head -1 || true)
+          ARQUIVOS=$(grep -oE 'Test Files +[0-9]+ passed' saida-da-suite.txt | grep -oE '[0-9]+' | head -1 || true)
+          DURACAO=$(grep -oE 'Duration +[0-9.]+s' saida-da-suite.txt | grep -oE '[0-9.]+s' | head -1 || true)
 
           {
             echo "### Prova automatizada"
