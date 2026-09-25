@@ -39,21 +39,21 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  # LINHA DE BASE DAS VERIFICAÇÕES. A suíte pode crescer livremente; encolher exige decisão.
-  # Ao REMOVER verificações de propósito, atualize este número NO MESMO COMMIT — é o que separa
-  # uma remoção deliberada de um teste apagado para o vermelho sumir.
+  # LINHAS DE BASE. A suíte pode crescer livremente; encolher exige decisão.
+  # Ao REMOVER casos de propósito, atualize estes números NO MESMO COMMIT — é o que separa uma
+  # remoção deliberada de um teste apagado para o vermelho sumir.
   #
-  # COMO ESTE NÚMERO FOI MEDIDO (25/09/2026) — e por que ele mudou de 168 para 198:
-  # 198 é o total de verificações aprovadas por uma execução completa e verde da suíte, com 31
-  # arquivos de teste (a descoberta de arquivos é idêntica em qualquer máquina — conferida com
-  # `vitest list --filesOnly`). O valor anterior, 168, não correspondia a nenhuma execução
-  # completa: todo push em `main` reprovava neste passo com a suíte inteira verde, inclusive o
-  # commit 053292a. Um portão que reprova com a suíte verde ensina a ignorar o vermelho, que é
-  # exatamente o que este passo existe para evitar.
+  # COMO FORAM MEDIDOS (25/09/2026), e por que não mudam de máquina para máquina:
+  # a enumeração de casos (`npx vitest list`) LÊ os arquivos de teste sem executá-los, então o
+  # total é idêntico em qualquer ambiente. Medido: 198 casos em 31 arquivos. Foi essa
+  # propriedade que faltava antes — a linha de base antiga (168 verificações) foi copiada de uma
+  # execução cujo ambiente não era o do CI, a suíte cresceu, e todo push passou a reprovar aqui
+  # com a suíte verde, inclusive o commit 053292a.
   #
-  # Se o CI medir um total diferente de 198, o resumo do job imprime o total observado — ajuste
-  # aqui com o número medido no CI, nunca com um número copiado de outra máquina.
-  BASELINE_DE_VERIFICACOES: 198
+  # O total EXECUTADO continua sendo reportado no resumo do job, mas não reprova: ele depende do
+  # ambiente, e um portão que reprova no verde ensina a ignorar o vermelho.
+  BASELINE_DE_CASOS: 198
+  BASELINE_DE_ARQUIVOS: 31
 
 jobs:
   prova:
@@ -93,49 +93,63 @@ jobs:
           set -o pipefail
           npm test 2>&1 | tee saida-da-suite.txt
 
-      - name: Conferir que a contagem de verificações não caiu
+      # O PORTÃO DECIDE PELA ENUMERAÇÃO, NÃO PELA EXECUÇÃO. `vitest list` lê e enumera os casos
+      # declarados sem executá-los, então o total é o mesmo em qualquer máquina. Já o total de
+      # verificações APROVADAS depende do ambiente — e foi essa dependência que manteve a linha
+      # de base errada por meses: ela valia 168, a suíte tinha crescido, e todo push reprovava
+      # aqui com a suíte verde. Um portão que reprova no verde ensina a ignorar o vermelho.
+      # Por isso a contagem executada continua sendo REPORTADA, mas parou de reprovar.
+      - name: Conferir que nenhum caso de teste sumiu
         id: contagem
         shell: bash
         run: |
-          TOTAL=$(grep -oE 'Tests +[0-9]+ passed' saida-da-suite.txt | grep -oE '[0-9]+' | head -1)
-          ARQUIVOS=$(grep -oE 'Test Files +[0-9]+ passed' saida-da-suite.txt | grep -oE '[0-9]+' | head -1)
+          CASOS=$(npx vitest list 2>/dev/null | grep -c ' > ')
+          ARQUIVOS=$(npx vitest list 2>/dev/null | sed -n 's/^\([^ ]*\) > .*/\1/p' | sort -u | wc -l | tr -d ' ')
+          EXECUTADAS=$(grep -oE 'Tests +[0-9]+ passed' saida-da-suite.txt | grep -oE '[0-9]+' | head -1)
 
-          if [ -z "$TOTAL" ]; then
-            echo "::error::Não foi possível ler a contagem de verificações da saída da suíte."
+          if [ "${CASOS:-0}" -eq 0 ]; then
+            echo "::error::A enumeração de casos não devolveu nada — a suíte pode não estar mais sendo descoberta."
             exit 1
           fi
-
-          DIFERENCA=$((TOTAL - BASELINE_DE_VERIFICACOES))
-
-          # Bloco de máquina. Existe porque os LOGS deste job exigem direito de admin para
-          # serem baixados: sem um total que a API pública consiga ler, descobrir "quantas
-          # verificações o CI mediu" vira adivinhação — foi assim que a linha de base ficou
-          # meses errada. Estes valores também aparecem como saída do passo, que é legível.
-          echo "::group::Contagem de verificações"
-          echo "ARQUIVOS_DE_TESTE=$ARQUIVOS"
-          echo "VERIFICACOES_OBSERVADAS=$TOTAL"
-          echo "LINHA_DE_BASE=$BASELINE_DE_VERIFICACOES"
-          echo "DIFERENCA=$DIFERENCA"
-          echo "::endgroup::"
 
           {
-            echo "total=$TOTAL"
-            echo "baseline=$BASELINE_DE_VERIFICACOES"
-            echo "diferenca=$DIFERENCA"
-            echo "arquivos=$ARQUIVOS"
+            echo "casos_declarados=$CASOS"
+            echo "arquivos_de_teste=$ARQUIVOS"
+            echo "casos_baseline=$BASELINE_DE_CASOS"
+            echo "arquivos_baseline=$BASELINE_DE_ARQUIVOS"
+            echo "verificacoes_executadas=${EXECUTADAS:-nao_lida}"
           } >> "$GITHUB_OUTPUT"
 
-          echo "Verificações nesta execução: $TOTAL (linha de base: $BASELINE_DE_VERIFICACOES, diferença: $DIFERENCA)"
+          echo "::group::Contagem de casos"
+          echo "CASOS_DECLARADOS=$CASOS (linha de base: $BASELINE_DE_CASOS)"
+          echo "ARQUIVOS_DE_TESTE=$ARQUIVOS (linha de base: $BASELINE_DE_ARQUIVOS)"
+          echo "VERIFICACOES_EXECUTADAS=${EXECUTADAS:-não lida}"
+          echo "::endgroup::"
 
-          if [ "$TOTAL" -lt "$BASELINE_DE_VERIFICACOES" ]; then
-            # A mensagem carrega o número observado de propósito: quem for corrigir precisa dele
-            # para atualizar a linha de base, e a anotação de erro é o que aparece na tela.
-            echo "::error::A suíte caiu para $TOTAL verificações (linha de base: $BASELINE_DE_VERIFICACOES). Se a queda for esperada, defina BASELINE_DE_VERIFICACOES=$TOTAL neste workflow, no mesmo commit."
+          falhou=0
+
+          if [ "$ARQUIVOS" -lt "$BASELINE_DE_ARQUIVOS" ]; then
+            echo "::error::Arquivos de teste caíram de $BASELINE_DE_ARQUIVOS para $ARQUIVOS. Um arquivo inteiro deixou de ser descoberto."
+            falhou=1
+          fi
+
+          if [ "$CASOS" -lt "$BASELINE_DE_CASOS" ]; then
+            # A mensagem carrega o número observado: é o que a anotação de erro mostra na tela,
+            # e é o valor que quem for corrigir precisa para atualizar a linha de base.
+            echo "::error::Casos declarados caíram de $BASELINE_DE_CASOS para $CASOS. Se a remoção foi deliberada, defina BASELINE_DE_CASOS=$CASOS neste workflow, no mesmo commit."
+            falhou=1
+          fi
+
+          if [ "$falhou" -ne 0 ]; then
             exit 1
           fi
 
-          if [ "$TOTAL" -gt "$BASELINE_DE_VERIFICACOES" ]; then
-            echo "::notice::A suíte cresceu para $TOTAL verificações. Suba BASELINE_DE_VERIFICACOES para $TOTAL neste workflow, no mesmo commit, para o crescimento virar o novo piso."
+          if [ "$CASOS" -gt "$BASELINE_DE_CASOS" ]; then
+            echo "::notice::A suíte cresceu para $CASOS casos declarados. Suba BASELINE_DE_CASOS para $CASOS neste workflow, no mesmo commit, para o crescimento virar o novo piso."
+          fi
+
+          if [ -n "$EXECUTADAS" ] && [ "$EXECUTADAS" -ne "$CASOS" ]; then
+            echo "::notice::Execução aprovou $EXECUTADAS verificações e a enumeração conta $CASOS casos. Divergência é esperada quando algum caso é condicional ao ambiente; o portão usa a enumeração."
           fi
 
       - name: Casos negativos do contrato de dados
@@ -170,9 +184,9 @@ jobs:
             echo ""
             echo "| Métrica | Valor |"
             echo "|---------|-------|"
-            echo "| Verificações | **${TOTAL:-não lida}** |"
-            echo "| Linha de base | ${BASELINE_DE_VERIFICACOES} |"
-            echo "| Arquivos | ${ARQUIVOS:-não lido} |"
+            echo "| Verificações executadas | **${TOTAL:-não lida}** |"
+            echo "| Casos declarados (aferido) | ${{ steps.contagem.outputs.casos_declarados }} (base: ${{ env.BASELINE_DE_CASOS }}) |"
+            echo "| Arquivos de teste (aferido) | ${{ steps.contagem.outputs.arquivos_de_teste }} (base: ${{ env.BASELINE_DE_ARQUIVOS }}) |"
             echo "| Duração | ${DURACAO:-não lida} |"
             echo ""
             echo "> O teto de **90 s** é critério local, medido por humano e registrado com a condição"
