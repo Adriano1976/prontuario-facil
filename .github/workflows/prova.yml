@@ -94,24 +94,48 @@ jobs:
           npm test 2>&1 | tee saida-da-suite.txt
 
       - name: Conferir que a contagem de verificações não caiu
+        id: contagem
         shell: bash
         run: |
           TOTAL=$(grep -oE 'Tests +[0-9]+ passed' saida-da-suite.txt | grep -oE '[0-9]+' | head -1)
+          ARQUIVOS=$(grep -oE 'Test Files +[0-9]+ passed' saida-da-suite.txt | grep -oE '[0-9]+' | head -1)
 
           if [ -z "$TOTAL" ]; then
             echo "::error::Não foi possível ler a contagem de verificações da saída da suíte."
             exit 1
           fi
 
-          echo "Verificações nesta execução: $TOTAL"
-          echo "Linha de base: $BASELINE_DE_VERIFICACOES"
-          if [ "$TOTAL" -ne "$BASELINE_DE_VERIFICACOES" ]; then
-            echo "::notice::Total observado ($TOTAL) difere da linha de base ($BASELINE_DE_VERIFICACOES)."
-          fi
+          DIFERENCA=$((TOTAL - BASELINE_DE_VERIFICACOES))
+
+          # Bloco de máquina. Existe porque os LOGS deste job exigem direito de admin para
+          # serem baixados: sem um total que a API pública consiga ler, descobrir "quantas
+          # verificações o CI mediu" vira adivinhação — foi assim que a linha de base ficou
+          # meses errada. Estes valores também aparecem como saída do passo, que é legível.
+          echo "::group::Contagem de verificações"
+          echo "ARQUIVOS_DE_TESTE=$ARQUIVOS"
+          echo "VERIFICACOES_OBSERVADAS=$TOTAL"
+          echo "LINHA_DE_BASE=$BASELINE_DE_VERIFICACOES"
+          echo "DIFERENCA=$DIFERENCA"
+          echo "::endgroup::"
+
+          {
+            echo "total=$TOTAL"
+            echo "baseline=$BASELINE_DE_VERIFICACOES"
+            echo "diferenca=$DIFERENCA"
+            echo "arquivos=$ARQUIVOS"
+          } >> "$GITHUB_OUTPUT"
+
+          echo "Verificações nesta execução: $TOTAL (linha de base: $BASELINE_DE_VERIFICACOES, diferença: $DIFERENCA)"
 
           if [ "$TOTAL" -lt "$BASELINE_DE_VERIFICACOES" ]; then
-            echo "::error::A suíte caiu de $BASELINE_DE_VERIFICACOES para $TOTAL verificações. Se a remoção foi deliberada, atualize BASELINE_DE_VERIFICACOES neste workflow no mesmo commit."
+            # A mensagem carrega o número observado de propósito: quem for corrigir precisa dele
+            # para atualizar a linha de base, e a anotação de erro é o que aparece na tela.
+            echo "::error::A suíte caiu para $TOTAL verificações (linha de base: $BASELINE_DE_VERIFICACOES). Se a queda for esperada, defina BASELINE_DE_VERIFICACOES=$TOTAL neste workflow, no mesmo commit."
             exit 1
+          fi
+
+          if [ "$TOTAL" -gt "$BASELINE_DE_VERIFICACOES" ]; then
+            echo "::notice::A suíte cresceu para $TOTAL verificações. Suba BASELINE_DE_VERIFICACOES para $TOTAL neste workflow, no mesmo commit, para o crescimento virar o novo piso."
           fi
 
       - name: Casos negativos do contrato de dados
