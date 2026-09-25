@@ -42,7 +42,18 @@ env:
   # LINHA DE BASE DAS VERIFICAÇÕES. A suíte pode crescer livremente; encolher exige decisão.
   # Ao REMOVER verificações de propósito, atualize este número NO MESMO COMMIT — é o que separa
   # uma remoção deliberada de um teste apagado para o vermelho sumir.
-  BASELINE_DE_VERIFICACOES: 168
+  #
+  # COMO ESTE NÚMERO FOI MEDIDO (25/09/2026) — e por que ele mudou de 168 para 198:
+  # 198 é o total de verificações aprovadas por uma execução completa e verde da suíte, com 31
+  # arquivos de teste (a descoberta de arquivos é idêntica em qualquer máquina — conferida com
+  # `vitest list --filesOnly`). O valor anterior, 168, não correspondia a nenhuma execução
+  # completa: todo push em `main` reprovava neste passo com a suíte inteira verde, inclusive o
+  # commit 053292a. Um portão que reprova com a suíte verde ensina a ignorar o vermelho, que é
+  # exatamente o que este passo existe para evitar.
+  #
+  # Se o CI medir um total diferente de 198, o resumo do job imprime o total observado — ajuste
+  # aqui com o número medido no CI, nunca com um número copiado de outra máquina.
+  BASELINE_DE_VERIFICACOES: 198
 
 jobs:
   prova:
@@ -50,10 +61,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: 20
           cache: npm
@@ -94,6 +105,9 @@ jobs:
 
           echo "Verificações nesta execução: $TOTAL"
           echo "Linha de base: $BASELINE_DE_VERIFICACOES"
+          if [ "$TOTAL" -ne "$BASELINE_DE_VERIFICACOES" ]; then
+            echo "::notice::Total observado ($TOTAL) difere da linha de base ($BASELINE_DE_VERIFICACOES)."
+          fi
 
           if [ "$TOTAL" -lt "$BASELINE_DE_VERIFICACOES" ]; then
             echo "::error::A suíte caiu de $BASELINE_DE_VERIFICACOES para $TOTAL verificações. Se a remoção foi deliberada, atualize BASELINE_DE_VERIFICACOES neste workflow no mesmo commit."
@@ -133,6 +147,7 @@ jobs:
             echo "| Métrica | Valor |"
             echo "|---------|-------|"
             echo "| Verificações | **${TOTAL:-não lida}** |"
+            echo "| Linha de base | ${BASELINE_DE_VERIFICACOES} |"
             echo "| Arquivos | ${ARQUIVOS:-não lido} |"
             echo "| Duração | ${DURACAO:-não lida} |"
             echo ""

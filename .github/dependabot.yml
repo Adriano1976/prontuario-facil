@@ -22,9 +22,10 @@ updates:
       timezone: "America/Sao_Paulo"
     open-pull-requests-limit: 5
     versioning-strategy: increase
-    labels:
-      - "dependencies"
-      - "npm"
+    # Sem `labels`: nenhuma etiqueta é criada automaticamente pelo Dependabot, e rotular com
+    # nome inexistente faz ele comentar um aviso em TODO pull request ("The following labels
+    # could not be found"). Se quiser etiquetas, crie-as antes no repositório e só então
+    # acrescente a lista aqui.
     commit-message:
       prefix: "chore"
       prefix-development: "chore"
@@ -96,9 +97,6 @@ updates:
       time: "06:00"
       timezone: "America/Sao_Paulo"
     open-pull-requests-limit: 3
-    labels:
-      - "dependencies"
-      - "github-actions"
     commit-message:
       prefix: "ci"
       include: "scope"
