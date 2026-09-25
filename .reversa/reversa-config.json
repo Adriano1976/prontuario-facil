@@ -2,6 +2,8 @@
   "version": 1,
   "allowLegacyEdits": true,
   "allowedPaths": [
+    "README.md",
+    "README.en.md",
     "src/**",
     "package.json",
     "tsconfig.json",

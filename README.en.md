@@ -6,6 +6,8 @@
 
 Complete management of patients, consultations, appointments, examinations, and prescriptions.
 
+🔗 **[Access the legacy application](https://prontuariofacil.base44.app)**
+
 ![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=white)
 ![Vite](https://img.shields.io/badge/Vite-6-646CFF?logo=vite&logoColor=white)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3-06B6D4?logo=tailwindcss&logoColor=white)
