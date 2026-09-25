@@ -1,0 +1,100 @@
+# Configuração do Dependabot
+# Documentação: https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+#
+# Este arquivo habilita as *atualizações de versão* (version updates).
+# Os *alertas* do Dependabot (Dependabot alerts) são habilitados no GitHub em:
+#   Settings → Code security → Dependabot alerts  (e "Dependabot security updates")
+# Os alertas de segurança funcionam mesmo sem este arquivo.
+
+version: 2
+
+updates:
+  # ---------------------------------------------------------------
+  # Dependências npm (package.json / package-lock.json)
+  # Stack: Vite + React 18 + TypeScript, projeto único (sem workspaces).
+  # ---------------------------------------------------------------
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "America/Sao_Paulo"
+    open-pull-requests-limit: 5
+    versioning-strategy: increase
+    labels:
+      - "dependencies"
+      - "npm"
+    commit-message:
+      prefix: "chore"
+      prefix-development: "chore"
+      include: "scope"
+    # Agrupa atualizações compatíveis em poucos PRs, reduzindo ruído no CI.
+    groups:
+      # 1) Correções de segurança primeiro: PR isolado e prioritário.
+      npm-security:
+        applies-to: security-updates
+        patterns:
+          - "*"
+      # 2) Rotina: minors e patches de runtime num único PR.
+      npm-minor-patch:
+        applies-to: version-updates
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+      # 3) Ferramental de desenvolvimento (lint, testes, tipos) agrupado à parte.
+      npm-dev-tooling:
+        applies-to: version-updates
+        dependency-type: "development"
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+    ignore:
+      # Atualizações de major exigem migração planejada; serão feitas manualmente.
+      - dependency-name: "react"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "react-dom"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "eslint"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "tailwindcss"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "vite"
+        update-types: ["version-update:semver-major"]
+
+  # ---------------------------------------------------------------
+  # GitHub Actions usadas em .github/workflows/
+  # (deploy-pages.yml, guarda-encoding.yml, prova.yml)
+  # ---------------------------------------------------------------
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+      day: "monday"
+      time: "06:00"
+      timezone: "America/Sao_Paulo"
+    open-pull-requests-limit: 3
+    labels:
+      - "dependencies"
+      - "github-actions"
+    commit-message:
+      prefix: "ci"
+      include: "scope"
+    groups:
+      actions-security:
+        applies-to: security-updates
+        patterns:
+          - "*"
+      actions-minor-patch:
+        applies-to: version-updates
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
