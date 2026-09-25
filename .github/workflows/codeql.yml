@@ -1,0 +1,74 @@
+name: Code scanning (CodeQL)
+
+# POR QUE ESTE WORKFLOW EXISTE
+# A auditoria de segurança do projeto é uma skill executada por humano, sob demanda
+# (`.github/skills/security-code-audit/`), e as duas auditorias registradas em
+# `docs/security-audit/` foram feitas assim. Isso cobre o que alguém lembra de olhar; não
+# cobre o que entra depois. Este workflow é o portão automático: a cada push em `main` e a
+# cada pull request, o CodeQL varre o código e joga os achados na aba Security do GitHub,
+# onde viram alertas rastreáveis em vez de um relatório PDF que envelhece.
+#
+# POR QUE ISTO NÃO SUBSTITUI A SKILL
+# O CodeQL encontra PADRÃO de código (taint, fluxo de dado, sinks conhecidos). Ele não sabe
+# o que o projeto promete: que rota admin exige papel, que consulta precisa de filtro de
+# organização, que acesso a prontuário precisa de registro de auditoria LGPD — os achados
+# F-01 a F-05 das auditorias 001/002 são desse tipo. O CodeQL é a rede de baixo; a skill
+# continua sendo a revisão de cima.
+#
+# O QUE ELE RODA
+# Linguagem `javascript-typescript` com `build-mode: none`: a análise é estática sobre o
+# fonte, NÃO precisa de `npm ci` nem de build. O projeto é um SPA Vite — compilar não
+# acrescenta nada ao alcance da análise e só tornaria o job mais lento e mais frágil.
+#
+# O QUE ELE **NÃO** FAZ
+# - Não barra a integração. O CodeQL publica resultado; transformar achado em portão de
+#   merge seria decidir severidade por ferramenta, e severidade aqui é decisão humana
+#   (ver `references/rubrica-severidade.md` da skill).
+# - Não substitui `npm audit` / Dependabot: aquele cobre dependência vulnerável, este
+#   cobre código próprio.
+# - Não tem passo de `analyze` no `main`: o CodeQL já executa a análise padrão do branch
+#   ao publicar o resultado, e repetir aqui só duplicaria tempo de runner.
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  schedule:
+    # Semanal: pega o que mudou no próprio CodeQL (queries novas) sem depender de commit.
+    - cron: "17 9 * * 2"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: "codeql-${{ github.ref }}"
+  cancel-in-progress: true
+
+jobs:
+  analisar:
+    name: Analisar JavaScript/TypeScript
+    runs-on: ubuntu-latest
+    permissions:
+      # `security-events: write` é o que permite publicar os achados na aba Security.
+      # Sem esta permissão o job falha ao enviar o SARIF.
+      security-events: write
+      contents: read
+      actions: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Inicializar o CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: javascript-typescript
+          # Análise estática pura: sem `npm ci`, sem build. O fonte É a superfície analisada.
+          build-mode: none
+          # `security-and-quality` soma regras de manutenção às de segurança. O projeto mantém
+          # 168 verificações e gates de tipo/estilo; um achado de qualidade aqui é o mesmo tipo
+          # de sinal que o CI já persegue, e entra pelo mesmo lugar.
+          queries: security-and-quality
+
+      # O passo de análise padrão do branch já roda ao publicar. Não há `analyze` manual aqui.
