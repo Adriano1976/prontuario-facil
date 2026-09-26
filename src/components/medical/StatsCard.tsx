@@ -2,10 +2,19 @@ import { motion } from 'framer-motion';
 import type { LucideIcon } from 'lucide-react';
 
 /**
- * Cartão de estatística com ícone e tendência opcional.
+ * Cartão de estatística com ícone, subtítulo e tendência opcionais.
  *
- * PARIDADE: comportamento e aparência idênticos ao componente anterior. A conversão é
- * de linguagem e de tipos; nenhuma regra nem texto mudou.
+ * PARIDADE: comportamento e aparência idênticos ao componente anterior **para os consumidores que
+ * não informam as props opcionais**. A conversão foi de linguagem e de tipos; nenhuma regra nem
+ * texto mudou.
+ *
+ * ⚠️ `subtitle` nasceu na feature `016-taxa-de-atendimento`: o cartão da Taxa de Atendimento passou
+ * a depender de uma janela de 12 meses, e um percentual sem o período a que se refere é ambíguo.
+ * É a única mudança de superfície desta feature, e é deliberada (`RN-07`, `RN-09`). A prop é
+ * opcional justamente para não alcançar os outros cartões.
+ *
+ * ⚠️ `trend` continua sem uso: o Dashboard não a informa em cartão nenhum, e `RF-04` proíbe. Ela
+ * ficou — removê-la seria mudança de contrato sem pedido.
  */
 
 /** Esquemas de cor aceitos. */
@@ -20,6 +29,8 @@ interface StatsCardProps {
   icon: LucideIcon;
   /** Esquema de cor do ícone. */
   color: StatsColor;
+  /** Linha secundária sob o valor: nomeia a janela, ou explica por que não há número. */
+  subtitle?: string;
   /** Tendência percentual; quando presente, aparece em verde (positiva) ou vermelho. */
   trend?: number;
   /** Atraso da animação, em segundos. */
@@ -39,6 +50,7 @@ export default function StatsCard({
   value,
   icon: Icon,
   color,
+  subtitle,
   trend,
   delay = 0,
 }: StatsCardProps) {
@@ -53,6 +65,7 @@ export default function StatsCard({
         <div>
           <p className="text-sm font-medium text-slate-500 mb-1">{title}</p>
           <p className="text-3xl font-bold text-slate-900">{value}</p>
+          {subtitle && <p className="text-xs text-slate-400 mt-1">{subtitle}</p>}
           {trend && (
             <p className={`text-sm mt-2 ${trend > 0 ? 'text-emerald-600' : 'text-rose-600'}`}>
               {trend > 0 ? '+' : ''}

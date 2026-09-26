@@ -30,20 +30,28 @@ import { logAccess, ACCESS_ACTIONS } from '@/components/medical/AccessLogger';
 import ReportsView from '@/components/medical/ReportsView';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import type { ConsultationStatus } from '@/types';
+import { calcularTaxaAtendimento, formatarTaxa, rotuloDoCartao } from '@/lib/taxaAtendimento';
 
 /**
  * Página do dashboard mostrando métricas-chave de saúde e atividade recente.
  * Exibe estatísticas de pacientes, consultas, prescrições e agendamentos.
  * Inclui ações rápidas e funcionalidade de busca de paciente.
  *
- * PARIDADE: comportamento e aparência idênticos ao anterior. Continuam iguais: as
- * quatro consultas com seus limites e ordenações, os filtros de "hoje" e
- * "próximos", o indicador de taxa de atendimento congelado em "94%" (valor de mock,
- * decisão humana preservada), o registro de acesso ao entrar no painel e as ações
- * rápidas.
+ * PARIDADE: comportamento e aparência idênticos ao anterior **exceto no quarto cartão**. Continuam
+ * iguais: as quatro consultas originais com seus limites e ordenações, os filtros de "hoje" e
+ * "próximos", o registro de acesso ao entrar no painel e as ações rápidas.
+ *
+ * ⚠️ PARIDADE ROMPIDA DE PROPÓSITO — Taxa de Atendimento. O cartão exibia o literal `"94%"`,
+ * classificado como métrica decorativa (`code-analysis.md#4.5`, `BR-D08`). A feature
+ * `016-taxa-de-atendimento` fechou a lacuna `G-01`: o valor passa a ser calculado sobre os
+ * agendamentos com desfecho nos últimos 12 meses, e o cartão ganha um subtítulo que nomeia a
+ * janela. É a regra 🟢 `BR-D08` sendo substituída, com a quebra prevista em `AMB-001` e o watch
+ * `W003` da feature `009` declarado superado. A fórmula e as bordas vivem em
+ * `@/lib/taxaAtendimento`, e não aqui.
  *
  * PARIDADE DE LEITURA: as quatro leituras passam a declarar o escopo pela decisão
- * de escopo da feature (opção C) — a mesma condição que a RLS do servidor já aplicava.
+ * de escopo da feature (opção C) — a mesma condição que a RLS do servidor já aplicava. A quinta
+ * leitura, a da taxa, declara o mesmo escopo.
  */
 export default function Dashboard() {
     const { data: patients, isLoading: loadingPatients } = useQuery({
@@ -78,6 +86,19 @@ export default function Dashboard() {
         },
     });
 
+    // Quinta leitura, e a única SEM limite. A Taxa de Atendimento precisa da janela de 12 meses
+    // inteira: com o teto de 100 da leitura acima, o número sairia truncado sem sintoma — o mesmo
+    // defeito que `BR-D09` registra em "Documentos Emitidos". A chave de cache é própria de
+    // propósito: `['appointments']` já guarda o conjunto limitado, e duas leituras de formas
+    // diferentes sob a mesma chave é a armadilha registrada em `code-analysis.md`.
+    const { data: desfechos } = useQuery({
+        queryKey: ['appointments-desfecho'],
+        queryFn: async () => {
+            const user = toSessionUser(await base44.auth.me());
+            return base44.entities.Appointment.listOwned(resolveScope(user));
+        },
+    });
+
     // Cálculos do legado preservados como estavam — mesmo que a renderização atual
     // não consuma todos, a conversão não remove lógica existente.
     const todayConsultations = consultations?.filter(c => {
@@ -105,6 +126,10 @@ export default function Dashboard() {
         const aptDate = new Date(a.date);
         return aptDate > new Date() && a.status !== 'cancelado';
     }).slice(0, 5) || [];
+
+    // `undefined` enquanto a leitura não responde, e a lista vazia depois dela, produzem o mesmo
+    // resultado: sem base. O cartão nunca mostra um `0%` que ainda não foi medido.
+    const taxaDeAtendimento = desfechos ? calcularTaxaAtendimento(desfechos, new Date()) : null;
 
     useEffect(() => {
         logAccess(ACCESS_ACTIONS.LOGIN, null, null, null, 'Acesso ao dashboard');
@@ -170,7 +195,8 @@ export default function Dashboard() {
                     />
                     <StatsCard 
                         title="Taxa de Atendimento" 
-                        value="94%" 
+                        value={formatarTaxa(taxaDeAtendimento)} 
+                        subtitle={rotuloDoCartao(taxaDeAtendimento)}
                         icon={TrendingUp} 
                         color="amber"
                         delay={0.4}
