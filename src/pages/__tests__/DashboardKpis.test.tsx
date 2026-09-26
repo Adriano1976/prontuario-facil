@@ -18,6 +18,7 @@ import {
   prescricoesEmitidas,
 } from '@/test/dashboardFixtures';
 import type { Appointment, Consultation, Patient, Prescription } from '@/types';
+import { ROTULO_JANELA, TEXTO_SEM_DESFECHO, VALOR_SEM_BASE } from '@/lib/taxaAtendimento';
 
 /**
  * Prova de TELA dos KPIs do Dashboard — os cinco cenários de `PT-008` e as regras que os sustentam.
@@ -47,11 +48,13 @@ import type { Appointment, Consultation, Patient, Prescription } from '@/types';
  *    existe, a superfície não. Por isso `PT-008.3` é provado pela ausência (`RF-03`): o painel
  *    exibe exatamente os quatro cartões do legado, e nenhum deles é um contador de consultas de
  *    hoje. A massa de consultas entra nos testes para tornar o descarte **observável**.
- * 2. **A constante de `AMB-001` nunca existiu.** A decisão humana registrou "manter `94%` como
- *    constante explícita e tipada (`TAXA_ATENDIMENTO_MOCK = 94`)", mas não há símbolo com esse
- *    nome em `src/`: o valor é o literal `"94%"` em `Dashboard.tsx:173`. O que esta prova trava é
- *    o **comportamento** — o valor exibido —, e a divergência entre o decidido e o implementado
- *    fica registrada, não corrigida.
+ * 2. **A constante de `AMB-001` nunca existiu — e o literal que ela protegia foi embora.** A decisão
+ *    humana de 2026-09-09 registrou "manter `94%` como constante explícita e tipada
+ *    (`TAXA_ATENDIMENTO_MOCK = 94`)" e nunca houve símbolo com esse nome em `src/`: o valor era o
+ *    literal `"94%"` em `Dashboard.tsx:173`. A feature `016-taxa-de-atendimento` fechou `G-01` — o
+ *    literal deu lugar ao cálculo. `PT-008.4` mudou de propósito **por decisão**, que é exatamente
+ *    o que `O004` do watch da `009` previa ("se um dia a fórmula real for definida, `W003` deve
+ *    mudar de propósito, e não por acidente"). O `W003` está superado.
  *
  * ⚠️ O DUBLÊ DE CONSULTA MODELA A CACHE, e isso é deliberado. Um dublê que executasse a função de
  * consulta a cada renderização contaria **renderizações**, não pedidos — armadilha medida na
@@ -271,7 +274,7 @@ describe('Dashboard — KPIs', () => {
         String(PACIENTES_ATIVOS),
         String(AGENDAMENTOS_HOJE),
         String(PRESCRICOES),
-        '94%',
+        VALOR_SEM_BASE,
       ]);
 
       // 3. E nenhum texto do painel fala de um contador de consultas de hoje.
@@ -279,11 +282,11 @@ describe('Dashboard — KPIs', () => {
     });
   });
 
-  describe('PT-008.4 — Taxa de Atendimento permanece como constante mock "94%"', () => {
-    it('exibe a constante, sem fórmula e sem tendência', async () => {
-      // A massa é construída de modo que uma fórmula plausível — concluídos sobre o total de
-      // agendamentos — daria um valor diferente de 94%. Se alguma fórmula influenciasse o cartão,
-      // o valor exibido não seria a constante.
+  describe('PT-008.4 — Taxa de Atendimento é calculada, e some quando não há desfecho', () => {
+    it('exibe o travessão com o texto quando a janela não tem desfecho', async () => {
+      // A massa daqui é de agendamentos de HOJE, e nenhum tem desfecho: dois `agendado`, um
+      // `cancelado` e dois em outras datas. Denominador zero — e `RN-06` manda o cartão dizer
+      // "sem base" em vez de "zero por cento", que afirmaria um fato que a base vazia não sustenta.
       configurar({
         pacientes: pacientesMistos(),
         consultas: consultasDeHoje(),
@@ -292,13 +295,18 @@ describe('Dashboard — KPIs', () => {
       });
       renderizarDashboard();
 
-      await esperarCartao('Taxa de Atendimento', '94%');
+      await esperarCartao('Taxa de Atendimento', VALOR_SEM_BASE);
 
-      // Apenas UM percentual em todo o painel, e é a constante.
+      // O texto do estado sem base acompanha o travessão.
+      expect(screen.getByText(TEXTO_SEM_DESFECHO)).toBeInTheDocument();
+
+      // Nenhum cartão exibe percentual: sem desfecho, não há o que medir. (O caso COM desfecho,
+      // que produz percentual de verdade, está na verificação própria da feature `016`.)
       const valores = cartoesDeKpi().map((cartao) => cartao.valor);
-      expect(valores.filter((valor) => valor.includes('%'))).toEqual(['94%']);
+      expect(valores.filter((valor) => valor.includes('%'))).toEqual([]);
 
       // Sem sparkline nem barra: o cartão aceita uma tendência opcional, e ela não foi usada.
+      // PRESERVADO da versão anterior — `RF-04` proíbe a tendência, e a proibição não caducou.
       expect(screen.queryByText(/este mês/i)).toBeNull();
     });
   });
@@ -366,19 +374,25 @@ describe('Dashboard — KPIs', () => {
       });
       renderizarDashboard();
 
-      await esperarCartao('Taxa de Atendimento', '94%');
+      await esperarCartao('Taxa de Atendimento', VALOR_SEM_BASE);
 
       // UMA chamada por leitura, e não uma por renderização — é o que confirma que o dublê modela
       // a cache. Uma contagem maior aqui significa que a asserção abaixo estaria medindo renders.
+      // `lerAgendamentos` é a exceção: ele serve DUAS leituras desde a feature `016` — a dos
+      // cartões de hoje/próximos, limitada a 100, e a da taxa, sem limite.
       expect(lerPacientes).toHaveBeenCalledTimes(1);
       expect(lerConsultas).toHaveBeenCalledTimes(1);
       expect(lerPrescricoes).toHaveBeenCalledTimes(1);
-      expect(lerAgendamentos).toHaveBeenCalledTimes(1);
+      expect(lerAgendamentos).toHaveBeenCalledTimes(2);
 
       expect(lerPacientes.mock.calls[0].slice(1)).toEqual(['-created_date', 100]);
       expect(lerConsultas.mock.calls[0].slice(1)).toEqual(['-date', 50]);
       expect(lerPrescricoes.mock.calls[0].slice(1)).toEqual(['-created_date', 100]);
       expect(lerAgendamentos.mock.calls[0].slice(1)).toEqual(['-date', 100]);
+      // A quinta leitura sai SEM limite, e é isso que impede a janela de 12 meses de ser truncada
+      // em silêncio (`D-04`). Discriminar pelo argumento é a única forma: as duas leituras caem no
+      // mesmo dublê e recebem a mesma massa, então o valor devolvido não distingue uma da outra.
+      expect(lerAgendamentos.mock.calls[1].slice(1)).toEqual([]);
     });
 
     it('declara o escopo da sessão nas quatro leituras', async () => {
@@ -394,6 +408,99 @@ describe('Dashboard — KPIs', () => {
       for (const leitura of [lerPacientes, lerConsultas, lerPrescricoes, lerAgendamentos]) {
         expect(leitura).toHaveBeenCalledWith(escopoEsperado, expect.any(String), expect.any(Number));
       }
+    });
+  });
+
+  describe('016 — o cartão da Taxa de Atendimento passa a ser calculado', () => {
+    /**
+     * Massa de desfechos dentro da janela de 12 meses.
+     *
+     * Trinta dias atrás, e não "hoje": a data precisa estar **dentro** da janela, e usar o dia
+     * corrente misturaria este critério com o do cartão "Agendamentos Hoje".
+     */
+    function desfechos(concluidos: number, faltas: number): Appointment[] {
+      const carimbo = horaLocal(diasAtras(30), 10, 0).toISOString();
+      return [
+        ...Array.from({ length: concluidos }, (_, indice) =>
+          agendamento({ id: `concluido-${indice + 1}`, status: 'concluido', date: carimbo }),
+        ),
+        ...Array.from({ length: faltas }, (_, indice) =>
+          agendamento({ id: `falta-${indice + 1}`, status: 'faltou', date: carimbo }),
+        ),
+      ];
+    }
+
+    it('exibe o percentual calculado e o subtítulo que nomeia a janela', async () => {
+      configurar({ agendamentos: desfechos(7, 3) });
+      renderizarDashboard();
+
+      await esperarCartao('Taxa de Atendimento', '70%');
+      expect(screen.getByText(ROTULO_JANELA)).toBeInTheDocument();
+    });
+
+    it('não deixa o cancelamento mexer no valor', async () => {
+      const carimbo = horaLocal(diasAtras(30), 10, 0).toISOString();
+      const cancelados = Array.from({ length: 5 }, (_, indice) =>
+        agendamento({ id: `cancelado-${indice + 1}`, status: 'cancelado', date: carimbo }),
+      );
+
+      configurar({ agendamentos: [...desfechos(7, 3), ...cancelados] });
+      renderizarDashboard();
+
+      // Cinco cancelamentos a mais, e o valor não se move: `RN-02` os exclui das duas contas.
+      await esperarCartao('Taxa de Atendimento', '70%');
+    });
+
+    it('distingue zero por cento de ausência de base', async () => {
+      configurar({ agendamentos: desfechos(0, 3) });
+      renderizarDashboard();
+
+      // Três faltas e nenhum comparecimento: há desfecho, então o cartão diz ZERO — e não o
+      // travessão, que é reservado à base vazia. É o par do estado sem base de `PT-008.4`.
+      await esperarCartao('Taxa de Atendimento', '0%');
+      expect(screen.queryByText(TEXTO_SEM_DESFECHO)).toBeNull();
+      expect(screen.getByText(ROTULO_JANELA)).toBeInTheDocument();
+    });
+
+    it('considera a janela inteira: 120 desfechos, e não os 100 de um limite', async () => {
+      // 100 concluídos e 20 faltas dão 83%.
+      //
+      // ⚠️ O VALOR NÃO DETECTA O TRUNCAMENTO, e a falsificação provou isso: o dublê de leitura
+      // devolve a massa inteira e **ignora** o argumento do limite, então reintroduzir o teto de
+      // 100 não muda o que o cartão exibe. Quem carrega esta prova são os ARGUMENTOS, abaixo — o
+      // valor só guarda a aritmética. Está registrado porque o risco `R-05` do roadmap previu
+      // exatamente esta fragilidade, e ela se confirmou.
+      configurar({ agendamentos: desfechos(100, 20) });
+      renderizarDashboard();
+
+      await esperarCartao('Taxa de Atendimento', '83%');
+
+      expect(lerAgendamentos).toHaveBeenCalledTimes(2);
+      // Discriminado pelo ARGUMENTO: a leitura da taxa sai com o escopo e sem terceiro argumento.
+      // Reintroduzir o teto faz esta linha falhar — é ela que sustenta o requisito.
+      expect(lerAgendamentos.mock.calls[1]).toEqual([
+        { kind: 'user', user_id: USUARIO_DA_SESSAO.id },
+      ]);
+    });
+
+    it('põe o subtítulo só no quarto cartão', async () => {
+      configurar({ agendamentos: desfechos(7, 3) });
+      renderizarDashboard();
+
+      await esperarCartao('Taxa de Atendimento', '70%');
+
+      expect(screen.getAllByText(ROTULO_JANELA)).toHaveLength(1);
+
+      const grade = screen.getByText(CARTOES_DO_LEGADO[0]).closest('div.grid');
+      const cartoes = Array.from(grade?.children ?? []);
+      expect(cartoes).toHaveLength(4);
+
+      // Os três primeiros continuam com dois parágrafos — título e valor. Se o subtítulo vazasse
+      // para eles, a superfície do painel teria mudado além do decidido em `RN-09`.
+      cartoes.slice(0, 3).forEach((cartao) => {
+        expect(cartao.querySelectorAll('p')).toHaveLength(2);
+      });
+      expect(cartoes[3]?.querySelectorAll('p')).toHaveLength(3);
     });
   });
 });
