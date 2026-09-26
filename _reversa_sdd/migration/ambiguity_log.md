@@ -27,12 +27,19 @@ hash: "sha256:b183179f8e568d370a99609689520f8b72082d65fc2eeb0bffbbbd1f78804b95"
 - **Descrição**: KPI "Taxa de Atendimento" não tem fórmula/fonte/período definidos no legado; exibido fixo em `94%`. Migrar como paridade (constante tipada mock) ou definir fórmula?
 - **Detectado por**: curator
 - **Origem**: `target_business_rules.md` → BR-HUMANA-001; `dashboard/requirements.md` (decisão pendente); `gaps.md` G-01
-- **Status**: RESOLVIDO COM DECISÃO HUMANA
+- **Status**: ⛔ **SUPERADO em 2026-09-25** pela feature `016-taxa-de-atendimento` — a "fase posterior" que a decisão previa chegou
+- **Status original**: RESOLVIDO COM DECISÃO HUMANA
 - **Decisão tomada**:
   - **Escolha**: paridade exata — manter `94%` como constante explícita e tipada (`TAXA_ATENDIMENTO_MOCK = 94`), sem inventar fórmula; correção/fórmula real em fase posterior.
   - **Decisor**: Product Owner/Developer
   - **Quando**: 2026-09-09T15:24:37-03:00
   - **Justificativa**: brief exige paridade 100% e exclui mudanças de comportamento nesta migração.
+  - **Revisão 2026-09-25 (`016-taxa-de-atendimento`)**: a decisão foi **cumprida e superada**. Cumprida
+    porque o comportamento de paridade valeu até aqui; superada porque a fórmula real foi definida
+    pelo dono do produto em `_reversa_forward/016-taxa-de-atendimento/requirements.md#9` e
+    implementada em `src/lib/taxaAtendimento.ts`. A constante `TAXA_ATENDIMENTO_MOCK = 94`, que esta
+    decisão exigiu e que **nunca existiu no código** (`O002` do watch da `009`), deixa de ser
+    necessária: agora há símbolo real, e ele carrega a fórmula. `G-01` está fechada.
 
 ### AMB-002 — Divergência de critério entre KPIs "Consultas de Hoje" e "Agendamentos Hoje"
 - **Descrição**: Contador de Consultas de hoje pode incluir `cancelada`; o de Agendamentos exclui. Unificar ou reproduzir a divergência no alvo?

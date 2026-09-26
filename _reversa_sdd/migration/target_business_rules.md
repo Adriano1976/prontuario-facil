@@ -375,7 +375,8 @@ hash: "sha256:369762a52e35491850743fcdc8b5d6014a52a10774c6a6b2c1537b870cd97073"
   2. Definir fórmula nova durante a migração (ex.: `concluidos/(concluidos+cancelados+faltou)×100`) — **foge do escopo** (brief: "novas features" e correções ficam fora).
   3. Remover o KPI no alvo — **quebra paridade**.
 - **Recomendação do Curator**: opção 1 — paridade exata, constante tipada `TAXA_ATENDIMENTO_MOCK = 94` com nota; fórmula real fica para decisão de produto em fase posterior.
-- **Status**: RESOLVIDA (opção 1 — paridade exata, constante mock tipada; decisor: Product Owner/Developer; 2026-09-09T15:24:37-03:00)
+- **Status**: ⛔ **SUPERADA em 2026-09-25** pela feature `016-taxa-de-atendimento`: a fórmula foi definida (`concluido ÷ (concluido + faltou) × 100`, sobre `Appointment`, em 12 meses) e implementada em `src/lib/taxaAtendimento.ts`. A regra vigente vive em `_reversa_forward/016-taxa-de-atendimento/requirements.md` (`RN-01` a `RN-07`) e em `dashboard/requirements.md`
+- **Status original**: RESOLVIDA (opção 1 — paridade exata, constante mock tipada; decisor: Product Owner/Developer; 2026-09-09T15:24:37-03:00)
 
 ### BR-HUMANA-002 — Divergência de critério entre KPIs "Consultas de Hoje" e "Agendamentos Hoje"
 - **Origem**: `_reversa_sdd/domain.md` §3 (Lacunas); `_reversa_sdd/review-report.md` §3 (alerta 1); `_reversa_sdd/code-analysis.md` (consultas: filtro `upcoming`/`today` inclui canceladas? — divergência documentada)

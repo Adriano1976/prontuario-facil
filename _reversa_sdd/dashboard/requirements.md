@@ -14,7 +14,7 @@ Página do dashboard mostrando métricas-chave de saúde e atividade recente. Ex
 - [Pacientes Ativos] Total de pacientes cadastrados com o status igual a 'ativo'. 🟢
 - [Agendamentos Hoje] Total de agendamentos onde a data coincide com o dia atual e o status é diferente de 'cancelado'. 🟢
 - [Documentos Emitidos] Calculado com base no total retornado (até 100) das prescrições ordenadas por data de criação. 🟢
-- [Taxa de Atendimento] O valor é atualmente exibido fixo/mockado em "94%"; não há fórmula, fonte agregada ou período definidos no legado. 🔴
+- [Taxa de Atendimento] Percentual de agendamentos **concluídos** sobre os que tiveram **desfecho** (`concluido + faltou`) nos últimos 12 meses. Cancelamento e estados sem desfecho ficam fora das duas contas. 🟢 *(decidida em 2026-09-25 — ver `_reversa_forward/016-taxa-de-atendimento/requirements.md#9`)*
 - [Próximos Agendamentos] Exibe até 5 agendamentos onde a data é no futuro (maior que a data/hora atual) e o status é diferente de 'cancelado'. 🟢
 
 > **Veredito de prova — convergência de 2026-09-24 (feature `009-prova-kpis-dashboard`).** As cinco
@@ -27,7 +27,7 @@ Página do dashboard mostrando métricas-chave de saúde e atividade recente. Ex
 | Pacientes Ativos | 🟢 **Provada** | `PT-008.1` — o paciente inativo é ignorado |
 | Agendamentos Hoje | 🟢 **Provada, com a borda explícita** | `PT-008.2` — exclui **apenas** `cancelado`, de modo que `faltou`, `concluido` e `confirmado` **contam**; e o agendamento de outra data não entra |
 | Documentos Emitidos | 🟢 **Provada** | `BR-MIGRAR-029` — reflete o tamanho da leitura, inclusive quando ela vem vazia |
-| Taxa de Atendimento | 🔴 **Provada como comportamento, pendente como produto** | `PT-008.4` — afirma a constante `"94%"`, sem fórmula e sem tendência. A lacuna remanescente é de **produto**, não de prova |
+| Taxa de Atendimento | 🟢 **Provada e calculada** | `PT-008.4` — o cartão exibe `—` com o texto do estado sem base quando não há desfecho; a fórmula e a janela são provadas em `src/lib/__tests__/taxaAtendimento.test.ts`. **A lacuna `G-01` foi fechada** pela feature `016-taxa-de-atendimento` (2026-09-25) |
 | Próximos Agendamentos | 🟢 **Provada** | `PT-008.5` — limita a cinco, ignora passado e cancelado, e exibe o estado vazio com o atalho |
 
 > **Limites e escopo das quatro leituras.** `BR-MIGRAR-033` prova que cada leitura sai com a
@@ -43,7 +43,7 @@ Página do dashboard mostrando métricas-chave de saúde e atividade recente. Ex
 
 | ID | Requisito | Prioridade | Critério de Aceite |
 |----|-----------|-----------|-------------------|
-| RF-01 | Exibir KPIs numéricos e percentuais | Must | Os valores refletem os dados no banco/API; até a definição de produto, a taxa permanece explicitamente mockada em 94% |
+| RF-01 | Exibir KPIs numéricos e percentuais | Must | Os valores refletem os dados no banco/API; a taxa é calculada sobre os desfechos dos últimos 12 meses |
 | RF-02 | Exibir lista de "Próximos Agendamentos" | Must | Listar apenas consultas futuras não canceladas (limite de 5) |
 | RF-03 | Disponibilizar botões de "Ações Rápidas" | Should | Os botões devem direcionar para os fluxos corretos (Novo Paciente, Nova Consulta, etc) |
 | RF-04 | Disponibilizar barra de busca global de pacientes | Must | Permitir pesquisa por nome/CPF usando o componente `PatientSearch` |
@@ -67,11 +67,29 @@ E a lista de Próximos Agendamentos não deve conter consultas passadas ou cance
 E um evento de auditoria de "Acesso ao dashboard" deve ser gravado via logAccess
 ```
 
-### Taxa de Atendimento — decisão pendente
+### Taxa de Atendimento — decidida e implementada
 
-- A implementação atual confirma apenas o placeholder `94%`. 🟢 **Medido em 2026-09-24**: `PT-008.4` prova que o valor exibido é a constante, sem fórmula e sem tendência.
-- A fórmula sugerida `concluídos / (concluídos + cancelados + faltou) × 100`, a entidade `Appointment` como fonte e o período de cálculo são hipóteses para validação, não requisitos confirmados. 🔴 **Lacuna de PRODUTO, aberta.** O que caducou foi o **bloqueio de prova** que dela derivava (`G-01`) — a feature `009` provou o comportamento sem resolver a fórmula. Ver `_reversa_sdd/gaps.md`.
-- ⚠️ **Divergência registrada em 2026-09-24.** A decisão humana (`AMB-001`, `migration/ambiguity_log.md`) registrou "manter `94%` como **constante explícita e tipada** (`TAXA_ATENDIMENTO_MOCK = 94`)". **Não existe símbolo com esse nome em `src/`**: o valor é o literal `value="94%"` em `Dashboard.tsx`. O **comportamento** foi preservado; a **forma decidida** nunca foi implementada. A cláusula de `PT-008.4` que diz "vindo de constante tipada" é **falsa hoje**.
+> **Fechada em 2026-09-25 pela feature `016-taxa-de-atendimento`.** O que segue substitui a seção
+> "decisão pendente", que valeu de 2026-08-31 a 2026-09-25. A lacuna `G-01` saiu de
+> `_reversa_sdd/gaps.md#Lacunas abertas`.
+
+- **Definição:** `concluido ÷ (concluido + faltou) × 100`, arredondado para inteiro. Cancelamento
+  fica fora das duas contas; `agendado`, `confirmado` e `em_atendimento` também, por não terem
+  desfecho. A fórmula sugerida em 2026-08-31 — `concluídos / (concluídos + cancelados + faltou)` —
+  foi **recusada** em favor desta, que separa quem avisa que não vem de quem simplesmente falta.
+- **Fonte:** `Appointment`, a agenda. `Consultation` foi descartada por não ter estado de falta.
+  Limitação aceita: `Appointment.status` só muda por ação manual (`Appointments.tsx:86`), então o
+  número mede **desfecho registrado**, não comparecimento real.
+- **Período:** 12 meses, com borda estrita — exatamente na marca de 12 meses fica fora.
+- **Sem base:** quando não há desfecho na janela, o cartão exibe `—` com o texto "sem agendamentos
+  com desfecho no período", e **não** `0%`.
+- **Superfície:** o cartão passa a exibir, sob o valor, o subtítulo "últimos 12 meses". É a única
+  mudança de superfície, e é deliberada. O rótulo, a posição e a cor não mudam.
+- ✅ **A divergência de `O002` está encerrada.** A decisão humana de 2026-09-09 (`AMB-001`) exigia
+  "constante explícita e tipada (`TAXA_ATENDIMENTO_MOCK = 94`)" e o código tinha o literal
+  `value="94%"`. O literal deixou de existir: existe símbolo real em `src/lib/taxaAtendimento.ts`.
+
+Decisão completa em `_reversa_forward/016-taxa-de-atendimento/requirements.md#9. Esclarecimentos`.
 
 ## Prioridade (MoSCoW)
 

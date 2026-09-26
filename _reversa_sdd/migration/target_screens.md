@@ -58,7 +58,7 @@ spec.root:
   children:
     - component: Tabs (Visão geral | Relatórios)
       children:
-        - KpiGrid: StatsCard x4 (Pacientes Ativos; Agendamentos Hoje; Documentos Emitidos; Taxa de Atendimento = "94%" constante mock tipada)
+        - KpiGrid: StatsCard x4 (Pacientes Ativos; Agendamentos Hoje; Documentos Emitidos; Taxa de Atendimento — **calculada** desde 2026-09-25 pela feature `016-taxa-de-atendimento`, com subtítulo "últimos 12 meses")
         - UpcomingList: até 5 agendamentos futuros != cancelado; estado vazio "Nenhum agendamento" + botão "Agendar consulta"; link "Ver todos"
         - QuickActions: Novo Paciente | Agendar Consulta | Nova Consulta | Lista de Pacientes | Templates | badge "LGPD Compliant"
         - GlobalSearch: PatientSearch (nome/CPF)

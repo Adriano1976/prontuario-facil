@@ -9,7 +9,7 @@ Visão geral e centro de controle do médico.
   - **Pacientes Ativos** — valor numérico (`activePatients`), filtrado por `status === 'ativo'`. 🟢
   - **Agendamentos Hoje** — valor numérico (`todayAppointments.length`), agendamentos do dia corrente com status ≠ `'cancelado'`. 🟢
   - **Documentos Emitidos** — valor numérico (`prescriptions?.length || 0`), total de prescrições retornadas pela API. 🟢
-  - **Taxa de Atendimento** — exibe `"94%"` hard-coded. **Não há sparkline, mini chart nem barra de progresso**; o componente `StatsCard` só suporta ícone, valor e indicador de tendência textual (prop `trend`), que não é passado aqui. O "gráfico mini" mencionado anteriormente era uma inferência incorreta da imagem. 🔴 *(valor mockado, cálculo real desconhecido)*
+  - **Taxa de Atendimento** — **deixou de ser `"94%"` hard-coded em 2026-09-25** (feature `016-taxa-de-atendimento`): exibe o percentual calculado sobre os desfechos dos últimos 12 meses, com o subtítulo "últimos 12 meses" sob o valor. **Não há sparkline, mini chart nem barra de progresso**; o componente `StatsCard` suporta ícone, valor, subtítulo e indicador de tendência textual (prop `trend`), e a tendência **não** é passada aqui — `RF-04` a proíbe. O "gráfico mini" mencionado anteriormente era uma inferência incorreta da imagem. 🟢 *(calculado; a fórmula vive em `src/lib/taxaAtendimento.ts`)*
 
 - **Área de Agendamentos** 🟢
   - Lista "Próximos Agendamentos" — exibe até 5 agendamentos futuros não cancelados (`upcomingAppointments`). 🟢

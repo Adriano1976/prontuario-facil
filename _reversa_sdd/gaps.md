@@ -6,7 +6,6 @@
 
 | ID | Severidade | Unit/arquivo | Lacuna | Próxima ação |
 |---|---|---|---|---|
-| G-01 | 🔴 Crítico | `dashboard/requirements.md` | A Taxa de Atendimento permanece fixa em `94%`; fórmula, fonte e período não foram definidos. | Validar regra com stakeholder e atualizar a spec. |
 | G-02 | 🟡 Moderado | `logs-acesso/screens.md` | O legado carrega 500 registros e renderiza todos os filtrados sem paginação; ainda falta decidir a política desejada acima desse limite. | Definir comportamento de paginação e estratégia de carregamento. |
 | G-04 | 🟡 Moderado | `modo-offline/` | O badge/aviso visual recomendado para indicar “Modo Offline — dados fictícios/de teste” ainda não foi implementado no código. | Implementar em etapa própria, fora do escopo do Reviewer. |
 
@@ -15,15 +14,23 @@
 > aviso mudaria comportamento observável, e a suíte teria de mudar de propósito. Ver
 > `_reversa_sdd/addenda/010-prova-modo-offline.md` e `_reversa_sdd/modo-offline/requirements.md#7`.
 >
-> **Nota de convergência (2026-09-24, feature `009-prova-kpis-dashboard`).** `G-01` também
-> **permanece aberta** e segue pedindo validação com stakeholder. O que caducou foi o **bloqueio de
+> ✅ **Nota de convergência (2026-09-25, feature `016-taxa-de-atendimento`).** `G-01` está
+> **RESOLVIDA**. A validação com stakeholder que a lacuna pedia aconteceu na sessão de
+> esclarecimentos de 2026-09-25: definição, fonte e período foram decididos
+> (`_reversa_forward/016-taxa-de-atendimento/requirements.md#9`), implementados em
+> `src/lib/taxaAtendimento.ts` e provados. O cartão deixou de exibir o literal `"94%"`. A linha da
+> lacuna foi removida da tabela acima — está registrada em "Lacunas resolvidas" abaixo.
+>
+> **Nota de convergência (2026-09-24, feature `009-prova-kpis-dashboard`).** `G-01` permanecia
+> **aberta** e pedia validação com stakeholder. O que caducou em 2026-09-24 foi o **bloqueio de
 > prova** que dela derivava — a feature `009` provou o comportamento (a constante `94%`) sem
-> resolver a fórmula. A lacuna é de **produto**. Ver `dashboard/requirements.md`.
+> resolver a fórmula. A lacuna era de **produto**, e foi fechada no dia seguinte.
 
 ## Lacunas resolvidas nesta revisão
 
 | Item anterior | Resolução |
 |---|---|
+| `G-01` — Taxa de Atendimento fixa em `94%` (fechada em 2026-09-25, feature `016-taxa-de-atendimento`) | Fórmula, fonte e período decididos com o dono do produto: `concluido ÷ (concluido + faltou) × 100` sobre `Appointment`, nos últimos 12 meses, com cancelamento e estados sem desfecho fora das duas contas. Implementado em `src/lib/taxaAtendimento.ts` e provado em `src/lib/__tests__/taxaAtendimento.test.ts` e `src/pages/__tests__/DashboardKpis.test.tsx`. Spec atualizada em `dashboard/requirements.md`. |
 | Dashboard incompleto e matriz sem Dashboard | Artefatos presentes; matriz aponta para `_reversa_sdd/dashboard/`. |
 | Campos de data/hora em Agendamentos | `screens.md` documenta a seção “Data e Horário” com date picker. |
 | Gatilho de `confirmado` | Transição manual; flags de lembrete não alteram status. |
