@@ -5,8 +5,10 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import AccessLogs from '../AccessLogs';
 import {
   CONJUNTO_DE_INDICADORES,
+  CONJUNTO_PAGINADO,
   DIA_DE_PROVA,
   INDICADORES_ESPERADOS,
+  RECORTE_DE_PROVA,
   diasAtras,
   horaLocal,
   registro,
@@ -48,7 +50,7 @@ const {
   sessao,
 } = vi.hoisted(() => ({
   armazem: { logs: [] as AccessLog[] },
-  cacheDeConsultas: new Map<string, boolean>(),
+  cacheDeConsultas: new Map<string, unknown>(),
   listar: vi.fn(),
   filtrar: vi.fn(),
   asUser: vi.fn(),
@@ -78,21 +80,45 @@ vi.mock('@/api/base44Client', () => ({
   },
 }));
 
-vi.mock('@tanstack/react-query', () => ({
-  useQuery: (opcoes: { queryKey: unknown[]; queryFn?: () => unknown }) => {
-    // ⚠️ O DUBLÊ MODEL A O CACHE, e não chama a consulta a cada renderização. Um dublê que
-    // chama sempre mede RENDERS, não pedidos — e a diferença é justamente o que esta prova
-    // precisa medir: como os filtros não entram na chave da consulta, o cliente pede UMA vez
-    // e filtra em memória. Se a página passasse a incluir os filtros na chave, cada mudança
-    // produziria uma chave nova e a contagem denunciaria a reconsulta.
-    const chave = JSON.stringify(opcoes.queryKey);
-    if (!cacheDeConsultas.has(chave)) {
-      void opcoes.queryFn?.();
-      cacheDeConsultas.set(chave, true);
-    }
-    return { data: armazem.logs, isLoading: false };
-  },
-}));
+vi.mock('@tanstack/react-query', async () => {
+  const { useEffect, useState } = await import('react');
+  return {
+    /**
+     * O dublê devolve **o que o transporte respondeu**, por chave de cache.
+     *
+     * ⚠️ ISTO MUDOU NA FEATURE 017, e a mudança era obrigatória. A forma anterior devolvia o
+     * ARMAZÉM inteiro, ignorando o retorno da consulta — o que tornava a paginação
+     * **inobservável por construção**: a tela recebia os 1.200 registros em qualquer página, e
+     * nenhuma prova conseguiria distinguir o recorte 1 do recorte 2.
+     *
+     * O que a forma anterior media continua sendo medido: como os filtros NÃO entram na chave da
+     * consulta, o cliente pede uma vez por recorte e filtra em memória. Se a página passasse a
+     * incluir os filtros na chave, cada mudança produziria uma chave nova e a contagem de
+     * chamadas denunciaria a reconsulta.
+     */
+    useQuery: (opcoes: { queryKey: unknown[]; queryFn?: () => unknown }) => {
+      const chave = JSON.stringify(opcoes.queryKey);
+      const [, forcarAtualizacao] = useState(0);
+
+      useEffect(() => {
+        if (cacheDeConsultas.has(chave)) return;
+        let vivo = true;
+        void Promise.resolve(opcoes.queryFn?.()).then((dados) => {
+          if (!vivo) return;
+          cacheDeConsultas.set(chave, dados);
+          forcarAtualizacao((versao) => versao + 1);
+        });
+        return () => {
+          vivo = false;
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps -- uma execução por chave, de propósito
+      }, [chave]);
+
+      const carregada = cacheDeConsultas.has(chave);
+      return { data: cacheDeConsultas.get(chave), isLoading: !carregada };
+    },
+  };
+});
 
 /** O cache é por verificação: sem isto, a massa de uma vazaria para a seguinte. */
 beforeEach(() => {
@@ -103,6 +129,10 @@ beforeEach(() => {
   sessao.valor = { id: 'admin-1', email: 'admin@medrecord.local', role: 'admin' };
   asUser.mockImplementation(() => ({ list: listar, filter: filtrar }));
   asAdmin.mockImplementation(() => ({ list: listar, filter: filtrar }));
+  // Padrão do arquivo: a leitura devolve o armazém inteiro. Quem precisa de recorte — o bloco
+  // da feature 017 — sobrepõe com um transporte que modela a janela.
+  listar.mockImplementation(async () => armazem.logs);
+  filtrar.mockImplementation(async () => armazem.logs);
 });
 
 /**
@@ -178,6 +208,20 @@ function linhasDeDados(): number {
   return within(screen.getByRole('table')).getAllByRole('row').length - 1;
 }
 
+/**
+ * Um botão de navegação, pelo texto.
+ *
+ * ⚠️ POR QUE NÃO `getByRole('button', { name })`. Medido: sobre um DOM de 1.200 linhas, a consulta
+ * por papel **com nome acessível** levava cerca de 90 s por chamada — ela computa o nome de todos
+ * os elementos. A consulta por texto não computa nome acessível e resolve em milissegundos. A
+ * asserção continua sendo sobre o mesmo elemento: o `<button>` que contém o rótulo.
+ */
+function botaoDeNavegacao(rotulo: string): HTMLButtonElement {
+  const elemento = screen.getByText(rotulo).closest('button');
+  if (!elemento) throw new Error(`o botão "${rotulo}" não foi encontrado`);
+  return elemento;
+}
+
 function reporArmazem(...logs: AccessLog[]): void {
   armazem.logs.length = 0;
   armazem.logs.push(...logs);
@@ -190,16 +234,21 @@ describe('AccessLogs — o pedido de leitura', () => {
     listar.mockImplementation(async () => armazem.logs);
   });
 
-  it('pede os registros com a ordenação e o limite exatos, e declara o escopo administrativo', async () => {
+  it('pede UM REGISTRO A MAIS do que exibe, e descarta o excedente', async () => {
+    // O pedido mudou com a feature 017. O recorte continua sendo o do legado (500, `RN-08`), mas
+    // agora se pede **um a mais**: o excedente é o que diz que há página seguinte, porque o
+    // contrato não tem operação de contagem e esta feature não a criou (`RN-07`, `D-06`).
+    reporArmazem(...CONJUNTO_PAGINADO.slice(0, RECORTE_DE_PROVA + 1));
     renderizarPagina();
-    await screen.findByText('Acesso de prova');
+    await screen.findByText('Evento 1');
 
-    // Argumentos EXATOS: a ordenação por criação decrescente e o teto de 500. É o que
-    // `PT-007.4` promete, e o teto é paridade congelada (AMB-004) — a correção do F-04 não
-    // tocou nem no limite nem na ordenação.
-    expect(listar).toHaveBeenCalledWith('-created_date', 500);
+    expect(listar).toHaveBeenCalledWith('-created_date', RECORTE_DE_PROVA + 1, 0);
 
-    // O escopo passou a ser DECLARADO (correção do F-04, 2026-09-24). A trilha é admin-only
+    // 501 registros na fonte, 500 na tela: o excedente foi LIDO e não exibido. Sem esta segunda
+    // metade, a asserção de argumento passaria mesmo que a tela renderizasse os 501.
+    expect(linhasDeDados()).toBe(RECORTE_DE_PROVA);
+
+    // O escopo continua DECLARADO (correção do F-04, 2026-09-24). A trilha é admin-only
     // (BR-MIGRAR-024), então a forma usada é a administrativa, e a de dono não é usada. A
     // restrição continua sendo aplicada pelo servidor; o que mudou é que a omissão deixou
     // de ser possível em silêncio.
@@ -207,40 +256,43 @@ describe('AccessLogs — o pedido de leitura', () => {
     expect(asUser).not.toHaveBeenCalled();
   });
 
-  it('não pergunta ao servidor quando a sessão não é de administrador', async () => {
+  it('não pergunta ao servidor quando a sessão não é de administrador, e não exibe registro nenhum', async () => {
     // O caminho de quem não é admin precisava ser DITO — era o que a omissão escondia:
     // "admin lendo a trilha" e "qualquer um lendo a trilha" eram o mesmo código.
     sessao.valor = { id: 'user-1', email: 'user@medrecord.local' };
 
     renderizarPagina();
-    await screen.findByText('Acesso de prova');
+    await screen.findByText('Nenhum log encontrado');
 
-    // ⚠️ O dublê de `useQuery` devolve o armazém, e não o retorno da consulta — por isso a
-    // asserção é sobre o TRANSPORTE, que é onde a diferença existe: para quem não é admin, a
-    // leitura responde vazio **sem chegar a pedir**.
+    // Para quem não é admin, a leitura responde vazio **sem chegar a pedir**.
     expect(asAdmin).not.toHaveBeenCalled();
     expect(listar).not.toHaveBeenCalled();
+
+    // ⚠️ ESTA METADE É NOVA, e o dublê anterior a escondia. Ele devolvia o armazém em vez do
+    // retorno da consulta, de modo que a tela exibia o registro da trilha mesmo para quem não é
+    // admin — a asserção de transporte passava enquanto a de tela teria falhado. Com o dublê
+    // fiel, o conjunto vazio aparece e o registro NÃO.
+    expect(screen.queryByText('Acesso de prova')).toBeNull();
   });
 
-  it('não oferece controle de paginação e não reconsulta quando um filtro muda', async () => {
+  it('não reconsulta o servidor quando um filtro muda, e agora oferece a navegação', async () => {
     const user = userEvent.setup();
     renderizarPagina();
     await screen.findByText('Acesso de prova');
 
     expect(listar).toHaveBeenCalledTimes(1);
 
-    // Nenhum controle de paginação existe: nem botão de avançar, nem de voltar, nem seletor
-    // de tamanho de página.
-    expect(
-      screen.queryByRole('button', { name: /próxim|anterior|avançar|voltar página/i }),
-    ).not.toBeInTheDocument();
-    expect(screen.queryByRole('navigation', { name: /pagina/i })).not.toBeInTheDocument();
+    // A navegação entre recortes passa a EXISTIR — é a entrega da feature 017, e a asserção
+    // anterior (ausência de controle) foi invertida de propósito (`D-13`).
+    expect(botaoDeNavegacao('Anterior')).toBeDisabled();
+    expect(botaoDeNavegacao('Próxima')).toBeDisabled();
 
     await user.selectOptions(seletorDeAcao(), 'login');
     await user.selectOptions(seletorDeData(), 'week');
     await user.type(campoDeBusca(), 'ana');
 
-    // O filtro é do cliente: os três controles mudaram e o servidor foi consultado UMA vez.
+    // O que NÃO mudou, e é o que esta verificação guarda desde a feature 006: o filtro é do
+    // cliente. Os três controles mudaram e o servidor continua tendo sido consultado uma vez.
     expect(listar).toHaveBeenCalledTimes(1);
   });
 });
@@ -397,7 +449,7 @@ describe('AccessLogs — os quatro indicadores', () => {
     // Cada indicador conferido contra o conjunto desenhado, que tem uma ação de cada
     // família: duas de visualização, cinco de edição ou criação, uma de exclusão, e quatro
     // que não entram em categoria nenhuma.
-    expect(indicador('Total de Logs')).toBe(String(INDICADORES_ESPERADOS.total));
+    expect(indicador('Logs neste recorte')).toBe(String(INDICADORES_ESPERADOS.total));
     expect(indicador('Visualizações')).toBe(String(INDICADORES_ESPERADOS.visualizacoes));
     expect(indicador('Edições')).toBe(String(INDICADORES_ESPERADOS.edicoes));
     expect(indicador('Exclusões')).toBe(String(INDICADORES_ESPERADOS.exclusoes));
@@ -440,3 +492,123 @@ describe('AccessLogs — a página é somente leitura', () => {
     expect(linhasDeDados()).toBe(INDICADORES_ESPERADOS.total);
   });
 });
+
+describe('017 — a leitura é paginada', () => {
+  /**
+   * O dublê do transporte passa a modelar a JANELA, e não só devolver o armazém inteiro.
+   *
+   * É deliberado e é fiel ao contrato: a feature `017` estendeu `EntityRepository` com `skip`
+   * (`D-02`), o adaptador repassa os três argumentos (`T005`) e o cliente de modo offline recorta
+   * depois de ordenar (`T004`). Um dublê que ignorasse `skip` tornaria a navegação **inobservável**
+   * — a página 2 mostraria a página 1, e a prova não teria como distinguir.
+   */
+  function transporteComJanela(): void {
+    listar.mockImplementation(async (_sort?: string, limit?: number, skip?: number) => {
+      const inicio = skip ?? 0;
+      return armazem.logs.slice(inicio, inicio + (limit ?? armazem.logs.length));
+    });
+  }
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    reporArmazem(...CONJUNTO_PAGINADO);
+    transporteComJanela();
+  });
+
+  it('avançar alcança registros que NÃO estavam na primeira página', async () => {
+    const usuario = userEvent.setup();
+    renderizarPagina();
+    await screen.findByText('Evento 1');
+
+    expect(linhasDeDados()).toBe(RECORTE_DE_PROVA);
+    // O 501º registro mais recente não está na primeira página — é o que a tela antiga tornava
+    // inalcançável, e é a entrega central da feature.
+    expect(screen.queryByText('Evento 501')).toBeNull();
+
+    await usuario.click(botaoDeNavegacao('Próxima'));
+
+    await screen.findByText('Evento 501');
+    expect(screen.queryByText('Evento 1')).toBeNull();
+    // A segunda página do conjunto de prova tem UM registro — o mínimo que prova a existência
+    // dela. O recorte cheio está na primeira, que é onde ele é medido.
+    expect(linhasDeDados()).toBe(1);
+
+    // A segunda leitura sai com o deslocamento de um recorte, e continua pedindo um a mais.
+    expect(listar).toHaveBeenCalledWith(
+      '-created_date',
+      RECORTE_DE_PROVA + 1,
+      RECORTE_DE_PROVA,
+    );
+  });
+
+  it('retroceder volta ao recorte anterior, e o retrocesso desabilita no primeiro', async () => {
+    const usuario = userEvent.setup();
+    renderizarPagina();
+    await screen.findByText('Evento 1');
+
+    expect(botaoDeNavegacao('Anterior')).toBeDisabled();
+
+    await usuario.click(botaoDeNavegacao('Próxima'));
+    await screen.findByText('Evento 501');
+    expect(botaoDeNavegacao('Anterior')).toBeEnabled();
+
+    await usuario.click(botaoDeNavegacao('Anterior'));
+    await screen.findByText('Evento 1');
+    expect(botaoDeNavegacao('Anterior')).toBeDisabled();
+  });
+
+  it('a última página é a incompleta, e o avanço desabilita nela', async () => {
+    const usuario = userEvent.setup();
+    renderizarPagina();
+    await screen.findByText('Evento 1');
+
+    expect(botaoDeNavegacao('Próxima')).toBeEnabled();
+
+    await usuario.click(botaoDeNavegacao('Próxima'));
+    await screen.findByText('Evento 501');
+
+    // 501 registros em páginas de 500: a segunda tem 1, e é a última. O avanço desabilita porque
+    // a leitura devolveu MENOS que o recorte — é o excedente que decide, e não um total.
+    expect(linhasDeDados()).toBe(1);
+    expect(botaoDeNavegacao('Próxima')).toBeDisabled();
+  });
+
+  it('nenhum indicador afirma ser o total da trilha', async () => {
+    renderizarPagina();
+    await screen.findByText('Evento 1');
+
+    // O rótulo antigo media o conjunto carregado e se chamava "Total". Com 1200 registros na
+    // trilha e 500 na tela, chamá-lo de total era a afirmação falsa mais direta da página.
+    expect(screen.queryByText('Total de Logs')).toBeNull();
+    expect(indicador('Logs neste recorte')).toBe(String(RECORTE_DE_PROVA));
+  });
+
+  it('a tela declara que a busca alcança o recorte, e não a trilha', async () => {
+    renderizarPagina();
+    await screen.findByText('Evento 1');
+
+    expect(screen.getByText(/busca alcança/i)).toBeInTheDocument();
+  });
+
+  it('a mesma busca devolve números diferentes em páginas diferentes', async () => {
+    const usuario = userEvent.setup();
+    renderizarPagina();
+    await screen.findByText('Evento 1');
+
+    // Na primeira página, 'Ana Souza' aparece a cada cinco registros de 0 a 499 → 100.
+    await usuario.type(campoDeBusca(), 'Ana Souza');
+    const naPrimeira = linhasDeDados();
+    expect(naPrimeira).toBe(100);
+
+    await usuario.clear(campoDeBusca());
+    await usuario.click(botaoDeNavegacao('Próxima'));
+    await screen.findByText('Evento 501');
+
+    // Na segunda, só `i = 500` é múltiplo de 5 → 1. É o comportamento DECIDIDO (`Q3.a` + `Q1.a`):
+    // a busca é do cliente e alcança o recorte. O que a declaração impede é o auditor concluir
+    // que o registro não existe.
+    await usuario.type(campoDeBusca(), 'Ana Souza');
+    expect(linhasDeDados()).toBe(1);
+    expect(linhasDeDados()).not.toBe(naPrimeira);
+  });
+}, 30_000);

@@ -180,3 +180,42 @@ export const INDICADORES_ESPERADOS = {
   exclusoes: 1,
   somaDosIndicadores: 8,
 } as const;
+
+/** Tamanho do recorte por leitura, decidido em `RN-08`. */
+export const RECORTE_DE_PROVA = 500;
+
+/** Total do conjunto paginado — o mínimo que produz **duas** páginas. */
+export const TOTAL_PAGINADO = 501;
+
+/**
+ * Conjunto com mais de um recorte, para a navegação ser observável.
+ *
+ * SÃO 501 REGISTROS, e não mais: duas páginas já provam tudo o que a navegação precisa provar
+ * (avançar alcança o que não estava, retroceder volta, o fim desabilita o avanço), e a segunda
+ * página fica com **um** registro — o que mantém barato o DOM das verificações que clicam. A
+ * primeira página é que carrega o recorte cheio, porque é ele que está sendo medido.
+ *
+ * CADA REGISTRO TEM CARIMBO PRÓPRIO, um minuto mais antigo que o anterior, de modo que a ordem
+ * `-created_date` seja **determinística**: `log-pag-0001` é o mais recente e `log-pag-0501` o mais
+ * antigo. Sem isso, a paginação por deslocamento mediria a instabilidade da ordenação.
+ *
+ * O `patient_name` é `'Ana Souza'` a cada cinco registros. É o que torna o alcance da busca
+ * **contável**: na primeira página são 100 (`i` múltiplo de 5 em 0..499), e na segunda é 1
+ * (`i = 500`). Números diferentes para a mesma busca, na mesma tela — que é o que `RF-08` manda
+ * declarar.
+ */
+export const CONJUNTO_PAGINADO: readonly AccessLog[] = Array.from(
+  { length: TOTAL_PAGINADO },
+  (_, indice) =>
+    registro({
+      id: `log-pag-${String(indice + 1).padStart(4, '0')}`,
+      created_date: new Date(DIA_DE_PROVA.getTime() - indice * 60_000).toISOString(),
+      user_email: indice % 4 === 0 ? 'outro@medrecord.local' : EMAIL_DA_SESSAO,
+      action: indice % 3 === 0 ? 'view_patient' : indice % 3 === 1 ? 'edit_patient' : 'login',
+      patient_name: indice % 5 === 0 ? 'Ana Souza' : undefined,
+      details: `Evento ${indice + 1}`,
+    }),
+);
+
+/** Quantas páginas o conjunto acima produz, com o recorte decidido. */
+export const PAGINAS_ESPERADAS = 2;

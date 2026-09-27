@@ -221,6 +221,30 @@ describe('Modo offline — o adaptador', () => {
     });
   });
 
+  describe('Deslocamento — o cliente de modo offline honra `skip`', () => {
+    it('devolve a janela seguinte DEPOIS de ordenar, e não os primeiros gravados', async () => {
+      const repositorio = rascunho();
+      // Gravados FORA da ordem alfabética de propósito: se o deslocamento fosse aplicado antes
+      // da ordenação, a janela de `skip = 2` seria 'Eduardo' e 'Bruno' — e não 'Carlos' e 'Dora'.
+      for (const nome of ['Carlos', 'Ana', 'Eduardo', 'Bruno', 'Dora']) {
+        await repositorio.create({ nome });
+      }
+
+      // Ordenado: Ana, Bruno, Carlos, Dora, Eduardo.
+      expect((await repositorio.list('nome', 2, 0)).map((r) => r.nome)).toEqual(['Ana', 'Bruno']);
+      expect((await repositorio.list('nome', 2, 2)).map((r) => r.nome)).toEqual(['Carlos', 'Dora']);
+      expect((await repositorio.list('nome', 2, 4)).map((r) => r.nome)).toEqual(['Eduardo']);
+    });
+
+    it('deslocamento além do conjunto devolve vazio, e deslocamento ausente vale zero', async () => {
+      const repositorio = rascunho();
+      await repositorio.create({ nome: 'Ana' });
+
+      expect(await repositorio.list('nome', 10, 99)).toEqual([]);
+      expect((await repositorio.list('nome', 10)).map((r) => r.nome)).toEqual(['Ana']);
+    });
+  });
+
   describe('BR-OFF10 — o adaptador não aplica regra de acesso', () => {
     it('um registro com dono alheio é visível e editável', async () => {
       // A forma FORTE da cláusula: não basta o próprio registro ser visível — o de outra origem
