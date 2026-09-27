@@ -55,3 +55,6 @@ registram limitação conhecida em vez de regra.
 | Data | Alteração | Autor |
 |------|-----------|-------|
 | 2026-09-25 | Versão inicial gerada por `/reversa-coding` — 10 itens no watch principal, 6 observações | reversa |
+
+---
+*Gerado pelo Reversa-Coding em 2026-09-27.*

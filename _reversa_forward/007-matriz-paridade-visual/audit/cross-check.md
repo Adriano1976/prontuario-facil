@@ -90,3 +90,6 @@ A citação equivocada do finding **A005** também aparece no `roadmap.md` da fe
 | Data | Alteração | Autor |
 |------|-----------|-------|
 | 2026-09-22 | Auditoria cruzada inicial (rewrite completo) | `/reversa-audit` |
+
+---
+*Gerado pelo Reversa-Audit em 2026-09-22.*

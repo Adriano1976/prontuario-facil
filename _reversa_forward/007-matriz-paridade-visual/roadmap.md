@@ -97,3 +97,6 @@ Plano de execução (o que o `/reversa-to-do` vai decompor em ações):
 | Data | Alteração | Autor |
 |------|-----------|-------|
 | 2026-09-22 | Versão inicial gerada por `/reversa-plan` | reversa |
+
+---
+*Gerado pelo Reversa-Plan em 2026-09-22.*

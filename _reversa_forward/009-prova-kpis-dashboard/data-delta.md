@@ -60,3 +60,6 @@ O critério `CF-02` do `roadmap.md` cobre exatamente isto, medido por comando no
 | Data | Alteração | Autor |
 |------|-----------|-------|
 | 2026-09-22 | Versão inicial gerada por `/reversa-plan` — delta de dados vazio | reversa |
+
+---
+*Gerado pelo Reversa-Plan em 2026-09-22.*

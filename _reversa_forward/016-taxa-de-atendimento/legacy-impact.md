@@ -83,3 +83,6 @@ nenhuma migração de dados, nenhum contrato externo. Conferido por `git status 
 | Data | Alteração | Autor |
 |------|-----------|-------|
 | 2026-09-25 | Versão inicial gerada por `/reversa-coding` | reversa |
+
+---
+*Gerado pelo Reversa-Coding em 2026-09-26.*

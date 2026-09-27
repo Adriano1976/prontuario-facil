@@ -252,3 +252,6 @@ registrada como **Won't** em `## 8`.
 |------|-----------|-------|
 | 2026-09-21 | Versão inicial gerada por `/reversa-requirements` | reversa |
 | 2026-09-21 | Sessão de esclarecimentos (5 perguntas): escopo fechado na emissão; AMB-006 provado e declarado; filtro do servidor com ressalva; impressão provada por duplo; `Date` congelado. `RF-18` acrescentado e RNF de isolamento emendado | `/reversa-clarify` |
+
+---
+*Gerado pelo Reversa-Requirements em 2026-09-21.*

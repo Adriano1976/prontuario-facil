@@ -96,3 +96,6 @@ Contagens finais: **22 ações**, **12 `[//]`**, maior cadeia **9**.
 | Data | Alteração | Autor |
 |------|-----------|-------|
 | 2026-09-24 | Versão inicial gerada por `/reversa-to-do` | reversa |
+
+---
+*Gerado pelo Reversa-To-Do em 2026-09-24.*

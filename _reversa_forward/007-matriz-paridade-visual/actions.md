@@ -61,3 +61,6 @@
 | Data | Alteração | Autor |
 |------|-----------|-------|
 | 2026-09-22 | Versão inicial gerada por `/reversa-to-do` | reversa |
+
+---
+*Gerado pelo Reversa-To-Do em 2026-09-22.*

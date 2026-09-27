@@ -334,3 +334,6 @@ Ressalvas da auto-validação contra `.reversa/templates/quality-template.md`:
 - **Q-018 (SoluçãoImplícita) — reavaliar.** O nome do produto do provedor foi retirado na geração
   inicial. A referência ao "adaptador do provedor" e ao "cliente de modo offline" descreve as duas
   implementações do contrato sem nomear biblioteca ou produto comercial.
+
+---
+*Gerado pelo Reversa-Requirements em 2026-09-27.*

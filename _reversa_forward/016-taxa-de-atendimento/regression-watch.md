@@ -54,3 +54,6 @@ registram uma limitação conhecida em vez de uma regra.
 | Data | Alteração | Autor |
 |------|-----------|-------|
 | 2026-09-25 | Versão inicial gerada por `/reversa-coding` — 7 itens no watch principal, 5 observações | reversa |
+
+---
+*Gerado pelo Reversa-Coding em 2026-09-26.*

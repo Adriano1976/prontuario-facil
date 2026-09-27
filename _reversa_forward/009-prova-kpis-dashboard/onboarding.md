@@ -152,3 +152,6 @@ episódio. Sem esse passo, o verde da rodada não seria evidência de nada.
 |------|-----------|-------|
 | 2026-09-22 | Versão inicial gerada por `/reversa-plan` | reversa |
 | 2026-09-22 | Tabela requisito × cenário preenchida com o instrumento de cada um; registro de execução com as medições; §7.1 com a falsificação que antecedeu o verde | reversa |
+
+---
+*Gerado pelo Reversa-Plan em 2026-09-22.*

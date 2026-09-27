@@ -108,3 +108,6 @@ o que `CF-02` mede.
 | Data | Alteração | Autor |
 |------|-----------|-------|
 | 2026-09-22 | Versão inicial gerada por `/reversa-coding` — nenhum arquivo de aplicação afetado | reversa |
+
+---
+*Gerado pelo Reversa-Coding em 2026-09-22.*

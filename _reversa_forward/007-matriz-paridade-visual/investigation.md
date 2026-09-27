@@ -60,3 +60,6 @@ Varredura por `V01|V16|16 cenários|cenários de tela|paridade visual` em toda a
 ## 7. Lacunas desta investigação
 
 Nenhuma. Não há fonte externa a consultar: o artefato é interno e o histórico está integralmente no repositório e nos adendos.
+
+---
+*Gerado pelo Reversa-Plan em 2026-09-22.*

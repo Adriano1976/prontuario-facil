@@ -166,3 +166,6 @@ ausência de chamada por acidente de arranjo.
 |------|-----------|-------|
 | 2026-09-22 | Versão inicial gerada por `/reversa-plan` | reversa |
 | 2026-09-22 | Tabela requisito × cenário com a distribuição por arquivo; registro de execução com as duas medições; §7.1 com as três falsificações que antecederam o verde | reversa |
+
+---
+*Gerado pelo Reversa-Plan em 2026-09-22.*

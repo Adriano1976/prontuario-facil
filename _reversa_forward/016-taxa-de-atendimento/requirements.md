@@ -287,3 +287,6 @@ previstas pelo `/reversa-requirements`:
 - **Reprovações corrigidas na geração inicial** (registradas para não se perderem): `Q-010` — `RF-05` e
   `RF-06` não tinham cenário Gherkin; `Q-016` — `LGPD` aparecia sem expansão na primeira ocorrência;
   `Q-017` — o critério de `RF-04` prescrevia o mecanismo em vez do observável.
+
+---
+*Gerado pelo Reversa-Requirements em 2026-09-26.*

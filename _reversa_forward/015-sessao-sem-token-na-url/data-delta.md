@@ -96,3 +96,6 @@ Sem o segundo item, a prova mediria o sintoma de hoje e ficaria cega para a rein
 | Data | Alteração | Autor |
 |------|-----------|-------|
 | 2026-09-24 | Versão inicial gerada por `/reversa-plan`; achado acoplado de `base44_from_url` registrado na §4 | reversa |
+
+---
+*Gerado pelo Reversa-Plan em 2026-09-24.*

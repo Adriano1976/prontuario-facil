@@ -280,3 +280,6 @@ n/a — **nenhuma lacuna em aberto.** As três dúvidas declaradas foram resolvi
 |------|-----------|-------|
 | 2026-09-22 | Versão inicial gerada por `/reversa-requirements` | reversa |
 | 2026-09-22 | Sessão de esclarecimentos (4 perguntas): achados laterais entram com o trio órfão declarado; tela provada como alcançável por não-admin; falha aberta provada e declarada; duplicação entra como Should. `RF-19` e `RF-20` acrescentados, gate renumerado para `RF-21`, `RN-10` criado | `/reversa-clarify` |
+
+---
+*Gerado pelo Reversa-Requirements em 2026-09-22.*

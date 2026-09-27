@@ -72,3 +72,6 @@ pelo passo de convergência do `roadmap.md#8`.
 | Data | Alteração | Autor |
 |------|-----------|-------|
 | 2026-09-25 | Versão inicial gerada por `/reversa-plan` — veredito de delta zero | reversa |
+
+---
+*Gerado pelo Reversa-Plan em 2026-09-26.*

@@ -282,3 +282,6 @@ Nenhuma delas é corrigida por esta feature, e todas devem ser resolvidas em `/r
 |------|-----------|-------|
 | 2026-09-22 | Versão inicial gerada por `/reversa-requirements` | reversa |
 | 2026-09-22 | Sessão de esclarecimentos: 4 dúvidas resolvidas; `RF-06` a `RF-09` promovidos a `Must`; `RF-11` e `RF-12` rebaixados a critérios de fechamento `CF-01` a `CF-03`; `PT-008.3` passa a ser provado pela ausência | reversa |
+
+---
+*Gerado pelo Reversa-Requirements em 2026-09-22.*

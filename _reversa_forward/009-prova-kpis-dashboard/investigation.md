@@ -166,3 +166,6 @@ teste que passa por acidente, e é o risco `R-04`.
 | Data | Alteração | Autor |
 |------|-----------|-------|
 | 2026-09-22 | Versão inicial gerada por `/reversa-plan` | reversa |
+
+---
+*Gerado pelo Reversa-Plan em 2026-09-22.*

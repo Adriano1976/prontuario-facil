@@ -96,3 +96,6 @@ O que **não** muda é a primeira seta: a credencial ainda passa pela URL vinda 
 - Auditoria: `docs/security-audit/001-record/achados.json`, `docs/security-audit/002-record/achados.json` (achado F-02)
 - Extração reversa: `_reversa_sdd/inventory.md#Configuração / ambiente`, `_reversa_sdd/code-analysis.md#10.2`, `_reversa_sdd/code-analysis.md#10.4 Persistência`, `_reversa_sdd/c4-context.md#Integrações Externas Detectadas`, `_reversa_sdd/dependencies.md`
 - Decisões do responsável: `_reversa_forward/015-sessao-sem-token-na-url/requirements.md#9. Esclarecimentos`
+
+---
+*Gerado pelo Reversa-Plan em 2026-09-24.*

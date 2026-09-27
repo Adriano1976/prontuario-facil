@@ -127,3 +127,6 @@ declarada como risco aceito, não como descoberta nova.
 - **Se o SDK honra `skip` no modo `asServiceRole` e sob RLS.** A assinatura é a mesma, mas só o
   adaptador de usuário é exercitado por este projeto. A prova cobre o mock e o repasse; o comportamento
   do servidor é o que a dependência documenta.
+
+---
+*Gerado pelo Reversa-Plan em 2026-09-27.*

@@ -67,3 +67,6 @@ resolve "há mais?" pelo excedente em vez de por um total.
 | Data | Alteração | Autor |
 |------|-----------|-------|
 | 2026-09-25 | Versão inicial gerada por `/reversa-plan` — veredito de delta zero no modelo, com delta de contrato de leitura | reversa |
+
+---
+*Gerado pelo Reversa-Plan em 2026-09-27.*

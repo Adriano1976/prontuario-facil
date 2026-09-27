@@ -336,3 +336,6 @@ quatro achados da coleta de contexto, **sem correção**.
 |------|-----------|-------|
 | 2026-09-22 | Versão inicial gerada por `/reversa-requirements` | reversa |
 | 2026-09-22 | Sessão de esclarecimentos: 3 dúvidas resolvidas; `RF-14` a `RF-18` promovidos a `Must` e quatro requisitos acrescentados (`RF-17` a `RF-20`); `L2` e `L7` ficam declaradas; o instrumento da metade negativa da ativação é a substituição da fábrica do provedor | reversa |
+
+---
+*Gerado pelo Reversa-Requirements em 2026-09-22.*

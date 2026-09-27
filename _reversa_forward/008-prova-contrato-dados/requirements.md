@@ -239,3 +239,6 @@ n/a — **nenhuma lacuna em aberto.** As três dúvidas declaradas foram resolvi
 |------|-----------|-------|
 | 2026-09-22 | Versão inicial gerada por `/reversa-requirements` | reversa |
 | 2026-09-22 | Sessão de esclarecimentos (5 perguntas): instrumento é o gate com citação do `typecheck`; casos existentes são citados; a guarda de encoding é adotada e ganha dono; enums do cenário apenas; o buraco do `F-03` passa a ser medido com caso positivo. `RN-09` e `RF-15` criados, `RF-12` promovido a Must | `/reversa-clarify` |
+
+---
+*Gerado pelo Reversa-Requirements em 2026-09-22.*

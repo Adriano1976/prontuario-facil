@@ -64,3 +64,6 @@ regressão. Ficam registradas para que a próxima re-extração saiba onde olhar
 | Data | Alteração | Autor |
 |------|-----------|-------|
 | 2026-09-22 | Versão inicial — 11 itens no watch principal e 10 observações | reversa |
+
+---
+*Gerado pelo Reversa-Coding em 2026-09-22.*

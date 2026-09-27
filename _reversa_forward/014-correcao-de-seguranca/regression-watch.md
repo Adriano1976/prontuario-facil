@@ -63,3 +63,6 @@ Registradas **sem peso de regressão**: são os limites declarados da correção
 - **Os três watches originais permanecem em disco** — `011-rbac-frontend`, `012-escopo-em-mutacoes` e
   `013-leitura-da-trilha`. Eles registram a entrega de cada correção isoladamente; este arquivo é a
   leitura consolidada, e é o que deve ser confrontado numa re-extração.
+
+---
+*Gerado pelo Reversa-Coding em 2026-09-24.*

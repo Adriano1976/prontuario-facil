@@ -43,3 +43,6 @@
 - **Fora do ciclo:** as features `001` a `010` têm `requirements.md`, `roadmap.md` e `actions.md`.
   Esta não tem, porque a correção nasceu de revisão de segurança — o registro dela é a seção
   `#Correção do F-04 — leitura da trilha` de `_reversa_sdd/code-spec-matrix.md`.
+
+---
+*Gerado pelo Reversa-Coding em 2026-09-24.*

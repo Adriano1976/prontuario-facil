@@ -139,3 +139,6 @@ Nenhuma lacuna aberta. As duas dúvidas da versão inicial foram resolvidas na s
 |------|-----------|-------|
 | 2026-09-22 | Versão inicial gerada por `/reversa-requirements` | reversa |
 | 2026-09-22 | Sessão de esclarecimentos: classificação dos 16 como trabalho transferido (19 concluídos / 31 transferidos), reconciliação por adendo novo sem tocar o adendo 002, e registro do golden na seção "Como a prova é executada". RF-04 e RF-05 especificados; as 2 dúvidas da versão inicial foram zeradas | `/reversa-clarify` |
+
+---
+*Gerado pelo Reversa-Requirements em 2026-09-22.*

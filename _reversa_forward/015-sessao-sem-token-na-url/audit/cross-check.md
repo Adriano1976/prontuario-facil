@@ -95,3 +95,6 @@ Resolvidos, o caminho é `/reversa-coding`.
 |------|-----------|-------|
 | 2026-09-24 | Primeira rodada: 1 HIGH, 3 MEDIUM, 3 LOW (`A001`–`A007`), todos resolvidos por revisão manual | reversa |
 | 2026-09-24 | Segunda rodada, após o reescopo do `RF-13` e a entrada de `T021`: 1 HIGH, 1 MEDIUM. Eixo novo aplicado — "o alvo da ação sustenta o observável do requisito" | reversa |
+
+---
+*Gerado pelo Reversa-Audit em 2026-09-24.*

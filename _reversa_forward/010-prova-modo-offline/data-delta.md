@@ -56,3 +56,6 @@ Medido por comando no fechamento, como nas features anteriores:
 | Data | Alteração | Autor |
 |------|-----------|-------|
 | 2026-09-22 | Versão inicial gerada por `/reversa-plan` — delta de dados vazio | reversa |
+
+---
+*Gerado pelo Reversa-Plan em 2026-09-22.*

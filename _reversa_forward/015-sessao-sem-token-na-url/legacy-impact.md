@@ -66,3 +66,6 @@ Regras 🟢 alteradas ou removidas, que geram item de watch na `regression-watch
 | Data | Alteração | Autor |
 |------|-----------|-------|
 | 2026-09-24 | Versão inicial gerada por `/reversa-coding` | reversa |
+
+---
+*Gerado pelo Reversa-Coding em 2026-09-24.*

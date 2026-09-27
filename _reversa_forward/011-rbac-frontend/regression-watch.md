@@ -48,3 +48,6 @@ regra seria dizer que o projeto promete mais do que ele entrega.
 - **Fora do ciclo:** as features `001` a `010` têm `requirements.md`, `roadmap.md` e `actions.md`.
   Esta não tem, porque a correção nasceu de revisão de segurança e foi conduzida por revisão de
   código — o registro dela é o adendo `_reversa_sdd/addenda/011-rbac-frontend.md`.
+
+---
+*Gerado pelo Reversa-Coding em 2026-09-24.*

@@ -124,3 +124,6 @@ prática, e não um capricho.
 - **Se um admin deveria ver a taxa da clínica inteira ou só a própria.** `D-04` alinha o cartão aos
   vizinhos (`resolveScope`), mas o `ReportsView`, na outra aba da mesma página, usa `asUserScope` —
   divergência **pré-existente**, não criada aqui. Se for indesejada, é assunto de outra feature.
+
+---
+*Gerado pelo Reversa-Plan em 2026-09-26.*

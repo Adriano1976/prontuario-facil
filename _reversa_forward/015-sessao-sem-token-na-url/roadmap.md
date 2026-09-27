@@ -112,3 +112,6 @@ Não há migração de dados. Há **limpeza de resíduo no cliente**, e ela é a
 | 2026-09-24 | Revisão manual pós-auditoria: cobertura por critério de pronto declarada (A005), desvio de citação do `architecture.md` justificado (A007) e o item dos quatro portões acrescentado ao critério de pronto (A003) | reversa |
 | 2026-09-24 | `D-08` reescopado na reconhecimento da codificação: o redirecionamento ao login permanece para a ausência de sessão e sai apenas da falha de verificação. `src/App.tsx` entra como alvo (`T021`), porque os observáveis de RF-12 e RF-13 vivem lá e nenhuma ação o alcançava | reversa |
 | 2026-09-24 | Segunda auditoria (achado **A002**): `App` acrescentado ao delta arquitetural — ele mudava em `T021` e não constava da tabela, o que faria o `legacy-impact.md` nascer incompleto | reversa |
+
+---
+*Gerado pelo Reversa-Plan em 2026-09-24.*

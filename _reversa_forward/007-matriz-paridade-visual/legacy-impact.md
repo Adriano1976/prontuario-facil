@@ -57,3 +57,6 @@ Também intactos: `_reversa_sdd/architecture.md` (nenhum componente muda), os sc
 **Nenhuma regra de negócio foi alterada, removida ou rebaixada de confidência.** A única regra com confidência diferente de 🟢 no domínio é `BR-A02` (🟡, inferida), e ela também não foi tocada.
 
 A alteração desta feature é de **rastreabilidade documental**: o que mudou foi o que a matriz *afirma sobre a cobertura de provas*, não o comportamento do sistema.
+
+---
+*Gerado pelo Reversa-Coding em 2026-09-22.*

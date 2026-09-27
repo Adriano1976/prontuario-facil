@@ -241,3 +241,6 @@ O que permanece em aberto **não é dúvida, é limite declarado com dono**: o t
 
 - **Q-018 — nome de produto no documento.** O checklist pede que não haja nome de biblioteca, framework ou produto comercial. Este documento nomeia a plataforma e o SDK, e o faz **de propósito**: o achado não é corrigível sem se saber que existe um **segundo colhedor da credencial**, fora do código do projeto, e a citação do caminho instalado é a única forma de tornar essa afirmação verificável. O nome aparece sempre como **evidência citada**, nunca como escolha de solução.
 - **Q-011 — regra original em `domain.md`.** As nove regras não citam `_reversa_sdd/domain.md` porque ele **não trata do assunto**: a busca por sessão, token, autenticação e armazenamento local nesse arquivo não devolve nenhuma ocorrência. A origem de cada regra é citada no artefato que de fato a sustenta — `permissions.md`, o registro de auditoria, o brief de migração e o próprio código.
+
+---
+*Gerado pelo Reversa-Requirements em 2026-09-24.*

@@ -113,3 +113,6 @@
 | Data | Alteração | Autor |
 |------|-----------|-------|
 | 2026-09-24 | Versão inicial, escrita **retroactivamente** sobre a entrega já feita (28 ações, todas concluídas) | reversa |
+
+---
+*Gerado pelo Reversa-To-Do em 2026-09-24.*

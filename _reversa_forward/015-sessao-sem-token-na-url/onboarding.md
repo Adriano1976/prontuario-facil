@@ -138,3 +138,6 @@ Repita para o **segundo** item do watch, que é o mais fácil de não perceber:
 | Data | Alteração | Autor |
 |------|-----------|-------|
 | 2026-09-24 | Versão inicial gerada por `/reversa-plan` | reversa |
+
+---
+*Gerado pelo Reversa-Plan em 2026-09-24.*

@@ -90,3 +90,6 @@ Não use isso para corrigir ações, edits manuais ficam fora desse arquivo, vã
 |------|-----------|-------|
 | 2026-09-25 | Versão inicial gerada por `/reversa-to-do` | reversa |
 | 2026-09-25 | Revisão pós-auditoria (`audit/cross-check.md`): `T025`–`T027` acrescentadas à Fase 4 como as falsificações que faltavam (subtítulo, `null` × `0`, texto do estado sem base); `T001`, `T005`, `T006`, `T009` e `T023` ajustadas. IDs novos foram **anexados**, nunca reciclados nem renumerados — por isso a Fase 4 vai até `T027` enquanto a Fase 5 começa em `T015` | reversa |
+
+---
+*Gerado pelo Reversa-To-Do em 2026-09-26.*

@@ -163,3 +163,6 @@ Cenário: CSS de gráfico não vira marcação
 | Data | Alteração | Autor |
 |------|-----------|-------|
 | 2026-09-24 | Versão inicial, escrita **retroactivamente** sobre a entrega já feita na branch `fix/seguranca-frontend` | reversa |
+
+---
+*Gerado pelo Reversa-Requirements em 2026-09-24.*

@@ -44,3 +44,6 @@ Estes itens **não** entram no watch principal: nenhum deles é regra extraída 
 3. **A citação equivocada herdada da feature 006** (finding `A005`): `roadmap.md` da `006` atribui a `_reversa_sdd/architecture.md#1. Visão Resumida` a regra "schemas de entidade intocados", que não está nessa seção. O `data-delta.md` desta feature herdou o mesmo ponteiro. Defeito pré-existente, fora do escopo desta entrega.
 4. **Números datados envelhecem** (finding `A006`): a guarda de encoding verificou **428** arquivos nesta execução (era 412 quando o `requirements.md` foi escrito, porque esta feature acrescentou 16 arquivos de texto). O `requirements.md` cita 412 **com data** — está correto como medição de 2026-09-22 no momento em que foi escrita; a contagem viva é a do `onboarding.md`.
 5. **A paridade visual continua sendo conferência humana.** O golden existe, mas **executá-lo** exige o harness de paridade visual, que não existe no projeto (`parity_specs.md#Lacunas declaradas`). Até lá, o que existe é referência capturada — não prova executada.
+
+---
+*Gerado pelo Reversa-Coding em 2026-09-22.*

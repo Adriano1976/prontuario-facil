@@ -151,3 +151,6 @@ está **na afirmação que fecha o `A001`**, e um leitor que a interprete mal po
 |------|-----------|-------|
 | 2026-09-25 | Primeira rodada — 0 CRITICAL, 3 HIGH, 6 MEDIUM, 1 LOW. Reescrita pela rodada seguinte | reversa |
 | 2026-09-25 | Segunda rodada, após a revisão manual do plano — 0 CRITICAL, 0 HIGH, 1 MEDIUM (carregado por decisão), 1 LOW (introduzido pela revisão). 8 dos 10 findings anteriores fechados por edição | reversa |
+
+---
+*Gerado pelo Reversa-Audit em 2026-09-26.*

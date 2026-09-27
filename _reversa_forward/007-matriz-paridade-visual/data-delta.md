@@ -45,3 +45,6 @@ Nenhum. A feature não toca BaaS, não faz requisição, não altera payload e n
 - `_reversa_sdd/code-spec-matrix.md` (§ Destino dos cenários de paridade não cobertos nesta feature; § Lacunas de prova; § Como a prova é executada)
 - `_reversa_sdd/architecture.md#1. Visão Resumida` (compromisso de schemas intocados)
 - `_reversa_sdd/screens/golden/manifest.yaml`
+
+---
+*Gerado pelo Reversa-Plan em 2026-09-22.*

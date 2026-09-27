@@ -76,3 +76,6 @@
 
 *Auditoria leitora gerada por `/reversa-audit` em 2026-09-24, terceira execução. Este relatório não
 corrige nada: o achado `A001` depende de decisão humana.*
+
+---
+*Gerado pelo Reversa-Audit em 2026-09-24.*

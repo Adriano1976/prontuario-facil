@@ -134,3 +134,6 @@ verificações novas. O que não pode acontecer é a suíte ficar vermelha, nem 
 | Data | Alteração | Autor |
 |------|-----------|-------|
 | 2026-09-25 | Versão inicial gerada por `/reversa-plan` | reversa |
+
+---
+*Gerado pelo Reversa-Plan em 2026-09-26.*

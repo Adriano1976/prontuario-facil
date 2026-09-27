@@ -112,3 +112,6 @@ implantação. O que existe é **merge pendente**: as 15 alterações vivem na b
 |------|-----------|-------|
 | 2026-09-24 | Versão inicial, escrita **retroactivamente** sobre a entrega já feita | reversa |
 | 2026-09-24 | Correção de `A001` e `A007` — as citações a `code-analysis.md#3.1` e a `code-spec-matrix.md` passam a **resolver a alvo único** — e acréscimo da decisão **`D-09`**, que dá decisão ao `RF-13` e registra a alternativa recusada do remendo no `app-params.ts`. Feito por **revisão humana** após o primeiro `cross-check.md` | revisão |
+
+---
+*Gerado pelo Reversa-Plan em 2026-09-24.*

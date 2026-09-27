@@ -108,3 +108,6 @@ Não use isso para corrigir ações, edits manuais ficam fora desse arquivo, vã
 | Data | Alteração | Autor |
 |------|-----------|-------|
 | 2026-09-25 | Versão inicial gerada por `/reversa-to-do` | reversa |
+
+---
+*Gerado pelo Reversa-To-Do em 2026-09-27.*

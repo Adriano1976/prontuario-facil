@@ -43,3 +43,6 @@ Registradas **sem peso de regressão**: são os limites declarados da correção
 | Data | Alteração | Autor |
 |------|-----------|-------|
 | 2026-09-24 | Versão inicial gerada por `/reversa-coding` — 8 itens no watch principal e 5 observações | reversa |
+
+---
+*Gerado pelo Reversa-Coding em 2026-09-24.*

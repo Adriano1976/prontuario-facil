@@ -126,3 +126,6 @@ Registro medido no fechamento da feature. Os passos acima descrevem o que confer
 - Nenhuma mudança em `src/`, `package.json`, `tsconfig.json` ou configurações.
 - Nenhum golden novo, nenhuma captura nova, nenhuma recaptura.
 - Nenhum teste automatizado novo: a verificação desta feature é o diff conferido, a guarda de encoding e a suíte inalterada.
+
+---
+*Gerado pelo Reversa-Plan em 2026-09-22.*

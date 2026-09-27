@@ -118,3 +118,6 @@ Registradas pelo `/reversa-plan` para orientar o `/reversa-coding`:
 | 2026-09-22 | Versão inicial gerada por `/reversa-to-do` | reversa |
 | 2026-09-22 | `T010` a `T014` reapontadas do arquivo de ativação para o do adaptador, por distribuí-las por fase em vez de por arquivo | reversa |
 | 2026-09-22 | Execução completa pelo `/reversa-coding`: 20 de 20 ações concluídas, com 6 notas novas de execução | reversa |
+
+---
+*Gerado pelo Reversa-To-Do em 2026-09-22.*

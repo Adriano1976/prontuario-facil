@@ -125,3 +125,6 @@ foi a **aplicação** delas no frontend, e é isso que a extração precisa abso
 3. `code-analysis.md` (contrato e componentes de UI) — `OwnedEntity` exige escopo na escrita, e o
    componente de gráficos não usa o sink.
 4. `permissions.md` — a matriz RBAC passa a ter contraparte explícita no cliente.
+
+---
+*Gerado pelo Reversa-Coding em 2026-09-24.*
