@@ -427,7 +427,21 @@ VITE_BASE44_APP_BASE_URL=https://seu-app.base44.app
 
 # Modo Offline (opcional — usa mock local em vez do backend)
 VITE_OFFLINE=true
+
+# Papel do usuário de demonstração no modo offline (opcional).
+# Apenas `admin` tem efeito: libera "Logs de Acesso" e as ações de
+# escrita de Médicos e Templates. Ausente, o usuário demo não tem papel.
+VITE_OFFLINE_ROLE=admin
 ```
+
+> **Acesso administrativo em modo offline:** o modo offline autentica direto como o
+> usuário de demonstração (`Dra. Demo`), que **não tem papel** (BR-MIGRAR-039) — é por
+> isso que as telas administrativas ficam fora de alcance. Declarar
+> `VITE_OFFLINE_ROLE=admin` no `.env.local` (e reiniciar o `npm run dev`, porque o valor
+> é lido na subida do servidor) libera a trilha de auditoria e as ações de escrita de
+> Médicos e Templates. É uma chave de demonstração **local**: o mock não aplica regra de
+> acesso, então o papel declarado aqui não substitui a RLS do servidor — quem manda em
+> produção continua sendo o papel da conta no backend.
 
 **Parâmetros via query string** (alternativa ao `.env.local`):
 - `app_id` — ID do aplicativo
