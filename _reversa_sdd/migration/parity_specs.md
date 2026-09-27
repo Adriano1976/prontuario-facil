@@ -6,7 +6,7 @@ reversa:
 kind: parity_specs
 producedBy: inspector
 mode: literal
-hash: "sha256:0dab46897e82d82b78ecaf13883b6a8b61d36ba6f7414765e11a74a22171fb67"
+hash: "sha256:2acdec9a31880703a9de345e0643f4c596726aa652ed143cf5eba36bca348a6d"
 ---
 
 # Parity Specs

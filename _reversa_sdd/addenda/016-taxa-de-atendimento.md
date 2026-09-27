@@ -87,3 +87,6 @@ mede desfecho **registrado** e não comparecimento real, que a chave de cache é
 - `_reversa_forward/016-taxa-de-atendimento/audit/cross-check.md`
 - `_reversa_forward/016-taxa-de-atendimento/actions.md`
 - `_reversa_forward/016-taxa-de-atendimento/progress.jsonl`
+
+---
+*Gerado pelo Reversa-Sync em 2026-09-25.*

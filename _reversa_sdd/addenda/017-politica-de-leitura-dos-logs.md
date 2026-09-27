@@ -101,3 +101,6 @@ aceitos e declarados.
 - `_reversa_forward/017-politica-de-leitura-dos-logs/onboarding.md`
 - `_reversa_forward/017-politica-de-leitura-dos-logs/actions.md`
 - `_reversa_forward/017-politica-de-leitura-dos-logs/progress.jsonl`
+
+---
+*Gerado pelo Reversa-Sync em 2026-09-25.*

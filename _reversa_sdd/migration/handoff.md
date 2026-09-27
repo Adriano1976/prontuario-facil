@@ -5,7 +5,7 @@ reversa:
   version: "1.3.2"
 kind: handoff
 producedBy: orchestrator
-hash: "sha256:3f77bd58d493ef4bfebb5c343af278c309c20a09cb6828e02b555a16c19d5f38"
+hash: "sha256:e62ba04f61cd51e7b282bfeee473bb73f93b603a9baea381cd4c9fab3779aaeb"
 ---
 
 # Handoff para o Agente de Codificação

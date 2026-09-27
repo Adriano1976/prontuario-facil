@@ -75,3 +75,6 @@ registradas no mesmo arquivo, **sem peso de regressão**: são os limites declar
   `src/__tests__/GuardasDeAcao.test.tsx`
 - `docs/security-audit/001-record/` e `docs/security-audit/002-record/` (achado F-01)
 - `_reversa_sdd/migration/target_business_rules.md` — BR-MIGRAR-015/017/020/024
+
+---
+*Gerado pelo Reversa-Sync em 2026-09-24.*

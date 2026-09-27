@@ -74,3 +74,6 @@ origem, e entre elas estão as limitações declaradas.
 - `_reversa_forward/010-prova-modo-offline/onboarding.md`
 - `_reversa_forward/010-prova-modo-offline/progress.jsonl`
 - `_reversa_forward/010-prova-modo-offline/actions.md`
+
+---
+*Gerado pelo Reversa-Sync em 2026-09-22.*

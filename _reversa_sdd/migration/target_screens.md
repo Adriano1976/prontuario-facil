@@ -11,7 +11,7 @@ targetPlatform: web-spa
 adapter: same-platform-literal (react-hooks → web-spa React+TS; sem re-expressão visual)
 screenCount: 21
 goldenCount: 23
-hash: "sha256:9885b52c2c4586cc97b9cc94bfa900eb3a86104df07da8b394fce831128312fc"
+hash: "sha256:06faf921cff3a612b0e43022b28e169cc16b1302010c7a7b161a6b98856e9aa5"
 ---
 
 # Target Screens

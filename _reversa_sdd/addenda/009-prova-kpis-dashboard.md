@@ -79,3 +79,6 @@ reescrito — adendo é registro histórico —, e esta nota é a correção de 
 
 O levantamento completo do que este adendo declarou e não foi aplicado está em
 `_reversa_sdd/pendencias-de-convergencia.md`.
+
+---
+*Gerado pelo Reversa-Sync em 2026-09-22.*

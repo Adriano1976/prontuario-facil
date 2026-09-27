@@ -110,3 +110,6 @@ contagem anterior **está preservada** no texto acima, e a correção fica aqui 
 reescrito, conforme a política de escrita do `/reversa-sync`.
 
 Nenhum outro ponto deste adendo muda: os impactos por artefato, o cenário e a vigência permanecem.
+
+---
+*Gerado pelo Reversa-Sync em 2026-09-24.*

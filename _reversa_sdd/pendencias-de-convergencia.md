@@ -107,3 +107,6 @@ para que ninguém os confunda com convergência feita pelo framework.
 > **Regra de leitura enquanto este arquivo existir:** ao consultar um adendo, confira o artefato
 > citado. A tabela "Impacto por artefato da extração" descreve a **intenção** do sync; o que está no
 > arquivo é o que vale.
+
+---
+*Gerado pelo Reversa-Sync em 2026-09-24.*

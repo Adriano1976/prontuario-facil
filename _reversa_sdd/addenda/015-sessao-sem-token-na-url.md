@@ -55,3 +55,6 @@ Cinco observações, sem peso de regressão (`O001` a `O005`), entre elas o limi
 - `docs/security-audit/001-record/achados.json` e `002-record/achados.json` — achado F-02
 - `src/lib/app-params.ts`, `src/api/base44Client.ts`, `src/lib/AuthContext.tsx`, `src/App.tsx`
 - `src/lib/__tests__/appParams.test.ts`, `src/lib/__tests__/AuthContext.test.tsx`, `src/__tests__/SessaoIndisponivel.test.tsx`
+
+---
+*Gerado pelo Reversa-Sync em 2026-09-24.*

@@ -5,7 +5,7 @@ reversa:
   version: "1.3.2"
 kind: target_business_rules
 producedBy: curator
-hash: "sha256:369762a52e35491850743fcdc8b5d6014a52a10774c6a6b2c1537b870cd97073"
+hash: "sha256:bbe9502752caa35978eaab4edf28660f2dfb8363c38915cc032d5a287586efb3"
 ---
 
 # Target Business Rules
