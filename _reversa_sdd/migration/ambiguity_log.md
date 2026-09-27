@@ -67,12 +67,18 @@ hash: "sha256:b183179f8e568d370a99609689520f8b72082d65fc2eeb0bffbbbd1f78804b95"
 - **Descrição**: Legado carrega 500 registros e renderiza todos os filtrados, sem paginação; política acima de 500 indefinida.
 - **Detectado por**: curator
 - **Origem**: `target_business_rules.md` → BR-HUMANA-004; `logs-acesso/screens.md`; `gaps.md` G-02
-- **Status**: RESOLVIDO COM DECISÃO HUMANA
+- **Status**: ⛔ **SUPERADO em 2026-09-25** pela feature `017-politica-de-leitura-dos-logs` — a "política real em fase futura" que a decisão adiava é esta feature
+- **Status original**: RESOLVIDO COM DECISÃO HUMANA
 - **Decisão tomada**:
   - **Escolha**: paridade exata — manter carregamento de até 500 registros sem paginação (constante de limite tipada); política real em fase futura.
   - **Decisor**: Product Owner/Developer
   - **Quando**: 2026-09-09T15:24:37-03:00
   - **Justificativa**: implementar paginação seria mudança de comportamento/feature fora do escopo.
+  - **Revisão 2026-09-25 (`017-politica-de-leitura-dos-logs`)**: a decisão foi **cumprida e superada**.
+    Cumprida porque a paridade valeu até aqui; superada porque a política real foi decidida pelo dono
+    do produto em `_reversa_forward/017-politica-de-leitura-dos-logs/requirements.md#9`. A leitura
+    passou a aceitar **deslocamento** — o contrato descartava o `skip` que o SDK já oferece —, o
+    recorte continua de 500, e a tela navega entre recortes. `G-02` está fechada.
 
 ### AMB-005 — Aviso visual de "dados de teste" no Modo Offline
 - **Descrição**: Badge/aviso "Modo Offline — dados fictícios" recomendado (Q-14/G-04) mas não implementado no legado.

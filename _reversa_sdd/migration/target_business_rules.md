@@ -406,7 +406,8 @@ hash: "sha256:369762a52e35491850743fcdc8b5d6014a52a10774c6a6b2c1537b870cd97073"
   1. Paridade: manter carregamento de até 500 + renderização dos filtrados sem paginação (comportamento atual), tipando a constante de limite. (Recomendado.)
   2. Definir/implementar paginação na migração — mudança de comportamento/feature, fora do escopo.
 - **Recomendação do Curator**: opção 1 — paridade exata; política de paginação real fica para fase futura de produto.
-- **Status**: RESOLVIDA (opção 1 — paridade, manter carregamento de até 500 sem paginação; decisor: Product Owner/Developer; 2026-09-09T15:24:37-03:00)
+- **Status**: ⛔ **SUPERADA em 2026-09-25** pela feature `017-politica-de-leitura-dos-logs`: a leitura passou a ser paginada por deslocamento, e `BR-L04` deixou de ser teto absoluto para ser o tamanho do recorte. A regra vigente vive em `_reversa_forward/017-politica-de-leitura-dos-logs/requirements.md` (`RN-01` a `RN-09`) e em `logs-acesso/screens.md`
+- **Status original**: RESOLVIDA (opção 1 — paridade, manter carregamento de até 500 sem paginação; decisor: Product Owner/Developer; 2026-09-09T15:24:37-03:00)
 
 ### BR-HUMANA-005 — Aviso visual de "dados de teste" no Modo Offline
 - **Origem**: `_reversa_sdd/modo-offline/requirements.md` §7 (P1); `_reversa_sdd/gaps.md` (G-04); `_reversa_sdd/questions.md` Q-14 (✅ — recomendação registrada)

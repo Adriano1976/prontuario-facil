@@ -13,7 +13,9 @@ Tabela de auditoria e conformidade LGPD para rastreamento de acessos aos dados s
     - `Visualizar Paciente` (Badge verde claro com ícone de olho)
   - **Paciente:** Nome do paciente associado ao registro de visualização (ex: `Adriano Santos`, `Neide Ferreira`), ou `-` quando não aplicável (ex: no Login).
   - **Detalhes:** Descrição complementar do evento (ex: "Acesso ao dashboard" ou `-`).
-- **Paginação:** A implementação atual carrega até 500 registros e renderiza todos os filtrados no cliente; não há controles de paginação. A política desejada para volumes acima desse limite permanece pendente. 🔴
+- **Paginação:** **deixou de ser pendência em 2026-09-25** (feature `017-politica-de-leitura-dos-logs`). A tela lê **um recorte de 500 registros por vez**, com deslocamento, e oferece navegação entre recortes — avançar e retroceder, com a posição exibida como número do recorte e nunca como "de N", porque o contrato não tem operação de contagem. O indicador que se chamava "Total de Logs" passou a **"Logs neste recorte"**, porque sempre mediu o conjunto carregado. 🟢
+  - A **busca continua sendo do cliente** e alcança apenas o recorte exibido; a tela **declara** isso, em vez de deixar o usuário concluir que o registro não existe.
+  - O recorte cheio é distinguido do último por **um registro a mais** pedido na leitura: o excedente é o que habilita o avanço.
 
 ---
 *Gerado pelo Reversa-Visor em 2026-08-27.*

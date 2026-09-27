@@ -31,6 +31,7 @@ Funcionalidade: Contrato Base44Client e isolamento por created_by_id/RBAC
     Quando sdkClient.ts (SDK real) e mockClient.ts (offline) são compilados
     Então ambos implementam integralmente a interface (tsc sem erro)
     E operações do mock têm os mesmos tipos de retorno que o SDK
+    E as duas implementações aceitam o deslocamento da leitura — o terceiro parâmetro de list e de filter — devolvendo a mesma janela para o mesmo par de limite e deslocamento
 
   @paridade
   Cenário: Enums de status/tipo não aceitam valores fora do conjunto
@@ -39,4 +40,7 @@ Funcionalidade: Contrato Base44Client e isolamento por created_by_id/RBAC
     Então a compilação falha (paridade de contrato de domínio)
 
 # ---
+# Acrescentado em 2026-09-25 pela feature 017-politica-de-leitura-dos-logs: o deslocamento passou a
+# fazer parte do contrato de leitura, e a cláusula de paridade entre as duas implementações passa a
+# cobri-lo. A assinatura do SDK já o oferecia — o adaptador é que o descartava.
 # Gerado pelo Reversa-Inspector em 2026-09-10.

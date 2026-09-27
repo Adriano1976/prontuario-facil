@@ -1094,7 +1094,7 @@ templates
 
 ## 1. Visão Geral
 
-O módulo **logs-acesso** implementa a tela de auditoria LGPD: visualização read-only dos registros `AccessLog` gerados pelo `AccessLogger` (usado transversalmente pelos demais módulos). Oferece busca textual, filtro por ação (12 tipos) e por período (hoje/semana/mês), painel de estatísticas agregadas e tabela paginada implicitamente (limite 500 registros).
+O módulo **logs-acesso** implementa a tela de auditoria LGPD: visualização read-only dos registros `AccessLog` gerados pelo `AccessLogger` (usado transversalmente pelos demais módulos). Oferece busca textual, filtro por ação (12 tipos) e por período (hoje/semana/mês), painel de estatísticas agregadas e tabela paginada por recortes de 500 registros com deslocamento (era "paginada implicitamente", isto é, truncada — corrigido em 2026-09-25 pela feature `017-politica-de-leitura-dos-logs`).
 
 **Arquitetura**: Página única read-only. Única query Base44 + filtros client-side. Sem mutations.
 
@@ -1183,7 +1183,7 @@ Mapa ação → { label, cor Tailwind, ícone } espelhando o enum do schema (`Ac
 | BR-L01 | Log exige user_email + action | AccessLog.jsonc:52-55 | 🟢 |
 | BR-L02 | Qualquer usuário autenticado cria log; leitura só admin | AccessLog.jsonc:56-72 | 🟢 |
 | BR-L03 | Logs imutáveis na prática (update RLS admin-only, sem UI de edição) | schema + página read-only | 🟢 |
-| BR-L04 | Limite de 500 registros por consulta | AccessLogs.jsx:64 | 🟢 |
+| BR-L04 | Limite de 500 registros **por recorte** — era teto absoluto até 2026-09-25, quando a feature `017-politica-de-leitura-dos-logs` acrescentou deslocamento à leitura | AccessLogs.jsx:64 | 🟢 |
 | BR-L05 | Ordenação sempre mais recente primeiro (-created_date) | AccessLogs.jsx:64 | 🟢 |
 | BR-L06 | ip_address gravado como 'client-side' (não é IP real) | AccessLogger.jsx:34 | 🟢 |
 | BR-L07 | details aceita qualquer valor (string/object) apesar do schema dizer string | AccessLogger.jsx:36 vs schema | 🟡 |

@@ -199,6 +199,7 @@ Medições, sobre o código desta árvore de trabalho (teto declarado: **90 segu
 | 2026-09-24, após a correção do F-05 | 183 | 29 | 97,6 s | 0 |
 | 2026-09-24, após a correção do F-02 | 198 | 31 | 89,6 s | 0 |
 | 2026-09-25, após a feature `016-taxa-de-atendimento` | 218 | 32 | 120,8 s a 220,1 s | 0 |
+| 2026-09-25, após a feature `017-politica-de-leitura-dos-logs` | 229 | 33 | 112,3 s a 125,4 s | 0 |
 
 As três linhas de `005`/`006`/`009` foram acrescentadas por features posteriores — a tabela estava
 parada na 004, e uma medição que não acompanha as features deixa de ser medição. A linha da `008`
@@ -370,8 +371,9 @@ mesmo código. `typecheck` em 0 erros e `prova:encoding` em 499 arquivos íntegr
 
 > ⚠️ **O que não mudou.** A restrição de leitura continua sendo a RLS do servidor: `asAdmin`
 > declara o escopo e **não** verifica autorização, e em runtime `asUser` e `asAdmin` devolvem o
-> mesmo repositório (`registry.ts:125`). O teto de 500 registros e a ausência de paginação seguem
-> como paridade congelada (AMB-004) e **não** foram tocados.
+> mesmo repositório (`registry.ts:125`). O teto de 500 registros **deixou de ser teto absoluto** em
+> 2026-09-25: a feature `017-politica-de-leitura-dos-logs` acrescentou deslocamento à leitura e
+> navegação à tela, e `BR-L04` passou a ser o tamanho do recorte. A RLS do servidor segue intocada.
 
 ### Cenários de paridade do módulo Pacientes
 
@@ -441,7 +443,7 @@ Os 4 cenários de `PT-007`, com o destino de cada um. Acrescentado em 2026-09-22
 | PT-007.1 — visualização de prontuário gera `AccessLog` | `parity_tests/07-auditoria-acesso.feature` | 🟢 | `PatientDetailAudit.test.tsx` e `Consultation.test.tsx`, medidos **no transporte**: a visualização grava `view_patient` e `view_consultation` com a entidade, o identificador e o nome do paciente. O endereço literal `'client-side'` e o agente do navegador são provados em `AccessLogger.test.ts` |
 | PT-007.2 — o log é append-only e só admin lê | `parity_tests/07-auditoria-acesso.feature` | 🟢 **metade** · 🔴 **metade** | A metade do **cliente** é provada: `AccessLogger.test.ts` conta a inserção **antes** de negar leitura, alteração e exclusão, e `AccessLogs.test.tsx` prova que nenhuma linha oferece controle de editar ou excluir. A metade do **servidor** — a imutabilidade e a leitura restrita — é **RLS** e fica **declarada**, no mesmo critério do default `agendada` da feature 004. A tela deixou de ser oferecida a quem **não** é admin em 2026-09-24 (correção do F-01), o que **restaura** a precisão da nota de `code-analysis.md#5.1` |
 | PT-007.3 — o Dashboard gera log ao carregar | `parity_tests/07-auditoria-acesso.feature` | 🟢 | `Dashboard.test.tsx` — a montagem grava **exatamente um** registro, com `action: 'login'` e `details: 'Acesso ao dashboard'`, e os campos de entidade chegam ausentes. A ação é `login` porque o enum não tem ação de painel: toda visita ao Dashboard entra na contagem de logins |
-| PT-007.4 — a listagem carrega até 500 sem paginação | `parity_tests/07-auditoria-acesso.feature` | 🟢 **com ressalva** | `AccessLogs.test.tsx` — o pedido é emitido com os argumentos **exatos** `('-created_date', 500)`, nenhum controle de paginação existe, e mudar qualquer filtro **não** reconsulta o servidor. O teto de 500 é paridade **congelada por decisão humana** (AMB-004), e a ressalva é essa: é promessa provada, não lacuna a fechar aqui |
+| PT-007.4 — a listagem carrega até 500 sem paginação | `parity_tests/07-auditoria-acesso.feature` | 🟢 **provado, cenário superado** | `AccessLogs.test.tsx` — o pedido é emitido com os argumentos `('-created_date', 501, 0)`: o recorte continua de **500** e a leitura pede **um a mais**, descartando o excedente. **O cenário foi superado por decisão em 2026-09-25** pela feature `017-politica-de-leitura-dos-logs`: a ausência de paginação deixou de ser a promessa, e o teto de 500 deixou de ser paridade congelada (`AMB-004` superada). A navegação entre recortes passou a existir, e a verificação herdada que afirmava o contrário foi invertida de propósito |
 
 ### Cenários de paridade do grupo 10
 

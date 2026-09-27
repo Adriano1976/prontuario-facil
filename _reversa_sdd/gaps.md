@@ -6,9 +6,15 @@
 
 | ID | Severidade | Unit/arquivo | Lacuna | Próxima ação |
 |---|---|---|---|---|
-| G-02 | 🟡 Moderado | `logs-acesso/screens.md` | O legado carrega 500 registros e renderiza todos os filtrados sem paginação; ainda falta decidir a política desejada acima desse limite. | Definir comportamento de paginação e estratégia de carregamento. |
 | G-04 | 🟡 Moderado | `modo-offline/` | O badge/aviso visual recomendado para indicar “Modo Offline — dados fictícios/de teste” ainda não foi implementado no código. | Implementar em etapa própria, fora do escopo do Reviewer. |
 
+> ✅ **Nota de convergência (2026-09-25, feature `017-politica-de-leitura-dos-logs`).** `G-02` está
+> **RESOLVIDA**. A política acima de 500 registros foi decidida em duas sessões de esclarecimento: a
+> leitura passou a ser **paginada com deslocamento** — o contrato de entidade, que descartava o `skip`
+> que o SDK já oferece, passou a repassá-lo nas duas implementações —, o recorte continua de 500, e a
+> tela navega entre recortes. O rótulo "Total de Logs" virou "Logs neste recorte", e a tela declara
+> que a busca alcança o recorte exibido. A linha da lacuna foi removida da tabela acima.
+>
 > **Nota de convergência (2026-09-24, feature `010-prova-modo-offline`).** `G-04` permanece
 > **aberta**, e **nenhuma prova a cobre**. É lacuna de **produto**, não de prova: implementar o
 > aviso mudaria comportamento observável, e a suíte teria de mudar de propósito. Ver
@@ -30,6 +36,7 @@
 
 | Item anterior | Resolução |
 |---|---|
+| `G-02` — Logs acima de 500 registros sem política (fechada em 2026-09-25, feature `017-politica-de-leitura-dos-logs`) | A leitura passou a aceitar **deslocamento** e a tela navega entre recortes. `BR-L04` deixou de ser teto absoluto e passou a ser o tamanho do recorte; o contrato de entidade ganhou `skip` nas duas leituras, nas duas implementações. Provado em `src/api/__tests__/leituraPaginada.test.ts`, `src/api/__tests__/mockClientOffline.test.ts` e `src/pages/__tests__/AccessLogs.test.tsx`. Spec atualizada em `logs-acesso/screens.md`. |
 | `G-01` — Taxa de Atendimento fixa em `94%` (fechada em 2026-09-25, feature `016-taxa-de-atendimento`) | Fórmula, fonte e período decididos com o dono do produto: `concluido ÷ (concluido + faltou) × 100` sobre `Appointment`, nos últimos 12 meses, com cancelamento e estados sem desfecho fora das duas contas. Implementado em `src/lib/taxaAtendimento.ts` e provado em `src/lib/__tests__/taxaAtendimento.test.ts` e `src/pages/__tests__/DashboardKpis.test.tsx`. Spec atualizada em `dashboard/requirements.md`. |
 | Dashboard incompleto e matriz sem Dashboard | Artefatos presentes; matriz aponta para `_reversa_sdd/dashboard/`. |
 | Campos de data/hora em Agendamentos | `screens.md` documenta a seção “Data e Horário” com date picker. |
