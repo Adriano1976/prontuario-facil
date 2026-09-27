@@ -14,6 +14,14 @@
 interface ImportMetaEnv {
   /** Ativa o modo offline (armazenamento local em vez do servidor). */
   readonly VITE_OFFLINE?: string;
+  /**
+   * Papel do usuário de demonstração no modo offline.
+   *
+   * Apenas `admin` tem efeito: é o que libera a trilha de auditoria e as ações de
+   * escrita de Médicos e Templates. Ausente (o padrão), o usuário de demonstração
+   * continua sem papel, como no legado (BR-MIGRAR-039).
+   */
+  readonly VITE_OFFLINE_ROLE?: string;
   /** Identificador da aplicação no BaaS. */
   readonly VITE_BASE44_APP_ID?: string;
   /** Versão das funções do BaaS. */

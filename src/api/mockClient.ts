@@ -17,16 +17,39 @@ import { mockSeed } from './mockSeed';
  */
 
 /**
+ * Papel opcional do usuário de demonstração, declarado pelo ambiente
+ * (`VITE_OFFLINE_ROLE=admin`).
+ *
+ * POR QUE É OPT-IN E NÃO PADRÃO: promover o usuário de demonstração a administrador
+ * de forma incondicional foi recusado no adendo `011-rbac-frontend` — o modo offline
+ * não aplica regra de acesso (BR-MIGRAR-044), e a promoção contradiz a BR-MIGRAR-039.
+ * Sem a variável, o valor continua exatamente o do legado: sem papel.
+ *
+ * POR QUE SÓ `'admin'` VALE: qualquer outro valor é ignorado. O papel é apenas
+ * DECLARADO aqui; quem valida é `toSessionUser` (`src/lib/session.ts`), que só
+ * preserva papéis da lista conhecida — papel desconhecido fica ausente, e ausente
+ * nunca é igual a `'admin'`.
+ */
+const OFFLINE_ROLE = import.meta.env.VITE_OFFLINE_ROLE;
+
+/**
  * Usuário fixo do modo offline (BR-MIGRAR-039).
  *
  * O valor é exatamente o do legado — `id`, `email` e `full_name`, sem papel e sem
  * dono. O campo discriminante `kind` pertence ao TIPO (`OfflineUser`), não ao dado
  * armazenado, por isso não aparece aqui.
+ *
+ * ACRÉSCIMO DECLARADO: com `VITE_OFFLINE_ROLE=admin`, este objeto ganha
+ * `role: 'admin'` — e só assim as telas administrativas (`/AccessLogs` e as ações de
+ * escrita de Médicos e Templates) ficam alcançáveis no modo offline. É uma chave de
+ * demonstração local: a ausência de papel continua sendo o padrão, e o papel continua
+ * sem valor probatório nenhum, porque o mock não aplica regra de acesso.
  */
 export const OFFLINE_USER = {
   id: 'demo-user-001',
   email: 'demo@medrecord.local',
   full_name: 'Dra. Demo',
+  ...(OFFLINE_ROLE === 'admin' ? { role: 'admin' as const } : {}),
 };
 
 const DB_PREFIX = 'mock_db_';

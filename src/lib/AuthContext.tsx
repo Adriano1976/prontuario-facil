@@ -136,11 +136,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
    */
   const checkAppState = async () => {
     // Modo offline: não há servidor; entra direto com o usuário de demonstração.
+    // O usuário passa pelo MESMO ponto único de conversão do caminho online. É ele
+    // que valida o papel declarado por `VITE_OFFLINE_ROLE` contra a lista de papéis
+    // conhecidos e devolve ausência para qualquer outro valor — a promoção do usuário
+    // de demonstração a administrador continua sendo uma declaração de ambiente
+    // explícita, e nunca o padrão (BR-MIGRAR-039; adendo `011-rbac-frontend`).
     if (import.meta.env.VITE_OFFLINE === 'true') {
+      const demo = toSessionUser(OFFLINE_USER);
       setIsLoadingPublicSettings(false);
       setIsLoadingAuth(false);
-      setIsAuthenticated(true);
-      setUser(OFFLINE_USER);
+      setIsAuthenticated(demo !== null);
+      setUser(demo);
       return;
     }
 
