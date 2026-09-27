@@ -62,6 +62,12 @@ export interface SendEmailParams {
  * prefixo opcional `-` para descendente, e `filter` compara apenas com `===`
  * (BR-MIGRAR-043).
  *
+ * `skip` é o **deslocamento** da leitura, e entra como terceiro posicional para
+ * espelhar a assinatura do SDK do provedor — que já o oferece, documentado como
+ * "Number of results to skip for pagination". A feature `017` apenas parou de
+ * descartá-lo no adaptador: a capacidade nunca faltou do outro lado, faltava aqui.
+ * Por ser o terceiro, não há como informá-lo sem informar `limit`.
+ *
  * `T` é o tipo do registro já com campos de servidor (`id`, `created_date`, …).
  * `TInput` é o que a escrita aceita — sem os campos que o servidor preenche.
  */
@@ -72,10 +78,15 @@ export interface EntityRepository<T, TInput> {
    * ⚠️ Leitura SEM escopo de ownership. Para entidades sob RLS use a camada com
    * escopo obrigatório (`src/api/scopedRead.ts`) — BR-MIGRAR-034.
    */
-  list(sort?: SortField<T>, limit?: number): Promise<T[]>;
+  list(sort?: SortField<T>, limit?: number, skip?: number): Promise<T[]>;
 
-  /** Filtra por igualdade de campos, com ordenação e limite opcionais. */
-  filter(conditions: FilterConditions<T>, sort?: SortField<T>, limit?: number): Promise<T[]>;
+  /** Filtra por igualdade de campos, com ordenação, limite e deslocamento opcionais. */
+  filter(
+    conditions: FilterConditions<T>,
+    sort?: SortField<T>,
+    limit?: number,
+    skip?: number,
+  ): Promise<T[]>;
 
   /** Cria um registro; o servidor (ou o mock) preenche `id` e `created_date`. */
   create(data: TInput): Promise<T>;

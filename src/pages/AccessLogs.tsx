@@ -60,10 +60,19 @@ type DateFilter = 'all' | 'today' | 'week' | 'month';
  * Suporta filtro por tipo de ação, intervalo de data e usuário.
  * Mostra paciente, usuário, timestamp e informações detalhadas de ação.
  *
- * PARIDADE: comportamento e aparência idênticos ao anterior. Continuam iguais: a
- * leitura com limite de 500 registros ordenados por criação, a busca por
- * usuário/paciente, os filtros de ação e de intervalo, os quatro indicadores e a
- * tabela com a ausência de paginação.
+ * PARIDADE: comportamento e aparência idênticos ao anterior **dentro do recorte**. Continuam
+ * iguais: o tamanho do recorte (500), a ordenação por criação decrescente, a busca por
+ * usuário/paciente, os filtros de ação e de intervalo, os indicadores e a tabela.
+ *
+ * ⚠️ PARIDADE ROMPIDA DE PROPÓSITO — paginação. A tela lia 500 registros e **não tinha como passar
+ * deles**: acima de 500, o registro mais antigo era inalcançável e nada dizia que a lista era
+ * parcial. A feature `017` fechou `G-02`: a leitura passou a ter deslocamento e a tela navega entre
+ * recortes. `BR-L04` deixou de ser teto absoluto e passou a ser o tamanho do recorte. O rótulo
+ * "Total de Logs" virou "Logs neste recorte", porque ele sempre mediu o conjunto carregado.
+ *
+ * ⚠️ A BUSCA CONTINUA SENDO DO CLIENTE, e por isso alcança apenas o recorte exibido. A tela DECLARA
+ * isso em vez de deixar o usuário concluir que o registro não existe — numa tela de auditoria, uma
+ * busca que não encontra sem dizer por quê é pior que uma busca lenta.
  *
  * PARIDADE DE LEITURA, **com uma exceção declarada**: a leitura deixou de ser feita
  * pelo repositório cru. A trilha é admin-only (BR-MIGRAR-024) e o escopo administrativo
@@ -84,22 +93,45 @@ type DateFilter = 'all' | 'today' | 'week' | 'month';
  * escopo de dono, a resposta é o conjunto vazio — a leitura não vaza dado e não chega a
  * perguntar ao servidor.
  */
-const leituraDaTrilha = async () => {
+/** Quantos registros por recorte (`RN-08`) — o mesmo valor que o legado usava como teto. */
+export const RECORTE_POR_PAGINA = 500;
+
+/**
+ * Lê UM recorte da trilha.
+ *
+ * Pede **um registro a mais** do que exibe: o excedente é o que diz que há recorte seguinte. O
+ * contrato não tem operação de contagem, e esta feature não a criou (`RN-07`) — sem o excedente,
+ * um recorte cheio seria indistinguível do último.
+ */
+const leituraDaTrilha = async (pagina: number) => {
   const scope = resolveScope(toSessionUser(await base44.auth.me()));
   if (!isAdminScope(scope)) return [];
-  return base44.entities.AccessLog.asAdmin(scope).list('-created_date', 500);
+  const inicio = (pagina - 1) * RECORTE_POR_PAGINA;
+  return base44.entities.AccessLog.asAdmin(scope).list(
+    '-created_date',
+    RECORTE_POR_PAGINA + 1,
+    inicio,
+  );
 };
 export default function AccessLogs() {
     const [search, setSearch] = useState('');
     const [actionFilter, setActionFilter] = useState<ActionFilter>('all');
     const [dateFilter, setDateFilter] = useState<DateFilter>('all');
+    const [pagina, setPagina] = useState(1);
 
-    const { data: logs, isLoading } = useQuery({
-        queryKey: ['access-logs'],
-        queryFn: leituraDaTrilha,
+    // A página entra na chave de cache: sem ela, trocar de recorte devolveria o anterior.
+    const { data, isLoading } = useQuery({
+        queryKey: ['access-logs', pagina],
+        queryFn: () => leituraDaTrilha(pagina),
     });
 
-    const filteredLogs = logs?.filter(log => {
+    // O excedente é lido e DESCARTADO. `undefined` (ainda carregando) e lista vazia caem no mesmo
+    // lugar, e o avanço fica indisponível nos dois.
+    const carregados = data ?? [];
+    const temProxima = carregados.length > RECORTE_POR_PAGINA;
+    const logs = carregados.slice(0, RECORTE_POR_PAGINA);
+
+    const filteredLogs = logs.filter(log => {
         const matchesSearch = !search || 
             log.user_email?.toLowerCase().includes(search.toLowerCase()) ||
             log.patient_name?.toLowerCase().includes(search.toLowerCase());
@@ -126,7 +158,7 @@ export default function AccessLogs() {
         }
         
         return matchesSearch && matchesAction && matchesDate;
-    }) || [];
+    });
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-sky-50">
@@ -194,6 +226,12 @@ export default function AccessLogs() {
                     </Select>
                 </motion.div>
 
+                {/* Alcance da busca — declarado, e não deixado para o usuário concluir */}
+                <p className="text-xs text-slate-500 mb-6">
+                    A busca alcança apenas os {RECORTE_POR_PAGINA} registros deste recorte. Para
+                    procurar em outro trecho da trilha, navegue entre os recortes.
+                </p>
+
                 {/* Stats */}
                 <motion.div 
                     initial={{ opacity: 0, y: 20 }}
@@ -202,25 +240,25 @@ export default function AccessLogs() {
                     className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6"
                 >
                     <Card className="p-4">
-                        <p className="text-sm text-slate-500">Total de Logs</p>
-                        <p className="text-2xl font-bold text-slate-900">{logs?.length || 0}</p>
+                        <p className="text-sm text-slate-500">Logs neste recorte</p>
+                        <p className="text-2xl font-bold text-slate-900">{logs.length}</p>
                     </Card>
                     <Card className="p-4">
                         <p className="text-sm text-slate-500">Visualizações</p>
                         <p className="text-2xl font-bold text-emerald-600">
-                            {logs?.filter(l => l.action?.includes('view')).length || 0}
+                            {logs.filter(l => l.action?.includes('view')).length}
                         </p>
                     </Card>
                     <Card className="p-4">
                         <p className="text-sm text-slate-500">Edições</p>
                         <p className="text-2xl font-bold text-amber-600">
-                            {logs?.filter(l => l.action?.includes('edit') || l.action?.includes('create')).length || 0}
+                            {logs.filter(l => l.action?.includes('edit') || l.action?.includes('create')).length}
                         </p>
                     </Card>
                     <Card className="p-4">
                         <p className="text-sm text-slate-500">Exclusões</p>
                         <p className="text-2xl font-bold text-rose-600">
-                            {logs?.filter(l => l.action?.includes('delete')).length || 0}
+                            {logs.filter(l => l.action?.includes('delete')).length}
                         </p>
                     </Card>
                 </motion.div>
@@ -307,6 +345,26 @@ export default function AccessLogs() {
                         </div>
                     </Card>
                 </motion.div>
+
+                {/* Navegação entre recortes — a posição é o número da página, nunca "de N":
+                    sem operação de contagem não existe total de páginas para exibir. */}
+                <div className="flex items-center justify-between mt-4">
+                    <Button
+                        variant="outline"
+                        disabled={pagina === 1}
+                        onClick={() => setPagina((atual) => Math.max(1, atual - 1))}
+                    >
+                        Anterior
+                    </Button>
+                    <span className="text-sm text-slate-500">Recorte {pagina}</span>
+                    <Button
+                        variant="outline"
+                        disabled={!temProxima}
+                        onClick={() => setPagina((atual) => atual + 1)}
+                    >
+                        Próxima
+                    </Button>
+                </div>
             </div>
         </div>
     );

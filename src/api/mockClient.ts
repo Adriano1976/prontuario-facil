@@ -64,6 +64,7 @@ function sortAndLimit(
   arr: StoredRecord[],
   sort?: string,
   limit?: number,
+  skip?: number,
 ): StoredRecord[] {
   let out = [...arr];
   if (sort) {
@@ -77,8 +78,14 @@ function sortAndLimit(
       return 0;
     });
   }
+  // O deslocamento recorta DEPOIS da ordenação, que é o que o SDK documenta e o que a feature
+  // 017 passou a repassar (`D-02`). `skip` ausente, zero ou não numérico vale zero.
+  const inicio = skip && Number.isFinite(Number(skip)) ? Number(skip) : 0;
   if (limit && Number.isFinite(Number(limit))) {
-    out = out.slice(0, Number(limit));
+    const quantidade = Number(limit);
+    out = out.slice(inicio, inicio + quantidade);
+  } else if (inicio > 0) {
+    out = out.slice(inicio);
   }
   return out;
 }
@@ -91,18 +98,19 @@ function sortAndLimit(
  */
 function makeRepo(entity: string) {
   return {
-    list: (sort?: string, limit?: number): Promise<StoredRecord[]> =>
-      Promise.resolve(sortAndLimit(load(entity), sort, limit)),
+    list: (sort?: string, limit?: number, skip?: number): Promise<StoredRecord[]> =>
+      Promise.resolve(sortAndLimit(load(entity), sort, limit, skip)),
 
     filter: (
       conditions: Record<string, unknown> = {},
       sort?: string,
       limit?: number,
+      skip?: number,
     ): Promise<StoredRecord[]> => {
       const all = load(entity).filter((item) =>
         Object.entries(conditions).every(([k, v]) => item[k] === v),
       );
-      return Promise.resolve(sortAndLimit(all, sort, limit));
+      return Promise.resolve(sortAndLimit(all, sort, limit, skip));
     },
 
     create: (data: Record<string, unknown>): Promise<StoredRecord> => {

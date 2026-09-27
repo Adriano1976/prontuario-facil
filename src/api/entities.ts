@@ -37,8 +37,13 @@ import { createAppDataClient } from './registry';
  * `createEntityRepository`, a partir do tipo de domínio.
  */
 export interface RepoLike<TInput> {
-  list(sort?: string, limit?: number): Promise<unknown[]>;
-  filter(conditions: Record<string, unknown>, sort?: string, limit?: number): Promise<unknown[]>;
+  list(sort?: string, limit?: number, skip?: number): Promise<unknown[]>;
+  filter(
+    conditions: Record<string, unknown>,
+    sort?: string,
+    limit?: number,
+    skip?: number,
+  ): Promise<unknown[]>;
   create(data: TInput): Promise<unknown>;
   update(id: string, data: Partial<TInput>): Promise<unknown>;
   delete(id: string): Promise<{ success: boolean } | void>;
@@ -54,12 +59,14 @@ export function createEntityRepository<T extends { id: string }, TInput>(
   source: RepoLike<TInput>,
 ): EntityRepository<T, TInput> {
   return {
-    list: (sort, limit) => source.list(sort as string | undefined, limit) as Promise<T[]>,
-    filter: (conditions, sort, limit) =>
+    list: (sort, limit, skip) =>
+      source.list(sort as string | undefined, limit, skip) as Promise<T[]>,
+    filter: (conditions, sort, limit, skip) =>
       source.filter(
         conditions as Record<string, unknown>,
         sort as string | undefined,
         limit,
+        skip,
       ) as Promise<T[]>,
     create: (data) => source.create(data) as Promise<T>,
     update: (id, data) => source.update(id, data) as Promise<T>,
